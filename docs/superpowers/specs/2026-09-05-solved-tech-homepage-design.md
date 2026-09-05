@@ -3,9 +3,9 @@
 ## Goal
 
 Create one immersive English-language landing page for Solved Tech, aimed at
-small and medium-sized businesses in the UK. The page should make a broad
-technical offer easy to understand and make contact feel like a low-risk next
-step.
+small and medium-sized businesses in the UK. The page should sell tangible
+digital products, show the business problems each product solves, and make
+contact a one-click action.
 
 ## Audience
 
@@ -15,26 +15,29 @@ technical knowledge.
 
 ## Positioning
 
-Solved Tech is presented as a practical partner that solves business problems,
-not as a catalogue of technologies. Copy leads with recognisable outcomes and
-introduces service names only when they help a visitor choose.
+Solved Tech is presented as a product-building partner. The page leads with
+what a client can buy, then explains the recognisable problem and useful result
+behind it. Technology names remain secondary.
 
 ## Page Structure
 
-1. Hero with a direct promise and a primary call-booking action.
-2. Familiar business frustrations that show understanding without creating
-   fear.
-3. Five outcome-led service groups:
-   - Get found: Google Ads, technical SEO, and on-page SEO.
-   - Sell online: online shops and conversion-focused websites.
-   - Build products: websites, SaaS platforms, mobile apps, and desktop apps.
-   - Connect systems: APIs and business integrations.
-   - Automate work: agentic workflows, MCP solutions, voice agents, and
-     WhatsApp agents.
-4. A short, plain-language working process.
-5. Trust signals based only on verifiable facts; no invented clients,
-   testimonials, metrics, or awards.
-6. Contact choices in this order: call, WhatsApp, voice note, quote.
+1. Hero that names the offer: websites, shops, apps, connected systems, and
+   digital assistants. It includes adjacent Call and WhatsApp actions.
+2. A product-first showcase headed “What can we build for you?”:
+   - Search and advertising that helps a business get discovered.
+   - Websites and online shops that turn visits into enquiries or sales.
+   - Web, mobile, and desktop products that make an idea usable.
+   - Connected business systems that remove manual copying.
+   - Digital assistants that handle routine work, calls, and messages.
+3. Every product pairs three concise facts: what it is, when a business needs
+   it, and what becomes easier. No catalogue-style paragraphs.
+4. A single visual three-step process: find the blockage, build the useful
+   product, and show what changed.
+5. A founders section with two clearly marked placeholder portraits, names,
+   roles, and LinkedIn destinations. Placeholder content must not resemble real
+   identities.
+6. A final contact block with only two primary actions: Call and WhatsApp.
+   During the trial, both use conspicuous non-production UK placeholders.
 7. Minimal footer.
 
 ## Visual Direction
@@ -44,8 +47,13 @@ introduces service names only when they help a visitor choose.
   highlights.
 - Large, disciplined typography and generous spacing create confidence.
 - A fine technical grid sits behind the page and shifts gently with scroll
-  progress. Sparse orange intersections appear near key moments without
-  competing with the copy.
+  progress.
+- Code becomes a quiet environmental texture rather than a visual feature:
+  eight or fewer fragments, low contrast, irregular positions across the full
+  document, and independent drift of no more than eight pixels. It is not
+  fixed to the viewport and contains no bright orange lines.
+- Product visuals receive the stronger contrast and orange emphasis previously
+  given to the code layer.
 - Scroll-triggered transitions reveal content progressively.
 - Motion stays restrained, preserves reading flow, and respects reduced-motion
   preferences.
@@ -81,14 +89,16 @@ Render the background grid as an inline, decorative SVG rather than a gradient
 or external image. Drive its subtle offset and scale from the existing
 scroll-progress value, keep it non-interactive and hidden from assistive
 technology, and leave it static when reduced motion is preferred.
-Store contact destinations in one configuration object. Until production
-contact details are supplied, contact controls use an explicit local preview
-state and do not invent addresses or phone numbers.
+Store contact destinations and founder profiles in typed configuration
+objects. Trial contact links use visibly labelled placeholder values and must
+be replaced before launch. Both controls still use the final one-click
+destinations: `tel:` for Call and `https://wa.me/` for WhatsApp.
 
 ## Verification
 
-- Automated tests cover content structure, service grouping, contact priority,
-  and contact configuration behaviour.
+- Automated tests cover the five product groups, problem/result copy,
+  two-action contact model, placeholder status, founder placeholders, and
+  interactive product selection.
 - The production build must complete successfully.
 - Browser checks cover desktop and mobile layouts, keyboard navigation, console
   errors, reduced motion, and primary contact interactions.
@@ -96,6 +106,6 @@ state and do not invent addresses or phone numbers.
 
 ## Scope
 
-This release contains one responsive homepage. A CMS, blog, client portal,
-backend contact processing, case-study pages, and additional routes are out of
-scope.
+This release contains one responsive homepage. Real founder information, real
+contact details, a CMS, blog, client portal, backend contact processing,
+case-study pages, and additional routes are out of scope.
