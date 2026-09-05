@@ -110,7 +110,7 @@ export const renderHomepage = (
             <circle class="hero__signal-point" cx="252" cy="84" r="3" />
           </svg>
         </div>
-        <p class="hero__eyebrow" data-reveal>Practical digital partner for UK businesses</p>
+        <p class="hero__eyebrow" data-reveal>Practical digital partner for your business</p>
         <h1 id="hero-heading" data-reveal>Solve what is slowing your business down.</h1>
         <p data-reveal>From finding more customers to removing repetitive work, we build what makes the next difference.</p>
         ${renderContactControl("call", "Book a call", config, " data-reveal")}

@@ -15,7 +15,7 @@ describe("homepage renderer", () => {
       '<div class="hero__signal" aria-hidden="true">',
     );
     expect(html).toContain(
-      '<p class="hero__eyebrow" data-reveal>Practical digital partner for UK businesses</p>',
+      '<p class="hero__eyebrow" data-reveal>Practical digital partner for your business</p>',
     );
     expect(html).toContain("Solve what is slowing your business down.");
     expect(html).toContain(
