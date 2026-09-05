@@ -1,0 +1,118 @@
+import {
+  getContactState,
+  type ContactConfig,
+  type ContactMethodId,
+  type SiteContent,
+} from "./content";
+
+const escapeHtml = (value: string): string =>
+  value.replace(
+    /[&<>"']/g,
+    (character) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      })[character] ?? character,
+  );
+
+const contactDestination = (
+  id: ContactMethodId,
+  config: ContactConfig,
+): string => {
+  switch (id) {
+    case "call":
+      return `tel:${config.phone}`;
+    case "whatsapp":
+    case "voice":
+      return `https://wa.me/${config.whatsapp}`;
+    case "quote":
+      return `mailto:${config.quoteEmail}`;
+  }
+};
+
+const renderContactControl = (
+  id: ContactMethodId,
+  label: string,
+  config: ContactConfig,
+): string =>
+  getContactState(config) === "preview"
+    ? `<button type="button" data-contact-preview="${escapeHtml(id)}">${escapeHtml(label)}</button>`
+    : `<a href="${escapeHtml(contactDestination(id, config))}">${escapeHtml(label)}</a>`;
+
+export const renderHomepage = (
+  content: SiteContent,
+  config: ContactConfig,
+): string => {
+  const preview = getContactState(config) === "preview";
+  const services = content.services
+    .map(
+      ({ title, summary, detail }, index) => `
+        <article class="service">
+          <p class="service-number">${String(index + 1).padStart(2, "0")}</p>
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(summary)}</p>
+          <p>${escapeHtml(detail)}</p>
+        </article>`,
+    )
+    .join("");
+  const contactMethods = content.contactMethods
+    .map(
+      ({ id, label, note }) => `
+        <li>
+          ${renderContactControl(id, label, config)}
+          <p>${escapeHtml(note)}</p>
+        </li>`,
+    )
+    .join("");
+
+  return `
+    <header id="top" class="site-header">
+      <a class="wordmark" href="#top" aria-label="Solved Tech home">Solved Tech</a>
+      <nav aria-label="Primary navigation">
+        <a href="#services">Services</a>
+        <a href="#approach">Approach</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-heading">
+        <h1 id="hero-heading">Technology should solve the next business problem. Not create another one.</h1>
+        <p>We help UK businesses attract customers, build useful digital products and remove repetitive work.</p>
+        ${renderContactControl("call", "Book a call", config)}
+      </section>
+      <section class="problem" aria-labelledby="problem-heading">
+        <h2 id="problem-heading">Your business does not need more digital noise.</h2>
+        <p>It needs a clear answer to the problem holding it back.</p>
+      </section>
+      <section id="services" class="services" aria-labelledby="services-heading">
+        <h2 id="services-heading">What we can solve</h2>
+        ${services}
+      </section>
+      <section id="approach" class="approach" aria-labelledby="approach-heading">
+        <h2 id="approach-heading">A clear way forward</h2>
+        <ol>
+          <li><h3>Find the blockage</h3><p>Understand what is getting in the way and why it matters.</p></li>
+          <li><h3>Build what changes it</h3><p>Choose and make the simplest useful solution.</p></li>
+          <li><h3>Show what improved</h3><p>Make the result clear so you know what changed.</p></li>
+        </ol>
+      </section>
+      <section class="trust" aria-labelledby="trust-heading">
+        <h2 id="trust-heading">Clarity from the start</h2>
+        <p>We explain the work in plain language, set out the next step and do not make claims we cannot support.</p>
+      </section>
+      <section class="contact" id="contact" aria-labelledby="contact-heading">
+        <h2 id="contact-heading">Tell us what needs solving</h2>
+        <p>Choose the easiest way to start the conversation.</p>
+        <ul>${contactMethods}</ul>
+        ${preview ? '<p class="contact-note">Contact details are being connected. These preview controls do not send or place anything yet.</p>' : ""}
+      </section>
+    </main>
+    <footer>
+      <p>&copy; ${new Date().getFullYear()} Solved Tech</p>
+      <a href="#top">Back to top</a>
+    </footer>
+  `;
+};
