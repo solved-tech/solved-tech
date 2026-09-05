@@ -75,6 +75,46 @@ export const setupContactPreview = (root: ParentNode): void => {
     });
 };
 
+export const setupHeroInteraction = (
+  root: ParentNode,
+  reducedMotion: boolean,
+): void => {
+  const hero = root.querySelector<HTMLElement>(".hero");
+
+  if (!hero || reducedMotion) {
+    return;
+  }
+
+  const update = (event: PointerEvent): void => {
+    const bounds = hero.getBoundingClientRect();
+
+    if (bounds.width <= 0 || bounds.height <= 0) {
+      return;
+    }
+
+    const x = Math.max(
+      -0.5,
+      Math.min(0.5, (event.clientX - bounds.left) / bounds.width - 0.5),
+    );
+    const y = Math.max(
+      -0.5,
+      Math.min(0.5, (event.clientY - bounds.top) / bounds.height - 0.5),
+    );
+
+    hero.style.setProperty("--hero-shift-x", `${(x * 36).toFixed(2)}px`);
+    hero.style.setProperty("--hero-shift-y", `${(y * 36).toFixed(2)}px`);
+  };
+
+  const reset = (): void => {
+    hero.style.setProperty("--hero-shift-x", "0px");
+    hero.style.setProperty("--hero-shift-y", "0px");
+  };
+
+  hero.addEventListener("pointermove", update, { passive: true });
+  hero.addEventListener("pointerdown", update, { passive: true });
+  hero.addEventListener("pointerleave", reset);
+};
+
 /**
  * Publish the measured header height so anchor scroll padding and the hero
  * height stay correct when the header wraps onto more rows.
@@ -149,9 +189,12 @@ const start = (view: Window): void => {
   view.document.documentElement.classList.add("has-enhancement");
   app.innerHTML = renderHomepage(siteContent, contactConfig);
 
+  const reducedMotion = prefersReducedMotion(view);
+
   stagger(app);
   setupHeaderOffset(view);
-  setupRevealMotion(app, prefersReducedMotion(view));
+  setupRevealMotion(app, reducedMotion);
+  setupHeroInteraction(app, reducedMotion);
   setupContactPreview(app);
   setupScrollProgress(view);
 };

@@ -12,6 +12,9 @@ describe("homepage renderer", () => {
 
   it("keeps the hero concise and clearly aimed at UK businesses", () => {
     expect(html).toContain(
+      '<div class="hero__signal" aria-hidden="true">',
+    );
+    expect(html).toContain(
       '<p class="hero__eyebrow" data-reveal>Practical digital partner for UK businesses</p>',
     );
     expect(html).toContain("Solve what is slowing your business down.");
@@ -31,6 +34,14 @@ describe("homepage renderer", () => {
     expect(html).toContain('aria-hidden="true"');
     expect(html).toContain('id="ambient-grid-pattern"');
     expect(html).toContain('class="ambient-grid__accent"');
+  });
+
+  it("renders a subtle decorative code field across representative stacks", () => {
+    expect(html.match(/class="code-field"/g)).toHaveLength(1);
+    expect(html).toContain('class="code-field" aria-hidden="true"');
+    ["typescript", "python", "go", "swift", "sql", "shell"].forEach(
+      (language) => expect(html).toContain(`data-language="${language}"`),
+    );
   });
 
   it("marks every element the enhancement layer reveals", () => {

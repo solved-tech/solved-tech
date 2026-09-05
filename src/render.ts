@@ -82,6 +82,14 @@ export const renderHomepage = (
       <circle class="ambient-grid__accent" cx="1216" cy="384" r="2.5" />
       <circle class="ambient-grid__accent" cx="832" cy="832" r="2.5" />
     </svg>
+    <div class="code-field" aria-hidden="true">
+      <code data-language="typescript">const result = await solve(problem);</code>
+      <code data-language="python">for task in repeatable: automate(task)</code>
+      <code data-language="go">go connect(people, systems)</code>
+      <code data-language="swift">Task { await build(value) }</code>
+      <code data-language="sql">SELECT opportunity FROM signals;</code>
+      <code data-language="shell">$ ship --when-ready</code>
+    </div>
     <header id="top" class="site-header">
       <a class="wordmark" href="#top" aria-label="Solved Tech home">Solved Tech</a>
       <nav aria-label="Primary navigation">
@@ -92,6 +100,16 @@ export const renderHomepage = (
     </header>
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-heading">
+        <div class="hero__signal" aria-hidden="true">
+          <svg viewBox="0 0 320 320" focusable="false">
+            <circle class="hero__signal-ring hero__signal-ring--outer" cx="160" cy="160" r="136" />
+            <circle class="hero__signal-ring" cx="160" cy="160" r="88" />
+            <path class="hero__signal-axis" d="M24 160H296M160 24V296" />
+            <path class="hero__signal-path" d="M76 224C112 148 164 106 252 84" />
+            <circle class="hero__signal-node" cx="76" cy="224" r="6" />
+            <circle class="hero__signal-point" cx="252" cy="84" r="3" />
+          </svg>
+        </div>
         <p class="hero__eyebrow" data-reveal>Practical digital partner for UK businesses</p>
         <h1 id="hero-heading" data-reveal>Solve what is slowing your business down.</h1>
         <p data-reveal>From finding more customers to removing repetitive work, we build what makes the next difference.</p>

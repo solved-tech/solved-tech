@@ -3,6 +3,7 @@ import {
   CONTACT_PREVIEW_MESSAGE,
   setupContactPreview,
   setupHeaderOffset,
+  setupHeroInteraction,
   setupRevealMotion,
   setupScrollProgress,
 } from "../src/main";
@@ -133,6 +134,52 @@ describe("reveal motion", () => {
     expect(unobserve).toHaveBeenCalledWith(item);
 
     vi.unstubAllGlobals();
+  });
+});
+
+describe("hero interaction", () => {
+  it("turns pointer position into restrained visual offsets", () => {
+    const properties = new Map<string, string>();
+    const handlers = new Map<string, (event: PointerEvent) => void>();
+    const hero = {
+      style: {
+        setProperty: (name: string, value: string) =>
+          properties.set(name, value),
+      },
+      getBoundingClientRect: () => ({
+        left: 0,
+        top: 0,
+        width: 400,
+        height: 800,
+      }),
+      addEventListener: (
+        type: string,
+        handler: (event: PointerEvent) => void,
+      ) => handlers.set(type, handler),
+    };
+    const root = {
+      querySelector: vi.fn(() => hero),
+    } as unknown as ParentNode;
+
+    setupHeroInteraction(root, false);
+    handlers.get("pointermove")?.({
+      clientX: 400,
+      clientY: 800,
+    } as PointerEvent);
+
+    expect(properties.get("--hero-shift-x")).toBe("18.00px");
+    expect(properties.get("--hero-shift-y")).toBe("18.00px");
+  });
+
+  it("stays static when reduced motion is preferred", () => {
+    const addEventListener = vi.fn();
+    const root = {
+      querySelector: vi.fn(() => ({ addEventListener })),
+    } as unknown as ParentNode;
+
+    setupHeroInteraction(root, true);
+
+    expect(addEventListener).not.toHaveBeenCalled();
   });
 });
 
