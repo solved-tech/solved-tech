@@ -71,25 +71,25 @@ body {
   pointer-events: none;
   transform:
     translate3d(
-      calc(var(--scroll-progress, 0) * -2rem),
-      calc(var(--scroll-progress, 0) * 3rem),
+      calc(var(--scroll-progress, 0) * -8rem),
+      calc(var(--scroll-progress, 0) * 10rem),
       0
     )
-    scale(calc(1 + var(--scroll-progress, 0) * 0.04));
+    scale(calc(1 + var(--scroll-progress, 0) * 0.12));
   transform-origin: center;
 }
 
 .ambient-grid path {
   fill: none;
   stroke: var(--line-strong);
-  stroke-width: 1;
-  opacity: 0.18;
+  stroke-width: 1.25;
+  opacity: 0.48;
   vector-effect: non-scaling-stroke;
 }
 
 .ambient-grid__accent {
   fill: var(--accent);
-  opacity: 0.32;
+  opacity: 0.72;
 }
 
 main,
