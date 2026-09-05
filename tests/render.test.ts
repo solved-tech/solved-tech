@@ -16,6 +16,13 @@ describe("homepage renderer", () => {
     expect(html).toContain('<section class="contact');
   });
 
+  it("renders one assistive-technology-hidden background grid", () => {
+    expect(html.match(/class="ambient-grid"/g)).toHaveLength(1);
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('id="ambient-grid-pattern"');
+    expect(html).toContain('class="ambient-grid__accent"');
+  });
+
   it("marks every element the enhancement layer reveals", () => {
     const expected =
       3 + 2 + 1 + siteContent.services.length + 4 + 2 + 2 +

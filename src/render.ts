@@ -70,6 +70,18 @@ export const renderHomepage = (
     .join("");
 
   return `
+    <svg class="ambient-grid" aria-hidden="true" focusable="false" preserveAspectRatio="none" viewBox="0 0 1600 1000">
+      <defs>
+        <pattern id="ambient-grid-pattern" width="64" height="64" patternUnits="userSpaceOnUse">
+          <path d="M 0 0 H 64" />
+          <path d="M 0 0 V 64" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#ambient-grid-pattern)" />
+      <circle class="ambient-grid__accent" cx="192" cy="192" r="2.5" />
+      <circle class="ambient-grid__accent" cx="1216" cy="384" r="2.5" />
+      <circle class="ambient-grid__accent" cx="832" cy="832" r="2.5" />
+    </svg>
     <header id="top" class="site-header">
       <a class="wordmark" href="#top" aria-label="Solved Tech home">Solved Tech</a>
       <nav aria-label="Primary navigation">

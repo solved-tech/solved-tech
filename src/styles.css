@@ -61,6 +61,43 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.ambient-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform:
+    translate3d(
+      calc(var(--scroll-progress, 0) * -2rem),
+      calc(var(--scroll-progress, 0) * 3rem),
+      0
+    )
+    scale(calc(1 + var(--scroll-progress, 0) * 0.04));
+  transform-origin: center;
+}
+
+.ambient-grid path {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  opacity: 0.18;
+  vector-effect: non-scaling-stroke;
+}
+
+.ambient-grid__accent {
+  fill: var(--accent);
+  opacity: 0.32;
+}
+
+main,
+footer {
+  position: relative;
+  z-index: 1;
+}
+
 /* Quiet orange reading-progress line. */
 body::before {
   content: "";
@@ -602,6 +639,10 @@ footer a:hover {
 
   .has-enhancement [data-reveal] {
     opacity: 1;
+    transform: none;
+  }
+
+  .ambient-grid {
     transform: none;
   }
 }
