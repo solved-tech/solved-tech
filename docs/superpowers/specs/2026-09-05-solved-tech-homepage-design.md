@@ -23,21 +23,25 @@ behind it. Technology names remain secondary.
 
 1. Hero that names the offer: websites, shops, apps, connected systems, and
    digital assistants. It includes adjacent Call and WhatsApp actions.
-2. A product-first showcase headed “What can we build for you?”:
-   - Search and advertising that helps a business get discovered.
-   - Websites and online shops that turn visits into enquiries or sales.
-   - Web, mobile, and desktop products that make an idea usable.
-   - Connected business systems that remove manual copying.
-   - Digital assistants that handle routine work, calls, and messages.
-3. Every product pairs three concise facts: what it is, when a business needs
-   it, and what becomes easier. No catalogue-style paragraphs.
+2. A product-first showcase headed “What do you need?” with five direct
+   questions:
+   - “Need a website?” covers websites and online shops.
+   - “Need an app?” covers web, mobile, and desktop products.
+   - “Need more traffic?” covers search visibility and paid advertising.
+   - “Want to use AI in your business?” covers useful assistants and
+     automated routine work.
+   - “Need something else?” covers connected systems, integrations, and
+     custom problems.
+3. Each question expands into one short result-focused sentence and a simple
+   product visual. No catalogue-style paragraphs or technology lists.
 4. A single visual three-step process: find the blockage, build the useful
    product, and show what changed.
 5. A founders section with two clearly marked placeholder portraits, names,
    roles, and LinkedIn destinations. Placeholder content must not resemble real
    identities.
-6. A final contact block with only two primary actions: Call and WhatsApp.
-   During the trial, both use conspicuous non-production UK placeholders.
+6. A final contact block that says “Whatever you need to move forward, call
+   us.” It has only two primary actions: Call us and WhatsApp us. During the
+   trial, both use conspicuous non-production UK placeholders.
 7. Minimal footer.
 
 ## Visual Direction
