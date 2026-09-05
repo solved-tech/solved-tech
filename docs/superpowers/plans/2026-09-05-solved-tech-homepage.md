@@ -319,6 +319,87 @@ git commit -m "feat(ui): add immersive scroll experience"
 
 ---
 
+### Task 3A: Scroll-Reactive Technical Grid
+
+**Files:**
+- Modify: `src/render.ts`
+- Modify: `src/styles.css`
+- Modify: `tests/render.test.ts`
+
+**Interfaces:**
+- Consumes: the existing `--scroll-progress` custom property
+- Produces: one decorative `.ambient-grid` SVG with a repeated line pattern
+  and sparse accent intersections
+
+- [ ] **Step 1: Write the failing renderer test**
+
+```ts
+it("renders one assistive-technology-hidden background grid", () => {
+  expect(html.match(/class="ambient-grid"/g)).toHaveLength(1);
+  expect(html).toContain('aria-hidden="true"');
+  expect(html).toContain('id="ambient-grid-pattern"');
+  expect(html).toContain('class="ambient-grid__accent"');
+});
+```
+
+- [ ] **Step 2: Run the test to verify it fails**
+
+Run: `npm test -- --run tests/render.test.ts`
+
+Expected: FAIL because the ambient grid markup is absent.
+
+- [ ] **Step 3: Add the decorative SVG layer**
+
+Render one fixed SVG before the page header. It must use `<defs>`,
+`<pattern id="ambient-grid-pattern">`, horizontal and vertical `<path>` lines,
+one full-viewport patterned rectangle, and a small set of circles with
+`class="ambient-grid__accent"`. Set `aria-hidden="true"`, `focusable="false"`,
+and `preserveAspectRatio="none"`. The SVG must contain no text or interactive
+elements.
+
+- [ ] **Step 4: Make the grid react to scroll**
+
+Use the existing `--scroll-progress` value in CSS to translate and slightly
+scale the fixed SVG:
+
+```css
+.ambient-grid {
+  transform:
+    translate3d(
+      calc(var(--scroll-progress, 0) * -2rem),
+      calc(var(--scroll-progress, 0) * 3rem),
+      0
+    )
+    scale(calc(1 + var(--scroll-progress, 0) * 0.04));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-grid {
+    transform: none;
+  }
+}
+```
+
+Keep line opacity faint, use the existing orange token only for sparse accent
+intersections, set `pointer-events: none`, and preserve text contrast. Do not
+use CSS gradients, raster images, dependencies, or continuous animation.
+
+- [ ] **Step 5: Verify the focused change**
+
+Run: `npm test -- --run tests/render.test.ts tests/motion.test.ts && npm run check && npm run build`
+
+Expected: all focused tests pass, TypeScript exits with code 0, and Vite
+reports a successful production build.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add src/render.ts src/styles.css tests/render.test.ts
+git commit -m "feat(ui): add scroll-reactive background grid"
+```
+
+---
+
 ### Task 4: Quality and Browser Verification
 
 **Files:**

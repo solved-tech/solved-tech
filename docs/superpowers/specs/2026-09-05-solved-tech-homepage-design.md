@@ -43,6 +43,9 @@ introduces service names only when they help a visitor choose.
 - Orange appears sparingly on primary actions, progress cues, and meaningful
   highlights.
 - Large, disciplined typography and generous spacing create confidence.
+- A fine technical grid sits behind the page and shifts gently with scroll
+  progress. Sparse orange intersections appear near key moments without
+  competing with the copy.
 - Scroll-triggered transitions reveal content progressively.
 - Motion stays restrained, preserves reading flow, and respects reduced-motion
   preferences.
@@ -74,6 +77,10 @@ statistics, and filler.
 Use Vite with TypeScript and repository-local npm tooling. Keep the landing page
 framework-free: semantic HTML, modular TypeScript, and CSS. Use
 `IntersectionObserver` only as progressive enhancement for scroll reveals.
+Render the background grid as an inline, decorative SVG rather than a gradient
+or external image. Drive its subtle offset and scale from the existing
+scroll-progress value, keep it non-interactive and hidden from assistive
+technology, and leave it static when reduced motion is preferred.
 Store contact destinations in one configuration object. Until production
 contact details are supplied, contact controls use an explicit local preview
 state and do not invent addresses or phone numbers.
