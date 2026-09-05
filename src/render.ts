@@ -89,12 +89,27 @@ export const renderHomepage = (
       <code data-language="swift">Task { await build(value) }</code>
       <code data-language="sql">SELECT opportunity FROM signals;</code>
       <code data-language="shell">$ ship --when-ready</code>
+      <code data-language="rust">let result = solve(problem).await?;</code>
+      <code data-language="java">return service.deliver(value);</code>
+      <code data-language="kotlin">flow.map { it.makeUseful() }</code>
+      <code data-language="csharp">await ConnectAsync(yourSystems);</code>
+      <code data-language="php">$growth = solve($friction);</code>
+      <code data-language="ruby">workflows.each(&amp;:automate)</code>
+      <code data-language="dart">await product.ship(whenReady: true);</code>
+      <code data-language="html">&lt;idea&gt;made useful&lt;/idea&gt;</code>
+      <code data-language="css">.friction { display: none; }</code>
+      <code data-language="graphql">query { opportunities { nextStep } }</code>
+      <code data-language="docker">RUN build --for=people</code>
+      <code data-language="terraform">resource "progress" "next" {}</code>
     </div>
     <header id="top" class="site-header">
       <a class="wordmark" href="#top" aria-label="Solved Tech home">
         <img src="/brand/solved-tech-logo-dark.svg" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
       </a>
-      <nav aria-label="Primary navigation">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="primary-navigation" aria-label="Primary navigation">
         <a href="#services">Services</a>
         <a href="#approach">Approach</a>
         <a href="#contact">Contact</a>

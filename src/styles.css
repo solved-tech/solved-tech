@@ -96,8 +96,13 @@ body {
   position: fixed;
   inset: -8vh -6vw;
   z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(9, minmax(0, 1fr));
+  align-items: center;
+  gap: 1rem 2rem;
   pointer-events: none;
-  opacity: 0.065;
+  opacity: 0.052;
   transform: translate3d(
     0,
     calc(var(--scroll-progress, 0) * -7rem),
@@ -106,7 +111,7 @@ body {
 }
 
 .code-field code {
-  position: absolute;
+  min-width: max-content;
   color: var(--ink);
   font-family: var(--font-mono);
   font-size: clamp(0.62rem, 0.58rem + 0.18vw, 0.78rem);
@@ -115,35 +120,19 @@ body {
   white-space: nowrap;
 }
 
-.code-field code:nth-child(1) {
-  inset-block-start: 12%;
-  inset-inline-start: 8%;
+.code-field code:nth-child(even) {
+  justify-self: end;
 }
 
-.code-field code:nth-child(2) {
-  inset-block-start: 30%;
-  inset-inline-end: 4%;
-}
-
-.code-field code:nth-child(3) {
-  inset-block-start: 48%;
-  inset-inline-start: 16%;
-}
-
-.code-field code:nth-child(4) {
-  inset-block-start: 64%;
-  inset-inline-end: 12%;
-}
-
-.code-field code:nth-child(5) {
-  inset-block-start: 80%;
-  inset-inline-start: 4%;
-}
-
-.code-field code:nth-child(6) {
-  inset-block-start: 94%;
-  inset-inline-end: 20%;
+.code-field code:nth-child(6n) {
   color: var(--accent);
+}
+
+@media (min-width: 48rem) {
+  .code-field {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+  }
 }
 
 main,
@@ -217,12 +206,11 @@ a {
   inset-block-start: 0;
   z-index: 10;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 2rem;
+  gap: 1rem;
   align-items: center;
   justify-content: space-between;
   min-height: var(--header-height);
-  padding: 0.5rem var(--gutter);
+  padding: 0.75rem var(--gutter);
   border-block-end: 1px solid var(--line);
   background-color: var(--surface);
 }
@@ -240,13 +228,71 @@ a {
 
 .wordmark img {
   display: block;
-  width: clamp(8.75rem, 38vw, 11.25rem);
+  width: clamp(9rem, 42vw, 11.25rem);
   height: auto;
 }
 
+.menu-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 19px;
+  height: 1px;
+  background-color: currentColor;
+  transform-origin: center;
+  transition:
+    transform 220ms var(--ease),
+    opacity 160ms var(--ease);
+}
+
+.menu-toggle[aria-expanded="true"] span:first-child {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menu-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle[aria-expanded="true"] span:last-child {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
 .site-header nav {
-  display: flex;
-  gap: clamp(1rem, 3vw, 2.5rem);
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline: 0;
+  display: grid;
+  padding: 0 var(--gutter) 1rem;
+  border-block-end: 1px solid var(--line);
+  background-color: var(--surface);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-0.5rem);
+  transition:
+    opacity 180ms var(--ease),
+    transform 220ms var(--ease),
+    visibility 180ms;
+}
+
+.site-header nav.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
 }
 
 .site-header nav a {
@@ -254,6 +300,8 @@ a {
   align-items: center;
   min-height: 44px;
   color: var(--ink-muted);
+  padding-block: 0.65rem;
+  border-block-start: 1px solid var(--line);
   font-size: var(--type-small);
   letter-spacing: 0.06em;
   text-decoration: none;
@@ -262,6 +310,29 @@ a {
 
 .site-header nav a:hover {
   color: var(--ink);
+}
+
+@media (min-width: 48rem) {
+  .menu-toggle {
+    display: none;
+  }
+
+  .site-header nav {
+    position: static;
+    display: flex;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding: 0;
+    border: 0;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .site-header nav a {
+    padding: 0;
+    border: 0;
+  }
 }
 
 /* Sections ------------------------------------------------------------ */

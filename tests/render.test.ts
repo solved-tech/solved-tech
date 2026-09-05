@@ -24,7 +24,8 @@ describe("homepage renderer", () => {
   });
 
   it("renders semantic navigation and contact landmarks", () => {
-    expect(html).toContain("<nav");
+    expect(html).toContain('<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"');
+    expect(html).toContain('<nav id="primary-navigation"');
     expect(html).toContain('<main id="main-content">');
     expect(html).toContain('<section class="contact');
   });
@@ -48,9 +49,15 @@ describe("homepage renderer", () => {
   it("renders a subtle decorative code field across representative stacks", () => {
     expect(html.match(/class="code-field"/g)).toHaveLength(1);
     expect(html).toContain('class="code-field" aria-hidden="true"');
-    ["typescript", "python", "go", "swift", "sql", "shell"].forEach(
-      (language) => expect(html).toContain(`data-language="${language}"`),
+    const languages = [
+      "typescript", "python", "go", "swift", "sql", "shell",
+      "rust", "java", "kotlin", "csharp", "php", "ruby",
+      "dart", "html", "css", "graphql", "docker", "terraform",
+    ];
+    languages.forEach((language) =>
+      expect(html).toContain(`data-language="${language}"`),
     );
+    expect(html.match(/data-language=/g)).toHaveLength(languages.length);
   });
 
   it("marks every element the enhancement layer reveals", () => {

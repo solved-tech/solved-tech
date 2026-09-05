@@ -4,6 +4,7 @@ import {
   setupContactPreview,
   setupHeaderOffset,
   setupHeroInteraction,
+  setupMobileMenu,
   setupRevealMotion,
   setupScrollProgress,
 } from "../src/main";
@@ -180,6 +181,40 @@ describe("hero interaction", () => {
     setupHeroInteraction(root, true);
 
     expect(addEventListener).not.toHaveBeenCalled();
+  });
+});
+
+describe("mobile menu", () => {
+  it("toggles navigation visibility and its accessible state", () => {
+    const attributes = new Map([["aria-expanded", "false"]]);
+    const handlers = new Map<string, () => void>();
+    const toggle = vi.fn();
+    const button = {
+      getAttribute: (name: string) => attributes.get(name) ?? null,
+      setAttribute: (name: string, value: string) =>
+        attributes.set(name, value),
+      addEventListener: (type: string, handler: () => void) =>
+        handlers.set(type, handler),
+    };
+    const nav = {
+      classList: { toggle },
+      querySelectorAll: vi.fn(() => []),
+    };
+    const root = {
+      querySelector: vi.fn((selector: string) =>
+        selector === ".menu-toggle" ? button : nav,
+      ),
+    } as unknown as ParentNode;
+
+    setupMobileMenu(root);
+    handlers.get("click")?.();
+
+    expect(attributes.get("aria-expanded")).toBe("true");
+    expect(toggle).toHaveBeenCalledWith("is-open", true);
+
+    handlers.get("click")?.();
+    expect(attributes.get("aria-expanded")).toBe("false");
+    expect(toggle).toHaveBeenLastCalledWith("is-open", false);
   });
 });
 

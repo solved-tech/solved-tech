@@ -115,6 +115,29 @@ export const setupHeroInteraction = (
   hero.addEventListener("pointerleave", reset);
 };
 
+export const setupMobileMenu = (root: ParentNode): void => {
+  const button = root.querySelector<HTMLButtonElement>(".menu-toggle");
+  const nav = root.querySelector<HTMLElement>("#primary-navigation");
+
+  if (!button || !nav) {
+    return;
+  }
+
+  const setOpen = (open: boolean): void => {
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    nav.classList.toggle("is-open", open);
+  };
+
+  button.addEventListener("click", () => {
+    setOpen(button.getAttribute("aria-expanded") !== "true");
+  });
+
+  nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+};
+
 /**
  * Publish the measured header height so anchor scroll padding and the hero
  * height stay correct when the header wraps onto more rows.
@@ -195,6 +218,7 @@ const start = (view: Window): void => {
   setupHeaderOffset(view);
   setupRevealMotion(app, reducedMotion);
   setupHeroInteraction(app, reducedMotion);
+  setupMobileMenu(app);
   setupContactPreview(app);
   setupScrollProgress(view);
 };
