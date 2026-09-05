@@ -10,6 +10,16 @@ describe("homepage renderer", () => {
     siteContent.services.forEach(({ title }) => expect(html).toContain(title));
   });
 
+  it("keeps the hero concise and clearly aimed at UK businesses", () => {
+    expect(html).toContain(
+      '<p class="hero__eyebrow" data-reveal>Practical digital partner for UK businesses</p>',
+    );
+    expect(html).toContain("Solve what is slowing your business down.");
+    expect(html).toContain(
+      "From finding more customers to removing repetitive work, we build what makes the next difference.",
+    );
+  });
+
   it("renders semantic navigation and contact landmarks", () => {
     expect(html).toContain("<nav");
     expect(html).toContain('<main id="main-content">');
@@ -25,7 +35,7 @@ describe("homepage renderer", () => {
 
   it("marks every element the enhancement layer reveals", () => {
     const expected =
-      3 + 2 + 1 + siteContent.services.length + 4 + 2 + 2 +
+      4 + 2 + 1 + siteContent.services.length + 4 + 2 + 2 +
       siteContent.contactMethods.length;
 
     expect(html.match(/ data-reveal(?=[ >])/g)).toHaveLength(expected);

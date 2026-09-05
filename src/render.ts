@@ -92,8 +92,9 @@ export const renderHomepage = (
     </header>
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-heading">
-        <h1 id="hero-heading" data-reveal>Technology should solve the next business problem. Not create another one.</h1>
-        <p data-reveal>We help UK businesses attract customers, build useful digital products and remove repetitive work.</p>
+        <p class="hero__eyebrow" data-reveal>Practical digital partner for UK businesses</p>
+        <h1 id="hero-heading" data-reveal>Solve what is slowing your business down.</h1>
+        <p data-reveal>From finding more customers to removing repetitive work, we build what makes the next difference.</p>
         ${renderContactControl("call", "Book a call", config, " data-reveal")}
       </section>
       <section class="problem" aria-labelledby="problem-heading">
