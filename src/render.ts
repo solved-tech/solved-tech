@@ -91,7 +91,9 @@ export const renderHomepage = (
       <code data-language="shell">$ ship --when-ready</code>
     </div>
     <header id="top" class="site-header">
-      <a class="wordmark" href="#top" aria-label="Solved Tech home">Solved Tech</a>
+      <a class="wordmark" href="#top" aria-label="Solved Tech home">
+        <img src="/brand/solved-tech-logo-dark.svg" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
+      </a>
       <nav aria-label="Primary navigation">
         <a href="#services">Services</a>
         <a href="#approach">Approach</a>

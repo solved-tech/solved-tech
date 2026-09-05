@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="160" viewBox="0 0 720 160" role="img" aria-labelledby="title description">
+  <title id="title">Solved Tech</title>
+  <desc id="description">An abstract S resolves through a technical grid into an orange point. Your digital problems, solved.</desc>
+  <g transform="translate(16 16)">
+    <path d="M0 0H128M0 32H128M0 64H128M0 96H128M0 128H128M0 0V128M32 0V128M64 0V128M96 0V128M128 0V128" fill="none" stroke="#4d4842" stroke-width="1"/>
+    <path d="M104 24H48C34.745 24 24 34.745 24 48s10.745 24 24 24h32c13.255 0 24 10.745 24 24s-10.745 24-24 24H24" fill="none" stroke="#f5f2ed" stroke-width="9" stroke-linecap="square" stroke-linejoin="round"/>
+    <circle cx="104" cy="96" r="7" fill="#e8622a"/>
+    <circle cx="24" cy="120" r="3" fill="#f5f2ed"/>
+  </g>
+  <text x="174" y="82" fill="#f5f2ed" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" letter-spacing="5">SOLVED</text>
+  <text x="462" y="82" fill="#e8622a" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" letter-spacing="5">TECH</text>
+  <path d="M176 104H704" stroke="#4d4842" stroke-width="1"/>
+  <text x="176" y="132" fill="#aaa49b" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="500" letter-spacing="2.2">YOUR DIGITAL PROBLEMS, SOLVED.</text>
+</svg>

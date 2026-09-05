@@ -238,6 +238,12 @@ a {
   text-decoration: none;
 }
 
+.wordmark img {
+  display: block;
+  width: clamp(8.75rem, 38vw, 11.25rem);
+  height: auto;
+}
+
 .site-header nav {
   display: flex;
   gap: clamp(1rem, 3vw, 2.5rem);

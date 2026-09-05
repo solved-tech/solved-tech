@@ -29,6 +29,15 @@ describe("homepage renderer", () => {
     expect(html).toContain('<section class="contact');
   });
 
+  it("uses the professional logo lockup in the site header", () => {
+    expect(html).toContain(
+      '<a class="wordmark" href="#top" aria-label="Solved Tech home">',
+    );
+    expect(html).toContain(
+      '<img src="/brand/solved-tech-logo-dark.svg" alt="Solved Tech — Your digital problems, solved."',
+    );
+  });
+
   it("renders one assistive-technology-hidden background grid", () => {
     expect(html.match(/class="ambient-grid"/g)).toHaveLength(1);
     expect(html).toContain('aria-hidden="true"');
