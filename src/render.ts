@@ -101,6 +101,12 @@ export const renderHomepage = (
       <code data-language="graphql">query { opportunities { nextStep } }</code>
       <code data-language="docker">RUN build --for=people</code>
       <code data-language="terraform">resource "progress" "next" {}</code>
+      <code data-language="c">result_t next = solve(problem);</code>
+      <code data-language="cpp">auto outcome = build&lt;Useful&gt;();</code>
+      <code data-language="scala">signals.map(_.nextStep)</code>
+      <code data-language="elixir">problem |&gt; solve() |&gt; ship()</code>
+      <code data-language="lua">return automate(workflow)</code>
+      <code data-language="r">growth &lt;- model(opportunity)</code>
     </div>
     <header id="top" class="site-header">
       <a class="wordmark" href="#top" aria-label="Solved Tech home">

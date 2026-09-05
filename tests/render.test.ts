@@ -53,6 +53,7 @@ describe("homepage renderer", () => {
       "typescript", "python", "go", "swift", "sql", "shell",
       "rust", "java", "kotlin", "csharp", "php", "ruby",
       "dart", "html", "css", "graphql", "docker", "terraform",
+      "c", "cpp", "scala", "elixir", "lua", "r",
     ];
     languages.forEach((language) =>
       expect(html).toContain(`data-language="${language}"`),
