@@ -16,6 +16,18 @@ describe("homepage renderer", () => {
     expect(html).toContain('<section class="contact');
   });
 
+  it("marks every element the enhancement layer reveals", () => {
+    const expected =
+      3 + 2 + 1 + siteContent.services.length + 4 + 2 + 2 +
+      siteContent.contactMethods.length;
+
+    expect(html.match(/ data-reveal(?=[ >])/g)).toHaveLength(expected);
+    expect(html).toContain('<h1 id="hero-heading" data-reveal>');
+    expect(html).toContain('<article class="service" data-reveal>');
+    expect(html).toContain("<li data-reveal>");
+    expect(html).toContain('data-contact-preview="call" data-reveal>');
+  });
+
   it("does not emit fabricated contact links in preview mode", () => {
     expect(html).not.toContain("tel:");
     expect(html).not.toContain("wa.me");

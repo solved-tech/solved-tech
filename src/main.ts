@@ -7,25 +7,19 @@ import "./styles.css";
 export const CONTACT_PREVIEW_MESSAGE =
   "Contact destinations are not configured yet, so this control cannot start a call, a chat or a quote. The real details will appear here as soon as they are live.";
 
-const REVEAL_GROUPS = [
-  ".hero > *",
-  ".problem > *",
-  ".services > h2",
-  ".service",
-  ".approach > h2",
-  ".approach li",
-  ".trust > *",
-  ".contact > h2",
-  ".contact > p",
-  ".contact li",
-];
+/**
+ * Stagger each reveal target against its own siblings. The renderer owns which
+ * elements carry `data-reveal`; nothing here depends on its class names.
+ */
+const stagger = (root: ParentNode): void => {
+  const positions = new Map<ParentNode, number>();
 
-const markRevealTargets = (root: ParentNode): void => {
-  REVEAL_GROUPS.forEach((selector) => {
-    root.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
-      element.dataset.reveal = "";
-      element.style.setProperty("--reveal-index", String(index));
-    });
+  root.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element) => {
+    const group: ParentNode = element.parentElement ?? root;
+    const position = positions.get(group) ?? 0;
+
+    element.style.setProperty("--reveal-index", String(position));
+    positions.set(group, position + 1);
   });
 };
 
@@ -81,6 +75,36 @@ export const setupContactPreview = (root: ParentNode): void => {
     });
 };
 
+/**
+ * Publish the measured header height so anchor scroll padding and the hero
+ * height stay correct when the header wraps onto more rows.
+ */
+export const setupHeaderOffset = (view: Window): void => {
+  const header = view.document.querySelector<HTMLElement>(".site-header");
+
+  if (!header) {
+    return;
+  }
+
+  const root = view.document.documentElement;
+
+  const measure = (): void => {
+    const { height } = header.getBoundingClientRect();
+
+    if (height > 0) {
+      root.style.setProperty("--header-height", `${Math.round(height)}px`);
+    }
+  };
+
+  if (typeof ResizeObserver === "undefined") {
+    view.addEventListener("resize", measure, { passive: true });
+  } else {
+    new ResizeObserver(measure).observe(header);
+  }
+
+  measure();
+};
+
 export const setupScrollProgress = (view: Window): void => {
   const root = view.document.documentElement;
   let queued = false;
@@ -125,7 +149,8 @@ const start = (view: Window): void => {
   view.document.documentElement.classList.add("has-enhancement");
   app.innerHTML = renderHomepage(siteContent, contactConfig);
 
-  markRevealTargets(app);
+  stagger(app);
+  setupHeaderOffset(view);
   setupRevealMotion(app, prefersReducedMotion(view));
   setupContactPreview(app);
   setupScrollProgress(view);

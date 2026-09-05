@@ -567,9 +567,10 @@ footer a:hover {
   color: var(--ink);
 }
 
-/* Scroll reveal (present only when the enhancement script runs) --------- */
+/* Scroll reveal. Hidden only while the enhancement script is in charge, so
+   markup that carries data-reveal is always readable on its own. ---------- */
 
-[data-reveal] {
+.has-enhancement [data-reveal] {
   opacity: 0;
   transform: translate3d(0, 1.25rem, 0);
   transition:
@@ -578,7 +579,7 @@ footer a:hover {
   transition-delay: calc(var(--reveal-index, 0) * 80ms);
 }
 
-[data-reveal].is-visible {
+.has-enhancement [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
@@ -599,7 +600,7 @@ footer a:hover {
     transition-delay: 0ms !important;
   }
 
-  [data-reveal] {
+  .has-enhancement [data-reveal] {
     opacity: 1;
     transform: none;
   }

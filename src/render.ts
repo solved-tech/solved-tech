@@ -37,10 +37,11 @@ const renderContactControl = (
   id: ContactMethodId,
   label: string,
   config: ContactConfig,
+  extraAttributes = "",
 ): string =>
   getContactState(config) === "preview"
-    ? `<button type="button" data-contact-preview="${escapeHtml(id)}">${escapeHtml(label)}</button>`
-    : `<a href="${escapeHtml(contactDestination(id, config))}">${escapeHtml(label)}</a>`;
+    ? `<button type="button" data-contact-preview="${escapeHtml(id)}"${extraAttributes}>${escapeHtml(label)}</button>`
+    : `<a href="${escapeHtml(contactDestination(id, config))}"${extraAttributes}>${escapeHtml(label)}</a>`;
 
 export const renderHomepage = (
   content: SiteContent,
@@ -50,7 +51,7 @@ export const renderHomepage = (
   const services = content.services
     .map(
       ({ title, summary, detail }, index) => `
-        <article class="service">
+        <article class="service" data-reveal>
           <p class="service-number">${String(index + 1).padStart(2, "0")}</p>
           <h3>${escapeHtml(title)}</h3>
           <p>${escapeHtml(summary)}</p>
@@ -61,7 +62,7 @@ export const renderHomepage = (
   const contactMethods = content.contactMethods
     .map(
       ({ id, label, note }) => `
-        <li>
+        <li data-reveal>
           ${renderContactControl(id, label, config)}
           <p>${escapeHtml(note)}</p>
         </li>`,
@@ -79,33 +80,33 @@ export const renderHomepage = (
     </header>
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-heading">
-        <h1 id="hero-heading">Technology should solve the next business problem. Not create another one.</h1>
-        <p>We help UK businesses attract customers, build useful digital products and remove repetitive work.</p>
-        ${renderContactControl("call", "Book a call", config)}
+        <h1 id="hero-heading" data-reveal>Technology should solve the next business problem. Not create another one.</h1>
+        <p data-reveal>We help UK businesses attract customers, build useful digital products and remove repetitive work.</p>
+        ${renderContactControl("call", "Book a call", config, " data-reveal")}
       </section>
       <section class="problem" aria-labelledby="problem-heading">
-        <h2 id="problem-heading">Your business does not need more digital noise.</h2>
-        <p>It needs a clear answer to the problem holding it back.</p>
+        <h2 id="problem-heading" data-reveal>Your business does not need more digital noise.</h2>
+        <p data-reveal>It needs a clear answer to the problem holding it back.</p>
       </section>
       <section id="services" class="services" aria-labelledby="services-heading">
-        <h2 id="services-heading">What we can solve</h2>
+        <h2 id="services-heading" data-reveal>What we can solve</h2>
         ${services}
       </section>
       <section id="approach" class="approach" aria-labelledby="approach-heading">
-        <h2 id="approach-heading">A clear way forward</h2>
+        <h2 id="approach-heading" data-reveal>A clear way forward</h2>
         <ol>
-          <li><h3>Find the blockage</h3><p>Understand what is getting in the way and why it matters.</p></li>
-          <li><h3>Build what changes it</h3><p>Choose and make the simplest useful solution.</p></li>
-          <li><h3>Show what improved</h3><p>Make the result clear so you know what changed.</p></li>
+          <li data-reveal><h3>Find the blockage</h3><p>Understand what is getting in the way and why it matters.</p></li>
+          <li data-reveal><h3>Build what changes it</h3><p>Choose and make the simplest useful solution.</p></li>
+          <li data-reveal><h3>Show what improved</h3><p>Make the result clear so you know what changed.</p></li>
         </ol>
       </section>
       <section class="trust" aria-labelledby="trust-heading">
-        <h2 id="trust-heading">Clarity from the start</h2>
-        <p>We explain the work in plain language, set out the next step and do not make claims we cannot support.</p>
+        <h2 id="trust-heading" data-reveal>Clarity from the start</h2>
+        <p data-reveal>We explain the work in plain language, set out the next step and do not make claims we cannot support.</p>
       </section>
       <section class="contact" id="contact" aria-labelledby="contact-heading">
-        <h2 id="contact-heading">Tell us what needs solving</h2>
-        <p>Choose the easiest way to start the conversation.</p>
+        <h2 id="contact-heading" data-reveal>Tell us what needs solving</h2>
+        <p data-reveal>Choose the easiest way to start the conversation.</p>
         <ul>${contactMethods}</ul>
         ${preview ? '<p class="contact-note">Contact details are being connected. These preview controls do not send or place anything yet.</p>' : ""}
       </section>
