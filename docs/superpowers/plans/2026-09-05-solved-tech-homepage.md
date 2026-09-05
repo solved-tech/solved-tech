@@ -36,7 +36,21 @@
 - Produces: `siteContent: SiteContent`, `contactConfig: ContactConfig`
 - Produces: `getContactState(config: ContactConfig): "ready" | "preview"`
 
-- [ ] **Step 1: Write the failing content tests**
+- [ ] **Step 1: Add the exact development toolchain**
+
+Create `package.json` with ESM mode and scripts for `dev`, `build`, `preview`,
+`test`, and `check`. Install exact versions with:
+
+```bash
+npm install --save-dev --save-exact vite@8.2.2 typescript@7.0.2 vitest@4.1.11
+```
+
+Use `.nvmrc` value `25.9.0`, ignore `node_modules`, `dist`, coverage output,
+macOS metadata, local environment files, `.superpowers/`, and `.notes/`.
+Configure TypeScript with `strict`, `noEmit`, `moduleResolution: "Bundler"`,
+and DOM libraries.
+
+- [ ] **Step 2: Write the failing content tests**
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -68,24 +82,11 @@ describe("site content", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [ ] **Step 3: Run the test to verify it fails**
 
 Run: `npm test -- --run tests/content.test.ts`
 
 Expected: FAIL because `src/content.ts` does not exist.
-
-- [ ] **Step 3: Add the exact development toolchain**
-
-Create `package.json` with ESM mode and scripts for `dev`, `build`, `preview`,
-`test`, and `check`. Install exact versions with:
-
-```bash
-npm install --save-dev --save-exact vite@8.2.2 typescript@7.0.2 vitest@4.1.11
-```
-
-Use `.nvmrc` value `25.9.0`, ignore `node_modules`, `dist`, coverage output,
-macOS metadata, and local environment files, and configure TypeScript with
-`strict`, `noEmit`, `moduleResolution: "Bundler"`, and DOM libraries.
 
 - [ ] **Step 4: Implement typed content and contact configuration**
 
