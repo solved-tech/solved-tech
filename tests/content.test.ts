@@ -24,4 +24,12 @@ describe("site content", () => {
   it("uses preview mode when production destinations are absent", () => {
     expect(getContactState(contactConfig)).toBe("preview");
   });
+
+  it("keeps visible service copy free from unexplained jargon", () => {
+    const serviceCopy = siteContent.services
+      .flatMap(({ summary, detail }) => [summary, detail])
+      .join(" ");
+
+    expect(serviceCopy).not.toMatch(/\b(?:SaaS|APIs?|agentic|MCP|SEO)\b/i);
+  });
 });

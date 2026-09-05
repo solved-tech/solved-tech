@@ -26,28 +26,32 @@ export const siteContent: SiteContent = {
     {
       title: "Be easier to find",
       summary: "Help the right customers discover your business.",
-      detail: "Google Ads, technical SEO, and on-page SEO.",
+      detail:
+        "Paid Google adverts and improvements to your website and its pages that help them appear in search results.",
     },
     {
       title: "Turn visits into business",
       summary: "Give customers a clear path from browsing to buying.",
-      detail: "Online shops and conversion-focused websites.",
+      detail:
+        "Online shops and websites designed to turn visits into enquiries or sales.",
     },
     {
       title: "Build what customers need",
-      summary: "Turn a useful idea into a dependable digital product.",
-      detail: "Websites, SaaS platforms, mobile apps, and desktop apps.",
+      summary: "Turn a useful idea into dependable software people can use.",
+      detail:
+        "Websites, subscription-based online software, and apps for phones and computers.",
     },
     {
       title: "Make your systems cooperate",
       summary: "Connect the tools your business relies on.",
-      detail: "APIs and business integrations.",
+      detail:
+        "Secure connections that let your business tools share information and work together.",
     },
     {
       title: "Give repetitive work away",
       summary: "Free your team from routine tasks and repeated answers.",
       detail:
-        "Agentic workflows, MCP solutions, voice agents, and WhatsApp agents.",
+        "Routine jobs that run by themselves, links that let digital assistants use your tools, and assistants that handle voice calls or WhatsApp conversations.",
     },
   ],
   contactMethods: [
