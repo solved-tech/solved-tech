@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 620" role="img" aria-labelledby="title desc">
+  <title id="title">Founder Two placeholder portrait</title>
+  <desc id="desc">An abstract monochrome portrait used until the real founder photograph is supplied.</desc>
+  <rect width="520" height="620" fill="#121110"/>
+  <g stroke="#322f2b" stroke-width="1">
+    <path d="M0 100H520M0 204H520M0 308H520M0 412H520M0 516H520"/>
+    <path d="M104 0V620M208 0V620M312 0V620M416 0V620"/>
+  </g>
+  <circle cx="260" cy="222" r="100" fill="#4d4842"/>
+  <path d="M72 620c12-150 80-232 188-232s176 82 188 232H72Z" fill="#6f6a63"/>
+  <path d="M150 238c-8-25-9-52-3-80 14-68 68-116 130-116 64 0 115 42 130 106-40-25-77-37-112-37-61 0-109 42-145 127Z" fill="#191817"/>
+  <rect x="102" y="86" width="12" height="12" fill="#e8622a"/>
+</svg>
