@@ -558,14 +558,12 @@ main > section + section {
 /* Sticky section labels ------------------------------------------------ */
 
 .services,
-.approach,
 .contact {
   display: grid;
   row-gap: 0;
 }
 
 .services > h2,
-.approach > h2,
 .contact > h2 {
   font-size: var(--type-title);
   line-height: 1.1;
@@ -573,19 +571,16 @@ main > section + section {
   margin-block-end: clamp(2rem, 4vw, 3rem);
 }
 
-.approach > h2,
 .contact > h2 {
   margin-block-end: clamp(1.75rem, 3vw, 2.5rem);
 }
 
 @media (min-width: 64rem) {
-  .approach,
   .contact {
     grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
     column-gap: clamp(3rem, 7vw, 8rem);
   }
 
-  .approach > h2,
   .contact > h2 {
     grid-column: 1;
     grid-row: 1 / span 12;
@@ -601,7 +596,6 @@ main > section + section {
     max-width: none;
   }
 
-  .approach > :not(h2),
   .contact > :not(h2) {
     grid-column: 2;
   }
@@ -1078,63 +1072,205 @@ main > section + section {
   }
 }
 
-/* Approach ------------------------------------------------------------- */
+/* Client journey ------------------------------------------------------- */
 
-.approach ol {
-  counter-reset: step;
+.journey {
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.25rem);
+  gap: clamp(2.5rem, 6vw, 5rem);
+}
+
+.journey__heading p,
+.journey__number {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--type-small);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.journey__heading h2 {
+  max-width: 16ch;
+  margin-block-start: 0.65rem;
+  font-size: var(--type-title);
+  line-height: 1.05;
+}
+
+.journey__moments {
+  position: relative;
+  display: grid;
+  gap: 2.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.approach li {
-  counter-increment: step;
-  padding-inline-start: clamp(2.5rem, 5vw, 3.5rem);
-  border-inline-start: 1px solid var(--line);
-  position: relative;
-}
-
-.approach li::before {
-  content: counter(step, decimal-leading-zero);
+.journey__moments::before,
+.journey__moments::after {
+  content: "";
   position: absolute;
-  inset-inline-start: 0;
-  inset-block-start: 0;
-  transform: translateX(-50%);
-  padding-block: 0.15rem;
-  background-color: var(--surface);
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: var(--type-small);
+  inset-block: 1.5rem 2.5rem;
+  inset-inline-start: 1.5rem;
+  z-index: 0;
+  width: 1px;
+  transform-origin: top;
 }
 
-.approach h3 {
+.journey__moments::before {
+  background-color: var(--line-strong);
+}
+
+.journey__moments::after {
+  background-color: var(--accent);
+  transform: scaleY(0);
+}
+
+.journey__moments.is-visible::after {
+  animation: journey-route-vertical 820ms var(--ease) both 120ms;
+}
+
+.journey__moment {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 0.3rem 1rem;
+  min-width: 0;
+}
+
+.journey__number,
+.journey__moment > div {
+  grid-column: 2;
+}
+
+.journey__signal {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  background-color: var(--surface);
+}
+
+.journey__signal svg {
+  width: 2.25rem;
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+  transition:
+    stroke 240ms var(--ease),
+    transform 240ms var(--ease);
+}
+
+.journey__moment:hover .journey__signal svg {
+  stroke: var(--accent);
+  transform: translateY(-2px);
+}
+
+.journey__moment h3 {
   margin-block-end: 0.35rem;
   font-size: var(--type-heading);
+  line-height: 1.2;
 }
 
-.approach p {
+.journey__moment p {
   color: var(--ink-muted);
 }
 
+.has-enhancement .journey__moments:not(.is-visible) .journey__moment {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.journey__moments.is-visible .journey__moment {
+  animation: journey-moment-enter 520ms var(--ease) both;
+}
+
+.journey__moments.is-visible .journey__moment:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.journey__moments.is-visible .journey__moment:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+.journey__moments.is-visible .journey__moment:nth-child(4) {
+  animation-delay: 360ms;
+}
+
+@keyframes journey-route-vertical {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes journey-route-horizontal {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes journey-moment-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (min-width: 52rem) {
-  .approach ol {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .journey__moments {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0;
   }
 
-  .approach li {
-    padding: clamp(2rem, 4vw, 3rem) 1rem 0 0;
-    border-block-start: 1px solid var(--line);
-    border-inline-start: 0;
+  .journey__moments::before,
+  .journey__moments::after {
+    inset-block: 2.7rem auto;
+    inset-inline-start: 1.5rem;
+    inset-inline-end: calc(25% - 1.5rem);
+    width: auto;
+    height: 1px;
+    transform-origin: left;
   }
 
-  .approach li::before {
-    inset-inline-start: 0;
-    inset-block-start: 0;
-    transform: translateY(-50%);
-    padding: 0 0.5rem 0 0;
+  .journey__moments::after {
+    transform: scaleX(0);
+  }
+
+  .journey__moments.is-visible::after {
+    animation-name: journey-route-horizontal;
+  }
+
+  .journey__moment {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 3rem auto;
+    padding-inline-end: clamp(1rem, 3vw, 2.5rem);
+  }
+
+  .journey__number,
+  .journey__signal,
+  .journey__moment > div {
+    grid-column: 1;
+  }
+
+  .journey__number {
+    grid-row: 1;
+  }
+
+  .journey__signal {
+    grid-row: 2;
+  }
+
+  .journey__moment > div {
+    grid-row: 3;
+    padding-block-start: 1.1rem;
   }
 }
 
@@ -1426,6 +1562,23 @@ footer a:hover {
   .code-field,
   .hero__signal {
     transform: none;
+  }
+
+  .journey__moments::after {
+    animation: none;
+    transform: scaleY(1);
+  }
+
+  .journey__moment {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 52rem) {
+  .journey__moments::after {
+    transform: scaleX(1);
   }
 }
 

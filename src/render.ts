@@ -178,12 +178,40 @@ export const renderHomepage = (
         <h2 id="services-heading" data-reveal>What do you need?</h2>
         <div class="service-grid">${services}</div>
       </section>
-      <section id="approach" class="approach" aria-labelledby="approach-heading">
-        <h2 id="approach-heading" data-reveal>Three steps. No fog.</h2>
-        <ol>
-          <li data-reveal><h3>Find what is stuck</h3></li>
-          <li data-reveal><h3>Build the useful product</h3></li>
-          <li data-reveal><h3>Show what changed</h3></li>
+      <section id="approach" class="journey" aria-labelledby="approach-heading">
+        <div class="journey__heading" data-reveal>
+          <p>What happens next</p>
+          <h2 id="approach-heading">One call. Then we make it simple.</h2>
+        </div>
+        <ol class="journey__moments" data-reveal>
+          <li class="journey__moment">
+            <span class="journey__number">01</span>
+            <span class="journey__signal" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><path d="M12 29c6-10 14-16 24-18M12 29h9M12 29v-9" /><circle cx="36" cy="11" r="3" /></svg>
+            </span>
+            <div><h3>Tell us what’s stuck.</h3><p>No polished brief needed.</p></div>
+          </li>
+          <li class="journey__moment">
+            <span class="journey__number">02</span>
+            <span class="journey__signal" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><path d="M9 24h27M29 16l8 8-8 8" /></svg>
+            </span>
+            <div><h3>Get a clear next move.</h3><p>We explain the simplest useful route.</p></div>
+          </li>
+          <li class="journey__moment">
+            <span class="journey__number">03</span>
+            <span class="journey__signal" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="24" rx="2" /><path d="M17 40h14M24 34v6M13 16h22" /></svg>
+            </span>
+            <div><h3>See something real, early.</h3><p>React to progress, not paperwork.</p></div>
+          </li>
+          <li class="journey__moment">
+            <span class="journey__number">04</span>
+            <span class="journey__signal" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" /><path d="m16 24 6 6 11-13" /></svg>
+            </span>
+            <div><h3>Move forward with confidence.</h3><p>We launch it with you.</p></div>
+          </li>
         </ol>
       </section>
       <section id="team" class="team" aria-labelledby="team-heading">

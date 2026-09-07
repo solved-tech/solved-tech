@@ -47,6 +47,22 @@ describe("homepage renderer", () => {
     expect(html).not.toContain('<article class="service"');
   });
 
+  it("explains what happens after a client calls", () => {
+    expect(html).toContain("What happens next");
+    expect(html).toContain("One call. Then we make it simple.");
+    expect(html.match(/class="journey__moment"/g)).toHaveLength(4);
+    expect(html.match(/class="journey__signal"/g)).toHaveLength(4);
+    expect(html).toContain("Tell us what’s stuck.");
+    expect(html).toContain("No polished brief needed.");
+    expect(html).toContain("Get a clear next move.");
+    expect(html).toContain("We explain the simplest useful route.");
+    expect(html).toContain("See something real, early.");
+    expect(html).toContain("React to progress, not paperwork.");
+    expect(html).toContain("Move forward with confidence.");
+    expect(html).toContain("We launch it with you.");
+    expect(html).not.toContain("Three steps. No fog.");
+  });
+
   it("uses the professional logo lockup in the site header", () => {
     expect(html).toContain(
       '<a class="wordmark" href="#top" aria-label="Solved Tech home">',
