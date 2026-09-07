@@ -1,4 +1,4 @@
-import type { ContactConfig, SiteContent } from "./content";
+import type { ContactConfig, ProductOffer, SiteContent } from "./content";
 
 const escapeHtml = (value: string): string =>
   value.replace(
@@ -27,74 +27,76 @@ const renderContactActions = (
     <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">WhatsApp us</a>
   </div>`;
 
-const renderProductScenes = (): string => `
-  <svg viewBox="0 0 520 360" role="img" aria-label="Visual preview of the selected product">
-    <g class="product-scene is-active" data-product-scene="0">
-      <rect class="scene-line" x="68" y="66" width="384" height="228" rx="8" />
-      <path class="scene-line" d="M68 108H452M98 87H110M122 87H134M146 87H158" />
-      <rect class="scene-line scene-line--soft" x="106" y="142" width="138" height="20" rx="3" />
-      <rect class="scene-line scene-line--soft" x="106" y="178" width="242" height="12" rx="3" />
-      <rect class="scene-accent scene-accent--fill" x="106" y="220" width="116" height="42" rx="4" />
-      <path class="scene-accent" d="M132 241H196" />
-      <text class="scene-label" x="68" y="326">VISIT → ACTION</text>
-    </g>
-    <g class="product-scene" data-product-scene="1">
-      <rect class="scene-line" x="68" y="70" width="274" height="188" rx="8" />
-      <path class="scene-line" d="M68 224H342M178 294H232M205 258V294" />
-      <rect class="scene-accent scene-device" x="314" y="122" width="132" height="190" rx="16" />
-      <path class="scene-accent" d="M356 288H404" />
-      <text class="scene-label" x="68" y="326">WEB · MOBILE · DESKTOP</text>
-    </g>
-    <g class="product-scene" data-product-scene="2">
-      <circle class="scene-line scene-line--soft" cx="254" cy="174" r="112" />
-      <circle class="scene-line" cx="254" cy="174" r="68" />
-      <path class="scene-line" d="M112 174H396M254 32V316" />
-      <path class="scene-accent scene-accent--path" d="M142 246C196 186 238 150 366 92" />
-      <circle class="scene-accent" cx="366" cy="92" r="9" />
-      <text class="scene-label" x="112" y="326">BE FOUND</text>
-    </g>
-    <g class="product-scene" data-product-scene="3">
-      <rect class="scene-line" x="66" y="132" width="110" height="96" rx="8" />
-      <rect class="scene-line" x="206" y="132" width="110" height="96" rx="8" />
-      <rect class="scene-accent scene-accent--fill" x="346" y="132" width="110" height="96" rx="8" />
-      <path class="scene-line" d="M176 180H206M316 180H346" />
-      <path class="scene-accent scene-accent--arrow" d="M192 168L204 180L192 192M332 168L344 180L332 192" />
-      <text class="scene-label" x="66" y="278">ASK</text>
-      <text class="scene-label" x="206" y="278">HANDLE</text>
-      <text class="scene-label" x="346" y="278">DONE</text>
-    </g>
-    <g class="product-scene" data-product-scene="4">
-      <path class="scene-line" d="M148 98L260 180L372 98M148 262L260 180L372 262" />
-      <circle class="scene-node" cx="148" cy="98" r="30" />
-      <rect class="scene-node" x="340" y="66" width="64" height="64" rx="8" />
-      <rect class="scene-node" x="116" y="230" width="64" height="64" rx="32" />
-      <circle class="scene-node" cx="372" cy="262" r="30" />
-      <circle class="scene-accent scene-accent--fill" cx="260" cy="180" r="42" />
-      <text class="scene-label" x="108" y="326">YOUR PROBLEM → USEFUL ANSWER</text>
-    </g>
-  </svg>`;
+const renderServiceArt = (id: ProductOffer["id"]): string => {
+  switch (id) {
+    case "website":
+      return `
+        <svg class="service-art service-art--website" data-service-art="website" aria-hidden="true" viewBox="0 0 520 300">
+          <rect class="art-stroke art-browser" x="48" y="42" width="424" height="216" rx="4" />
+          <path class="art-stroke art-browser-bar" d="M48 84H472M80 63H92M104 63H116M128 63H140" />
+          <rect class="art-stroke art-page-line art-page-line--one" x="84" y="118" width="160" height="18" rx="2" />
+          <rect class="art-stroke art-page-line art-page-line--two" x="84" y="150" width="284" height="10" rx="2" />
+          <rect class="art-stroke art-page-line art-page-line--three" x="84" y="172" width="224" height="10" rx="2" />
+          <rect class="art-accent art-page-action" x="84" y="204" width="112" height="34" rx="2" />
+        </svg>`;
+    case "app":
+      return `
+        <svg class="service-art service-art--app" data-service-art="app" aria-hidden="true" viewBox="0 0 520 300">
+          <rect class="art-stroke art-desktop" x="62" y="52" width="292" height="184" rx="5" />
+          <path class="art-stroke art-desktop-stand" d="M62 202H354M180 268H236M208 236V268" />
+          <rect class="art-accent art-phone" x="328" y="92" width="126" height="178" rx="15" />
+          <path class="art-accent art-phone-detail" d="M370 248H412" />
+        </svg>`;
+    case "traffic":
+      return `
+        <svg class="service-art service-art--traffic" data-service-art="traffic" aria-hidden="true" viewBox="0 0 520 300">
+          <circle class="art-stroke art-orbit art-orbit--outer" cx="260" cy="146" r="104" />
+          <circle class="art-stroke art-orbit" cx="260" cy="146" r="64" />
+          <path class="art-stroke art-axis" d="M110 146H410M260 26V266" />
+          <path class="art-accent art-traffic-route" d="M112 240C184 166 248 130 408 66" />
+          <circle class="art-accent art-target" cx="408" cy="66" r="9" />
+        </svg>`;
+    case "ai":
+      return `
+        <svg class="service-art service-art--ai" data-service-art="ai" aria-hidden="true" viewBox="0 0 520 300">
+          <rect class="art-stroke art-step art-step--one" x="42" y="104" width="116" height="88" rx="6" />
+          <rect class="art-stroke art-step art-step--two" x="202" y="104" width="116" height="88" rx="6" />
+          <rect class="art-accent art-step art-step--three" x="362" y="104" width="116" height="88" rx="6" />
+          <path class="art-accent art-connector art-connector--one" d="M158 148H202" />
+          <path class="art-accent art-connector art-connector--two" d="M318 148H362" />
+          <path class="art-accent art-check" d="M397 148L414 164L445 128" />
+        </svg>`;
+    case "other":
+      return `
+        <svg class="service-art service-art--other" data-service-art="other" aria-hidden="true" viewBox="0 0 520 300">
+          <path class="art-accent art-connections" d="M132 74L260 150L388 74M132 226L260 150L388 226" />
+          <circle class="art-stroke art-block art-block--one" cx="132" cy="74" r="30" />
+          <rect class="art-stroke art-block art-block--two" x="358" y="44" width="60" height="60" rx="6" />
+          <rect class="art-stroke art-block art-block--three" x="102" y="196" width="60" height="60" rx="30" />
+          <circle class="art-stroke art-block art-block--four" cx="388" cy="226" r="30" />
+          <circle class="art-accent art-hub" cx="260" cy="150" r="38" />
+        </svg>`;
+  }
+};
 
 export const renderHomepage = (
   content: SiteContent,
   config: ContactConfig,
   baseUrl: string = import.meta.env.BASE_URL,
 ): string => {
-  const initialProduct = content.products[0];
-  const products = content.products
+  const services = content.products
     .map(
-      ({ question, title, answer }, index) => `
-        <button
-          class="product-option${index === 0 ? " is-active" : ""}"
-          type="button"
-          data-product-option
-          data-product-index="${index}"
-          data-title="${escapeHtml(title)}"
-          data-answer="${escapeHtml(answer)}"
-          aria-pressed="${index === 0 ? "true" : "false"}"
-        >
-          <span class="product-option__number">${String(index + 1).padStart(2, "0")}</span>
-          <strong>${escapeHtml(question)}</strong>
-        </button>`,
+      ({ id, question, title, answer }, index) => `
+        <article class="service-box service-box--${escapeHtml(id)}" data-reveal>
+          <a class="service-box__link" href="#contact">
+            <span class="service-box__number">${String(index + 1).padStart(2, "0")}</span>
+            <strong>${escapeHtml(question)}</strong>
+            <span class="service-box__product">${escapeHtml(title)}</span>
+            <p>${escapeHtml(answer)}</p>
+            <span class="service-box__artwork">${renderServiceArt(id)}</span>
+            <span class="service-box__cta">Talk to us <span aria-hidden="true">→</span></span>
+          </a>
+        </article>`,
     )
     .join("");
   const founders = content.founders
@@ -102,7 +104,9 @@ export const renderHomepage = (
       ({ name, role, image, linkedin }) => `
         <article class="founder" data-reveal>
           <div class="founder__portrait">
-            <img src="${escapeHtml(publicAssetUrl(image, baseUrl))}" alt="Placeholder portrait for ${escapeHtml(name)}" width="520" height="620" loading="lazy" />
+            <div class="founder__portrait-frame">
+              <img src="${escapeHtml(publicAssetUrl(image, baseUrl))}" alt="Placeholder portrait for ${escapeHtml(name)}" width="520" height="620" loading="lazy" />
+            </div>
             <span>Photo placeholder</span>
           </div>
           <div class="founder__details">
@@ -172,19 +176,7 @@ export const renderHomepage = (
       </section>
       <section id="services" class="services" aria-labelledby="services-heading">
         <h2 id="services-heading" data-reveal>What do you need?</h2>
-        <div class="product-showcase" data-reveal>
-          <div class="product-options" aria-label="Choose what your business needs">
-            ${products}
-          </div>
-          <div class="product-stage" data-product-stage data-active-product="0" aria-live="polite">
-            <div class="product-stage__copy">
-              <p class="product-stage__eyebrow">We can build it</p>
-              <h3 data-product-title>${escapeHtml(initialProduct.title)}</h3>
-              <p data-product-answer>${escapeHtml(initialProduct.answer)}</p>
-            </div>
-            <div class="product-stage__visual">${renderProductScenes()}</div>
-          </div>
-        </div>
+        <div class="service-grid">${services}</div>
       </section>
       <section id="approach" class="approach" aria-labelledby="approach-heading">
         <h2 id="approach-heading" data-reveal>Three steps. No fog.</h2>

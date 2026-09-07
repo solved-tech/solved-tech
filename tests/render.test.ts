@@ -35,11 +35,14 @@ describe("homepage renderer", () => {
     expect(html).toContain('href="#team">Team</a>');
   });
 
-  it("uses a question-led visual product showcase", () => {
-    expect(html).toContain('class="product-showcase"');
-    expect(html).toContain('data-product-option');
-    expect(html).toContain('data-product-stage');
-    expect(html).toContain('data-product-scene="0"');
+  it("renders every service as an animated visual box", () => {
+    expect(html.match(/class="service-box service-box--/g)).toHaveLength(5);
+    siteContent.products.forEach(({ id, question }) => {
+      expect(html).toContain(`data-service-art="${id}"`);
+      expect(html).toContain(`<strong>${question}</strong>`);
+    });
+    expect(html).not.toContain("data-product-option");
+    expect(html).not.toContain("data-product-stage");
     expect(html).not.toContain('<section class="trust"');
     expect(html).not.toContain('<article class="service"');
   });
@@ -97,7 +100,7 @@ describe("homepage renderer", () => {
   it("marks every element the enhancement layer reveals", () => {
     expect(html.match(/ data-reveal(?=[ >])/g)?.length).toBeGreaterThan(8);
     expect(html).toContain('<h1 id="hero-heading" data-reveal>');
-    expect(html).toContain('<div class="product-showcase" data-reveal>');
+    expect(html).toContain('<div class="service-grid">');
     expect(html).toContain('<section id="team" class="team"');
   });
 
@@ -118,5 +121,7 @@ describe("homepage renderer", () => {
     expect(html.match(/aria-label="LinkedIn profile placeholder/g)).toHaveLength(
       2,
     );
+    expect(html.match(/class="founder__portrait-frame"/g)).toHaveLength(2);
+    expect(html.match(/Photo placeholder/g)).toHaveLength(2);
   });
 });

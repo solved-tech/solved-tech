@@ -111,74 +111,6 @@ export const setupMobileMenu = (root: ParentNode): void => {
   });
 };
 
-export const setupProductShowcase = (root: ParentNode): void => {
-  const options = Array.from(
-    root.querySelectorAll<HTMLButtonElement>("[data-product-option]"),
-  );
-  const stage = root.querySelector<HTMLElement>("[data-product-stage]");
-
-  if (!stage || options.length === 0) {
-    return;
-  }
-
-  const title = stage.querySelector<HTMLElement>("[data-product-title]");
-  const answer = stage.querySelector<HTMLElement>("[data-product-answer]");
-  const scenes = Array.from(
-    stage.querySelectorAll<SVGGElement>("[data-product-scene]"),
-  );
-
-  if (!title || !answer) {
-    return;
-  }
-
-  const activate = (selected: HTMLButtonElement): void => {
-    const index = Number(selected.getAttribute("data-product-index") ?? 0);
-
-    options.forEach((option) => {
-      const active = option === selected;
-      option.setAttribute("aria-pressed", String(active));
-      option.classList.toggle("is-active", active);
-    });
-
-    stage.dataset.activeProduct = String(index);
-    title.textContent = selected.getAttribute("data-title") ?? "";
-    answer.textContent = selected.getAttribute("data-answer") ?? "";
-    scenes.forEach((scene, sceneIndex) => {
-      scene.classList.toggle("is-active", sceneIndex === index);
-    });
-  };
-
-  options.forEach((option) => {
-    option.addEventListener("click", () => activate(option));
-    option.addEventListener("focus", () => activate(option));
-  });
-
-  const desktop =
-    typeof window !== "undefined" &&
-    window.matchMedia("(min-width: 64rem)").matches;
-
-  if (desktop && typeof IntersectionObserver !== "undefined") {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const nearest = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (a, b) =>
-              Math.abs(a.boundingClientRect.top) -
-              Math.abs(b.boundingClientRect.top),
-          )[0];
-
-        if (nearest) {
-          activate(nearest.target as HTMLButtonElement);
-        }
-      },
-      { rootMargin: "-35% 0px -45%", threshold: 0 },
-    );
-
-    options.forEach((option) => observer.observe(option));
-  }
-};
-
 /**
  * Publish the measured header height so anchor scroll padding and the hero
  * height stay correct when the header wraps onto more rows.
@@ -260,7 +192,6 @@ const start = (view: Window): void => {
   setupRevealMotion(app, reducedMotion);
   setupHeroInteraction(app, reducedMotion);
   setupMobileMenu(app);
-  setupProductShowcase(app);
   setupScrollProgress(view);
 };
 

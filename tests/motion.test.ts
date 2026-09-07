@@ -3,7 +3,6 @@ import {
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
-  setupProductShowcase,
   setupRevealMotion,
   setupScrollProgress,
 } from "../src/main";
@@ -195,68 +194,6 @@ describe("mobile menu", () => {
     handlers.get("click")?.();
     expect(attributes.get("aria-expanded")).toBe("false");
     expect(toggle).toHaveBeenLastCalledWith("is-open", false);
-  });
-});
-
-describe("product showcase", () => {
-  it("activates one buying question and updates its product answer", () => {
-    const createOption = (
-      index: number,
-      title: string,
-      answer: string,
-    ) => {
-      const attributes = new Map([
-        ["data-product-index", String(index)],
-        ["data-title", title],
-        ["data-answer", answer],
-      ]);
-      const handlers = new Map<string, () => void>();
-      return {
-        attributes,
-        handlers,
-        element: {
-          getAttribute: (name: string) => attributes.get(name) ?? null,
-          setAttribute: (name: string, value: string) =>
-            attributes.set(name, value),
-          classList: { toggle: vi.fn() },
-          addEventListener: (type: string, handler: () => void) =>
-            handlers.set(type, handler),
-        },
-      };
-    };
-    const first = createOption(0, "Website", "Turn visits into action");
-    const second = createOption(1, "App", "Build the useful product");
-    const title = { textContent: "" };
-    const answer = { textContent: "" };
-    const scenes = [
-      { classList: { toggle: vi.fn() } },
-      { classList: { toggle: vi.fn() } },
-    ];
-    const stage = {
-      dataset: {} as Record<string, string>,
-      querySelector: vi.fn((selector: string) => {
-        if (selector === "[data-product-title]") return title;
-        return answer;
-      }),
-      querySelectorAll: vi.fn(() => scenes),
-    };
-    const root = {
-      querySelectorAll: vi.fn(() => [first.element, second.element]),
-      querySelector: vi.fn(() => stage),
-    } as unknown as ParentNode;
-
-    setupProductShowcase(root);
-    second.handlers.get("click")?.();
-
-    expect(first.attributes.get("aria-pressed")).toBe("false");
-    expect(second.attributes.get("aria-pressed")).toBe("true");
-    expect(stage.dataset.activeProduct).toBe("1");
-    expect(title.textContent).toBe("App");
-    expect(answer.textContent).toBe("Build the useful product");
-    expect(scenes[1]?.classList.toggle).toHaveBeenCalledWith(
-      "is-active",
-      true,
-    );
   });
 });
 
