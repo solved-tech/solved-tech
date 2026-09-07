@@ -1,35 +1,42 @@
 import { describe, expect, it } from "vitest";
-import { contactConfig, getContactState, siteContent } from "../src/content";
+import { contactConfig, siteContent } from "../src/content";
 
 describe("site content", () => {
-  it("keeps the five service groups in outcome order", () => {
-    expect(siteContent.services.map(({ title }) => title)).toEqual([
-      "Be easier to find",
-      "Turn visits into business",
-      "Build what customers need",
-      "Make your systems cooperate",
-      "Give repetitive work away",
+  it("leads with the five approved buying questions", () => {
+    expect(siteContent.products.map(({ question }) => question)).toEqual([
+      "Need a website?",
+      "Need an app?",
+      "Need more traffic?",
+      "Want to use AI in your business?",
+      "Need something else?",
     ]);
   });
 
-  it("keeps contact methods in the approved priority", () => {
-    expect(siteContent.contactMethods.map(({ id }) => id)).toEqual([
-      "call",
-      "whatsapp",
-      "voice",
-      "quote",
+  it("uses explicit one-click trial contact placeholders", () => {
+    expect(contactConfig).toEqual({
+      displayPhone: "+44 20 0000 0000",
+      phone: "+442000000000",
+      whatsapp: "442000000000",
+      placeholder: true,
+    });
+  });
+
+  it("defines two clearly marked founder placeholders", () => {
+    expect(siteContent.founders).toHaveLength(2);
+    expect(siteContent.founders.every(({ placeholder }) => placeholder)).toBe(
+      true,
+    );
+    expect(siteContent.founders.map(({ name }) => name)).toEqual([
+      "Founder One",
+      "Founder Two",
     ]);
   });
 
-  it("uses preview mode when production destinations are absent", () => {
-    expect(getContactState(contactConfig)).toBe("preview");
-  });
-
-  it("keeps visible service copy free from unexplained jargon", () => {
-    const serviceCopy = siteContent.services
-      .flatMap(({ summary, detail }) => [summary, detail])
+  it("keeps visible product copy free from unexplained jargon", () => {
+    const productCopy = siteContent.products
+      .flatMap(({ question, answer }) => [question, answer])
       .join(" ");
 
-    expect(serviceCopy).not.toMatch(/\b(?:SaaS|APIs?|agentic|MCP|SEO)\b/i);
+    expect(productCopy).not.toMatch(/\b(?:SaaS|APIs?|agentic|MCP|SEO)\b/i);
   });
 });

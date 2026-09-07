@@ -4,9 +4,6 @@ import { contactConfig, siteContent } from "./content";
 import { renderHomepage } from "./render";
 import "./styles.css";
 
-export const CONTACT_PREVIEW_MESSAGE =
-  "Contact destinations are not configured yet, so this control cannot start a call, a chat or a quote. The real details will appear here as soon as they are live.";
-
 /**
  * Stagger each reveal target against its own siblings. The renderer owns which
  * elements carry `data-reveal`; nothing here depends on its class names.
@@ -49,30 +46,6 @@ export const setupRevealMotion = (
   );
 
   targets.forEach((target) => observer.observe(target));
-};
-
-export const setupContactPreview = (root: ParentNode): void => {
-  root
-    .querySelectorAll<HTMLButtonElement>("[data-contact-preview]")
-    .forEach((button, index) => {
-      const message = button.ownerDocument.createElement("p");
-
-      message.className = "contact-preview-message";
-      message.id = `contact-preview-${index + 1}`;
-      message.textContent = CONTACT_PREVIEW_MESSAGE;
-      message.hidden = true;
-
-      button.setAttribute("aria-expanded", "false");
-      button.setAttribute("aria-controls", message.id);
-      button.insertAdjacentElement("afterend", message);
-
-      button.addEventListener("click", () => {
-        const expanded = button.getAttribute("aria-expanded") === "true";
-
-        button.setAttribute("aria-expanded", String(!expanded));
-        message.hidden = expanded;
-      });
-    });
 };
 
 export const setupHeroInteraction = (
@@ -136,6 +109,74 @@ export const setupMobileMenu = (root: ParentNode): void => {
   nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
     link.addEventListener("click", () => setOpen(false));
   });
+};
+
+export const setupProductShowcase = (root: ParentNode): void => {
+  const options = Array.from(
+    root.querySelectorAll<HTMLButtonElement>("[data-product-option]"),
+  );
+  const stage = root.querySelector<HTMLElement>("[data-product-stage]");
+
+  if (!stage || options.length === 0) {
+    return;
+  }
+
+  const title = stage.querySelector<HTMLElement>("[data-product-title]");
+  const answer = stage.querySelector<HTMLElement>("[data-product-answer]");
+  const scenes = Array.from(
+    stage.querySelectorAll<SVGGElement>("[data-product-scene]"),
+  );
+
+  if (!title || !answer) {
+    return;
+  }
+
+  const activate = (selected: HTMLButtonElement): void => {
+    const index = Number(selected.getAttribute("data-product-index") ?? 0);
+
+    options.forEach((option) => {
+      const active = option === selected;
+      option.setAttribute("aria-pressed", String(active));
+      option.classList.toggle("is-active", active);
+    });
+
+    stage.dataset.activeProduct = String(index);
+    title.textContent = selected.getAttribute("data-title") ?? "";
+    answer.textContent = selected.getAttribute("data-answer") ?? "";
+    scenes.forEach((scene, sceneIndex) => {
+      scene.classList.toggle("is-active", sceneIndex === index);
+    });
+  };
+
+  options.forEach((option) => {
+    option.addEventListener("click", () => activate(option));
+    option.addEventListener("focus", () => activate(option));
+  });
+
+  const desktop =
+    typeof window !== "undefined" &&
+    window.matchMedia("(min-width: 64rem)").matches;
+
+  if (desktop && typeof IntersectionObserver !== "undefined") {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const nearest = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              Math.abs(a.boundingClientRect.top) -
+              Math.abs(b.boundingClientRect.top),
+          )[0];
+
+        if (nearest) {
+          activate(nearest.target as HTMLButtonElement);
+        }
+      },
+      { rootMargin: "-35% 0px -45%", threshold: 0 },
+    );
+
+    options.forEach((option) => observer.observe(option));
+  }
 };
 
 /**
@@ -219,7 +260,7 @@ const start = (view: Window): void => {
   setupRevealMotion(app, reducedMotion);
   setupHeroInteraction(app, reducedMotion);
   setupMobileMenu(app);
-  setupContactPreview(app);
+  setupProductShowcase(app);
   setupScrollProgress(view);
 };
 

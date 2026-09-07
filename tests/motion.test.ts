@@ -1,10 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import {
-  CONTACT_PREVIEW_MESSAGE,
-  setupContactPreview,
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
+  setupProductShowcase,
   setupRevealMotion,
   setupScrollProgress,
 } from "../src/main";
@@ -63,25 +62,6 @@ const createFakeView = (options: {
     listeners.filter((listener) => listener.type === type).forEach(({ handler }) => handler());
 
   return { fire, frames, header, listeners, properties, view };
-};
-
-const createFakeButton = () => {
-  const attributes = new Map<string, string>();
-  const message = { hidden: false, id: "", className: "", textContent: "" };
-  const handlers: Array<() => void> = [];
-  const button = {
-    ownerDocument: { createElement: vi.fn(() => message) },
-    setAttribute: (name: string, value: string) => {
-      attributes.set(name, value);
-    },
-    getAttribute: (name: string) => attributes.get(name) ?? null,
-    insertAdjacentElement: vi.fn(),
-    addEventListener: (_type: string, handler: () => void) => {
-      handlers.push(handler);
-    },
-  };
-
-  return { attributes, button, handlers, message };
 };
 
 describe("reveal motion", () => {
@@ -218,51 +198,64 @@ describe("mobile menu", () => {
   });
 });
 
-describe("contact preview", () => {
-  it("discloses the preview message on request", () => {
-    const { attributes, button, handlers, message } = createFakeButton();
+describe("product showcase", () => {
+  it("activates one buying question and updates its product answer", () => {
+    const createOption = (
+      index: number,
+      title: string,
+      answer: string,
+    ) => {
+      const attributes = new Map([
+        ["data-product-index", String(index)],
+        ["data-title", title],
+        ["data-answer", answer],
+      ]);
+      const handlers = new Map<string, () => void>();
+      return {
+        attributes,
+        handlers,
+        element: {
+          getAttribute: (name: string) => attributes.get(name) ?? null,
+          setAttribute: (name: string, value: string) =>
+            attributes.set(name, value),
+          classList: { toggle: vi.fn() },
+          addEventListener: (type: string, handler: () => void) =>
+            handlers.set(type, handler),
+        },
+      };
+    };
+    const first = createOption(0, "Website", "Turn visits into action");
+    const second = createOption(1, "App", "Build the useful product");
+    const title = { textContent: "" };
+    const answer = { textContent: "" };
+    const scenes = [
+      { classList: { toggle: vi.fn() } },
+      { classList: { toggle: vi.fn() } },
+    ];
+    const stage = {
+      dataset: {} as Record<string, string>,
+      querySelector: vi.fn((selector: string) => {
+        if (selector === "[data-product-title]") return title;
+        return answer;
+      }),
+      querySelectorAll: vi.fn(() => scenes),
+    };
     const root = {
-      querySelectorAll: vi.fn(() => [button]),
+      querySelectorAll: vi.fn(() => [first.element, second.element]),
+      querySelector: vi.fn(() => stage),
     } as unknown as ParentNode;
 
-    setupContactPreview(root);
+    setupProductShowcase(root);
+    second.handlers.get("click")?.();
 
-    expect(message.hidden).toBe(true);
-    expect(message.textContent).toBe(CONTACT_PREVIEW_MESSAGE);
-    expect(attributes.get("aria-expanded")).toBe("false");
-    expect(attributes.get("aria-controls")).toBe(message.id);
-    expect(button.insertAdjacentElement).toHaveBeenCalledWith(
-      "afterend",
-      message,
-    );
-
-    handlers[0]?.();
-    expect(attributes.get("aria-expanded")).toBe("true");
-    expect(message.hidden).toBe(false);
-
-    handlers[0]?.();
-    expect(attributes.get("aria-expanded")).toBe("false");
-    expect(message.hidden).toBe(true);
-  });
-
-  it("gives every preview control its own message target", () => {
-    const first = createFakeButton();
-    const second = createFakeButton();
-    const root = {
-      querySelectorAll: vi.fn(() => [first.button, second.button]),
-    } as unknown as ParentNode;
-
-    setupContactPreview(root);
-
-    expect(first.message.id).not.toBe(second.message.id);
-    expect(first.attributes.get("aria-controls")).toBe(first.message.id);
-    expect(second.attributes.get("aria-controls")).toBe(second.message.id);
-  });
-
-  it("never implies a call, message or quote was delivered", () => {
-    expect(CONTACT_PREVIEW_MESSAGE).toMatch(/not configured/i);
-    expect(CONTACT_PREVIEW_MESSAGE).not.toMatch(
-      /\b(sent|delivered|received|submitted|thank you|success)\b/i,
+    expect(first.attributes.get("aria-pressed")).toBe("false");
+    expect(second.attributes.get("aria-pressed")).toBe("true");
+    expect(stage.dataset.activeProduct).toBe("1");
+    expect(title.textContent).toBe("App");
+    expect(answer.textContent).toBe("Build the useful product");
+    expect(scenes[1]?.classList.toggle).toHaveBeenCalledWith(
+      "is-active",
+      true,
     );
   });
 });

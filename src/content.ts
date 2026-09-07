@@ -1,82 +1,85 @@
-export type ContactMethodId = "call" | "whatsapp" | "voice" | "quote";
-
 export interface ContactConfig {
-  phone: string | null;
-  whatsapp: string | null;
-  quoteEmail: string | null;
+  displayPhone: string;
+  phone: string;
+  whatsapp: string;
+  placeholder: boolean;
+}
+
+export interface ProductOffer {
+  id: "website" | "app" | "traffic" | "ai" | "other";
+  question: string;
+  title: string;
+  answer: string;
+}
+
+export interface FounderProfile {
+  name: string;
+  role: string;
+  image: string;
+  linkedin: string;
+  placeholder: boolean;
 }
 
 export interface SiteContent {
-  services: Array<{ title: string; summary: string; detail: string }>;
-  contactMethods: Array<{
-    id: ContactMethodId;
-    label: string;
-    note: string;
-  }>;
+  products: ProductOffer[];
+  founders: FounderProfile[];
 }
 
 export const contactConfig: ContactConfig = {
-  phone: null,
-  whatsapp: null,
-  quoteEmail: null,
+  displayPhone: "+44 20 0000 0000",
+  phone: "+442000000000",
+  whatsapp: "442000000000",
+  placeholder: true,
 };
 
 export const siteContent: SiteContent = {
-  services: [
+  products: [
     {
-      title: "Be easier to find",
-      summary: "Help the right customers discover your business.",
-      detail:
-        "Paid Google adverts and improvements to your website and its pages that help them appear in search results.",
+      id: "website",
+      question: "Need a website?",
+      title: "Websites and online shops",
+      answer:
+        "A clear, fast place built to turn attention into action.",
     },
     {
-      title: "Turn visits into business",
-      summary: "Give customers a clear path from browsing to buying.",
-      detail:
-        "Online shops and websites designed to turn visits into enquiries or sales.",
+      id: "app",
+      question: "Need an app?",
+      title: "Web, mobile and desktop apps",
+      answer: "A useful product built around the job it needs to do.",
     },
     {
-      title: "Build what customers need",
-      summary: "Turn a useful idea into dependable software people can use.",
-      detail:
-        "Websites, subscription-based online software, and apps for phones and computers.",
+      id: "traffic",
+      question: "Need more traffic?",
+      title: "Search and paid campaigns",
+      answer: "Help the right people find you when they are ready to act.",
     },
     {
-      title: "Make your systems cooperate",
-      summary: "Connect the tools your business relies on.",
-      detail:
-        "Secure connections that let your business tools share information and work together.",
+      id: "ai",
+      question: "Want to use AI in your business?",
+      title: "Useful digital assistants",
+      answer: "Take routine work, calls and messages off your team.",
     },
     {
-      title: "Give repetitive work away",
-      summary: "Free your team from routine tasks and repeated answers.",
-      detail:
-        "Routine jobs that run by themselves, links that let digital assistants use your tools, and assistants that handle voice calls or WhatsApp conversations.",
+      id: "other",
+      question: "Need something else?",
+      title: "Connected systems and custom builds",
+      answer: "Bring us the problem. We will find the simplest useful answer.",
     },
   ],
-  contactMethods: [
+  founders: [
     {
-      id: "call",
-      label: "Call",
-      note: "Talk through what you need.",
+      name: "Founder One",
+      role: "Co-founder — Product & Growth",
+      image: "/team/founder-one-placeholder.svg",
+      linkedin: "https://www.linkedin.com/",
+      placeholder: true,
     },
     {
-      id: "whatsapp",
-      label: "WhatsApp",
-      note: "Send a message when it suits you.",
-    },
-    {
-      id: "voice",
-      label: "Voice note",
-      note: "Explain the problem in your own words.",
-    },
-    {
-      id: "quote",
-      label: "Request a quote",
-      note: "Share the essentials and get a clear next step.",
+      name: "Founder Two",
+      role: "Co-founder — Technology & Delivery",
+      image: "/team/founder-two-placeholder.svg",
+      linkedin: "https://www.linkedin.com/",
+      placeholder: true,
     },
   ],
 };
-
-export const getContactState = (config: ContactConfig) =>
-  config.phone && config.whatsapp && config.quoteEmail ? "ready" : "preview";

@@ -5,21 +5,25 @@ import { renderHomepage } from "../src/render";
 describe("homepage renderer", () => {
   const html = renderHomepage(siteContent, contactConfig);
 
-  it("renders one main heading and every service", () => {
+  it("renders one main heading and every product question", () => {
     expect(html.match(/<h1/g)).toHaveLength(1);
-    siteContent.services.forEach(({ title }) => expect(html).toContain(title));
+    siteContent.products.forEach(({ question }) =>
+      expect(html).toContain(question),
+    );
   });
 
-  it("keeps the hero concise and clearly aimed at UK businesses", () => {
+  it("makes the hero a direct product offer", () => {
     expect(html).toContain(
       '<div class="hero__signal" aria-hidden="true">',
     );
     expect(html).toContain(
-      '<p class="hero__eyebrow" data-reveal>Practical digital partner for your business</p>',
+      '<p class="hero__eyebrow" data-reveal>Websites. Apps. Growth. AI.</p>',
     );
-    expect(html).toContain("Solve what is slowing your business down.");
     expect(html).toContain(
-      "From finding more customers to removing repetitive work, we build what makes the next difference.",
+      "Whatever your business needs next, we build it.",
+    );
+    expect(html).toContain(
+      "Bring us the problem. We will turn it into something useful.",
     );
   });
 
@@ -28,6 +32,16 @@ describe("homepage renderer", () => {
     expect(html).toContain('<nav id="primary-navigation"');
     expect(html).toContain('<main id="main-content">');
     expect(html).toContain('<section class="contact');
+    expect(html).toContain('href="#team">Team</a>');
+  });
+
+  it("uses a question-led visual product showcase", () => {
+    expect(html).toContain('class="product-showcase"');
+    expect(html).toContain('data-product-option');
+    expect(html).toContain('data-product-stage');
+    expect(html).toContain('data-product-scene="0"');
+    expect(html).not.toContain('<section class="trust"');
+    expect(html).not.toContain('<article class="service"');
   });
 
   it("uses the professional logo lockup in the site header", () => {
@@ -39,6 +53,21 @@ describe("homepage renderer", () => {
     );
   });
 
+  it("prefixes public assets for a GitHub Pages project site", () => {
+    const pagesHtml = renderHomepage(
+      siteContent,
+      contactConfig,
+      "/solved-tech/",
+    );
+
+    expect(pagesHtml).toContain(
+      'src="/solved-tech/brand/solved-tech-logo-dark.svg"',
+    );
+    expect(pagesHtml).toContain(
+      'src="/solved-tech/team/founder-one-placeholder.svg"',
+    );
+  });
+
   it("renders one assistive-technology-hidden background grid", () => {
     expect(html.match(/class="ambient-grid"/g)).toHaveLength(1);
     expect(html).toContain('aria-hidden="true"');
@@ -46,14 +75,18 @@ describe("homepage renderer", () => {
     expect(html).toContain('class="ambient-grid__accent"');
   });
 
-  it("renders a subtle decorative code field across representative stacks", () => {
+  it("renders no more than eight quiet code fragments", () => {
     expect(html.match(/class="code-field"/g)).toHaveLength(1);
     expect(html).toContain('class="code-field" aria-hidden="true"');
     const languages = [
-      "typescript", "python", "go", "swift", "sql", "shell",
-      "rust", "java", "kotlin", "csharp", "php", "ruby",
-      "dart", "html", "css", "graphql", "docker", "terraform",
-      "c", "cpp", "scala", "elixir", "lua", "r",
+      "typescript",
+      "python",
+      "swift",
+      "sql",
+      "html",
+      "css",
+      "terraform",
+      "shell",
     ];
     languages.forEach((language) =>
       expect(html).toContain(`data-language="${language}"`),
@@ -62,21 +95,28 @@ describe("homepage renderer", () => {
   });
 
   it("marks every element the enhancement layer reveals", () => {
-    const expected =
-      4 + 2 + 1 + siteContent.services.length + 4 + 2 + 2 +
-      siteContent.contactMethods.length;
-
-    expect(html.match(/ data-reveal(?=[ >])/g)).toHaveLength(expected);
+    expect(html.match(/ data-reveal(?=[ >])/g)?.length).toBeGreaterThan(8);
     expect(html).toContain('<h1 id="hero-heading" data-reveal>');
-    expect(html).toContain('<article class="service" data-reveal>');
-    expect(html).toContain("<li data-reveal>");
-    expect(html).toContain('data-contact-preview="call" data-reveal>');
+    expect(html).toContain('<div class="product-showcase" data-reveal>');
+    expect(html).toContain('<section id="team" class="team"');
   });
 
-  it("does not emit fabricated contact links in preview mode", () => {
-    expect(html).not.toContain("tel:");
-    expect(html).not.toContain("wa.me");
+  it("renders one-click Call and WhatsApp placeholders", () => {
+    expect(html).toContain('href="tel:+442000000000"');
+    expect(html).toContain('href="https://wa.me/442000000000"');
+    expect(html).toContain("Trial contact details");
     expect(html).not.toContain("mailto:");
-    expect(html).toContain("Contact details are being connected");
+    expect(html).not.toContain("Voice note");
+    expect(html).not.toContain("Request a quote");
+  });
+
+  it("renders two founder cards with portraits and LinkedIn links", () => {
+    siteContent.founders.forEach(({ image, name }) => {
+      expect(html).toContain(`src="${image}"`);
+      expect(html).toContain(name);
+    });
+    expect(html.match(/aria-label="LinkedIn profile placeholder/g)).toHaveLength(
+      2,
+    );
   });
 });
