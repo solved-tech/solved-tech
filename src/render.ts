@@ -18,8 +18,6 @@ const publicAssetUrl = (path: string, baseUrl: string): string => {
   return `${base}${path.replace(/^\/+/, "")}`;
 };
 
-export const contactActionLabels = ["Call us", "WhatsApp us", "Email us"] as const;
-
 const whatsappIcon = `
   <svg class="contact-action__icon contact-action__icon--whatsapp" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
     <path d="M20 11.6a8 8 0 0 1-11.8 7.1L4 20l1.3-4A8 8 0 1 1 20 11.6Z" />
@@ -37,9 +35,9 @@ const renderContactActions = (
   className: string,
 ): string => `
   <div class="${className}">
-    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}">${contactActionLabels[0]}</a>
-    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">${whatsappIcon}<span>${contactActionLabels[1]}</span></a>
-    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}">${emailIcon}<span>${contactActionLabels[2]}</span></a>
+    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}">Call us</a>
+    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">${whatsappIcon}<span>WhatsApp us</span></a>
+    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}">${emailIcon}<span>Email us</span></a>
   </div>`;
 
 export const pipelinePath =

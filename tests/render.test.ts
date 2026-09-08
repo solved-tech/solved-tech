@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { contactConfig, siteContent } from "../src/content";
-import { contactActionLabels, renderHomepage } from "../src/render";
+import { renderHomepage } from "../src/render";
 
 describe("homepage renderer", () => {
   const html = renderHomepage(siteContent, contactConfig);
@@ -273,7 +273,7 @@ describe("homepage renderer", () => {
         },
       );
 
-      expect(labels).toEqual([...contactActionLabels]);
+      expect(labels).toEqual(["Call us", "WhatsApp us", "Email us"]);
     });
   });
 
