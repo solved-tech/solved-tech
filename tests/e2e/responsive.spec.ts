@@ -1,110 +1,34 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import {
+  assertCompleteBounds,
+  assertMinHeight,
+  assertMotionDisabled,
+  assertNoDocumentOverflow,
+  assertNoRuntimeErrors,
+  assertVisibleLayout,
+  gotoHome,
+  gridColumnCount,
+  PHONE_LANDSCAPE_PROJECT,
+  preparePage,
+  REDUCED_MOTION_PROJECT,
+  scrollArtworkIntoReveal,
+  scrollJourneyIntoReveal,
+  setupErrorCollection,
+  viewportSize,
+  WIDE_DESKTOP_PROJECT,
+} from "./responsive.helpers";
 
-type Viewport = { width: number; height: number };
-
-const PHONE_LANDSCAPE_PROJECT = "phone-landscape";
-
-const setupErrorCollection = (page: Page) => {
-  const consoleErrors: string[] = [];
-  const pageErrors: string[] = [];
-
-  page.on("console", (message) => {
-    if (message.type() === "error") {
-      consoleErrors.push(message.text());
-    }
-  });
-
-  page.on("pageerror", (error) => {
-    pageErrors.push(error.message);
-  });
-
-  return { consoleErrors, pageErrors };
-};
-
-const viewportSize = (page: Page): Viewport => page.viewportSize()!;
-
-const assertCompleteBounds = async (
-  page: Page,
-  locator: Locator,
-  viewport: Viewport,
-) => {
-  await expect(locator).toBeVisible();
-
-  const box = await locator.boundingBox();
-  expect(box).not.toBeNull();
-  expect(box!.width).toBeGreaterThan(0);
-  expect(box!.height).toBeGreaterThan(0);
-  expect(box!.x).toBeGreaterThanOrEqual(0);
-  expect(box!.y).toBeGreaterThanOrEqual(0);
-  expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width + 0.5);
-  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height + 0.5);
-};
-
-const assertMinHeight = async (locator: Locator, minHeight: number) => {
-  const box = await locator.boundingBox();
-  expect(box).not.toBeNull();
-  expect(box!.height).toBeGreaterThanOrEqual(minHeight - 0.5);
-};
-
-const assertNoDocumentOverflow = async (page: Page) => {
-  const overflow = await page.evaluate(() => ({
-    scrollWidth: document.documentElement.scrollWidth,
-    clientWidth: document.documentElement.clientWidth,
-  }));
-
-  expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
-};
-
-const assertRenderedDiagram = async (
-  page: Page,
-  locator: Locator,
-  viewport: Viewport,
-) => {
-  await locator.scrollIntoViewIfNeeded();
-
-  const metrics = await locator.evaluate((element) => {
-    const style = window.getComputedStyle(element);
-    const rect = element.getBoundingClientRect();
-
-    return {
-      opacity: Number.parseFloat(style.opacity),
-      width: rect.width,
-      height: rect.height,
-      x: rect.x,
-      y: rect.y,
-    };
-  });
-
-  expect(metrics.opacity).toBeGreaterThan(0);
-  expect(metrics.width).toBeGreaterThan(0);
-  expect(metrics.height).toBeGreaterThan(0);
-  expect(metrics.x).toBeGreaterThanOrEqual(0);
-  expect(metrics.y).toBeGreaterThanOrEqual(0);
-  expect(metrics.x + metrics.width).toBeLessThanOrEqual(viewport.width + 0.5);
-  expect(metrics.y + metrics.height).toBeLessThanOrEqual(viewport.height + 0.5);
-};
-
-const gridColumnCount = (columns: string) =>
-  columns.split(/\s+/).filter(Boolean).length;
-
-test("responsive smoke matrix", async ({ page }, testInfo) => {
-  const projectName = testInfo.project.name;
-  const viewport = viewportSize(page);
-  const { consoleErrors, pageErrors } = setupErrorCollection(page);
-
-  await page.goto("/");
-  await page.waitForLoadState("domcontentloaded");
-
-  // 1. No horizontal document overflow
+test("document has no horizontal overflow", async ({ page }) => {
+  const collector = await preparePage(page);
   await assertNoDocumentOverflow(page);
+  assertNoRuntimeErrors(collector);
+});
 
-  // 2. No console or page errors
-  expect(consoleErrors, "console errors").toEqual([]);
-  expect(pageErrors, "page errors").toEqual([]);
+test("header controls stay in complete bounds", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
 
-  // 3. Header controls in complete bounds
-  const wordmark = page.locator(".wordmark");
-  await assertCompleteBounds(page, wordmark, viewport);
+  await assertCompleteBounds(page, page.locator(".wordmark"), viewport);
 
   if (viewport.width < 768) {
     const menuToggle = page.locator(".menu-toggle");
@@ -118,7 +42,13 @@ test("responsive smoke matrix", async ({ page }, testInfo) => {
     }
   }
 
-  // 4. Minimum target sizes
+  assertNoRuntimeErrors(collector);
+});
+
+test("primary controls meet minimum touch heights", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+
   const heroActions = page.locator(".hero__actions .contact-action");
   await expect(heroActions).toHaveCount(3);
   for (const action of await heroActions.all()) {
@@ -133,7 +63,15 @@ test("responsive smoke matrix", async ({ page }, testInfo) => {
     }
   }
 
-  // 5–6. Hero actions geometry
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero contact actions stay in complete bounds", async ({ page }, testInfo) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  const projectName = testInfo.project.name;
+  const heroActions = page.locator(".hero__actions .contact-action");
+
   if (projectName !== PHONE_LANDSCAPE_PROJECT) {
     await page.evaluate(() => window.scrollTo(0, 0));
   }
@@ -146,8 +84,14 @@ test("responsive smoke matrix", async ({ page }, testInfo) => {
     await assertCompleteBounds(page, action, viewport);
   }
 
-  // 7. 40rem contact stack
+  assertNoRuntimeErrors(collector);
+});
+
+test("contact actions stack below 40rem", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
   const contactActions = page.locator(".contact__actions");
+
   await contactActions.scrollIntoViewIfNeeded();
   const contactColumns = await contactActions.evaluate(
     (element) => getComputedStyle(element).gridTemplateColumns,
@@ -159,8 +103,17 @@ test("responsive smoke matrix", async ({ page }, testInfo) => {
     expect(gridColumnCount(contactColumns)).toBe(3);
   }
 
-  // 8. 48rem service split
-  const serviceBody = page.locator(".service-box").first().locator(".service-box__body");
+  assertNoRuntimeErrors(collector);
+});
+
+test("service body splits at 48rem", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  const serviceBody = page
+    .locator(".service-box")
+    .first()
+    .locator(".service-box__body");
+
   await serviceBody.scrollIntoViewIfNeeded();
   const serviceColumns = await serviceBody.evaluate(
     (element) => getComputedStyle(element).gridTemplateColumns,
@@ -172,8 +125,14 @@ test("responsive smoke matrix", async ({ page }, testInfo) => {
     expect(serviceColumns.split(" ").length).toBe(1);
   }
 
-  // 9. 48rem team grid
+  assertNoRuntimeErrors(collector);
+});
+
+test("team grid splits at 48rem", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
   const teamGrid = page.locator(".team__grid");
+
   await teamGrid.scrollIntoViewIfNeeded();
   const teamColumns = await teamGrid.evaluate(
     (element) => getComputedStyle(element).gridTemplateColumns,
@@ -185,8 +144,14 @@ test("responsive smoke matrix", async ({ page }, testInfo) => {
     expect(gridColumnCount(teamColumns)).toBe(1);
   }
 
-  // 10. 52rem journey horizontal
+  assertNoRuntimeErrors(collector);
+});
+
+test("journey route is horizontal at 52rem", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
   const journeyMoments = page.locator(".journey__moments");
+
   await journeyMoments.scrollIntoViewIfNeeded();
   const journeyColumns = await journeyMoments.evaluate(
     (element) => getComputedStyle(element).gridTemplateColumns,
@@ -198,8 +163,14 @@ test("responsive smoke matrix", async ({ page }, testInfo) => {
     expect(gridColumnCount(journeyColumns)).toBe(1);
   }
 
-  // 11. 64rem contact rail
+  assertNoRuntimeErrors(collector);
+});
+
+test("contact heading is sticky at 64rem", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
   const contactHeading = page.locator(".contact > h2");
+
   await contactHeading.scrollIntoViewIfNeeded();
   const headingPosition = await contactHeading.evaluate(
     (element) => getComputedStyle(element).position,
@@ -211,88 +182,178 @@ test("responsive smoke matrix", async ({ page }, testInfo) => {
     expect(headingPosition).not.toBe("sticky");
   }
 
-  // 12. Service rows visible before reveal
+  assertNoRuntimeErrors(collector);
+});
+
+test("service text stays visible before artwork reveal", async ({ page }) => {
+  const collector = await preparePage(page);
   const serviceBoxes = page.locator(".service-box");
+
   await expect(serviceBoxes).toHaveCount(5);
+  await page.evaluate(() => window.scrollTo(0, 0));
 
   for (const serviceBox of await serviceBoxes.all()) {
-    const header = serviceBox.locator(".service-box__header");
-    await header.scrollIntoViewIfNeeded();
-
+    const artwork = serviceBox.locator(".service-box__artwork");
     const question = serviceBox.locator(".service-box__question");
     const answer = serviceBox.locator(".service-box__header > p");
     const provides = serviceBox.locator(".service-box__provides");
 
-    await assertCompleteBounds(page, question, viewport);
-    await assertCompleteBounds(page, answer, viewport);
-    await provides.scrollIntoViewIfNeeded();
-    await assertCompleteBounds(page, provides, viewport);
+    await expect(artwork).not.toHaveClass(/is-visible/);
+
+    await assertVisibleLayout(question);
+    await assertVisibleLayout(answer);
+    await assertVisibleLayout(provides);
   }
 
-  // 13. Service and journey diagram geometry; hero clip
+  assertNoRuntimeErrors(collector);
+});
+
+test("service and journey diagrams render in complete bounds", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+
+  await expect(page.locator(".service-box__artwork .service-art")).toHaveCount(5);
+  await expect(page.locator(".journey__signal svg")).toHaveCount(4);
+
+  await scrollArtworkIntoReveal(page, viewport);
+  await scrollJourneyIntoReveal(page, viewport);
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero clips decorative pipeline overflow", async ({ page }) => {
+  const collector = await preparePage(page);
+
   const heroOverflow = await page.locator(".hero").evaluate((element) => {
-    const style = getComputedStyle(element);
-    return style.overflow;
+    return getComputedStyle(element).overflow;
   });
   expect(["clip", "hidden"]).toContain(heroOverflow);
 
-  for (const artwork of await page.locator(".service-box__artwork .service-art").all()) {
-    await assertRenderedDiagram(page, artwork, viewport);
-  }
-
-  for (const signal of await page.locator(".journey__signal svg").all()) {
-    await assertRenderedDiagram(page, signal, viewport);
-  }
-
-  // 15. Wide-screen balance (2560×1440 only)
-  if (projectName === "wide-desktop") {
-    const serviceGrid = page.locator(".service-grid");
-    await serviceGrid.scrollIntoViewIfNeeded();
-
-    const gridBox = await serviceGrid.boundingBox();
-    expect(gridBox).not.toBeNull();
-    expect(gridBox!.width / viewport.width).toBeGreaterThanOrEqual(0.52);
-
-    const contactNote = page.locator(".contact-note");
-    await contactNote.scrollIntoViewIfNeeded();
-    const noteWidth = (await contactNote.boundingBox())?.width ?? 0;
-    expect(noteWidth).toBeGreaterThan(0);
-    expect(noteWidth).toBeLessThanOrEqual(920);
-
-    const heroLead = page.locator(".hero p").first();
-    const leadWidth = (await heroLead.boundingBox())?.width ?? 0;
-    expect(leadWidth).toBeGreaterThan(0);
-    expect(leadWidth).toBeLessThanOrEqual(920);
-  }
+  assertNoRuntimeErrors(collector);
 });
 
-test("reduced motion exposes complete static content", async ({ page }, testInfo) => {
+test("wide desktop keeps prose constrained and service grid wide", async ({ page }, testInfo) => {
   test.skip(
-    testInfo.project.name !== "uk-phone-standard",
+    testInfo.project.name !== WIDE_DESKTOP_PROJECT,
+    "2560×1440 project only",
+  );
+
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  const serviceGrid = page.locator(".service-grid");
+
+  await serviceGrid.scrollIntoViewIfNeeded();
+
+  const gridBox = await serviceGrid.boundingBox();
+  expect(gridBox).not.toBeNull();
+  expect(gridBox!.width / viewport.width).toBeGreaterThanOrEqual(0.52);
+
+  const contactNote = page.locator(".contact-note");
+  await contactNote.scrollIntoViewIfNeeded();
+  const noteWidth = (await contactNote.boundingBox())?.width ?? 0;
+  expect(noteWidth).toBeGreaterThan(0);
+  expect(noteWidth).toBeLessThanOrEqual(920);
+
+  const heroLead = page.locator(".hero p").first();
+  const leadWidth = (await heroLead.boundingBox())?.width ?? 0;
+  expect(leadWidth).toBeGreaterThan(0);
+  expect(leadWidth).toBeLessThanOrEqual(920);
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("reduced motion renders completed static states", async ({ page }, testInfo) => {
+  test.skip(
+    testInfo.project.name !== REDUCED_MOTION_PROJECT,
     "Chromium 390×844 project only",
   );
 
-  const viewport = viewportSize(page);
-  const { consoleErrors, pageErrors } = setupErrorCollection(page);
-
+  const collector = setupErrorCollection(page);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
-  await page.waitForLoadState("domcontentloaded");
+  await gotoHome(page);
 
-  expect(consoleErrors, "console errors").toEqual([]);
-  expect(pageErrors, "page errors").toEqual([]);
   await assertNoDocumentOverflow(page);
 
-  for (const artwork of await page.locator(".service-box__artwork .service-art").all()) {
-    await assertRenderedDiagram(page, artwork, viewport);
+  const serviceArtworks = page.locator(".service-box__artwork .service-art");
+  const journeySignals = page.locator(".journey__signal svg");
+  const revealTargets = page.locator("[data-reveal]");
+
+  await expect(serviceArtworks).toHaveCount(5);
+  await expect(journeySignals).toHaveCount(4);
+  await expect(page.locator(".journey__moment")).toHaveCount(4);
+
+  for (const target of await revealTargets.all()) {
+    await target.scrollIntoViewIfNeeded();
+    await assertVisibleLayout(target);
+  }
+
+  for (const artwork of await serviceArtworks.all()) {
+    await artwork.scrollIntoViewIfNeeded();
+    await assertVisibleLayout(artwork);
+    const motion = await artwork.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        animationName: style.animationName,
+        animationDuration: style.animationDuration,
+      };
+    });
+    assertMotionDisabled(motion.animationName, motion.animationDuration);
   }
 
   for (const moment of await page.locator(".journey__moment").all()) {
     await moment.scrollIntoViewIfNeeded();
-    await assertCompleteBounds(page, moment, viewport);
+    await assertVisibleLayout(moment);
+    const motion = await moment.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        animationName: style.animationName,
+        animationDuration: style.animationDuration,
+      };
+    });
+    assertMotionDisabled(motion.animationName, motion.animationDuration);
   }
 
-  for (const signal of await page.locator(".journey__signal svg").all()) {
-    await assertRenderedDiagram(page, signal, viewport);
+  const journeyRoute = await page.locator(".journey__moments").evaluate((element) => {
+    const after = getComputedStyle(element, "::after");
+    const horizontal = window.matchMedia("(min-width: 52rem)").matches;
+
+    return {
+      animationName: after.animationName,
+      animationDuration: after.animationDuration,
+      transform: after.transform,
+      horizontal,
+    };
+  });
+
+  assertMotionDisabled(journeyRoute.animationName, journeyRoute.animationDuration);
+  if (journeyRoute.horizontal) {
+    expect(journeyRoute.transform).toMatch(/matrix\(1, 0, 0, 1|scaleX\(1\)/);
+  } else {
+    expect(journeyRoute.transform).toMatch(/matrix\(1, 0, 0, 1|scaleY\(1\)|scale\(1, 1\)/);
   }
+
+  const pipeline = page.locator(".hero__pipeline");
+  await expect(pipeline).toBeVisible();
+  await expect(pipeline).not.toHaveClass(/is-pipeline-visible/);
+
+  const pipelineMotion = await pipeline.evaluate((element) => {
+    const signal = element.querySelector(".hero-pipeline__signal");
+    const ring = element.querySelector(".hero-pipeline__node-ring");
+
+    return {
+      signalDisplay: signal ? getComputedStyle(signal).display : "",
+      ringAnimation: ring ? getComputedStyle(ring).animationName : "",
+      signalAnimation: signal ? getComputedStyle(signal).animationName : "",
+    };
+  });
+
+  expect(pipelineMotion.signalDisplay).toBe("none");
+  expect(
+    pipelineMotion.ringAnimation === "none" || pipelineMotion.ringAnimation === "",
+  ).toBeTruthy();
+  expect(
+    pipelineMotion.signalAnimation === "none" || pipelineMotion.signalAnimation === "",
+  ).toBeTruthy();
+
+  assertNoRuntimeErrors(collector);
 });

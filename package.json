@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest --exclude tests/e2e/**",
+    "test": "vitest run tests/*.test.ts",
     "test:responsive": "playwright test",
     "check": "tsc"
   },
