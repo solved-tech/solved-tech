@@ -83,6 +83,12 @@ test("hero contact actions stay in complete bounds", async ({ page }, testInfo) 
     }
 
     await assertCompleteBounds(page, action, viewport);
+
+    const labelOverflow = await action.evaluate((element) => ({
+      scrollWidth: element.scrollWidth,
+      clientWidth: element.clientWidth,
+    }));
+    expect(labelOverflow.scrollWidth).toBeLessThanOrEqual(labelOverflow.clientWidth);
   }
 
   assertNoRuntimeErrors(collector);

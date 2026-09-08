@@ -485,7 +485,7 @@ describe("stylesheet contracts", () => {
   });
 
   it("fits hero contact actions on one desktop row", () => {
-    const actionsRule = styles.match(/\.hero__actions\s*\{([^}]*)\}/)?.[1];
+    const actionsRule = styles.match(/^\.hero__actions\s*\{([^}]*)\}/m)?.[1];
 
     expect(actionsRule).toBeDefined();
     expect(actionsRule).toContain("width: min(100%, 42rem)");
@@ -593,5 +593,47 @@ html {
     );
     expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?opacity:\s*1/);
     expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?transform:\s*none/);
+  });
+
+  it("uses dvh-aware global hero gap and padding", () => {
+    const heroRule = styles.match(/\.hero\s*\{([^}]*)\}/)?.[1];
+
+    expect(heroRule).toMatch(/gap:[^;]*dvh/);
+    expect(heroRule).toMatch(/padding-block:[^;]*dvh/);
+  });
+
+  it("defines a compact threshold below 23rem", () => {
+    expect(styles).toMatch(
+      /@media\s*\(\s*max-width:\s*23rem\s*\)/,
+    );
+    expect(styles).toMatch(
+      /\.hero \.contact-action__suffix[\s\S]*?display:\s*none/,
+    );
+  });
+
+  it("simplifies decorative motion on short viewports", () => {
+    expect(styles).toMatch(
+      /@media[\s\S]*?max-height:[\s\S]*?\.code-field code[\s\S]*?animation-play-state:\s*paused/,
+    );
+    expect(styles).toMatch(
+      /@media[\s\S]*?max-height:[\s\S]*?\.hero__signal[\s\S]*?opacity:/,
+    );
+  });
+
+  it("never hides hero pipeline or service diagrams", () => {
+    const pipelineRules = styles.match(/\.hero__pipeline\s*\{[^}]*\}/g) ?? [];
+    pipelineRules.forEach((rule) => {
+      expect(rule).not.toMatch(/display:\s*none/);
+    });
+    expect(styles).not.toMatch(/\.service-art\s*\{[^}]*display:\s*none/);
+    expect(styles).not.toMatch(
+      /\.service-box__artwork\s*\{[^}]*display:\s*none/,
+    );
+  });
+
+  it("widens the content shell at 96rem and above", () => {
+    expect(styles).toMatch(
+      /@media\s*\(\s*min-width:\s*96rem\s*\)[\s\S]*?--shell:\s*96rem/,
+    );
   });
 });

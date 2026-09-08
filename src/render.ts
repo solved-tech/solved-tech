@@ -30,15 +30,31 @@ const emailIcon = `
     <path d="m4 7 8 6 8-6" />
   </svg>`;
 
+const renderHeroLabel = (verb: string): string =>
+  `${verb}<span class="contact-action__suffix"> us</span>`;
+
 const renderContactActions = (
   config: ContactConfig,
   className: string,
-): string => `
+): string => {
+  const isHero = className === "hero__actions";
+
+  if (isHero) {
+    return `
+  <div class="${className}">
+    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}" aria-label="Call us">${renderHeroLabel("Call")}</a>
+    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer" aria-label="WhatsApp us">${whatsappIcon}<span>${renderHeroLabel("WhatsApp")}</span></a>
+    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}" aria-label="Email us">${emailIcon}<span>${renderHeroLabel("Email")}</span></a>
+  </div>`;
+  }
+
+  return `
   <div class="${className}">
     <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}">Call us</a>
     <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">${whatsappIcon}<span>WhatsApp us</span></a>
     <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}">${emailIcon}<span>Email us</span></a>
   </div>`;
+};
 
 export const pipelinePath =
   "M80 140C80 58 178 25 320 28C478 31 560 76 560 140C560 218 470 250 320 252C164 254 80 218 80 140Z";

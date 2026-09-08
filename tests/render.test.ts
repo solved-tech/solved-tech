@@ -303,25 +303,34 @@ describe("homepage renderer", () => {
     ).toHaveLength(2);
     expect(html.match(/contact-action__icon--email/g)).toHaveLength(2);
 
-    const groups = Array.from(
-      html.matchAll(
-        /<div class="(?:hero__actions|contact__actions)">([\s\S]*?)<\/div>/g,
+    const heroGroup = html.match(
+      /<div class="hero__actions">([\s\S]*?)<\/div>/,
+    )?.[1];
+    const contactGroup = html.match(
+      /<div class="contact__actions">([\s\S]*?)<\/div>/,
+    )?.[1];
+
+    expect(heroGroup).toBeDefined();
+    expect(contactGroup).toBeDefined();
+
+    const heroLabels = Array.from(
+      heroGroup!.matchAll(
+        /<a class="contact-action[^"]*"(?:[^>]*aria-label="([^"]*)")?[^>]*>/g,
       ),
-      (match) => match[1],
+      ([, ariaLabel]) => ariaLabel,
     );
+    expect(heroLabels).toEqual(["Call us", "WhatsApp us", "Email us"]);
+    expect(heroGroup!.match(/contact-action__suffix/g)).toHaveLength(3);
 
-    expect(groups).toHaveLength(2);
-    groups.forEach((group) => {
-      const labels = Array.from(
-        group.matchAll(/<a class="contact-action[^"]*"[^>]*>([\s\S]*?)<\/a>/g),
-        ([, inner]) => {
-          const spanLabel = inner.match(/<span>([^<]+)<\/span>/)?.[1];
-          return spanLabel ?? inner.replace(/<[^>]+>/g, "").trim();
-        },
-      );
-
-      expect(labels).toEqual(["Call us", "WhatsApp us", "Email us"]);
-    });
+    const contactLabels = Array.from(
+      contactGroup!.matchAll(/<a class="contact-action[^"]*"[^>]*>([\s\S]*?)<\/a>/g),
+      ([, inner]) => {
+        const spanLabel = inner.match(/<span>([^<]+)<\/span>/)?.[1];
+        return spanLabel ?? inner.replace(/<[^>]+>/g, "").trim();
+      },
+    );
+    expect(contactLabels).toEqual(["Call us", "WhatsApp us", "Email us"]);
+    expect(contactGroup).not.toContain("contact-action__suffix");
   });
 
   it("renders two founder cards with portraits and LinkedIn links", () => {
