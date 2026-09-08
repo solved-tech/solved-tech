@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
   setupHeaderOffset,
@@ -6,6 +8,16 @@ import {
   setupRevealMotion,
   setupScrollProgress,
 } from "../src/main";
+
+const styles = readFileSync(
+  resolve(import.meta.dirname, "../src/styles.css"),
+  "utf8",
+);
+
+const reducedMotionBlock = styles.slice(
+  styles.indexOf("@media (prefers-reduced-motion: reduce)"),
+  styles.indexOf("@media (prefers-reduced-motion: reduce) and (min-width: 52rem)"),
+);
 
 interface FakeListener {
   type: string;
@@ -348,5 +360,23 @@ describe("scroll progress", () => {
     view.innerHeight = 2000;
     listeners.find(({ type }) => type === "resize")?.handler();
     expect(properties.get("--scroll-progress")).toBe("0.0000");
+  });
+});
+
+describe("stylesheet contracts", () => {
+  it("defaults to immediate scrolling and restores smooth scrolling for fine pointers", () => {
+    expect(styles).toMatch(/html\s*\{[^}]*scroll-behavior:\s*auto/s);
+    expect(styles).toMatch(
+      /@media\s*\(\s*pointer:\s*fine\s*\)\s*\{[\s\S]*html\s*\{[^}]*scroll-behavior:\s*smooth/s,
+    );
+  });
+
+  it("disables service artwork motion under reduced motion", () => {
+    expect(reducedMotionBlock).toContain(".service-art");
+    expect(reducedMotionBlock).toMatch(
+      /\.service-art[\s\S]*?animation:\s*none/,
+    );
+    expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?opacity:\s*1/);
+    expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?transform:\s*none/);
   });
 });
