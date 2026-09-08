@@ -51,10 +51,11 @@ export const setupRevealMotion = (
 export const setupHeroInteraction = (
   root: ParentNode,
   reducedMotion: boolean,
+  finePointer = true,
 ): void => {
   const hero = root.querySelector<HTMLElement>(".hero");
 
-  if (!hero || reducedMotion) {
+  if (!hero || reducedMotion || !finePointer) {
     return;
   }
 
@@ -190,7 +191,8 @@ const start = (view: Window): void => {
   stagger(app);
   setupHeaderOffset(view);
   setupRevealMotion(app, reducedMotion);
-  setupHeroInteraction(app, reducedMotion);
+  const finePointer = view.matchMedia("(pointer: fine)").matches;
+  setupHeroInteraction(app, reducedMotion, finePointer);
   setupMobileMenu(app);
   setupScrollProgress(view);
 };

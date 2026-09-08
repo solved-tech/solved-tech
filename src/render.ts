@@ -204,7 +204,7 @@ export const renderHomepage = (
               <span class="service-box__cta">Talk to us <span aria-hidden="true">→</span></span>
             </div>
             ${renderCapabilities(provides)}
-            <span class="service-box__artwork">${renderServiceArt(id)}</span>
+            <span class="service-box__artwork" data-reveal>${renderServiceArt(id)}</span>
           </a>
         </article>`,
     )

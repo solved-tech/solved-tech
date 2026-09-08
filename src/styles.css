@@ -45,9 +45,15 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   scroll-padding-top: calc(var(--header-height) + 1.5rem);
   -webkit-text-size-adjust: 100%;
+}
+
+@media (pointer: fine) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -877,48 +883,50 @@ main > section + section {
   color: var(--accent);
 }
 
-.has-enhancement .service-box:not(.is-visible) .service-art {
+.has-enhancement
+  .service-box__artwork:not(.is-visible)
+  .service-art {
   opacity: 0;
   transform: translateY(12px);
 }
 
-.service-box.is-visible .service-art {
+.service-box__artwork.is-visible .service-art {
   animation: art-enter 620ms var(--ease) both;
 }
 
-.service-box.is-visible .art-detail {
+.service-box__artwork.is-visible .art-detail {
   animation: art-detail-enter 420ms var(--ease) both;
 }
 
-.service-box.is-visible .art-detail--two {
+.service-box__artwork.is-visible .art-detail--two {
   animation-delay: 120ms;
 }
 
-.service-box.is-visible .art-detail--three {
+.service-box__artwork.is-visible .art-detail--three {
   animation-delay: 240ms;
 }
 
-.service-box.is-visible .art-detail--four {
+.service-box__artwork.is-visible .art-detail--four {
   animation-delay: 360ms;
 }
 
-.service-box.is-visible .art-data-route {
+.service-box__artwork.is-visible .art-data-route {
   animation: art-flow 700ms var(--ease) both 120ms;
 }
 
-.service-box.is-visible .art-data-route--arrow {
+.service-box__artwork.is-visible .art-data-route--arrow {
   animation: art-detail-enter 420ms var(--ease) both 400ms;
 }
 
-.service-box.is-visible .art-packet--x {
+.service-box__artwork.is-visible .art-packet--x {
   animation: art-packet-x 480ms var(--ease) both 180ms;
 }
 
-.service-box.is-visible .art-packet--y {
+.service-box__artwork.is-visible .art-packet--y {
   animation: art-packet-y 480ms var(--ease) both 180ms;
 }
 
-.service-box.is-visible .art-packet--late {
+.service-box__artwork.is-visible .art-packet--late {
   animation-delay: 240ms;
 }
 

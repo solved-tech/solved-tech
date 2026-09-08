@@ -66,6 +66,12 @@ describe("homepage renderer", () => {
     expect(html.match(/class="service-box__artwork"/g)).toHaveLength(5);
   });
 
+  it("reveals each service artwork when the diagram reaches the viewport", () => {
+    expect(
+      html.match(/class="service-box__artwork" data-reveal/g),
+    ).toHaveLength(5);
+  });
+
   it("fills every service visual with meaningful interface detail", () => {
     [
       "Home",

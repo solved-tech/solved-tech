@@ -161,6 +161,17 @@ describe("hero interaction", () => {
 
     expect(addEventListener).not.toHaveBeenCalled();
   });
+
+  it("skips pointer tracking for coarse pointers", () => {
+    const addEventListener = vi.fn();
+    const root = {
+      querySelector: vi.fn(() => ({ addEventListener })),
+    } as unknown as ParentNode;
+
+    setupHeroInteraction(root, false, false);
+
+    expect(addEventListener).not.toHaveBeenCalled();
+  });
 });
 
 describe("mobile menu", () => {
