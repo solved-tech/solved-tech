@@ -770,6 +770,16 @@ main > section + section {
   fill: var(--accent);
 }
 
+.art-hub--solid {
+  fill: var(--surface-deep);
+}
+
+.service-art--app .art-desktop,
+.service-art--app .art-phone {
+  fill: rgb(255 255 255 / 0.012);
+  stroke: rgb(255 255 255 / 0.34);
+}
+
 .art-label {
   fill: rgb(255 255 255 / 0.72);
   font-family: var(--font-mono);

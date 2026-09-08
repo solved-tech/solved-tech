@@ -71,6 +71,27 @@ describe("homepage renderer", () => {
     expect(html.match(/class="art-packet/g)?.length).toBeGreaterThanOrEqual(5);
   });
 
+  it("keeps the app and system diagrams visually restrained", () => {
+    const appScene = html.match(
+      /data-service-art="app"[\s\S]*?<\/svg>/,
+    )?.[0];
+    const aiScene = html.match(
+      /data-service-art="ai"[\s\S]*?<\/svg>/,
+    )?.[0];
+    const systemsScene = html.match(
+      /data-service-art="other"[\s\S]*?<\/svg>/,
+    )?.[0];
+
+    expect(appScene).toBeDefined();
+    expect(appScene).not.toContain("art-data-line");
+    expect(aiScene).toContain(">Tools</text>");
+    expect(aiScene).not.toContain("art-data-route--arrow");
+    expect(systemsScene?.match(/text-anchor="middle"/g)).toHaveLength(6);
+    expect(systemsScene).toContain(
+      'class="art-accent art-hub art-hub--solid"',
+    );
+  });
+
   it("explains what happens after a client calls", () => {
     expect(html).toContain("What happens next");
     expect(html).toContain("One call. Then we make it simple.");

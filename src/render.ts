@@ -57,30 +57,28 @@ const renderServiceArt = (id: ProductOffer["id"]): string => {
     case "app":
       return `
         <svg class="service-art service-art--app" data-service-art="app" aria-hidden="true" viewBox="0 0 520 300">
-          <rect class="art-stroke art-desktop" x="42" y="32" width="326" height="226" rx="5" />
-          <path class="art-stroke art-desktop-stand" d="M42 226H368M170 278H240M205 258V278" />
+          <rect class="art-stroke art-desktop" x="42" y="42" width="292" height="204" rx="5" />
+          <path class="art-stroke art-desktop-stand" d="M42 214H334M156 274H220M188 246V274" />
           <g class="art-detail art-detail--one">
-            <rect class="art-ui-fill" x="42" y="32" width="62" height="194" rx="4" />
-            <path class="art-icon" d="M62 62h22M62 82h22M62 102h22M62 182h22" />
-            <text class="art-label art-label--strong" x="126" y="62">Tasks</text>
-            <path class="art-ui-line" d="M126 74h76" />
+            <rect class="art-ui-fill" x="42" y="42" width="48" height="172" rx="4" />
+            <path class="art-icon" d="M59 68h14M59 88h14M59 184h14" />
+            <text class="art-label art-label--strong" x="112" y="78">Tasks</text>
+            <path class="art-ui-line" d="M112 92h66" />
           </g>
           <g class="art-detail art-detail--two">
-            <rect class="art-panel" x="126" y="92" width="218" height="52" rx="2" />
-            <path class="art-data-line" d="M142 130l36-18 32 8 42-22 34 12 42-28" />
-            <path class="art-ui-line" d="M126 166h218M126 194h218" />
-            <circle class="art-status" cx="140" cy="158" r="4" />
-            <circle class="art-status art-status--active" cx="140" cy="186" r="4" />
-            <circle class="art-status" cx="140" cy="214" r="4" />
-            <path class="art-ui-line" d="M154 158h108M154 186h86M154 214h122" />
+            <rect class="art-panel" x="112" y="112" width="198" height="36" rx="2" />
+            <rect class="art-panel" x="112" y="164" width="198" height="36" rx="2" />
+            <circle class="art-status" cx="128" cy="130" r="4" />
+            <circle class="art-status art-status--active" cx="128" cy="182" r="4" />
+            <path class="art-ui-line" d="M142 130h112M142 182h84" />
           </g>
           <g class="art-detail art-detail--three">
-            <rect class="art-accent art-phone" x="346" y="74" width="132" height="196" rx="15" />
-            <text class="art-label art-label--accent" x="370" y="108">TASK</text>
-            <rect class="art-panel" x="366" y="124" width="92" height="72" rx="3" />
-            <path class="art-ui-line" d="M378 142h62M378 156h48" />
-            <circle class="art-status art-status--active" cx="388" cy="178" r="8" />
-            <path class="art-check-small" d="m383 178 4 4 7-9M390 246h44" />
+            <rect class="art-stroke art-phone" x="370" y="72" width="108" height="184" rx="14" />
+            <text class="art-label art-label--accent" x="390" y="106">TASK</text>
+            <rect class="art-panel" x="386" y="116" width="76" height="62" rx="3" />
+            <path class="art-ui-line" d="M398 136h52M398 150h36" />
+            <circle class="art-status art-status--active" cx="404" cy="198" r="8" />
+            <path class="art-check-small" d="m399 198 4 4 7-9M402 232h44" />
           </g>
         </svg>`;
     case "traffic":
@@ -111,73 +109,66 @@ const renderServiceArt = (id: ProductOffer["id"]): string => {
     case "ai":
       return `
         <svg class="service-art service-art--ai" data-service-art="ai" aria-hidden="true" viewBox="0 0 520 300">
-          <path class="art-data-route" d="M112 150H188M250 100V68M312 122L394 56M312 150H394M312 178l82 66M250 200v38" />
-          <path class="art-data-route art-data-route--arrow" d="m176 142 12 8-12 8M242 80l8-12 8 12M382 48l12 8-12 8M382 142l12 8-12 8M382 236l12 8-12 8M242 226l8 12 8-12" />
+          <path class="art-data-route" d="M112 150H194M250 84V100M306 150H378M250 200V237" />
           <g class="art-detail art-detail--one">
-            <rect class="art-panel" x="24" y="124" width="88" height="52" rx="4" />
-            <text class="art-label art-label--strong" x="39" y="155">Request</text>
-            <rect class="art-accent" x="188" y="100" width="124" height="100" rx="8" />
-            <text class="art-label art-label--accent" x="226" y="132">Agent</text>
-            <circle class="art-agent-node" cx="226" cy="160" r="6" />
-            <circle class="art-agent-node" cx="250" cy="172" r="6" />
-            <circle class="art-agent-node" cx="274" cy="154" r="6" />
-            <path class="art-icon" d="M226 160l24 12 24-18M250 172l24-18" />
+            <rect class="art-panel" x="28" y="124" width="84" height="52" rx="4" />
+            <text class="art-label art-label--strong" x="70" y="150" text-anchor="middle" dominant-baseline="middle">Request</text>
+            <rect class="art-accent" x="194" y="100" width="112" height="100" rx="8" />
+            <text class="art-label art-label--accent" x="250" y="128" text-anchor="middle" dominant-baseline="middle">Agent</text>
+            <circle class="art-agent-node" cx="226" cy="158" r="5" />
+            <circle class="art-agent-node" cx="250" cy="174" r="5" />
+            <circle class="art-agent-node" cx="274" cy="158" r="5" />
+            <path class="art-icon" d="m226 158 24 16 24-16M226 158h48" />
           </g>
           <g class="art-detail art-detail--two">
-            <rect class="art-panel" x="202" y="26" width="96" height="42" rx="4" />
-            <text class="art-label" x="222" y="52">Memory</text>
+            <rect class="art-panel" x="205" y="26" width="90" height="42" rx="4" />
+            <text class="art-label" x="250" y="47" text-anchor="middle" dominant-baseline="middle">Memory</text>
           </g>
           <g class="art-detail art-detail--three">
-            <rect class="art-panel" x="394" y="34" width="102" height="44" rx="4" />
-            <text class="art-label" x="428" y="61">CRM</text>
-            <rect class="art-panel" x="394" y="128" width="102" height="44" rx="4" />
-            <text class="art-label" x="408" y="155">Calendar</text>
-            <rect class="art-panel" x="394" y="222" width="102" height="44" rx="4" />
-            <text class="art-label" x="408" y="249">Messages</text>
+            <rect class="art-panel" x="378" y="84" width="124" height="132" rx="5" />
+            <text class="art-label art-label--strong" x="440" y="103" text-anchor="middle" dominant-baseline="middle">Tools</text>
+            <path class="art-ui-line" d="M394 116H486M394 148H486M394 180H486" />
+            <text class="art-label" x="440" y="133" text-anchor="middle" dominant-baseline="middle">CRM</text>
+            <text class="art-label" x="440" y="165" text-anchor="middle" dominant-baseline="middle">Calendar</text>
+            <text class="art-label" x="440" y="197" text-anchor="middle" dominant-baseline="middle">Messages</text>
           </g>
           <g class="art-detail art-detail--four">
-            <rect class="art-panel" x="208" y="238" width="84" height="42" rx="4" />
-            <text class="art-label art-label--strong" x="229" y="264">Done</text>
-            <path class="art-check-small" d="m270 256 5 5 9-12" />
+            <rect class="art-panel" x="208" y="237" width="84" height="42" rx="4" />
+            <text class="art-label art-label--strong" x="250" y="258" text-anchor="middle" dominant-baseline="middle">Done</text>
           </g>
-          <circle class="art-packet art-packet--x" cx="148" cy="150" r="5" />
-          <circle class="art-packet art-packet--y" cx="250" cy="82" r="5" />
+          <circle class="art-packet art-packet--x" cx="154" cy="150" r="5" />
           <circle class="art-packet art-packet--y art-packet--late" cx="250" cy="218" r="5" />
         </svg>`;
     case "other":
       return `
         <svg class="service-art service-art--other" data-service-art="other" aria-hidden="true" viewBox="0 0 520 300">
-          <path class="art-data-route" d="M132 62L260 150M132 238l128-88M388 62l-128 88M402 150H302M388 238l-128-88" />
+          <path class="art-data-route" d="M132 62L222 131M132 238l90-69M388 62l-90 70M402 150H302M388 238l-90-70" />
           <g class="art-detail art-detail--one">
             <rect class="art-panel" x="34" y="34" width="98" height="56" rx="4" />
-            <path class="art-icon" d="M50 54h18l-2 15H52l-4-20h-6M54 77h1M64 77h1" />
-            <text class="art-label" x="78" y="67">Shop</text>
+            <path class="art-icon" d="M74 46h18l-2 12H78l-3-16h-5" />
+            <text class="art-label" x="83" y="72" text-anchor="middle" dominant-baseline="middle">Shop</text>
             <rect class="art-panel" x="34" y="210" width="98" height="56" rx="4" />
-            <rect class="art-icon" x="49" y="222" width="22" height="32" rx="4" />
-            <text class="art-label" x="82" y="243">App</text>
+            <rect class="art-icon" x="76" y="220" width="14" height="20" rx="3" />
+            <text class="art-label" x="83" y="251" text-anchor="middle" dominant-baseline="middle">App</text>
           </g>
           <g class="art-detail art-detail--two">
             <rect class="art-panel" x="388" y="34" width="112" height="56" rx="4" />
-            <path class="art-icon" d="M402 51h24v18h-24zM402 57h24" />
-            <text class="art-label" x="435" y="67">Payments</text>
+            <path class="art-icon" d="M432 44h24v14h-24zM432 49h24" />
+            <text class="art-label" x="444" y="72" text-anchor="middle" dominant-baseline="middle">Payments</text>
             <rect class="art-panel" x="402" y="122" width="98" height="56" rx="4" />
-            <circle class="art-icon" cx="420" cy="142" r="7" />
-            <path class="art-icon" d="M408 165c2-9 8-14 12-14s10 5 12 14" />
-            <text class="art-label" x="442" y="154">CRM</text>
+            <circle class="art-icon" cx="451" cy="137" r="6" />
+            <path class="art-icon" d="M441 154c2-7 6-10 10-10s8 3 10 10" />
+            <text class="art-label" x="451" y="166" text-anchor="middle" dominant-baseline="middle">CRM</text>
             <rect class="art-panel" x="388" y="210" width="112" height="56" rx="4" />
-            <path class="art-icon" d="M402 226h24v7h-24zM402 237h24v7h-24zM402 248h24v7h-24z" />
-            <text class="art-label" x="438" y="243">Data</text>
+            <path class="art-icon" d="M432 220h24v5h-24zM432 229h24v5h-24zM432 238h24v5h-24z" />
+            <text class="art-label" x="444" y="255" text-anchor="middle" dominant-baseline="middle">Data</text>
           </g>
           <g class="art-detail art-detail--three">
-            <circle class="art-accent art-hub" cx="260" cy="150" r="42" />
-            <circle class="art-agent-node" cx="248" cy="142" r="5" />
-            <circle class="art-agent-node" cx="272" cy="142" r="5" />
-            <circle class="art-agent-node" cx="260" cy="163" r="5" />
-            <path class="art-icon" d="m248 142 12 21 12-21M248 142h24" />
-            <text class="art-label art-label--accent" x="235" y="188">Connect</text>
+            <circle class="art-accent art-hub art-hub--solid" cx="260" cy="150" r="42" />
+            <text class="art-label art-label--accent" x="260" y="150" text-anchor="middle" dominant-baseline="middle">Connect</text>
           </g>
-          <circle class="art-packet art-packet--x" cx="188" cy="101" r="5" />
-          <circle class="art-packet art-packet--x art-packet--late" cx="338" cy="199" r="5" />
+          <circle class="art-packet art-packet--x" cx="178" cy="97" r="5" />
+          <circle class="art-packet art-packet--x art-packet--late" cx="342" cy="203" r="5" />
         </svg>`;
   }
 };
