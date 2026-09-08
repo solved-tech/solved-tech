@@ -37,13 +37,13 @@ const renderHeroPipeline = (): string => `
       <circle class="hero-pipeline__signal" r="5" />
 
       <g class="hero-pipeline__node hero-pipeline__node--ai" transform="translate(80 140)" style="--pipeline-delay: 0s">
-        <circle class='hero-pipeline__node-ring' r="25" />
+        <circle class="hero-pipeline__node-ring" r="25" />
         <path class="hero-pipeline__icon" d="M-9-7H9V8H-9ZM-5-12V-7M5-12V-7M-4-1h1M3-1h1M-4 4h8" />
         <text y="43">AI</text>
       </g>
 
       <g class="hero-pipeline__node" transform="translate(150 58)" style="--pipeline-delay: 1.28s">
-        <circle class='hero-pipeline__node-ring' r="25" />
+        <circle class="hero-pipeline__node-ring" r="25" />
         <circle class="hero-pipeline__icon" r="10" />
         <circle class="hero-pipeline__icon" r="5" />
         <path class="hero-pipeline__icon" d="M0-14V-9M0 9V14M-14 0H-9M9 0H14" />
@@ -51,35 +51,35 @@ const renderHeroPipeline = (): string => `
       </g>
 
       <g class="hero-pipeline__node" transform="translate(280 36)" style="--pipeline-delay: 2.56s">
-        <circle class='hero-pipeline__node-ring' r="25" />
+        <circle class="hero-pipeline__node-ring" r="25" />
         <rect class="hero-pipeline__icon" x="-13" y="-10" width="26" height="20" rx="1" />
         <path class="hero-pipeline__icon" d="M-13-4H13M-9-7h1M-5-7h1" />
         <text y="43">Websites</text>
       </g>
 
       <g class="hero-pipeline__node" transform="translate(420 54)" style="--pipeline-delay: 3.84s">
-        <circle class='hero-pipeline__node-ring' r="25" />
+        <circle class="hero-pipeline__node-ring" r="25" />
         <rect class="hero-pipeline__icon" x="-13" y="-11" width="26" height="22" rx="1" />
         <path class="hero-pipeline__icon" d="M-13-5H13M-8 0h6v6h-6M2 0h6M2 5h6" />
         <text y="43">Web apps</text>
       </g>
 
       <g class="hero-pipeline__node" transform="translate(552 118)" style="--pipeline-delay: 5.12s">
-        <circle class='hero-pipeline__node-ring' r="25" />
+        <circle class="hero-pipeline__node-ring" r="25" />
         <rect class="hero-pipeline__icon" x="-8" y="-14" width="16" height="28" rx="2" />
         <path class="hero-pipeline__icon" d="M-3-10H3M-2 10H2" />
         <text y="43">Mobile apps</text>
       </g>
 
       <g class="hero-pipeline__node" transform="translate(500 220)" style="--pipeline-delay: 6.4s">
-        <circle class='hero-pipeline__node-ring' r="25" />
+        <circle class="hero-pipeline__node-ring" r="25" />
         <rect class="hero-pipeline__icon" x="-14" y="-11" width="28" height="19" rx="1" />
         <path class="hero-pipeline__icon" d="M0 8V13M-7 13H7" />
         <text y="43">Desktop apps</text>
       </g>
 
       <g class="hero-pipeline__node" transform="translate(280 246)" style="--pipeline-delay: 7.68s">
-        <circle class='hero-pipeline__node-ring' r="25" />
+        <circle class="hero-pipeline__node-ring" r="25" />
         <path class="hero-pipeline__icon" d="M-9-6L8-10M-9-6L-2 10M8-10L10 7M-2 10L10 7" />
         <circle class="hero-pipeline__icon hero-pipeline__icon-dot" cx="-9" cy="-6" r="3" />
         <circle class="hero-pipeline__icon hero-pipeline__icon-dot" cx="8" cy="-10" r="3" />

@@ -33,7 +33,7 @@ describe("homepage renderer", () => {
 
     expect(pipeline).toBeGreaterThan(html.indexOf("Bring us the problem."));
     expect(pipeline).toBeLessThan(actions);
-    expect(html.match(/class="hero-pipeline__node/g)).toHaveLength(7);
+    expect(html.match(/class="hero-pipeline__node(?:\s|")/g)).toHaveLength(7);
     expect(html).toContain("hero-pipeline__node--ai");
     [
       "AI",
