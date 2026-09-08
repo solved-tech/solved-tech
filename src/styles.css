@@ -411,6 +411,7 @@ main > section + section {
   gap: clamp(1.25rem, 3vw, 2.5rem);
   justify-content: center;
   min-height: calc(100svh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height));
   padding-block: clamp(3rem, 9svh, 8rem);
 }
 

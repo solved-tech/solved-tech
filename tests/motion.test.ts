@@ -491,6 +491,18 @@ describe("stylesheet contracts", () => {
     expect(actionsRule).toContain("width: min(100%, 42rem)");
   });
 
+  it("tracks the live mobile viewport while retaining a safe fallback", () => {
+    const heroRule = styles.match(/\.hero\s*\{([^}]*)\}/)?.[1];
+    const fallback = "min-height: calc(100svh - var(--header-height))";
+    const dynamic = "min-height: calc(100dvh - var(--header-height))";
+
+    expect(heroRule).toContain(fallback);
+    expect(heroRule).toContain(dynamic);
+    expect(heroRule?.indexOf(fallback)).toBeLessThan(
+      heroRule?.indexOf(dynamic) ?? -1,
+    );
+  });
+
   it("fits hero contact actions on one mobile row", () => {
     const mobileHeroBlock = styles.match(
       /@media\s*\(\s*max-width:\s*40rem\s*\)\s*\{[\s\S]*?\.hero__actions[\s\S]*?\n\}/,
