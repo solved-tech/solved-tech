@@ -223,3 +223,39 @@ export const measurePipelineLayout = async (page: Page) => {
 
   return { pipelineWidth, labelHeights };
 };
+
+export type HeroGeometry = {
+  heading: { width: number; height: number };
+  pipeline: { width: number; height: number };
+  labelHeights: number[];
+};
+
+export const measureHeroGeometry = async (page: Page): Promise<HeroGeometry> => {
+  const heading = page.locator("#hero-heading");
+  const pipeline = page.locator(".hero__pipeline");
+  const labels = page.locator(".hero-pipeline__node text");
+
+  await expect(heading).toBeVisible();
+  await expect(pipeline).toBeVisible();
+  await expect(labels).toHaveCount(PIPELINE_LABEL_COUNT);
+
+  const [headingBox, pipelineBox, labelHeights] = await Promise.all([
+    heading.boundingBox(),
+    pipeline.boundingBox(),
+    labels.evaluateAll((elements) =>
+      elements.map((element) => element.getBoundingClientRect().height),
+    ),
+  ]);
+
+  expect(headingBox).not.toBeNull();
+  expect(pipelineBox).not.toBeNull();
+
+  return {
+    heading: { width: headingBox!.width, height: headingBox!.height },
+    pipeline: { width: pipelineBox!.width, height: pipelineBox!.height },
+    labelHeights,
+  };
+};
+
+export const geometryDelta = (first: number, second: number): number =>
+  Math.abs(second - first) / Math.max(first, second);

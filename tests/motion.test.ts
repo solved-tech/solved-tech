@@ -558,25 +558,15 @@ describe("stylesheet contracts", () => {
   });
 
   it("fits hero contact actions on one mobile row", () => {
-    const mobileHeroBlock = styles.match(
-      /@media\s*\(\s*max-width:\s*40rem\s*\)\s*\{[\s\S]*?\.hero__actions[\s\S]*?\n\}/,
-    )?.[0];
-
-    expect(mobileHeroBlock).toBeDefined();
-
-    const actionsRule = mobileHeroBlock?.match(/\.hero__actions\s*\{([^}]*)\}/)?.[1];
-    const buttonRule = mobileHeroBlock?.match(/\.hero \.contact-action\s*\{([^}]*)\}/)?.[1];
+    const actionsRule = styles.match(/^\.hero__actions\s*\{([^}]*)\}/m)?.[1];
+    const buttonRule = styles.match(/^\.hero \.contact-action\s*\{([^}]*)\}/m)?.[1];
 
     expect(actionsRule).toContain("display: grid");
     expect(actionsRule).toContain(
       "grid-template-columns: repeat(3, minmax(0, 1fr))",
     );
     expect(buttonRule).toMatch(/min-height:\s*48px/);
-
-    const heroRule = mobileHeroBlock?.match(/\.hero\s*\{([^}]*)\}/)?.[1];
-
-    expect(heroRule).toContain("justify-content: flex-start");
-    expect(heroRule).toContain("padding-block-start: 1.5rem");
+    expect(buttonRule).toContain("min-width: 0");
   });
 
   it("pulses only the node ring after the signal crosses", () => {
@@ -649,16 +639,23 @@ html {
     expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?transform:\s*none/);
   });
 
-  it("uses dvh-aware global hero gap and padding", () => {
+  it("uses continuous viewport-aware hero geometry in base rules", () => {
     const heroRule = styles.match(/\.hero\s*\{([^}]*)\}/)?.[1];
+    const headingRule = styles.match(/\.hero h1\s*\{([^}]*)\}/)?.[1];
+    const pipelineRule = styles.match(/\.hero__pipeline\s*\{([^}]*)\}/)?.[1];
 
+    for (const rule of [heroRule, headingRule, pipelineRule]) {
+      expect(rule).toMatch(/dvh/);
+      expect(rule).toMatch(/(?:vw|100%)/);
+      expect(rule).toMatch(/(?:clamp|min|max)\(/);
+    }
     expect(heroRule).toMatch(/gap:[^;]*dvh/);
     expect(heroRule).toMatch(/padding-block:[^;]*dvh/);
   });
 
-  it("defines a compact threshold below 23rem", () => {
+  it("defines a compact threshold strictly below 23rem", () => {
     expect(styles).toMatch(
-      /@media\s*\(\s*max-width:\s*23rem\s*\)/,
+      /@media\s*\(\s*max-width:\s*22\.999rem\s*\)/,
     );
     expect(styles).toMatch(
       /\.hero \.contact-action__suffix[\s\S]*?display:\s*none/,
@@ -674,57 +671,22 @@ html {
     );
   });
 
-  it("caps short-height queries below ultra-wide widths without a 40rem floor", () => {
-    expect(styles).toMatch(
-      /@media\s*\(\s*max-height:\s*68rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
-    );
-    expect(styles).toMatch(
-      /@media\s*\(\s*max-height:\s*54rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
-    );
-    expect(styles).toMatch(
-      /@media\s*\(\s*max-height:\s*48rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
-    );
-    expect(styles).not.toMatch(
-      /@media\s*\(\s*max-height:\s*68rem\s*\)[^}]*min-width:\s*40rem/,
-    );
-    expect(styles).not.toMatch(
-      /@media\s*\(\s*max-height:\s*54rem\s*\)[^}]*min-width:\s*40rem/,
-    );
-    expect(styles).not.toMatch(
-      /@media\s*\(\s*max-height:\s*48rem\s*\)[^}]*min-width:\s*40rem/,
-    );
-  });
-
-  it("assigns scaled SVG font sizes in short-height and compact bands", () => {
-    const compactBlock = mediaBlock(
+  it("keeps short-height media rules decorative rather than geometric", () => {
+    const shortHeightBlock = mediaBlock(
       styles,
-      /@media\s*\(\s*max-width:\s*23rem\s*\)\s*\{[\s\S]*?\n\}/,
-    );
-    const short68Block = mediaBlock(
-      styles,
-      /@media\s*\(\s*max-height:\s*68rem\s*\)[\s\S]*?\n\}/,
-    );
-    const short54Block = mediaBlock(
-      styles,
-      /@media\s*\(\s*max-height:\s*54rem\s*\)[\s\S]*?\n\}/,
-    );
-    const short48Block = mediaBlock(
-      styles,
-      /@media\s*\(\s*max-height:\s*48rem\s*\)[\s\S]*?\n\}/,
+      /@media\s*\(\s*max-height:\s*48rem\s*\)\s*\{[\s\S]*?\n\}/,
     );
 
-    expect(
-      compactBlock?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*23px/s),
-    ).toBeTruthy();
-    expect(
-      short68Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*18px/s),
-    ).toBeTruthy();
-    expect(
-      short54Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*21px/s),
-    ).toBeTruthy();
-    expect(
-      short48Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*23px/s),
-    ).toBeTruthy();
+    expect(shortHeightBlock).toBeDefined();
+    expect(shortHeightBlock).toMatch(
+      /\.code-field code\s*\{[^}]*animation-play-state:\s*paused/s,
+    );
+    expect(shortHeightBlock).toMatch(/\.hero__signal\s*\{[^}]*opacity:/s);
+    expect(shortHeightBlock?.slice(shortHeightBlock.indexOf("{") + 1)).not.toMatch(
+      /(?:font-size|gap|padding|width|height|justify-content)\s*:/,
+    );
+    expect(styles).not.toContain("max-width: 120rem");
+    expect(styles).not.toMatch(/max-height:\s*(?:54|68)rem/);
   });
 
   it("never hides hero pipeline or service diagrams", () => {

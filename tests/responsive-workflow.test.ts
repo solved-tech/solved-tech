@@ -7,6 +7,9 @@ const WORKFLOW_PATH = new URL(
 );
 
 const CHILD_INDENT = 2;
+const CHECKOUT_SHA = "d23441a48e516b6c34aea4fa41551a30e30af803";
+const SETUP_NODE_SHA = "249970729cb0ef3589644e2896645e5dc5ba9c38";
+const UPLOAD_ARTIFACT_SHA = "ea165f8d65b6e75b540449e92b4886f43607fa02";
 
 type YamlLine = { indent: number; text: string; index: number };
 
@@ -27,7 +30,10 @@ const parseKey = (line: YamlLine): { key: string; value: string } | undefined =>
     return undefined;
   }
 
-  return { key: match[1], value: match[2].trim() };
+  return {
+    key: match[1],
+    value: match[2].trim().replace(/\s+#.*$/, ""),
+  };
 };
 
 const expectedChildIndent = (parent: YamlLine): number =>
@@ -276,14 +282,26 @@ describe("responsive pull-request workflow", () => {
     );
   });
 
-  it("checks out the repository with actions/checkout@v6", () => {
-    const checkout = findStepByDirectUses(steps, "actions/checkout@v6");
+  it("pins actions/checkout v6 to the reviewed commit", () => {
+    const checkout = findStepByDirectUses(
+      steps,
+      `actions/checkout@${CHECKOUT_SHA}`,
+    );
     expect(checkout).toBeDefined();
+    expect(workflow).toContain(
+      `uses: actions/checkout@${CHECKOUT_SHA} # actions/checkout v6`,
+    );
   });
 
-  it("sets up Node from .nvmrc with npm cache", () => {
-    const setup = findStepByDirectUses(steps, "actions/setup-node@v6");
+  it("pins setup-node v6 and configures Node from .nvmrc with npm cache", () => {
+    const setup = findStepByDirectUses(
+      steps,
+      `actions/setup-node@${SETUP_NODE_SHA}`,
+    );
     expect(setup).toBeDefined();
+    expect(workflow).toContain(
+      `uses: actions/setup-node@${SETUP_NODE_SHA} # actions/setup-node v6`,
+    );
 
     const withBlock = getDirectStepChildBlock(setup!, "with");
     expect(withBlock).toBeDefined();
@@ -325,11 +343,17 @@ describe("responsive pull-request workflow", () => {
   });
 
   it("uploads test-results only on failure", () => {
-    const uploadStep = findStepByDirectUses(steps, "actions/upload-artifact@v4");
+    const uploadStep = findStepByDirectUses(
+      steps,
+      `actions/upload-artifact@${UPLOAD_ARTIFACT_SHA}`,
+    );
     expect(uploadStep).toBeDefined();
     expect(getStepDirectValue(uploadStep!, "if")).toBe("failure()");
     expect(getStepDirectValue(uploadStep!, "uses")).toBe(
-      "actions/upload-artifact@v4",
+      `actions/upload-artifact@${UPLOAD_ARTIFACT_SHA}`,
+    );
+    expect(workflow).toContain(
+      `uses: actions/upload-artifact@${UPLOAD_ARTIFACT_SHA} # actions/upload-artifact v4`,
     );
 
     const withBlock = getDirectStepChildBlock(uploadStep!, "with");

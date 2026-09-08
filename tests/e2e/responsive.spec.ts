@@ -6,14 +6,15 @@ import {
   assertNoDocumentOverflow,
   assertNoRuntimeErrors,
   assertVisibleLayout,
+  geometryDelta,
   gotoHome,
   gridColumnCount,
+  measureHeroGeometry,
   PHONE_LANDSCAPE_PROJECT,
   preparePage,
   REDUCED_MOTION_PROJECT,
   assertPipelineLabelsRendered,
   measurePipelineLayout,
-  PIPELINE_WIDTH_SMOOTH_PROJECT,
   assertProseWidth,
   scrollArtworkIntoReveal,
   scrollJourneyIntoReveal,
@@ -49,23 +50,104 @@ test("header controls stay in complete bounds", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("primary controls meet minimum touch heights", async ({ page }) => {
+test("interactive targets have complete bounds and minimum touch heights", async ({
+  page,
+}) => {
   const collector = await preparePage(page);
   const viewport = viewportSize(page);
 
-  const heroActions = page.locator(".hero__actions .contact-action");
-  await expect(heroActions).toHaveCount(3);
-  for (const action of await heroActions.all()) {
+  const skipLink = page.locator(".skip-link");
+  await expect(skipLink).toHaveCount(1);
+  await skipLink.focus();
+  await assertMinHeight(skipLink, 44);
+  await assertCompleteBounds(page, skipLink, viewport);
+
+  const wordmark = page.locator(".wordmark");
+  await expect(wordmark).toHaveCount(1);
+  await wordmark.scrollIntoViewIfNeeded();
+  await assertMinHeight(wordmark, 44);
+  await assertCompleteBounds(page, wordmark, viewport);
+
+  const contactActions = page.locator(".contact-action");
+  await expect(contactActions).toHaveCount(6);
+  for (const action of await contactActions.all()) {
+    await action.scrollIntoViewIfNeeded();
     await assertMinHeight(action, 48);
+    await assertCompleteBounds(page, action, viewport);
   }
 
-  if (viewport.width < 768) {
-    await assertMinHeight(page.locator(".menu-toggle"), 44);
-  } else {
-    for (const link of await page.locator("#primary-navigation a").all()) {
-      await assertMinHeight(link, 44);
-    }
+  const serviceActions = page.locator(".service-box__cta");
+  await expect(serviceActions).toHaveCount(5);
+  for (const action of await serviceActions.all()) {
+    await action.scrollIntoViewIfNeeded();
+    await assertMinHeight(action, 48);
+    await assertCompleteBounds(page, action, viewport);
   }
+
+  const navigationLinks = page.locator("#primary-navigation a");
+  await expect(navigationLinks).toHaveCount(4);
+  if (viewport.width < 768) {
+    const menuToggle = page.locator(".menu-toggle");
+    await menuToggle.scrollIntoViewIfNeeded();
+    await assertMinHeight(menuToggle, 44);
+    await assertCompleteBounds(page, menuToggle, viewport);
+    await menuToggle.click();
+  }
+  for (const link of await navigationLinks.all()) {
+    await link.scrollIntoViewIfNeeded();
+    await assertMinHeight(link, 44);
+    await assertCompleteBounds(page, link, viewport);
+  }
+
+  const founderLinks = page.locator(".founder__details a");
+  await expect(founderLinks).toHaveCount(2);
+  for (const link of await founderLinks.all()) {
+    await link.scrollIntoViewIfNeeded();
+    await assertMinHeight(link, 44);
+    await assertCompleteBounds(page, link, viewport);
+  }
+
+  const footerLinks = page.locator("footer a");
+  await expect(footerLinks).toHaveCount(1);
+  for (const link of await footerLinks.all()) {
+    await link.scrollIntoViewIfNeeded();
+    await assertMinHeight(link, 44);
+    await assertCompleteBounds(page, link, viewport);
+  }
+
+  await assertNoDocumentOverflow(page);
+  assertNoRuntimeErrors(collector);
+});
+
+test("mobile menu opens, contains usable links, and closes on navigation", async ({
+  page,
+}) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  test.skip(viewport.width >= 768, "Profiles below 48rem only");
+
+  const menuToggle = page.locator(".menu-toggle");
+  const navigation = page.locator("#primary-navigation");
+  const links = navigation.locator("a");
+
+  await expect(menuToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(navigation).not.toHaveClass(/is-open/);
+  await expect(links).toHaveCount(4);
+
+  await menuToggle.click();
+  await expect(menuToggle).toHaveAttribute("aria-expanded", "true");
+  await expect(navigation).toHaveClass(/is-open/);
+
+  for (const link of await links.all()) {
+    await assertMinHeight(link, 44);
+    await assertCompleteBounds(page, link, viewport);
+  }
+  await assertNoDocumentOverflow(page);
+
+  await navigation.locator('a[href="#services"]').click();
+  await expect(page).toHaveURL(/#services$/);
+  await expect(menuToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(navigation).not.toHaveClass(/is-open/);
 
   assertNoRuntimeErrors(collector);
 });
@@ -250,22 +332,35 @@ test("hero pipeline labels stay legible when rendered", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("hero pipeline scales smoothly across the 40rem width boundary", async ({
+test("40rem boundary preserves hero geometry and contact columns", async ({
   page,
-}, testInfo) => {
-  test.skip(
-    testInfo.project.name !== PIPELINE_WIDTH_SMOOTH_PROJECT,
-    "Chromium tablet-landscape project only",
-  );
-
+}) => {
   const collector = setupErrorCollection(page);
 
-  await page.setViewportSize({ width: 639, height: 768 });
+  await page.setViewportSize({ width: 639, height: 844 });
   await gotoHome(page);
+  const narrowContact = page.locator(".contact__actions");
+  await narrowContact.scrollIntoViewIfNeeded();
+  expect(
+    gridColumnCount(
+      await narrowContact.evaluate(
+        (element) => getComputedStyle(element).gridTemplateColumns,
+      ),
+    ),
+  ).toBe(1);
   const narrow = await measurePipelineLayout(page);
 
-  await page.setViewportSize({ width: 640, height: 768 });
+  await page.setViewportSize({ width: 640, height: 844 });
   await gotoHome(page);
+  const wideContact = page.locator(".contact__actions");
+  await wideContact.scrollIntoViewIfNeeded();
+  expect(
+    gridColumnCount(
+      await wideContact.evaluate(
+        (element) => getComputedStyle(element).gridTemplateColumns,
+      ),
+    ),
+  ).toBe(3);
   const wide = await measurePipelineLayout(page);
 
   const widthDelta =
@@ -278,6 +373,79 @@ test("hero pipeline scales smoothly across the 40rem width boundary", async ({
     expect(height).toBeGreaterThanOrEqual(9 - 0.5);
   }
 
+  assertNoRuntimeErrors(collector);
+});
+
+const assertSmoothHeroBoundary = async (
+  page: Parameters<typeof measureHeroGeometry>[0],
+  first: { width: number; height: number },
+  second: { width: number; height: number },
+) => {
+  await page.setViewportSize(first);
+  await gotoHome(page);
+  const before = await measureHeroGeometry(page);
+
+  await page.setViewportSize(second);
+  await gotoHome(page);
+  const after = await measureHeroGeometry(page);
+
+  for (const dimension of ["width", "height"] as const) {
+    expect(
+      geometryDelta(before.heading[dimension], after.heading[dimension]),
+      `heading ${dimension} at ${first.width}x${first.height}/${second.width}x${second.height}`,
+    ).toBeLessThanOrEqual(0.05);
+    expect(
+      geometryDelta(before.pipeline[dimension], after.pipeline[dimension]),
+      `pipeline ${dimension} at ${first.width}x${first.height}/${second.width}x${second.height}`,
+    ).toBeLessThanOrEqual(0.05);
+  }
+
+  for (const height of [...before.labelHeights, ...after.labelHeights]) {
+    expect(height).toBeGreaterThanOrEqual(9 - 0.5);
+  }
+};
+
+test("hero geometry is continuous across the former 120rem cutoff", async ({
+  page,
+}) => {
+  const collector = setupErrorCollection(page);
+  await assertSmoothHeroBoundary(
+    page,
+    { width: 1920, height: 1080 },
+    { width: 1921, height: 1080 },
+  );
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero geometry is continuous across former height thresholds", async ({
+  page,
+}) => {
+  const collector = setupErrorCollection(page);
+
+  for (const [height, nextHeight] of [
+    [768, 769],
+    [864, 865],
+    [1088, 1089],
+  ] as const) {
+    await assertSmoothHeroBoundary(
+      page,
+      { width: 1366, height },
+      { width: 1366, height: nextHeight },
+    );
+  }
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero geometry is continuous at the compact-width boundary", async ({
+  page,
+}) => {
+  const collector = setupErrorCollection(page);
+  await assertSmoothHeroBoundary(
+    page,
+    { width: 367, height: 844 },
+    { width: 368, height: 844 },
+  );
   assertNoRuntimeErrors(collector);
 });
 
