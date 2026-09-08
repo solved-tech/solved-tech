@@ -713,6 +713,99 @@ main > section + section {
   stroke-width: 1.75;
 }
 
+.art-panel,
+.art-icon,
+.art-ui-line,
+.art-data-line,
+.art-check-small {
+  vector-effect: non-scaling-stroke;
+}
+
+.art-panel {
+  fill: rgb(255 255 255 / 0.055);
+  stroke: rgb(255 255 255 / 0.46);
+  stroke-width: 1.15;
+}
+
+.art-icon,
+.art-check-small {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.68);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.25;
+}
+
+.art-icon--soft {
+  stroke: rgb(255 255 255 / 0.42);
+}
+
+.art-ui-line {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.46);
+  stroke-linecap: round;
+  stroke-width: 1.25;
+}
+
+.art-ui-fill {
+  fill: rgb(255 255 255 / 0.12);
+  stroke: rgb(255 255 255 / 0.36);
+  stroke-width: 1;
+}
+
+.art-data-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.art-status {
+  fill: rgb(255 255 255 / 0.5);
+}
+
+.art-status--active,
+.art-agent-node {
+  fill: var(--accent);
+}
+
+.art-label {
+  fill: rgb(255 255 255 / 0.72);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.35px;
+}
+
+.art-label--strong {
+  fill: #fff;
+}
+
+.art-label--accent {
+  fill: var(--accent);
+}
+
+.art-data-route {
+  fill: none;
+  stroke: var(--accent);
+  stroke-dasharray: 420;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.art-data-route--arrow {
+  stroke-dasharray: none;
+}
+
+.art-packet {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
 .service-box__cta {
   grid-column: 1 / -1;
   grid-row: 6;
@@ -741,130 +834,55 @@ main > section + section {
   animation: art-enter 620ms var(--ease) both;
 }
 
-.service-box.is-visible .art-browser {
-  stroke-dasharray: 1300;
-  animation: art-draw 760ms var(--ease) both 100ms;
+.service-box.is-visible .art-detail {
+  animation: art-detail-enter 420ms var(--ease) both;
 }
 
-.service-box.is-visible .art-browser-bar,
-.service-box.is-visible .art-page-line {
-  animation: art-line-enter 520ms var(--ease) both;
+.service-box.is-visible .art-detail--two {
+  animation-delay: 120ms;
 }
 
-.service-box.is-visible .art-page-line--one {
+.service-box.is-visible .art-detail--three {
   animation-delay: 240ms;
 }
 
-.service-box.is-visible .art-page-line--two {
-  animation-delay: 320ms;
+.service-box.is-visible .art-detail--four {
+  animation-delay: 360ms;
 }
 
-.service-box.is-visible .art-page-line--three {
-  animation-delay: 400ms;
+.service-box.is-visible .art-data-route {
+  animation: art-flow 700ms var(--ease) both 120ms;
 }
 
-.service-box.is-visible .art-page-action {
-  transform-origin: 140px 221px;
-  animation: art-pop 440ms var(--ease) both 500ms;
+.service-box.is-visible .art-data-route--arrow {
+  animation: art-detail-enter 420ms var(--ease) both 400ms;
 }
 
-.service-box.is-visible .art-desktop {
-  animation: art-from-left 620ms var(--ease) both 80ms;
+.service-box.is-visible .art-packet--x {
+  animation: art-packet-x 480ms var(--ease) both 180ms;
 }
 
-.service-box.is-visible .art-desktop-stand {
-  animation: art-line-enter 500ms var(--ease) both 280ms;
+.service-box.is-visible .art-packet--y {
+  animation: art-packet-y 480ms var(--ease) both 180ms;
 }
 
-.service-box.is-visible .art-phone {
-  animation: art-from-right 620ms var(--ease) both 240ms;
-}
-
-.service-box.is-visible .art-phone-detail {
-  animation: art-line-enter 420ms var(--ease) both 460ms;
-}
-
-.art-traffic-route,
-.art-connector,
-.art-connections {
-  fill: none;
-  stroke-dasharray: 420;
-}
-
-.service-box.is-visible .art-orbit {
-  transform-origin: 260px 146px;
-  animation: art-orbit 800ms var(--ease) both;
-}
-
-.service-box.is-visible .art-traffic-route {
-  animation: art-flow 820ms var(--ease) both 140ms;
-}
-
-.service-box.is-visible .art-target {
-  transform-origin: 408px 66px;
-  animation: art-pop 440ms var(--ease) both 540ms;
-}
-
-.service-box.is-visible .art-step {
-  animation: art-step-enter 520ms var(--ease) both;
-}
-
-.service-box.is-visible .art-step--two {
-  animation-delay: 140ms;
-}
-
-.service-box.is-visible .art-step--three {
-  animation-delay: 280ms;
-}
-
-.service-box.is-visible .art-connector {
-  animation: art-flow 520ms linear both;
-}
-
-.service-box.is-visible .art-connector--one {
-  animation-delay: 220ms;
-}
-
-.service-box.is-visible .art-connector--two {
-  animation-delay: 380ms;
-}
-
-.service-box.is-visible .art-check {
-  animation: art-line-enter 420ms var(--ease) both 520ms;
-}
-
-.service-box.is-visible .art-connections {
-  animation: art-flow 720ms var(--ease) both 180ms;
-}
-
-.service-box.is-visible .art-block {
-  animation: art-block-enter 580ms var(--ease) both;
-}
-
-.service-box.is-visible .art-block--two {
-  animation-delay: 80ms;
-}
-
-.service-box.is-visible .art-block--three {
-  animation-delay: 160ms;
-}
-
-.service-box.is-visible .art-block--four {
+.service-box.is-visible .art-packet--late {
   animation-delay: 240ms;
 }
 
-.service-box.is-visible .art-hub {
-  transform-origin: 260px 150px;
-  animation: art-pop 480ms var(--ease) both 480ms;
+.service-box:hover .art-data-route,
+.service-box:focus-within .art-data-route {
+  animation: art-pulse-route 700ms linear;
 }
 
-.service-box:hover .art-traffic-route,
-.service-box:focus-within .art-traffic-route,
-.service-box:hover .art-connector,
-.service-box:focus-within .art-connector,
-.service-box:hover .art-connections,
-.service-box:focus-within .art-connections {
-  animation: art-pulse-route 800ms linear;
+.service-box:hover .art-packet--x,
+.service-box:focus-within .art-packet--x {
+  animation: art-packet-pulse-x 620ms var(--ease);
+}
+
+.service-box:hover .art-packet--y,
+.service-box:focus-within .art-packet--y {
+  animation: art-packet-pulse-y 620ms var(--ease);
 }
 
 @keyframes art-enter {
@@ -879,75 +897,15 @@ main > section + section {
   }
 }
 
-@keyframes art-draw {
-  from {
-    opacity: 0.25;
-    stroke-dashoffset: 1300;
-  }
-
-  to {
-    opacity: 1;
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes art-line-enter {
+@keyframes art-detail-enter {
   from {
     opacity: 0;
-    transform: translateX(-12px);
+    transform: translateY(10px);
   }
 
   to {
     opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes art-pop {
-  from {
-    opacity: 0;
-    transform: scale(0.82);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes art-from-left {
-  from {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes art-from-right {
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes art-orbit {
-  from {
-    opacity: 0;
-    transform: scale(0.92) rotate(-8deg);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(0);
+    transform: translateY(0);
   }
 }
 
@@ -963,22 +921,22 @@ main > section + section {
   }
 }
 
-@keyframes art-step-enter {
+@keyframes art-packet-x {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateX(-12px) scale(0.7);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0) scale(1);
   }
 }
 
-@keyframes art-block-enter {
+@keyframes art-packet-y {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.92);
+    transform: translateY(-12px) scale(0.7);
   }
 
   to {
@@ -994,6 +952,18 @@ main > section + section {
 
   to {
     stroke-dashoffset: 0;
+  }
+}
+
+@keyframes art-packet-pulse-x {
+  50% {
+    transform: translateX(12px);
+  }
+}
+
+@keyframes art-packet-pulse-y {
+  50% {
+    transform: translateY(12px);
   }
 }
 
@@ -1069,6 +1039,12 @@ main > section + section {
   .service-box--ai .service-box__cta {
     grid-column: 1;
     grid-row: 5;
+  }
+}
+
+@media (max-width: 26rem) {
+  .art-detail--secondary {
+    display: none;
   }
 }
 
@@ -1572,6 +1548,15 @@ footer a:hover {
   .journey__moment {
     animation: none;
     opacity: 1;
+    transform: none;
+  }
+
+  .art-detail,
+  .art-data-route,
+  .art-packet {
+    animation: none;
+    opacity: 1;
+    stroke-dashoffset: 0;
     transform: none;
   }
 }

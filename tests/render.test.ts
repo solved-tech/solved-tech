@@ -47,6 +47,30 @@ describe("homepage renderer", () => {
     expect(html).not.toContain('<article class="service"');
   });
 
+  it("fills every service visual with meaningful interface detail", () => {
+    [
+      "Home",
+      "Shop",
+      "Contact",
+      "Tasks",
+      "Search",
+      "Ads",
+      "Visit",
+      "Request",
+      "Agent",
+      "Memory",
+      "Calendar",
+      "Messages",
+      "Done",
+      "Payments",
+      "CRM",
+      "Data",
+    ].forEach((label) => expect(html).toContain(`>${label}</text>`));
+
+    expect(html.match(/class="art-detail/g)?.length).toBeGreaterThanOrEqual(15);
+    expect(html.match(/class="art-packet/g)?.length).toBeGreaterThanOrEqual(5);
+  });
+
   it("explains what happens after a client calls", () => {
     expect(html).toContain("What happens next");
     expect(html).toContain("One call. Then we make it simple.");
