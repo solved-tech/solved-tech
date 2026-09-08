@@ -60,10 +60,25 @@ describe("homepage renderer", () => {
     expect(html).not.toContain('data-service-art="traffic"');
   });
 
-  it("renders every service as the same three-region row", () => {
-    expect(html.match(/class="service-box__copy"/g)).toHaveLength(5);
-    expect(html.match(/class="service-box__provides"/g)).toHaveLength(5);
-    expect(html.match(/class="service-box__artwork"/g)).toHaveLength(5);
+  it("uses a full header, diagram-first body, and dedicated CTA per service", () => {
+    expect(html.match(/class="service-box__header"/g)).toHaveLength(5);
+    expect(html.match(/class="service-box__body"/g)).toHaveLength(5);
+    expect(
+      html.match(/class="service-box__cta" href="#contact"/g),
+    ).toHaveLength(5);
+    expect(
+      html.match(
+        /<div class="service-box__body">\s*<span class="service-box__artwork" data-reveal>[\s\S]*?<div class="service-box__provides">/g,
+      ),
+    ).toHaveLength(5);
+    expect(html).not.toContain('class="service-box__link"');
+  });
+
+  it("keeps the two section labels on a single semantic line", () => {
+    expect(html).toContain(
+      '<h2 id="services-heading" data-reveal>What do you need?</h2>',
+    );
+    expect(html).toContain("<p>What happens next</p>");
   });
 
   it("reveals each service artwork when the diagram reaches the viewport", () => {
