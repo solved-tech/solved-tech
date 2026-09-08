@@ -491,6 +491,23 @@ describe("stylesheet contracts", () => {
     expect(actionsRule).toContain("width: min(100%, 42rem)");
   });
 
+  it("fits hero contact actions on one mobile row", () => {
+    const mobileHeroBlock = styles.match(
+      /@media\s*\(\s*max-width:\s*40rem\s*\)\s*\{[\s\S]*?\.hero__actions[\s\S]*?\n\}/,
+    )?.[0];
+
+    expect(mobileHeroBlock).toBeDefined();
+
+    const actionsRule = mobileHeroBlock?.match(/\.hero__actions\s*\{([^}]*)\}/)?.[1];
+    const buttonRule = mobileHeroBlock?.match(/\.hero \.contact-action\s*\{([^}]*)\}/)?.[1];
+
+    expect(actionsRule).toContain("display: grid");
+    expect(actionsRule).toContain(
+      "grid-template-columns: repeat(3, minmax(0, 1fr))",
+    );
+    expect(buttonRule).toMatch(/min-height:\s*48px/);
+  });
+
   it("pulses only the node ring after the signal crosses", () => {
     const nodeRule = styles.match(/\.hero-pipeline__node\s*\{([^}]*)\}/)?.[1];
     const ringRule = styles.match(
