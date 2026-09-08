@@ -67,14 +67,17 @@ Hero viewport height keeps `100svh` as fallback, then `100dvh`, minus
 ### Hero
 
 - Fills first viewport using `svh` then `dvh` minus header height.
-- Portrait phone profiles: Call, WhatsApp, and Email actions fully visible
-  within the first viewport (below the header).
+- Portrait phone profiles (320×568, 360×780, 390×844, 414×896): Call,
+  WhatsApp, and Email actions fully visible within the first viewport below
+  the header.
+- Short landscape profiles (844×390): hero contact actions may sit below the
+  first viewport; user scrolls to reach them. Horizontal bounds and control
+  visibility still apply after scroll.
 - Contact actions wrap without horizontal overflow; labels and icons remain
   vertically centred.
 - Hero pipeline is decorative; clipping by the hero container is intentional
   and must not cause document-level horizontal overflow.
-- Pipeline and ambient motion scale down on compact and short viewports;
-  landscape phone may scroll naturally when the complete hero cannot fit.
+- Pipeline and ambient motion scale down on compact and short viewports.
 - Signal graphic recentres at 40rem and above.
 
 ### Services
@@ -161,49 +164,60 @@ Playwright smoke tests run at every matrix profile unless noted.
    <= document.documentElement.clientWidth`.
 2. **No console or page errors:** zero console errors and zero uncaught page
    errors during load and smoke interaction.
-3. **Primary controls in bounds:** header wordmark, menu toggle or nav links,
-   and hero contact actions are visible and within viewport bounds.
+3. **Primary controls in horizontal bounds:** header wordmark, menu toggle or
+   nav links, and hero contact actions are visible with bounding boxes fully
+   within the viewport width at every profile.
 4. **Minimum target sizes:** hero contact actions ≥ 48px height; navigation
    controls ≥ 44px height.
 
 ### Portrait phone (320×568, 360×780, 390×844, 414×896)
 
 5. **Hero actions in first viewport:** bottom edge of the lowest hero contact
-   action ≤ viewport height (accounting for sticky header).
+   action ≤ viewport height (accounting for sticky header). Applies to
+   portrait phone profiles only; not short landscape.
+
+### Short landscape (844×390)
+
+6. **Hero actions reachable by scroll:** scroll hero contact actions into
+   view; assert each action is visible and within horizontal viewport bounds
+   after scroll.
 
 ### Layout transitions (content thresholds)
 
-6. **40rem contact stack:** below 640px width, contact actions stack in one
+7. **40rem contact stack:** below 640px width, contact actions stack in one
    column.
-7. **48rem service split:** at and above 768px width, service body uses
+8. **48rem service split:** at and above 768px width, service body uses
    two-column diagram/capabilities layout.
-8. **48rem team grid:** at and above 768px width, team uses two-column
+9. **48rem team grid:** at and above 768px width, team uses two-column
    founder grid.
-9. **52rem journey horizontal:** at and above 832px width, journey moments
-   use horizontal four-step layout.
-10. **64rem contact rail:** at and above 1024px width, contact heading is
+10. **52rem journey horizontal:** at and above 832px width, journey moments
+    use horizontal four-step layout.
+11. **64rem contact rail:** at and above 1024px width, contact heading is
     sticky in the left rail.
 
 ### Services and motion
 
-11. **Service rows visible before reveal:** service question and body text
+12. **Service rows visible before reveal:** service question and body text
     visible before diagram artwork animation completes.
-12. **Diagram reveal on scroll:** artwork gains visibility class when
-    scrolled into view with enhancements enabled.
-13. **Reduced motion complete:** at 390×844 with `prefers-reduced-motion:
+13. **Diagram rendered visibility on scroll:** for each service diagram, hero
+    pipeline, and journey signal graphic, scroll the element into view and
+    assert rendered visibility (non-zero opacity, non-zero bounding box) with
+    geometry fully within the viewport width; class presence alone is
+    insufficient.
+14. **Reduced motion complete:** at 390×844 with `prefers-reduced-motion:
     reduce`, all service artwork and journey content visible without
     animation.
 
 ### Wide screen
 
-14. **2560×1440 balance:** prose line lengths stay constrained within shell;
+15. **2560×1440 balance:** prose line lengths stay constrained within shell;
     no accidental empty regions in the service grid.
 
 ### Browser coverage
 
 - Chromium: full eleven-profile matrix.
 - WebKit: key phone profiles (320×568, 390×844).
-- Trace and screenshot capture on failure only.
+- `trace: "retain-on-failure"` and `screenshot: "only-on-failure"`.
 
 ## Baseline
 
@@ -213,9 +227,20 @@ Measured on `origin/main` at `54ad6d4` before responsive matrix changes.
 y=651px — 83px below the first viewport. Likely selectors: `.hero`,
 `.hero__pipeline`, `.hero__actions`.
 
-**Passing profiles:** 360×780, 390×844, 414×896, 844×390, 768×1024,
-1366×768, 1536×864, 1920×1080, and 390×844 reduced motion show no document
-overflow and correct section geometry.
+**Measured passing profiles:**
+
+- 360×780: hero actions y=581–629; no document overflow.
+- 390×844: hero actions y=596–644; no document overflow; service rows full
+  width.
+- 414×896: no document overflow.
+- 844×390: no document overflow; desktop navigation active.
+- 768×1024: no document overflow; service rows full width.
+- 1366×768: no document overflow; service rows use the shell without
+  accidental empty space.
+- 1536×864: no document overflow.
+- 1920×1080: no document overflow; service diagram/capabilities split
+  visible.
+- 390×844 reduced motion: animations suppressed and content remains visible.
 
 **Intentional behaviour:** hero pipeline extends outside its box on phone
 widths but is clipped by the hero container — decorative clipping, not
@@ -236,7 +261,7 @@ bands.
 - `playwright.config.ts`: one named project per matrix profile.
 - Chromium runs the full matrix; WebKit runs key phone profiles only.
 - Install Chromium and WebKit browsers only.
-- `trace: 'on-first-retry'` or equivalent; screenshots on failure only.
+- `trace: "retain-on-failure"` and `screenshot: "only-on-failure"`.
 - Add `.github/workflows/responsive.yml` for pull-request and manual-dispatch
   runs; keep the existing Pages deployment workflow unchanged.
 
@@ -255,9 +280,8 @@ Manual inspection after automation passes: 320×568, 390×844 WebKit, 844×390,
 
 ## Out of Scope
 
-- Device-model-specific CSS profiles or user-agent targeting.
+- Device-model-specific CSS profiles.
 - Pixel-perfect screenshot baselines, Percy, or Chromatic.
 - Copy, branding, founder assets, service content, or pipeline redesign.
-- Hiding services, service rows, or diagrams on small screens.
-- Merging, deploying, or pushing without explicit instruction.
-- Changes to the existing GitHub Pages deployment workflow.
+- Hiding services or diagrams on small screens.
+- Merging or deploying without explicit instruction.
