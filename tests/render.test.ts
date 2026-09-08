@@ -27,6 +27,25 @@ describe("homepage renderer", () => {
     );
   });
 
+  it("places the seven-service pipeline above the hero actions", () => {
+    const pipeline = html.indexOf('class="hero__pipeline"');
+    const actions = html.indexOf('class="hero__actions"');
+
+    expect(pipeline).toBeGreaterThan(html.indexOf("Bring us the problem."));
+    expect(pipeline).toBeLessThan(actions);
+    expect(html.match(/class="hero-pipeline__node/g)).toHaveLength(7);
+    expect(html).toContain("hero-pipeline__node--ai");
+    [
+      "AI",
+      "Customers",
+      "Websites",
+      "Web apps",
+      "Mobile apps",
+      "Desktop apps",
+      "Custom systems",
+    ].forEach((label) => expect(html).toContain(`>${label}</text>`));
+  });
+
   it("renders semantic navigation and contact landmarks", () => {
     expect(html).toContain('<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"');
     expect(html).toContain('<nav id="primary-navigation"');
