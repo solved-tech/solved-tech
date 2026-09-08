@@ -626,7 +626,7 @@ main > section + section {
 .service-box__link {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: auto auto auto 1fr auto auto;
+  grid-template-rows: auto auto auto auto 1fr auto auto;
   gap: 0.35rem 1rem;
   min-height: 26rem;
   padding: clamp(1.25rem, 3vw, 2rem);
@@ -674,9 +674,43 @@ main > section + section {
   line-height: 1.5;
 }
 
+.service-box__provides {
+  grid-column: 2;
+  grid-row: 4;
+  margin-block-start: 1rem;
+  padding-block-start: 0.8rem;
+  border-block-start: 1px solid var(--line);
+}
+
+.service-box__provides > span {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--type-small);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.service-box__capabilities {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service-box__capability {
+  min-width: 0;
+  padding: 0.45rem 0.6rem 0.45rem 0;
+  border-block-start: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: var(--type-small);
+  line-height: 1.3;
+}
+
 .service-box__artwork {
   grid-column: 1 / -1;
-  grid-row: 5;
+  grid-row: 6;
   align-self: end;
   display: block;
   width: 100%;
@@ -818,7 +852,7 @@ main > section + section {
 
 .service-box__cta {
   grid-column: 1 / -1;
-  grid-row: 6;
+  grid-row: 7;
   display: flex;
   gap: 0.6rem;
   justify-content: space-between;
@@ -998,7 +1032,7 @@ main > section + section {
   }
 
   .service-box--app,
-  .service-box--traffic {
+  .service-box--customers {
     grid-column: span 2;
   }
 
@@ -1009,7 +1043,7 @@ main > section + section {
   .service-box--website .service-box__link,
   .service-box--ai .service-box__link {
     grid-template-columns: minmax(15rem, 0.75fr) minmax(18rem, 1.25fr);
-    grid-template-rows: auto auto auto 1fr auto;
+    grid-template-rows: auto auto auto auto 1fr auto;
     column-gap: clamp(2rem, 4vw, 4rem);
   }
 
@@ -1037,10 +1071,16 @@ main > section + section {
     grid-row: 4;
   }
 
+  .service-box--website .service-box__provides,
+  .service-box--ai .service-box__provides {
+    grid-column: 1;
+    grid-row: 5;
+  }
+
   .service-box--website .service-box__artwork,
   .service-box--ai .service-box__artwork {
     grid-column: 2;
-    grid-row: 1 / span 5;
+    grid-row: 1 / span 6;
     align-self: center;
     margin: 0;
   }
@@ -1048,13 +1088,19 @@ main > section + section {
   .service-box--website .service-box__cta,
   .service-box--ai .service-box__cta {
     grid-column: 1;
-    grid-row: 5;
+    grid-row: 6;
   }
 }
 
 @media (max-width: 26rem) {
   .art-detail--secondary {
     display: none;
+  }
+}
+
+@media (max-width: 22rem) {
+  .service-box__capabilities {
+    grid-template-columns: 1fr;
   }
 }
 

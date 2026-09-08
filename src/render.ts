@@ -27,6 +27,19 @@ const renderContactActions = (
     <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">WhatsApp us</a>
   </div>`;
 
+const renderCapabilities = (provides: ProductOffer["provides"]): string => `
+  <div class="service-box__provides">
+    <span>We provide</span>
+    <ul class="service-box__capabilities">
+      ${provides
+        .map(
+          (capability) =>
+            `<li class="service-box__capability">${escapeHtml(capability)}</li>`,
+        )
+        .join("")}
+    </ul>
+  </div>`;
+
 const renderServiceArt = (id: ProductOffer["id"]): string => {
   switch (id) {
     case "website":
@@ -81,9 +94,9 @@ const renderServiceArt = (id: ProductOffer["id"]): string => {
             <path class="art-check-small" d="m399 198 4 4 7-9M402 232h44" />
           </g>
         </svg>`;
-    case "traffic":
+    case "customers":
       return `
-        <svg class="service-art service-art--traffic" data-service-art="traffic" aria-hidden="true" viewBox="0 0 520 300">
+        <svg class="service-art service-art--customers" data-service-art="customers" aria-hidden="true" viewBox="0 0 520 300">
           <g class="art-detail art-detail--one">
             <rect class="art-panel" x="34" y="42" width="148" height="82" rx="3" />
             <text class="art-label art-label--strong" x="52" y="68">Search</text>
@@ -180,13 +193,14 @@ export const renderHomepage = (
 ): string => {
   const services = content.products
     .map(
-      ({ id, question, title, answer }, index) => `
+      ({ id, question, title, answer, provides }, index) => `
         <article class="service-box service-box--${escapeHtml(id)}" data-reveal>
           <a class="service-box__link" href="#contact">
             <span class="service-box__number">${String(index + 1).padStart(2, "0")}</span>
             <strong>${escapeHtml(question)}</strong>
             <span class="service-box__product">${escapeHtml(title)}</span>
             <p>${escapeHtml(answer)}</p>
+            ${renderCapabilities(provides)}
             <span class="service-box__artwork">${renderServiceArt(id)}</span>
             <span class="service-box__cta">Talk to us <span aria-hidden="true">→</span></span>
           </a>

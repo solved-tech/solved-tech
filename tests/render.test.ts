@@ -47,6 +47,19 @@ describe("homepage renderer", () => {
     expect(html).not.toContain('<article class="service"');
   });
 
+  it("renders the service order and capability lists", () => {
+    expect(html.match(/class="service-box__provides"/g)).toHaveLength(5);
+    expect(html.match(/class="service-box__capability"/g)).toHaveLength(20);
+    expect(html.indexOf("Want to use AI?")).toBeLessThan(
+      html.indexOf("Need more customers?"),
+    );
+    expect(html.indexOf("Need more customers?")).toBeLessThan(
+      html.indexOf("Need a website?"),
+    );
+    expect(html).not.toContain("Need more traffic?");
+    expect(html).not.toContain('data-service-art="traffic"');
+  });
+
   it("fills every service visual with meaningful interface detail", () => {
     [
       "Home",

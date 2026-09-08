@@ -2,14 +2,32 @@ import { describe, expect, it } from "vitest";
 import { contactConfig, siteContent } from "../src/content";
 
 describe("site content", () => {
-  it("leads with the five approved buying questions", () => {
+  it("uses the approved commercial service order", () => {
+    expect(siteContent.products.map(({ id }) => id)).toEqual([
+      "ai",
+      "customers",
+      "website",
+      "app",
+      "other",
+    ]);
     expect(siteContent.products.map(({ question }) => question)).toEqual([
+      "Want to use AI?",
+      "Need more customers?",
       "Need a website?",
       "Need an app?",
-      "Need more traffic?",
-      "Want to use AI in your business?",
       "Need something else?",
     ]);
+  });
+
+  it("lists four concrete capabilities for every product", () => {
+    expect(siteContent.products.every(({ provides }) => provides.length === 4))
+      .toBe(true);
+    expect(siteContent.products.flatMap(({ provides }) => provides)).toContain(
+      "Technical SEO",
+    );
+    expect(siteContent.products.flatMap(({ provides }) => provides)).toContain(
+      "MCP integrations",
+    );
   });
 
   it("uses explicit one-click trial contact placeholders", () => {
