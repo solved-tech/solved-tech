@@ -33,6 +33,60 @@ const finePointerHtmlRule = (css: string): string | undefined => {
 const scrollBehavior = (rule: string | undefined): string | undefined =>
   rule?.match(/scroll-behavior:\s*(\w+)/)?.[1];
 
+type CssRule = { prelude: string; body: string };
+
+const stripCssComments = (css: string): string =>
+  css.replace(/\/\*[\s\S]*?\*\//g, "");
+
+const flattenCssRules = (css: string): CssRule[] => {
+  const rules: CssRule[] = [];
+  const input = stripCssComments(css);
+
+  const walk = (block: string) => {
+    let index = 0;
+
+    while (index < block.length) {
+      const braceOpen = block.indexOf("{", index);
+      if (braceOpen === -1) {
+        break;
+      }
+
+      const prelude = block.slice(index, braceOpen).trim();
+      let depth = 1;
+      let cursor = braceOpen + 1;
+
+      while (cursor < block.length && depth > 0) {
+        if (block[cursor] === "{") {
+          depth += 1;
+        }
+        if (block[cursor] === "}") {
+          depth -= 1;
+        }
+        cursor += 1;
+      }
+
+      const body = block.slice(braceOpen + 1, cursor - 1);
+
+      if (prelude.startsWith("@")) {
+        walk(body);
+      } else {
+        rules.push({ prelude, body: body.trim() });
+      }
+
+      index = cursor;
+    }
+  };
+
+  walk(input);
+  return rules;
+};
+
+const rulesContainingSelector = (css: string, selectorFragment: string): CssRule[] =>
+  flattenCssRules(css).filter(({ prelude }) => prelude.includes(selectorFragment));
+
+const mediaBlock = (css: string, queryPattern: RegExp): string | undefined =>
+  css.match(queryPattern)?.[0];
+
 interface FakeListener {
   type: string;
   handler: () => void;
@@ -485,7 +539,7 @@ describe("stylesheet contracts", () => {
   });
 
   it("fits hero contact actions on one desktop row", () => {
-    const actionsRule = styles.match(/\.hero__actions\s*\{([^}]*)\}/)?.[1];
+    const actionsRule = styles.match(/^\.hero__actions\s*\{([^}]*)\}/m)?.[1];
 
     expect(actionsRule).toBeDefined();
     expect(actionsRule).toContain("width: min(100%, 42rem)");
@@ -504,25 +558,15 @@ describe("stylesheet contracts", () => {
   });
 
   it("fits hero contact actions on one mobile row", () => {
-    const mobileHeroBlock = styles.match(
-      /@media\s*\(\s*max-width:\s*40rem\s*\)\s*\{[\s\S]*?\.hero__actions[\s\S]*?\n\}/,
-    )?.[0];
-
-    expect(mobileHeroBlock).toBeDefined();
-
-    const actionsRule = mobileHeroBlock?.match(/\.hero__actions\s*\{([^}]*)\}/)?.[1];
-    const buttonRule = mobileHeroBlock?.match(/\.hero \.contact-action\s*\{([^}]*)\}/)?.[1];
+    const actionsRule = styles.match(/^\.hero__actions\s*\{([^}]*)\}/m)?.[1];
+    const buttonRule = styles.match(/^\.hero \.contact-action\s*\{([^}]*)\}/m)?.[1];
 
     expect(actionsRule).toContain("display: grid");
     expect(actionsRule).toContain(
       "grid-template-columns: repeat(3, minmax(0, 1fr))",
     );
     expect(buttonRule).toMatch(/min-height:\s*48px/);
-
-    const heroRule = mobileHeroBlock?.match(/\.hero\s*\{([^}]*)\}/)?.[1];
-
-    expect(heroRule).toContain("justify-content: flex-start");
-    expect(heroRule).toContain("padding-block-start: 1.5rem");
+    expect(buttonRule).toContain("min-width: 0");
   });
 
   it("pulses only the node ring after the signal crosses", () => {
@@ -593,5 +637,83 @@ html {
     );
     expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?opacity:\s*1/);
     expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?transform:\s*none/);
+  });
+
+  it("uses continuous viewport-aware hero geometry in base rules", () => {
+    const heroRule = styles.match(/\.hero\s*\{([^}]*)\}/)?.[1];
+    const headingRule = styles.match(/\.hero h1\s*\{([^}]*)\}/)?.[1];
+    const pipelineRule = styles.match(/\.hero__pipeline\s*\{([^}]*)\}/)?.[1];
+
+    for (const rule of [heroRule, headingRule, pipelineRule]) {
+      expect(rule).toMatch(/dvh/);
+      expect(rule).toMatch(/(?:vw|100%)/);
+      expect(rule).toMatch(/(?:clamp|min|max)\(/);
+    }
+    expect(heroRule).toMatch(/gap:[^;]*dvh/);
+    expect(heroRule).toMatch(/padding-block:[^;]*dvh/);
+  });
+
+  it("defines a compact threshold strictly below 23rem", () => {
+    expect(styles).toMatch(
+      /@media\s*\(\s*max-width:\s*22\.999rem\s*\)/,
+    );
+    expect(styles).toMatch(
+      /\.hero \.contact-action__suffix[\s\S]*?display:\s*none/,
+    );
+  });
+
+  it("simplifies decorative motion on short viewports", () => {
+    expect(styles).toMatch(
+      /@media[\s\S]*?max-height:[\s\S]*?\.code-field code[\s\S]*?animation-play-state:\s*paused/,
+    );
+    expect(styles).toMatch(
+      /@media[\s\S]*?max-height:[\s\S]*?\.hero__signal[\s\S]*?opacity:/,
+    );
+  });
+
+  it("keeps short-height media rules decorative rather than geometric", () => {
+    const shortHeightBlock = mediaBlock(
+      styles,
+      /@media\s*\(\s*max-height:\s*48rem\s*\)\s*\{[\s\S]*?\n\}/,
+    );
+
+    expect(shortHeightBlock).toBeDefined();
+    expect(shortHeightBlock).toMatch(
+      /\.code-field code\s*\{[^}]*animation-play-state:\s*paused/s,
+    );
+    expect(shortHeightBlock).toMatch(/\.hero__signal\s*\{[^}]*opacity:/s);
+    expect(shortHeightBlock?.slice(shortHeightBlock.indexOf("{") + 1)).not.toMatch(
+      /(?:font-size|gap|padding|width|height|justify-content)\s*:/,
+    );
+    expect(styles).not.toContain("max-width: 120rem");
+    expect(styles).not.toMatch(/max-height:\s*(?:54|68)rem/);
+  });
+
+  it("never hides hero pipeline or service diagrams", () => {
+    const protectedSelectors = [
+      ".hero__pipeline",
+      ".service-box__artwork",
+      ".service-art",
+    ] as const;
+
+    protectedSelectors.forEach((selector) => {
+      const matchingRules = rulesContainingSelector(styles, selector);
+      expect(
+        matchingRules.length,
+        `expected rules containing ${selector}`,
+      ).toBeGreaterThan(0);
+
+      matchingRules.forEach(({ prelude, body }) => {
+        expect(body, `display:none in ${prelude.trim()}`).not.toMatch(
+          /display:\s*none\b/,
+        );
+      });
+    });
+  });
+
+  it("widens the content shell at 96rem and above", () => {
+    expect(styles).toMatch(
+      /@media\s*\(\s*min-width:\s*96rem\s*\)[\s\S]*?--shell:\s*96rem/,
+    );
   });
 });

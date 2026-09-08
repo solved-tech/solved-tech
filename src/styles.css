@@ -38,6 +38,12 @@
   --ease: cubic-bezier(0.22, 0.68, 0.28, 1);
 }
 
+@media (min-width: 96rem) {
+  :root {
+    --shell: 96rem;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -408,11 +414,11 @@ main > section + section {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: clamp(1.25rem, 3vw, 2.5rem);
+  gap: clamp(0.4rem, 0.5vw + 1.2dvh, 2.5rem);
   justify-content: center;
   min-height: calc(100svh - var(--header-height));
   min-height: calc(100dvh - var(--header-height));
-  padding-block: clamp(3rem, 9svh, 8rem);
+  padding-block: clamp(0.65rem, 1vw + 1.8dvh, 8rem);
 }
 
 .hero > :not(.hero__signal) {
@@ -483,7 +489,7 @@ main > section + section {
 
 .hero h1 {
   max-width: 15ch;
-  font-size: clamp(2.65rem, 10.5vw, 6.2rem);
+  font-size: clamp(1.95rem, min(10.5vw, 1.5rem + 4.5dvh), 6.2rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
 }
@@ -506,8 +512,8 @@ main > section + section {
 }
 
 .hero__pipeline {
-  width: min(100%, 42rem);
-  padding-block: 0.75rem;
+  width: min(100%, clamp(18rem, 12vw + 34dvh, 42rem));
+  padding-block: clamp(0.25rem, 0.1rem + 1dvh, 0.75rem);
   border-block: 1px solid var(--line);
 }
 
@@ -558,7 +564,7 @@ main > section + section {
 .hero-pipeline__node text {
   fill: currentColor;
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: clamp(13px, calc(27px - 1dvh), 23px);
   text-anchor: middle;
 }
 
@@ -593,21 +599,36 @@ main > section + section {
   }
 }
 
-@media (max-width: 30rem) {
-  .hero__pipeline {
-    width: calc(100% + 0.75rem);
-    margin-inline-end: -0.75rem;
+@media (max-width: 22.999rem) {
+  .hero .contact-action__suffix {
+    display: none;
   }
 
-  .hero-pipeline__node text {
-    font-size: 22px;
+  .hero__signal {
+    opacity: 0.42;
+  }
+
+  .code-field code {
+    animation-play-state: paused;
+    opacity: 0.018;
+  }
+}
+
+@media (max-height: 48rem) {
+  .hero__signal {
+    opacity: 0.4;
+  }
+
+  .code-field code {
+    animation-play-state: paused;
+    opacity: 0.02;
   }
 }
 
 .hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.35rem, 0.2rem + 0.35vw, 0.55rem);
   width: min(100%, 42rem);
   margin-block-start: clamp(0.5rem, 2vw, 1.5rem);
 }
@@ -615,16 +636,17 @@ main > section + section {
 .hero .contact-action {
   display: inline-flex;
   align-items: center;
-  flex: 1 1 10rem;
+  gap: 0.3rem;
   justify-content: center;
+  min-width: 0;
   min-height: 48px;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem clamp(0.35rem, 1vw, 1rem);
   border: 1px solid var(--accent);
   border-radius: 2px;
   background-color: var(--accent);
   color: var(--accent-ink);
   font-family: inherit;
-  font-size: var(--type-body);
+  font-size: clamp(0.78rem, 0.7rem + 0.4vw, 1.1rem);
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -638,6 +660,10 @@ main > section + section {
 
 .hero .contact-action:focus-visible {
   outline-color: var(--ink);
+}
+
+.contact-action__suffix {
+  white-space: pre;
 }
 
 .contact-action__icon {
@@ -681,27 +707,7 @@ main > section + section {
   color: var(--ink);
 }
 
-@media (max-width: 40rem) {
-  .hero {
-    justify-content: flex-start;
-    padding-block-start: 1.5rem;
-  }
-
-  .hero__actions {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.35rem;
-  }
-
-  .hero .contact-action {
-    flex: initial;
-    gap: 0.3rem;
-    min-width: 0;
-    min-height: 48px;
-    padding: 0.75rem 0.35rem;
-    font-size: clamp(0.78rem, 2.6vw, 0.92rem);
-  }
-
+@media (max-width: 39.999rem) {
   .hero .contact-action .contact-action__icon {
     width: 0.95rem;
     height: 0.95rem;
@@ -1631,7 +1637,7 @@ main > section + section {
   color: var(--ink);
 }
 
-@media (max-width: 40rem) {
+@media (max-width: 39.999rem) {
   .contact__actions {
     grid-template-columns: 1fr;
   }
