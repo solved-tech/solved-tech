@@ -33,6 +33,60 @@ const finePointerHtmlRule = (css: string): string | undefined => {
 const scrollBehavior = (rule: string | undefined): string | undefined =>
   rule?.match(/scroll-behavior:\s*(\w+)/)?.[1];
 
+type CssRule = { prelude: string; body: string };
+
+const stripCssComments = (css: string): string =>
+  css.replace(/\/\*[\s\S]*?\*\//g, "");
+
+const flattenCssRules = (css: string): CssRule[] => {
+  const rules: CssRule[] = [];
+  const input = stripCssComments(css);
+
+  const walk = (block: string) => {
+    let index = 0;
+
+    while (index < block.length) {
+      const braceOpen = block.indexOf("{", index);
+      if (braceOpen === -1) {
+        break;
+      }
+
+      const prelude = block.slice(index, braceOpen).trim();
+      let depth = 1;
+      let cursor = braceOpen + 1;
+
+      while (cursor < block.length && depth > 0) {
+        if (block[cursor] === "{") {
+          depth += 1;
+        }
+        if (block[cursor] === "}") {
+          depth -= 1;
+        }
+        cursor += 1;
+      }
+
+      const body = block.slice(braceOpen + 1, cursor - 1);
+
+      if (prelude.startsWith("@")) {
+        walk(body);
+      } else {
+        rules.push({ prelude, body: body.trim() });
+      }
+
+      index = cursor;
+    }
+  };
+
+  walk(input);
+  return rules;
+};
+
+const rulesContainingSelector = (css: string, selectorFragment: string): CssRule[] =>
+  flattenCssRules(css).filter(({ prelude }) => prelude.includes(selectorFragment));
+
+const mediaBlock = (css: string, queryPattern: RegExp): string | undefined =>
+  css.match(queryPattern)?.[0];
+
 interface FakeListener {
   type: string;
   handler: () => void;
@@ -620,15 +674,70 @@ html {
     );
   });
 
-  it("never hides hero pipeline or service diagrams", () => {
-    const pipelineRules = styles.match(/\.hero__pipeline\s*\{[^}]*\}/g) ?? [];
-    pipelineRules.forEach((rule) => {
-      expect(rule).not.toMatch(/display:\s*none/);
-    });
-    expect(styles).not.toMatch(/\.service-art\s*\{[^}]*display:\s*none/);
-    expect(styles).not.toMatch(
-      /\.service-box__artwork\s*\{[^}]*display:\s*none/,
+  it("caps short-height queries below ultra-wide widths", () => {
+    expect(styles).toMatch(
+      /@media\s*\(\s*max-height:\s*68rem\s*\)\s*and\s*\(\s*min-width:\s*40rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
     );
+    expect(styles).toMatch(
+      /@media\s*\(\s*max-height:\s*54rem\s*\)\s*and\s*\(\s*min-width:\s*40rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
+    );
+    expect(styles).toMatch(
+      /@media\s*\(\s*max-height:\s*48rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
+    );
+  });
+
+  it("preserves legible pipeline labels after responsive SVG scaling", () => {
+    const compactBlock = mediaBlock(
+      styles,
+      /@media\s*\(\s*max-width:\s*23rem\s*\)\s*\{[\s\S]*?\n\}/,
+    );
+    const short68Block = mediaBlock(
+      styles,
+      /@media\s*\(\s*max-height:\s*68rem\s*\)[\s\S]*?\n\}/,
+    );
+    const short54Block = mediaBlock(
+      styles,
+      /@media\s*\(\s*max-height:\s*54rem\s*\)[\s\S]*?\n\}/,
+    );
+    const short48Block = mediaBlock(
+      styles,
+      /@media\s*\(\s*max-height:\s*48rem\s*\)[\s\S]*?\n\}/,
+    );
+
+    expect(
+      compactBlock?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*23px/s),
+    ).toBeTruthy();
+    expect(
+      short68Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*16px/s),
+    ).toBeTruthy();
+    expect(
+      short54Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*21px/s),
+    ).toBeTruthy();
+    expect(
+      short48Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*23px/s),
+    ).toBeTruthy();
+  });
+
+  it("never hides hero pipeline or service diagrams", () => {
+    const protectedSelectors = [
+      ".hero__pipeline",
+      ".service-box__artwork",
+      ".service-art",
+    ] as const;
+
+    protectedSelectors.forEach((selector) => {
+      const matchingRules = rulesContainingSelector(styles, selector);
+      expect(
+        matchingRules.length,
+        `expected rules containing ${selector}`,
+      ).toBeGreaterThan(0);
+
+      matchingRules.forEach(({ prelude, body }) => {
+        expect(body, `display:none in ${prelude.trim()}`).not.toMatch(
+          /display:\s*none\b/,
+        );
+      });
+    });
   });
 
   it("widens the content shell at 96rem and above", () => {
