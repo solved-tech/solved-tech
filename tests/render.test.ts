@@ -49,6 +49,34 @@ describe("homepage renderer", () => {
     ]);
   });
 
+  it("aligns node ring delays with measured signal crossings", () => {
+    const nodes = Array.from(
+      html.matchAll(
+        /<g class="hero-pipeline__node[^"]*"[^>]*style="--pipeline-delay:\s*([^"]+)"[\s\S]*?<text y="43">([^<]+)<\/text>/g,
+      ),
+      ([, delay, label]) => ({ delay, label }),
+    );
+
+    expect(nodes.map(({ label }) => label)).toEqual([
+      "AI",
+      "Customers",
+      "Websites",
+      "Web apps",
+      "Mobile apps",
+      "Desktop apps",
+      "Custom systems",
+    ]);
+    expect(nodes.map(({ delay }) => delay)).toEqual([
+      "0s",
+      "0.911s",
+      "1.952s",
+      "3.059s",
+      "4.302s",
+      "5.313s",
+      "7.045s",
+    ]);
+  });
+
   it("renders semantic navigation and contact landmarks", () => {
     expect(html).toContain('<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"');
     expect(html).toContain('<nav id="primary-navigation"');
