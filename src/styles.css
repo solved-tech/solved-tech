@@ -532,15 +532,15 @@ main > section + section {
 
 .hero-pipeline__node {
   color: var(--ink-muted);
-  animation: pipeline-node-active 9s linear infinite;
-  animation-delay: var(--pipeline-delay);
-  animation-play-state: paused;
 }
 
 .hero-pipeline__node-ring {
   fill: rgb(18 17 16 / 0.92);
-  stroke: currentColor;
+  stroke: var(--ink-muted);
   stroke-width: 1.25;
+  animation: pipeline-node-ring-active 9s linear infinite;
+  animation-delay: calc(var(--pipeline-delay) + 140ms);
+  animation-play-state: paused;
 }
 
 .hero-pipeline__icon {
@@ -569,7 +569,7 @@ main > section + section {
   animation-play-state: paused;
 }
 
-.hero__pipeline.is-pipeline-visible .hero-pipeline__node,
+.hero__pipeline.is-pipeline-visible .hero-pipeline__node-ring,
 .hero__pipeline.is-pipeline-visible .hero-pipeline__signal {
   animation-play-state: running;
 }
@@ -580,15 +580,15 @@ main > section + section {
   }
 }
 
-@keyframes pipeline-node-active {
+@keyframes pipeline-node-ring-active {
   0%,
   12% {
-    color: var(--accent);
+    stroke: var(--accent);
   }
 
   18%,
   100% {
-    color: var(--ink-muted);
+    stroke: var(--ink-muted);
   }
 }
 
@@ -1707,7 +1707,7 @@ footer a:hover {
   }
 
   .hero-pipeline__signal,
-  .hero-pipeline__node {
+  .hero-pipeline__node-ring {
     animation: none;
   }
 

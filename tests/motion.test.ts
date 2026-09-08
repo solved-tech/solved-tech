@@ -474,7 +474,7 @@ describe("stylesheet contracts", () => {
 
   it("runs pipeline animations only while the pipeline is visible", () => {
     expect(styles).toMatch(
-      /\.hero-pipeline__node\s*\{[^}]*animation-play-state:\s*paused/s,
+      /\.hero-pipeline__node-ring\s*\{[^}]*animation-play-state:\s*paused/s,
     );
     expect(styles).toMatch(
       /\.hero-pipeline__signal\s*\{[^}]*animation-play-state:\s*paused/s,
@@ -482,6 +482,28 @@ describe("stylesheet contracts", () => {
     expect(styles).toMatch(
       /\.hero__pipeline\.is-pipeline-visible[\s\S]*?animation-play-state:\s*running/,
     );
+  });
+
+  it("pulses only the node ring after the signal crosses", () => {
+    const nodeRule = styles.match(/\.hero-pipeline__node\s*\{([^}]*)\}/)?.[1];
+    const ringRule = styles.match(
+      /\.hero-pipeline__node-ring\s*\{([^}]*)\}/,
+    )?.[1];
+    const iconRule = styles.match(/\.hero-pipeline__icon\s*\{([^}]*)\}/)?.[1];
+    const labelRule = styles.match(
+      /\.hero-pipeline__node text\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(nodeRule).not.toContain("animation:");
+    expect(ringRule).toContain(
+      "animation: pipeline-node-ring-active 9s linear infinite",
+    );
+    expect(ringRule).toContain(
+      "animation-delay: calc(var(--pipeline-delay) + 140ms)",
+    );
+    expect(iconRule).not.toContain("animation:");
+    expect(labelRule).not.toContain("animation:");
+    expect(styles).toContain("@keyframes pipeline-node-ring-active");
   });
 
   it("does not apply a drop shadow to the pipeline signal", () => {

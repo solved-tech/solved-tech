@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { contactConfig, siteContent } from "../src/content";
-import { renderHomepage } from "../src/render";
+import { contactActionLabels, renderHomepage } from "../src/render";
 
 describe("homepage renderer", () => {
   const html = renderHomepage(siteContent, contactConfig);
@@ -265,8 +265,15 @@ describe("homepage renderer", () => {
 
     expect(groups).toHaveLength(2);
     groups.forEach((group) => {
-      expect(group.indexOf("Call us")).toBeLessThan(group.indexOf("WhatsApp us"));
-      expect(group.indexOf("WhatsApp us")).toBeLessThan(group.indexOf("Email us"));
+      const labels = Array.from(
+        group.matchAll(/<a class="contact-action[^"]*"[^>]*>([\s\S]*?)<\/a>/g),
+        ([, inner]) => {
+          const spanLabel = inner.match(/<span>([^<]+)<\/span>/)?.[1];
+          return spanLabel ?? inner.replace(/<[^>]+>/g, "").trim();
+        },
+      );
+
+      expect(labels).toEqual([...contactActionLabels]);
     });
   });
 
