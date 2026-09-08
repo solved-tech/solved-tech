@@ -68,11 +68,11 @@ Hero viewport height keeps `100svh` as fallback, then `100dvh`, minus
 
 - Fills first viewport using `svh` then `dvh` minus header height.
 - Portrait phone profiles (320×568, 360×780, 390×844, 414×896): Call,
-  WhatsApp, and Email actions fully visible within the first viewport below
-  the header.
+  WhatsApp, and Email actions fully visible with complete x/y in-bounds
+  geometry within the first viewport below the header, without scrolling.
 - Short landscape profiles (844×390): hero contact actions may sit below the
-  first viewport; user scrolls to reach them. Horizontal bounds and control
-  visibility still apply after scroll.
+  first viewport; user scrolls to reach them. Complete x/y in-bounds geometry
+  applies after scroll.
 - Contact actions wrap without horizontal overflow; labels and icons remain
   vertically centred.
 - Hero pipeline is decorative; clipping by the hero container is intentional
@@ -164,23 +164,21 @@ Playwright smoke tests run at every matrix profile unless noted.
    <= document.documentElement.clientWidth`.
 2. **No console or page errors:** zero console errors and zero uncaught page
    errors during load and smoke interaction.
-3. **Primary controls in horizontal bounds:** header wordmark, menu toggle or
-   nav links, and hero contact actions are visible with bounding boxes fully
-   within the viewport width at every profile.
+3. **Header controls in complete bounds:** wordmark, menu toggle or nav
+   links visible; bounding box fully within viewport width and height
+   without scrolling.
 4. **Minimum target sizes:** hero contact actions ≥ 48px height; navigation
    controls ≥ 44px height.
 
-### Portrait phone (320×568, 360×780, 390×844, 414×896)
+### Hero actions geometry
 
-5. **Hero actions in first viewport:** bottom edge of the lowest hero contact
-   action ≤ viewport height (accounting for sticky header). Applies to
-   portrait phone profiles only; not short landscape.
-
-### Short landscape (844×390)
-
-6. **Hero actions reachable by scroll:** scroll hero contact actions into
-   view; assert each action is visible and within horizontal viewport bounds
-   after scroll.
+5. **Complete bounds without scroll:** at every profile except 844×390, each
+   hero contact action bounding box fully within viewport width and height
+   without scrolling. Portrait phone profiles (320×568, 360×780, 390×844,
+   414×896) are mandatory first-viewport pass cases.
+6. **Complete bounds after scroll:** at 844×390, scroll each hero contact
+   action into view; assert bounding box fully within viewport width and
+   height.
 
 ### Layout transitions (content thresholds)
 
@@ -199,11 +197,13 @@ Playwright smoke tests run at every matrix profile unless noted.
 
 12. **Service rows visible before reveal:** service question and body text
     visible before diagram artwork animation completes.
-13. **Diagram rendered visibility on scroll:** for each service diagram, hero
-    pipeline, and journey signal graphic, scroll the element into view and
-    assert rendered visibility (non-zero opacity, non-zero bounding box) with
-    geometry fully within the viewport width; class presence alone is
-    insufficient.
+13. **Service and journey diagram geometry:** for each service diagram and
+    journey signal graphic, scroll into view and assert rendered visibility
+    (non-zero opacity, non-zero bounding box) with complete x/y geometry
+    within the viewport; class presence alone is insufficient. Exclude
+    `.hero__pipeline` from geometry containment — its decorative bleed is
+    intentional. Assert `.hero` clips overflow; check 1 confirms no document
+    overflow.
 14. **Reduced motion complete:** at 390×844 with `prefers-reduced-motion:
     reduce`, all service artwork and journey content visible without
     animation.
