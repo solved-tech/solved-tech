@@ -64,14 +64,20 @@ describe("site content", () => {
     });
   });
 
-  it("defines two clearly marked founder placeholders", () => {
-    expect(siteContent.founders).toHaveLength(2);
-    expect(siteContent.founders.every(({ placeholder }) => placeholder)).toBe(
-      true,
-    );
-    expect(siteContent.founders.map(({ name }) => name)).toEqual([
-      "Founder One",
-      "Founder Two",
+  it("defines the approved founders with Razvan first", () => {
+    expect(siteContent.founders).toEqual([
+      {
+        name: "Razvan Cristofor",
+        role: "Co-founder — Apps & SEO Expert",
+        image: "/team/razvan_cristofor.png",
+        linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
+      },
+      {
+        name: "Remus Baciu",
+        role: "Co-founder — Senior Software Engineer",
+        image: "/team/remus_baciu.png",
+        linkedin: "https://www.linkedin.com/in/remus-baciu-4a11a7105/",
+      },
     ]);
   });
 

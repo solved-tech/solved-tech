@@ -1452,19 +1452,6 @@ main > section + section {
   transform: scale(1.025);
 }
 
-.founder__portrait span {
-  position: absolute;
-  inset-inline-start: 1.35rem;
-  inset-block-end: 1.35rem;
-  padding: 0.3rem 0.45rem;
-  background-color: rgb(18 17 16 / 0.86);
-  color: var(--ink-muted);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
 .founder__details {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

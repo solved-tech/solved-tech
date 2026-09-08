@@ -203,7 +203,10 @@ describe("homepage renderer", () => {
       'src="/solved-tech/brand/solved-tech-logo-dark.svg"',
     );
     expect(pagesHtml).toContain(
-      'src="/solved-tech/team/founder-one-placeholder.svg"',
+      'src="/solved-tech/team/razvan_cristofor.png"',
+    );
+    expect(pagesHtml).toContain(
+      'src="/solved-tech/team/remus_baciu.png"',
     );
   });
 
@@ -250,14 +253,15 @@ describe("homepage renderer", () => {
   });
 
   it("renders two founder cards with portraits and LinkedIn links", () => {
-    siteContent.founders.forEach(({ image, name }) => {
+    siteContent.founders.forEach(({ image, linkedin, name }) => {
       expect(html).toContain(`src="${image}"`);
       expect(html).toContain(name);
+      expect(html).toContain(`alt="Portrait of ${name}"`);
+      expect(html).toContain(`href="${linkedin}"`);
+      expect(html).toContain(`aria-label="LinkedIn profile for ${name}"`);
     });
-    expect(html.match(/aria-label="LinkedIn profile placeholder/g)).toHaveLength(
-      2,
-    );
     expect(html.match(/class="founder__portrait-frame"/g)).toHaveLength(2);
-    expect(html.match(/Photo placeholder/g)).toHaveLength(2);
+    expect(html).not.toContain("Placeholder portrait");
+    expect(html).not.toContain("Photo placeholder");
   });
 });

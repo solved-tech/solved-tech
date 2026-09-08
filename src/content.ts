@@ -18,7 +18,6 @@ export interface FounderProfile {
   role: string;
   image: string;
   linkedin: string;
-  placeholder: boolean;
 }
 
 export interface SiteContent {
@@ -100,18 +99,16 @@ export const siteContent: SiteContent = {
   ],
   founders: [
     {
-      name: "Founder One",
-      role: "Co-founder — Product & Growth",
-      image: "/team/founder-one-placeholder.svg",
-      linkedin: "https://www.linkedin.com/",
-      placeholder: true,
+      name: "Razvan Cristofor",
+      role: "Co-founder — Apps & SEO Expert",
+      image: "/team/razvan_cristofor.png",
+      linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
     },
     {
-      name: "Founder Two",
-      role: "Co-founder — Technology & Delivery",
-      image: "/team/founder-two-placeholder.svg",
-      linkedin: "https://www.linkedin.com/",
-      placeholder: true,
+      name: "Remus Baciu",
+      role: "Co-founder — Senior Software Engineer",
+      image: "/team/remus_baciu.png",
+      linkedin: "https://www.linkedin.com/in/remus-baciu-4a11a7105/",
     },
   ],
 };
