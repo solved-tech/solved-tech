@@ -27,9 +27,10 @@ const renderContactActions = (
     <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">WhatsApp us</a>
   </div>`;
 
-const pipelinePath =
+export const pipelinePath =
   "M80 140C80 58 178 25 320 28C478 31 560 76 560 140C560 218 470 250 320 252C164 254 80 218 80 140Z";
 
+// Node delays approximate equal route segments; they are not arc-length measurements.
 const renderHeroPipeline = (): string => `
   <div class="hero__pipeline" data-reveal aria-hidden="true">
     <svg viewBox="0 0 640 300" focusable="false">
@@ -256,12 +257,15 @@ export const renderHomepage = (
 ): string => {
   const services = content.products
     .map(
-      ({ id, question, title, answer, provides }, index) => `
-        <article class="service-box service-box--${escapeHtml(id)}" data-reveal>
+      ({ id, question, title, answer, provides }, index) => {
+        const questionId = `service-${id}-question`;
+
+        return `
+        <article class="service-box service-box--${escapeHtml(id)}" data-reveal aria-labelledby="${questionId}">
           <header class="service-box__header">
             <div class="service-box__heading">
               <span class="service-box__number">${String(index + 1).padStart(2, "0")}</span>
-              <strong>${escapeHtml(question)}</strong>
+              <h3 id="${questionId}" class="service-box__question">${escapeHtml(question)}</h3>
             </div>
             <span class="service-box__product">${escapeHtml(title)}</span>
             <p>${escapeHtml(answer)}</p>
@@ -270,10 +274,11 @@ export const renderHomepage = (
             <span class="service-box__artwork" data-reveal>${renderServiceArt(id)}</span>
             ${renderCapabilities(provides)}
           </div>
-          <a class="service-box__cta" href="#contact">
+          <a class="service-box__cta" href="#contact" aria-label="Talk to us about ${escapeHtml(title)}">
             Talk to us <span aria-hidden="true">→</span>
           </a>
-        </article>`,
+        </article>`;
+      },
     )
     .join("");
   const founders = content.founders

@@ -30,12 +30,15 @@ describe("homepage renderer", () => {
   it("places the seven-service pipeline above the hero actions", () => {
     const pipeline = html.indexOf('class="hero__pipeline"');
     const actions = html.indexOf('class="hero__actions"');
+    const pipelineLabels = [
+      ...html.matchAll(/<text y="43">([^<]+)<\/text>/g),
+    ].map(([, label]) => label);
 
     expect(pipeline).toBeGreaterThan(html.indexOf("Bring us the problem."));
     expect(pipeline).toBeLessThan(actions);
     expect(html.match(/class="hero-pipeline__node(?:\s|")/g)).toHaveLength(7);
     expect(html).toContain("hero-pipeline__node--ai");
-    [
+    expect(pipelineLabels).toEqual([
       "AI",
       "Customers",
       "Websites",
@@ -43,7 +46,7 @@ describe("homepage renderer", () => {
       "Mobile apps",
       "Desktop apps",
       "Custom systems",
-    ].forEach((label) => expect(html).toContain(`>${label}</text>`));
+    ]);
   });
 
   it("renders semantic navigation and contact landmarks", () => {
@@ -57,8 +60,15 @@ describe("homepage renderer", () => {
   it("renders every service as an animated visual box", () => {
     expect(html.match(/class="service-box service-box--/g)).toHaveLength(5);
     siteContent.products.forEach(({ id, question }) => {
+      const questionId = `service-${id}-question`;
+
       expect(html).toContain(`data-service-art="${id}"`);
-      expect(html).toContain(`<strong>${question}</strong>`);
+      expect(html).toContain(
+        `<article class="service-box service-box--${id}" data-reveal aria-labelledby="${questionId}">`,
+      );
+      expect(html).toContain(
+        `<h3 id="${questionId}" class="service-box__question">${question}</h3>`,
+      );
     });
     expect(html).not.toContain("data-product-option");
     expect(html).not.toContain("data-product-stage");
@@ -91,6 +101,12 @@ describe("homepage renderer", () => {
       ),
     ).toHaveLength(5);
     expect(html).not.toContain('class="service-box__link"');
+  });
+
+  it("gives every service contact link a distinct accessible name", () => {
+    siteContent.products.forEach(({ title }) => {
+      expect(html).toContain(`aria-label="Talk to us about ${title}"`);
+    });
   });
 
   it("keeps the two section labels on a single semantic line", () => {

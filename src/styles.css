@@ -534,6 +534,7 @@ main > section + section {
   color: var(--ink-muted);
   animation: pipeline-node-active 9s linear infinite;
   animation-delay: var(--pipeline-delay);
+  animation-play-state: paused;
 }
 
 .hero-pipeline__node-ring {
@@ -564,8 +565,13 @@ main > section + section {
   offset-path: path("M80 140C80 58 178 25 320 28C478 31 560 76 560 140C560 218 470 250 320 252C164 254 80 218 80 140Z");
   offset-distance: 0%;
   fill: var(--accent);
-  filter: drop-shadow(0 0 5px rgb(232 98 42 / 0.5));
   animation: pipeline-signal-travel 9s linear infinite;
+  animation-play-state: paused;
+}
+
+.hero__pipeline.is-pipeline-visible .hero-pipeline__node,
+.hero__pipeline.is-pipeline-visible .hero-pipeline__signal {
+  animation-play-state: running;
 }
 
 @keyframes pipeline-signal-travel {
@@ -593,7 +599,7 @@ main > section + section {
   }
 
   .hero-pipeline__node text {
-    font-size: 17px;
+    font-size: 22px;
   }
 }
 
@@ -748,10 +754,13 @@ main > section + section {
   font-variant-numeric: tabular-nums;
 }
 
-.service-box strong {
+.service-box__question {
+  font-family: inherit;
   font-size: clamp(1.3rem, 1.05rem + 1.1vw, 2rem);
   font-weight: 600;
+  letter-spacing: normal;
   line-height: 1.12;
+  text-wrap: wrap;
 }
 
 .service-box__product,

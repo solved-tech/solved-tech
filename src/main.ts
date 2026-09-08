@@ -48,6 +48,37 @@ export const setupRevealMotion = (
   targets.forEach((target) => observer.observe(target));
 };
 
+export const setupPipelineMotion = (
+  root: ParentNode,
+  reducedMotion: boolean,
+): void => {
+  if (reducedMotion) {
+    return;
+  }
+
+  const pipeline = root.querySelector<HTMLElement>(".hero__pipeline");
+
+  if (!pipeline) {
+    return;
+  }
+
+  if (typeof IntersectionObserver === "undefined") {
+    pipeline.classList.add("is-pipeline-visible");
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      entry.target.classList.toggle(
+        "is-pipeline-visible",
+        entry.isIntersecting,
+      );
+    });
+  });
+
+  observer.observe(pipeline);
+};
+
 export const setupHeroInteraction = (
   root: ParentNode,
   reducedMotion: boolean,
@@ -191,6 +222,7 @@ const start = (view: Window): void => {
   stagger(app);
   setupHeaderOffset(view);
   setupRevealMotion(app, reducedMotion);
+  setupPipelineMotion(app, reducedMotion);
   const finePointer = view.matchMedia("(pointer: fine)").matches;
   setupHeroInteraction(app, reducedMotion, finePointer);
   setupMobileMenu(app);

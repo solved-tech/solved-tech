@@ -4,15 +4,16 @@ import {
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
+  setupPipelineMotion,
   setupRevealMotion,
   setupScrollProgress,
 } from "../src/main";
+import { pipelinePath } from "../src/render";
 
 const styles = readFileSync(
   new URL("../src/styles.css", import.meta.url),
   "utf8",
 );
-
 const reducedMotionBlock = styles.slice(
   styles.indexOf("@media (prefers-reduced-motion: reduce)"),
   styles.indexOf("@media (prefers-reduced-motion: reduce) and (min-width: 52rem)"),
@@ -138,6 +139,95 @@ describe("reveal motion", () => {
     expect(item.classList.add).toHaveBeenCalledWith("is-visible");
     expect(unobserve).toHaveBeenCalledWith(item);
 
+    vi.unstubAllGlobals();
+  });
+});
+
+describe("pipeline motion", () => {
+  it("exports a dedicated pipeline visibility controller", () => {
+    expect(setupPipelineMotion).toBeTypeOf("function");
+  });
+
+  it("does nothing when reduced motion is preferred", () => {
+    const querySelector = vi.fn();
+    const observer = vi.fn();
+    vi.stubGlobal("IntersectionObserver", observer);
+
+    setupPipelineMotion(
+      { querySelector } as unknown as ParentNode,
+      true,
+    );
+
+    expect(querySelector).not.toHaveBeenCalled();
+    expect(observer).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
+  it("runs the pipeline as a fallback without IntersectionObserver", () => {
+    const pipeline = { classList: { add: vi.fn() } };
+    const root = {
+      querySelector: vi.fn(() => pipeline),
+    } as unknown as ParentNode;
+    vi.stubGlobal("IntersectionObserver", undefined);
+
+    setupPipelineMotion(root, false);
+
+    expect(pipeline.classList.add).toHaveBeenCalledWith(
+      "is-pipeline-visible",
+    );
+    vi.unstubAllGlobals();
+  });
+
+  it("toggles pipeline motion on every visibility change without unobserving", () => {
+    const toggle = vi.fn();
+    const pipeline = { classList: { toggle } };
+    const root = {
+      querySelector: vi.fn(() => pipeline),
+    } as unknown as ParentNode;
+    const observe = vi.fn();
+    const unobserve = vi.fn();
+    let notify: ((entries: IntersectionObserverEntry[]) => void) | undefined;
+
+    class FakeObserver {
+      observe = observe;
+      unobserve = unobserve;
+      disconnect = vi.fn();
+
+      constructor(callback: (entries: IntersectionObserverEntry[]) => void) {
+        notify = callback;
+      }
+    }
+
+    vi.stubGlobal("IntersectionObserver", FakeObserver);
+    setupPipelineMotion(root, false);
+
+    expect(observe).toHaveBeenCalledWith(pipeline);
+
+    notify?.([
+      {
+        isIntersecting: true,
+        target: pipeline,
+      } as unknown as IntersectionObserverEntry,
+    ]);
+    notify?.([
+      {
+        isIntersecting: false,
+        target: pipeline,
+      } as unknown as IntersectionObserverEntry,
+    ]);
+    notify?.([
+      {
+        isIntersecting: true,
+        target: pipeline,
+      } as unknown as IntersectionObserverEntry,
+    ]);
+
+    expect(toggle.mock.calls).toEqual([
+      ["is-pipeline-visible", true],
+      ["is-pipeline-visible", false],
+      ["is-pipeline-visible", true],
+    ]);
+    expect(unobserve).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
 });
@@ -377,6 +467,33 @@ describe("scroll progress", () => {
 });
 
 describe("stylesheet contracts", () => {
+  it("uses the rendered pipeline path as the exact CSS motion path", () => {
+    expect(pipelinePath).toBeTypeOf("string");
+    expect(styles).toContain(`offset-path: path("${pipelinePath}");`);
+  });
+
+  it("runs pipeline animations only while the pipeline is visible", () => {
+    expect(styles).toMatch(
+      /\.hero-pipeline__node\s*\{[^}]*animation-play-state:\s*paused/s,
+    );
+    expect(styles).toMatch(
+      /\.hero-pipeline__signal\s*\{[^}]*animation-play-state:\s*paused/s,
+    );
+    expect(styles).toMatch(
+      /\.hero__pipeline\.is-pipeline-visible[\s\S]*?animation-play-state:\s*running/,
+    );
+  });
+
+  it("does not apply a drop shadow to the pipeline signal", () => {
+    const signalRule = styles.match(
+      /\.hero-pipeline__signal\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(signalRule).toBeDefined();
+    expect(signalRule).not.toContain("filter:");
+    expect(signalRule).not.toContain("drop-shadow");
+  });
+
   it("defaults to immediate scrolling and restores smooth scrolling for fine pointers", () => {
     expect(scrollBehavior(topLevelHtmlRule(styles))).toBe("auto");
     expect(scrollBehavior(finePointerHtmlRule(styles))).toBe("smooth");
