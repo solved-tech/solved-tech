@@ -110,6 +110,13 @@ An orange signal travels along the closed route and activates each node in
 sequence. The route and labels remain visible without motion. The animation
 stops under `prefers-reduced-motion`.
 
+Each node's circular border receives its orange highlight 140 milliseconds
+after the signal crosses the centre of that node. The ring must remain muted
+while the signal approaches and overlaps it. The delayed border pulse lasts
+briefly, then returns to the muted border colour before the next circuit. Node
+icons and labels remain muted so the moving signal and trailing ring are the
+only orange motion cues.
+
 The pipeline uses a wide oval on tablet and desktop so it does not make the
 hero unnecessarily tall. On mobile it remains within the content width and
 keeps every label legible without horizontal scrolling.
@@ -192,6 +199,8 @@ Decorative SVG markup remains hidden from assistive technology.
   actions, with all seven labels and an AI agent icon.
 - Renderer tests require service artworks to be independent reveal targets.
 - Motion tests verify that coarse pointers skip hero pointer tracking.
+- Stylesheet tests require the 140-millisecond trailing node-ring delay and
+  keep node icons and labels outside the highlight animation.
 - CSS defaults to immediate scrolling and limits smooth scrolling to fine
   pointers.
 - CSS contains one shared 68/32 body grid and no three-column service row.
