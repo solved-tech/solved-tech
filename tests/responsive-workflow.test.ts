@@ -8,18 +8,152 @@ const WORKFLOW_PATH = new URL(
 
 const loadWorkflow = () => readFileSync(WORKFLOW_PATH, "utf8");
 
+type YamlLine = { indent: number; text: string; index: number };
+
+const parseLines = (yaml: string): YamlLine[] =>
+  yaml.split("\n").map((text, index) => ({
+    indent: text.match(/^(\s*)/)?.[1].length ?? 0,
+    text,
+    index,
+  }));
+
+const findKeyLine = (
+  lines: YamlLine[],
+  key: string,
+  parentIndent = -1,
+): YamlLine | undefined =>
+  lines.find((line) => {
+    if (parentIndent >= 0 && line.indent <= parentIndent) {
+      return false;
+    }
+
+    return new RegExp(`^\\s*${key}:\\s*(.*)$`).test(line.text);
+  });
+
+const extractBlockLines = (
+  lines: YamlLine[],
+  startLine: YamlLine,
+): string[] => {
+  const blockLines = [startLine.text];
+
+  for (let i = startLine.index + 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.text.trim() === "") {
+      blockLines.push(line.text);
+      continue;
+    }
+
+    if (line.indent <= startLine.indent) {
+      break;
+    }
+
+    blockLines.push(line.text);
+  }
+
+  return blockLines;
+};
+
+const extractBlock = (lines: YamlLine[], startLine: YamlLine): string =>
+  extractBlockLines(lines, startLine).join("\n");
+
+const extractNestedBlock = (
+  yaml: string,
+  keys: string[],
+): string | undefined => {
+  const lines = parseLines(yaml);
+  let parentIndent = -1;
+  let block = yaml;
+
+  for (const key of keys) {
+    const scope = parseLines(block);
+    const keyLine = findKeyLine(scope, key, parentIndent);
+    if (!keyLine) {
+      return undefined;
+    }
+
+    block = extractBlock(scope, keyLine);
+    parentIndent = keyLine.indent;
+  }
+
+  return block;
+};
+
+const extractSteps = (yaml: string): string[] => {
+  const lines = parseLines(yaml);
+  const stepsLine = findKeyLine(lines, "steps");
+  if (!stepsLine) {
+    return [];
+  }
+
+  const stepIndent = stepsLine.indent + 2;
+  const steps: string[] = [];
+  let currentStep: string[] = [];
+
+  for (let i = stepsLine.index + 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.text.trim() === "") {
+      continue;
+    }
+
+    if (line.indent <= stepsLine.indent) {
+      break;
+    }
+
+    if (line.indent === stepIndent && line.text.trimStart().startsWith("- ")) {
+      if (currentStep.length) {
+        steps.push(currentStep.join("\n"));
+      }
+
+      currentStep = [line.text];
+      continue;
+    }
+
+    if (currentStep.length && line.indent > stepIndent) {
+      currentStep.push(line.text);
+    }
+  }
+
+  if (currentStep.length) {
+    steps.push(currentStep.join("\n"));
+  }
+
+  return steps;
+};
+
+const findStepByUses = (steps: string[], uses: string): string | undefined =>
+  steps.find((step) => step.includes(`uses: ${uses}`));
+
+const listItems = (block: string): string[] =>
+  block
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("- "))
+    .map((line) => line.slice(2).trim());
+
 describe("responsive pull-request workflow", () => {
   const workflow = loadWorkflow();
+  const steps = extractSteps(workflow);
 
   it("is named Responsive UI", () => {
     expect(workflow).toMatch(/^name:\s*Responsive UI\s*$/m);
   });
 
   it("runs on pull requests targeting main and manual dispatch", () => {
-    expect(workflow).toMatch(/^\s*pull_request:\s*$/m);
-    expect(workflow).toMatch(/^\s*branches:\s*$/m);
-    expect(workflow).toMatch(/^\s*-\s*main\s*$/m);
-    expect(workflow).toMatch(/^\s*workflow_dispatch:\s*$/m);
+    const onBlock = extractNestedBlock(workflow, ["on"]);
+    expect(onBlock).toBeDefined();
+
+    const pullRequestBlock = extractNestedBlock(workflow, ["on", "pull_request"]);
+    expect(pullRequestBlock).toBeDefined();
+
+    const branchesBlock = extractNestedBlock(workflow, [
+      "on",
+      "pull_request",
+      "branches",
+    ]);
+    expect(branchesBlock).toBeDefined();
+    expect(listItems(branchesBlock!)).toContain("main");
+
+    expect(onBlock).toMatch(/^\s*workflow_dispatch:\s*$/m);
   });
 
   it("requests read-only contents permission", () => {
@@ -29,7 +163,9 @@ describe("responsive pull-request workflow", () => {
 
   it("cancels in-progress runs for the same workflow and ref", () => {
     expect(workflow).toMatch(/^\s*concurrency:\s*$/m);
-    expect(workflow).toMatch(/group:\s*\$\{\{\s*github\.workflow\s*\}\}-\$\{\{\s*github\.ref\s*\}\}/);
+    expect(workflow).toMatch(
+      /group:\s*\$\{\{\s*github\.workflow\s*\}\}-\$\{\{\s*github\.ref\s*\}\}/,
+    );
     expect(workflow).toMatch(/^\s*cancel-in-progress:\s*true\s*$/m);
   });
 
@@ -53,9 +189,23 @@ describe("responsive pull-request workflow", () => {
   });
 
   it("installs Chromium and WebKit with OS dependencies", () => {
-    expect(workflow).toMatch(
-      /run:\s*npx playwright install --with-deps chromium webkit/,
+    const installLines = workflow
+      .split("\n")
+      .filter((line) => line.includes("playwright install"));
+
+    expect(installLines).toHaveLength(1);
+
+    const installCommand = installLines[0].match(/run:\s*(.+)/)?.[1]?.trim();
+    expect(installCommand).toBe(
+      "npx playwright install --with-deps chromium webkit",
     );
+
+    const installCommands = workflow
+      .split("\n")
+      .filter((line) => /run:\s*.*install/.test(line));
+    for (const line of installCommands) {
+      expect(line).not.toMatch(/firefox/);
+    }
   });
 
   it("runs the responsive Playwright matrix", () => {
@@ -63,11 +213,12 @@ describe("responsive pull-request workflow", () => {
   });
 
   it("uploads test-results only on failure", () => {
-    expect(workflow).toMatch(/if:\s*failure\(\)/);
-    expect(workflow).toMatch(/uses:\s*actions\/upload-artifact@v4/);
-    expect(workflow).toMatch(/name:\s*playwright-responsive-results/);
-    expect(workflow).toMatch(/path:\s*test-results/);
-    expect(workflow).toMatch(/retention-days:\s*5/);
+    const uploadStep = findStepByUses(steps, "actions/upload-artifact@v4");
+    expect(uploadStep).toBeDefined();
+    expect(uploadStep).toMatch(/if:\s*failure\(\)/);
+    expect(uploadStep).toMatch(/name:\s*playwright-responsive-results/);
+    expect(uploadStep).toMatch(/path:\s*test-results/);
+    expect(uploadStep).toMatch(/retention-days:\s*5/);
   });
 
   it("does not configure, upload, or deploy GitHub Pages", () => {
