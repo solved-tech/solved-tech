@@ -363,7 +363,7 @@ export const renderHomepage = (
             <circle class="hero__signal-point" cx="252" cy="84" r="3" />
           </svg>
         </div>
-        <p class="hero__eyebrow" data-reveal>Websites. Apps. Growth. AI.</p>
+        <p class="hero__eyebrow" data-reveal>AI. Growth. Apps. Websites.</p>
         <h1 id="hero-heading" data-reveal>Whatever your business needs next, we build it.</h1>
         <p data-reveal>Bring us the problem. We will turn it into something useful.</p>
         ${renderHeroPipeline()}

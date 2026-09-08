@@ -484,6 +484,13 @@ describe("stylesheet contracts", () => {
     );
   });
 
+  it("fits hero contact actions on one desktop row", () => {
+    const actionsRule = styles.match(/\.hero__actions\s*\{([^}]*)\}/)?.[1];
+
+    expect(actionsRule).toBeDefined();
+    expect(actionsRule).toContain("width: min(100%, 42rem)");
+  });
+
   it("pulses only the node ring after the signal crosses", () => {
     const nodeRule = styles.match(/\.hero-pipeline__node\s*\{([^}]*)\}/)?.[1];
     const ringRule = styles.match(

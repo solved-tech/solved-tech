@@ -607,7 +607,7 @@ main > section + section {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
-  width: min(100%, 30rem);
+  width: min(100%, 42rem);
   margin-block-start: clamp(0.5rem, 2vw, 1.5rem);
 }
 

@@ -17,14 +17,18 @@ describe("homepage renderer", () => {
       '<div class="hero__signal" aria-hidden="true">',
     );
     expect(html).toContain(
-      '<p class="hero__eyebrow" data-reveal>Websites. Apps. Growth. AI.</p>',
-    );
-    expect(html).toContain(
       "Whatever your business needs next, we build it.",
     );
     expect(html).toContain(
       "Bring us the problem. We will turn it into something useful.",
     );
+  });
+
+  it("uses the approved hero eyebrow service order", () => {
+    expect(html).toContain(
+      '<p class="hero__eyebrow" data-reveal>AI. Growth. Apps. Websites.</p>',
+    );
+    expect(html).not.toContain("Websites. Apps. Growth. AI.");
   });
 
   it("places the seven-service pipeline above the hero actions", () => {
