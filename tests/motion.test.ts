@@ -19,6 +19,20 @@ const reducedMotionBlock = styles.slice(
   styles.indexOf("@media (prefers-reduced-motion: reduce) and (min-width: 52rem)"),
 );
 
+const topLevelHtmlRule = (css: string): string | undefined =>
+  css.match(/^html\s*\{([^}]*)\}/m)?.[1];
+
+const finePointerHtmlRule = (css: string): string | undefined => {
+  const block = css.match(
+    /@media\s*\(\s*pointer:\s*fine\s*\)\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+
+  return block?.match(/html\s*\{([^}]*)\}/)?.[1];
+};
+
+const scrollBehavior = (rule: string | undefined): string | undefined =>
+  rule?.match(/scroll-behavior:\s*(\w+)/)?.[1];
+
 interface FakeListener {
   type: string;
   handler: () => void;
@@ -365,10 +379,32 @@ describe("scroll progress", () => {
 
 describe("stylesheet contracts", () => {
   it("defaults to immediate scrolling and restores smooth scrolling for fine pointers", () => {
-    expect(styles).toMatch(/html\s*\{[^}]*scroll-behavior:\s*auto/s);
-    expect(styles).toMatch(
-      /@media\s*\(\s*pointer:\s*fine\s*\)\s*\{[\s\S]*html\s*\{[^}]*scroll-behavior:\s*smooth/s,
-    );
+    expect(scrollBehavior(topLevelHtmlRule(styles))).toBe("auto");
+    expect(scrollBehavior(finePointerHtmlRule(styles))).toBe("smooth");
+  });
+
+  it("anchors scroll contract to the top-level html rule, not reduced-motion overrides", () => {
+    const deceptiveStyles = `
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (pointer: fine) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+`;
+
+    expect(deceptiveStyles).toMatch(/html\s*\{[^}]*scroll-behavior:\s*auto/s);
+    expect(scrollBehavior(topLevelHtmlRule(deceptiveStyles))).toBe("smooth");
+    expect(scrollBehavior(topLevelHtmlRule(deceptiveStyles))).not.toBe("auto");
   });
 
   it("disables service artwork motion under reduced motion", () => {
