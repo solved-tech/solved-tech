@@ -11,6 +11,9 @@ import {
   PHONE_LANDSCAPE_PROJECT,
   preparePage,
   REDUCED_MOTION_PROJECT,
+  assertPipelineLabelsRendered,
+  measurePipelineLayout,
+  PIPELINE_WIDTH_SMOOTH_PROJECT,
   assertProseWidth,
   scrollArtworkIntoReveal,
   scrollJourneyIntoReveal,
@@ -235,6 +238,45 @@ test("hero clips decorative pipeline overflow", async ({ page }) => {
     return getComputedStyle(element).overflow;
   });
   expect(["clip", "hidden"]).toContain(heroOverflow);
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero pipeline labels stay legible when rendered", async ({ page }) => {
+  const collector = await preparePage(page);
+
+  await assertPipelineLabelsRendered(page);
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero pipeline scales smoothly across the 40rem width boundary", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== PIPELINE_WIDTH_SMOOTH_PROJECT,
+    "Chromium tablet-landscape project only",
+  );
+
+  const collector = setupErrorCollection(page);
+
+  await page.setViewportSize({ width: 639, height: 768 });
+  await gotoHome(page);
+  const narrow = await measurePipelineLayout(page);
+
+  await page.setViewportSize({ width: 640, height: 768 });
+  await gotoHome(page);
+  const wide = await measurePipelineLayout(page);
+
+  const widthDelta =
+    Math.abs(wide.pipelineWidth - narrow.pipelineWidth) /
+    Math.max(narrow.pipelineWidth, wide.pipelineWidth);
+
+  expect(widthDelta).toBeLessThanOrEqual(0.05);
+
+  for (const height of [...narrow.labelHeights, ...wide.labelHeights]) {
+    expect(height).toBeGreaterThanOrEqual(9 - 0.5);
+  }
 
   assertNoRuntimeErrors(collector);
 });

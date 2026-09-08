@@ -10,6 +10,9 @@ export type ErrorCollector = {
 export const PHONE_LANDSCAPE_PROJECT = "phone-landscape";
 export const WIDE_DESKTOP_PROJECT = "wide-desktop";
 export const REDUCED_MOTION_PROJECT = "uk-phone-standard";
+export const PIPELINE_WIDTH_SMOOTH_PROJECT = "tablet-landscape";
+export const PIPELINE_LABEL_COUNT = 7;
+export const PIPELINE_LABEL_MIN_HEIGHT = 9;
 
 export const setupErrorCollection = (page: Page): ErrorCollector => {
   const consoleErrors: string[] = [];
@@ -191,4 +194,32 @@ export const assertProseWidth = async (locator: Locator, maxWidth = 920) => {
   const width = (await locator.boundingBox())?.width ?? 0;
   expect(width).toBeGreaterThan(0);
   expect(width).toBeLessThanOrEqual(maxWidth);
+};
+
+export const assertPipelineLabelsRendered = async (page: Page) => {
+  const labels = page.locator(".hero-pipeline__node text");
+
+  await expect(labels).toHaveCount(PIPELINE_LABEL_COUNT);
+
+  for (const label of await labels.all()) {
+    const box = await label.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.height).toBeGreaterThanOrEqual(PIPELINE_LABEL_MIN_HEIGHT - 0.5);
+  }
+};
+
+export const measurePipelineLayout = async (page: Page) => {
+  const pipeline = page.locator(".hero__pipeline");
+  const labels = page.locator(".hero-pipeline__node text");
+
+  await expect(labels).toHaveCount(PIPELINE_LABEL_COUNT);
+
+  const pipelineWidth = await pipeline.evaluate(
+    (element) => element.getBoundingClientRect().width,
+  );
+  const labelHeights = await labels.evaluateAll((elements) =>
+    elements.map((element) => element.getBoundingClientRect().height),
+  );
+
+  return { pipelineWidth, labelHeights };
 };

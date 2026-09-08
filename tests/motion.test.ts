@@ -674,19 +674,28 @@ html {
     );
   });
 
-  it("caps short-height queries below ultra-wide widths", () => {
+  it("caps short-height queries below ultra-wide widths without a 40rem floor", () => {
     expect(styles).toMatch(
-      /@media\s*\(\s*max-height:\s*68rem\s*\)\s*and\s*\(\s*min-width:\s*40rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
+      /@media\s*\(\s*max-height:\s*68rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
     );
     expect(styles).toMatch(
-      /@media\s*\(\s*max-height:\s*54rem\s*\)\s*and\s*\(\s*min-width:\s*40rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
+      /@media\s*\(\s*max-height:\s*54rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
     );
     expect(styles).toMatch(
       /@media\s*\(\s*max-height:\s*48rem\s*\)\s*and\s*\(\s*max-width:\s*120rem\s*\)/,
     );
+    expect(styles).not.toMatch(
+      /@media\s*\(\s*max-height:\s*68rem\s*\)[^}]*min-width:\s*40rem/,
+    );
+    expect(styles).not.toMatch(
+      /@media\s*\(\s*max-height:\s*54rem\s*\)[^}]*min-width:\s*40rem/,
+    );
+    expect(styles).not.toMatch(
+      /@media\s*\(\s*max-height:\s*48rem\s*\)[^}]*min-width:\s*40rem/,
+    );
   });
 
-  it("preserves legible pipeline labels after responsive SVG scaling", () => {
+  it("assigns scaled SVG font sizes in short-height and compact bands", () => {
     const compactBlock = mediaBlock(
       styles,
       /@media\s*\(\s*max-width:\s*23rem\s*\)\s*\{[\s\S]*?\n\}/,
@@ -708,7 +717,7 @@ html {
       compactBlock?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*23px/s),
     ).toBeTruthy();
     expect(
-      short68Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*16px/s),
+      short68Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*18px/s),
     ).toBeTruthy();
     expect(
       short54Block?.match(/\.hero-pipeline__node text\s*\{[^}]*font-size:\s*21px/s),
