@@ -11,6 +11,7 @@ import {
   PHONE_LANDSCAPE_PROJECT,
   preparePage,
   REDUCED_MOTION_PROJECT,
+  assertProseWidth,
   scrollArtworkIntoReveal,
   scrollJourneyIntoReveal,
   setupErrorCollection,
@@ -232,7 +233,7 @@ test("hero clips decorative pipeline overflow", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("wide desktop keeps prose constrained and service grid wide", async ({ page }, testInfo) => {
+test("wide desktop service grid spans viewport", async ({ page }, testInfo) => {
   test.skip(
     testInfo.project.name !== WIDE_DESKTOP_PROJECT,
     "2560×1440 project only",
@@ -248,16 +249,33 @@ test("wide desktop keeps prose constrained and service grid wide", async ({ page
   expect(gridBox).not.toBeNull();
   expect(gridBox!.width / viewport.width).toBeGreaterThanOrEqual(0.52);
 
-  const contactNote = page.locator(".contact-note");
-  await contactNote.scrollIntoViewIfNeeded();
-  const noteWidth = (await contactNote.boundingBox())?.width ?? 0;
-  expect(noteWidth).toBeGreaterThan(0);
-  expect(noteWidth).toBeLessThanOrEqual(920);
+  assertNoRuntimeErrors(collector);
+});
 
-  const heroLead = page.locator(".hero p").first();
-  const leadWidth = (await heroLead.boundingBox())?.width ?? 0;
-  expect(leadWidth).toBeGreaterThan(0);
-  expect(leadWidth).toBeLessThanOrEqual(920);
+test("wide desktop hero lead stays constrained", async ({ page }, testInfo) => {
+  test.skip(
+    testInfo.project.name !== WIDE_DESKTOP_PROJECT,
+    "2560×1440 project only",
+  );
+
+  const collector = await preparePage(page);
+  const heroLead = page.locator("#hero-heading + p");
+
+  await expect(heroLead).toHaveText(/Bring us the problem/);
+  await assertProseWidth(heroLead);
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("wide desktop contact note stays constrained", async ({ page }, testInfo) => {
+  test.skip(
+    testInfo.project.name !== WIDE_DESKTOP_PROJECT,
+    "2560×1440 project only",
+  );
+
+  const collector = await preparePage(page);
+
+  await assertProseWidth(page.locator(".contact-note"));
 
   assertNoRuntimeErrors(collector);
 });

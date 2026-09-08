@@ -167,17 +167,28 @@ export const scrollArtworkIntoReveal = async (page: Page, viewport: Viewport) =>
 
 export const scrollJourneyIntoReveal = async (page: Page, viewport: Viewport) => {
   const journeyMoments = page.locator(".journey__moments");
-  const firstMoment = page.locator(".journey__moment").first();
+  const moments = page.locator(".journey__moment");
 
   await journeyMoments.scrollIntoViewIfNeeded();
   await expect(journeyMoments).toHaveClass(/is-visible/);
-  await expect
-    .poll(async () =>
-      firstMoment.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity)),
-    )
-    .toBeGreaterThan(0);
+  await expect(moments).toHaveCount(4);
 
-  for (const signal of await page.locator(".journey__signal svg").all()) {
+  for (const moment of await moments.all()) {
+    await moment.scrollIntoViewIfNeeded();
+    await expect
+      .poll(async () =>
+        moment.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity)),
+      )
+      .toBeGreaterThan(0);
+
+    const signal = moment.locator(".journey__signal svg");
     await assertRenderedDiagram(page, signal, viewport);
   }
+};
+
+export const assertProseWidth = async (locator: Locator, maxWidth = 920) => {
+  await locator.scrollIntoViewIfNeeded();
+  const width = (await locator.boundingBox())?.width ?? 0;
+  expect(width).toBeGreaterThan(0);
+  expect(width).toBeLessThanOrEqual(maxWidth);
 };
