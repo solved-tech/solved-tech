@@ -1,13 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 620" role="img" aria-labelledby="title desc">
-  <title id="title">Founder Two placeholder portrait</title>
-  <desc id="desc">An abstract monochrome portrait used until the real founder photograph is supplied.</desc>
+  <title id="title">Founder Two editorial placeholder portrait</title>
+  <desc id="desc">Distinct geometric placeholder artwork, not a depiction of a real person.</desc>
   <rect width="520" height="620" fill="#121110"/>
-  <g stroke="#322f2b" stroke-width="1">
-    <path d="M0 100H520M0 204H520M0 308H520M0 412H520M0 516H520"/>
-    <path d="M104 0V620M208 0V620M312 0V620M416 0V620"/>
-  </g>
-  <circle cx="260" cy="222" r="100" fill="#4d4842"/>
-  <path d="M72 620c12-150 80-232 188-232s176 82 188 232H72Z" fill="#6f6a63"/>
-  <path d="M150 238c-8-25-9-52-3-80 14-68 68-116 130-116 64 0 115 42 130 106-40-25-77-37-112-37-61 0-109 42-145 127Z" fill="#191817"/>
-  <rect x="102" y="86" width="12" height="12" fill="#e8622a"/>
+  <path d="M0 0h244v620H0z" fill="#201e1b"/>
+  <path d="M244 92h276v528H244z" fill="#191817"/>
+  <path d="M0 104H520M0 208H520M0 312H520M0 416H520M0 520H520" stroke="#322f2b"/>
+  <path d="M104 0V620M208 0V620M312 0V620M416 0V620" stroke="#322f2b"/>
+  <path d="M54 54h72v72H54z" fill="none" stroke="#4d4842" stroke-width="2"/>
+  <path d="M72 72h36v36H72z" fill="#e8622a"/>
+  <path d="M44 620c12-133 79-211 183-226l52 26 57-29c98 22 157 104 169 229H44Z" fill="#56514b"/>
+  <path d="m227 394 52 26-47 77-54-86 49-17Z" fill="#aaa49b"/>
+  <path d="m336 391-57 29 42 76 66-84-51-21Z" fill="#f5f2ed"/>
+  <path d="M223 318h112v112c-30 29-83 29-112 0V318Z" fill="#8d877e"/>
+  <path d="M154 165c7-76 70-132 146-132 81 0 146 65 146 146v76c0 67-54 121-121 121h-45c-70 0-126-57-126-126v-85Z" fill="#a49e95"/>
+  <path d="M150 202c-8-92 53-172 142-184 83-11 160 42 179 123-42-34-89-52-140-54-68-2-128 36-181 115Z" fill="#191817"/>
+  <path d="M403 171c20 42 24 87 11 133-10 35-31 59-63 73 55-10 95-59 95-118v-83l-43-5Z" fill="#777168"/>
+  <path d="M150 226c-24 3-41 25-37 49 4 25 27 42 52 37l11-2-13-86-13 2Z" fill="#8d877e"/>
+  <path d="M212 223c19-12 41-15 63-8M324 214c18-7 38-4 53 7" fill="none" stroke="#4d4842" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="248" cy="248" r="7" fill="#191817"/>
+  <circle cx="347" cy="244" r="7" fill="#191817"/>
+  <path d="m299 235-14 60 34 6M253 329c25 12 51 11 76-3" fill="none" stroke="#6f6a63" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M458 478h16v86h-16zM423 548h86v16h-86z" fill="#e8622a"/>
+  <path d="M386 568h123v5H386z" fill="#6f6a63"/>
 </svg>

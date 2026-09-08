@@ -1,12 +1,37 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import {
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
-  setupProductShowcase,
+  setupPipelineMotion,
   setupRevealMotion,
   setupScrollProgress,
 } from "../src/main";
+import { pipelinePath } from "../src/render";
+
+const styles = readFileSync(
+  new URL("../src/styles.css", import.meta.url),
+  "utf8",
+);
+const reducedMotionBlock = styles.slice(
+  styles.indexOf("@media (prefers-reduced-motion: reduce)"),
+  styles.indexOf("@media (prefers-reduced-motion: reduce) and (min-width: 52rem)"),
+);
+
+const topLevelHtmlRule = (css: string): string | undefined =>
+  css.match(/^html\s*\{([^}]*)\}/m)?.[1];
+
+const finePointerHtmlRule = (css: string): string | undefined => {
+  const block = css.match(
+    /@media\s*\(\s*pointer:\s*fine\s*\)\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+
+  return block?.match(/html\s*\{([^}]*)\}/)?.[1];
+};
+
+const scrollBehavior = (rule: string | undefined): string | undefined =>
+  rule?.match(/scroll-behavior:\s*(\w+)/)?.[1];
 
 interface FakeListener {
   type: string;
@@ -118,6 +143,95 @@ describe("reveal motion", () => {
   });
 });
 
+describe("pipeline motion", () => {
+  it("exports a dedicated pipeline visibility controller", () => {
+    expect(setupPipelineMotion).toBeTypeOf("function");
+  });
+
+  it("does nothing when reduced motion is preferred", () => {
+    const querySelector = vi.fn();
+    const observer = vi.fn();
+    vi.stubGlobal("IntersectionObserver", observer);
+
+    setupPipelineMotion(
+      { querySelector } as unknown as ParentNode,
+      true,
+    );
+
+    expect(querySelector).not.toHaveBeenCalled();
+    expect(observer).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
+  it("runs the pipeline as a fallback without IntersectionObserver", () => {
+    const pipeline = { classList: { add: vi.fn() } };
+    const root = {
+      querySelector: vi.fn(() => pipeline),
+    } as unknown as ParentNode;
+    vi.stubGlobal("IntersectionObserver", undefined);
+
+    setupPipelineMotion(root, false);
+
+    expect(pipeline.classList.add).toHaveBeenCalledWith(
+      "is-pipeline-visible",
+    );
+    vi.unstubAllGlobals();
+  });
+
+  it("toggles pipeline motion on every visibility change without unobserving", () => {
+    const toggle = vi.fn();
+    const pipeline = { classList: { toggle } };
+    const root = {
+      querySelector: vi.fn(() => pipeline),
+    } as unknown as ParentNode;
+    const observe = vi.fn();
+    const unobserve = vi.fn();
+    let notify: ((entries: IntersectionObserverEntry[]) => void) | undefined;
+
+    class FakeObserver {
+      observe = observe;
+      unobserve = unobserve;
+      disconnect = vi.fn();
+
+      constructor(callback: (entries: IntersectionObserverEntry[]) => void) {
+        notify = callback;
+      }
+    }
+
+    vi.stubGlobal("IntersectionObserver", FakeObserver);
+    setupPipelineMotion(root, false);
+
+    expect(observe).toHaveBeenCalledWith(pipeline);
+
+    notify?.([
+      {
+        isIntersecting: true,
+        target: pipeline,
+      } as unknown as IntersectionObserverEntry,
+    ]);
+    notify?.([
+      {
+        isIntersecting: false,
+        target: pipeline,
+      } as unknown as IntersectionObserverEntry,
+    ]);
+    notify?.([
+      {
+        isIntersecting: true,
+        target: pipeline,
+      } as unknown as IntersectionObserverEntry,
+    ]);
+
+    expect(toggle.mock.calls).toEqual([
+      ["is-pipeline-visible", true],
+      ["is-pipeline-visible", false],
+      ["is-pipeline-visible", true],
+    ]);
+    expect(unobserve).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+});
+
 describe("hero interaction", () => {
   it("turns pointer position into restrained visual offsets", () => {
     const properties = new Map<string, string>();
@@ -162,6 +276,17 @@ describe("hero interaction", () => {
 
     expect(addEventListener).not.toHaveBeenCalled();
   });
+
+  it("skips pointer tracking for coarse pointers", () => {
+    const addEventListener = vi.fn();
+    const root = {
+      querySelector: vi.fn(() => ({ addEventListener })),
+    } as unknown as ParentNode;
+
+    setupHeroInteraction(root, false, false);
+
+    expect(addEventListener).not.toHaveBeenCalled();
+  });
 });
 
 describe("mobile menu", () => {
@@ -195,68 +320,6 @@ describe("mobile menu", () => {
     handlers.get("click")?.();
     expect(attributes.get("aria-expanded")).toBe("false");
     expect(toggle).toHaveBeenLastCalledWith("is-open", false);
-  });
-});
-
-describe("product showcase", () => {
-  it("activates one buying question and updates its product answer", () => {
-    const createOption = (
-      index: number,
-      title: string,
-      answer: string,
-    ) => {
-      const attributes = new Map([
-        ["data-product-index", String(index)],
-        ["data-title", title],
-        ["data-answer", answer],
-      ]);
-      const handlers = new Map<string, () => void>();
-      return {
-        attributes,
-        handlers,
-        element: {
-          getAttribute: (name: string) => attributes.get(name) ?? null,
-          setAttribute: (name: string, value: string) =>
-            attributes.set(name, value),
-          classList: { toggle: vi.fn() },
-          addEventListener: (type: string, handler: () => void) =>
-            handlers.set(type, handler),
-        },
-      };
-    };
-    const first = createOption(0, "Website", "Turn visits into action");
-    const second = createOption(1, "App", "Build the useful product");
-    const title = { textContent: "" };
-    const answer = { textContent: "" };
-    const scenes = [
-      { classList: { toggle: vi.fn() } },
-      { classList: { toggle: vi.fn() } },
-    ];
-    const stage = {
-      dataset: {} as Record<string, string>,
-      querySelector: vi.fn((selector: string) => {
-        if (selector === "[data-product-title]") return title;
-        return answer;
-      }),
-      querySelectorAll: vi.fn(() => scenes),
-    };
-    const root = {
-      querySelectorAll: vi.fn(() => [first.element, second.element]),
-      querySelector: vi.fn(() => stage),
-    } as unknown as ParentNode;
-
-    setupProductShowcase(root);
-    second.handlers.get("click")?.();
-
-    expect(first.attributes.get("aria-pressed")).toBe("false");
-    expect(second.attributes.get("aria-pressed")).toBe("true");
-    expect(stage.dataset.activeProduct).toBe("1");
-    expect(title.textContent).toBe("App");
-    expect(answer.textContent).toBe("Build the useful product");
-    expect(scenes[1]?.classList.toggle).toHaveBeenCalledWith(
-      "is-active",
-      true,
-    );
   });
 });
 
@@ -400,5 +463,123 @@ describe("scroll progress", () => {
     view.innerHeight = 2000;
     listeners.find(({ type }) => type === "resize")?.handler();
     expect(properties.get("--scroll-progress")).toBe("0.0000");
+  });
+});
+
+describe("stylesheet contracts", () => {
+  it("uses the rendered pipeline path as the exact CSS motion path", () => {
+    expect(pipelinePath).toBeTypeOf("string");
+    expect(styles).toContain(`offset-path: path("${pipelinePath}");`);
+  });
+
+  it("runs pipeline animations only while the pipeline is visible", () => {
+    expect(styles).toMatch(
+      /\.hero-pipeline__node-ring\s*\{[^}]*animation-play-state:\s*paused/s,
+    );
+    expect(styles).toMatch(
+      /\.hero-pipeline__signal\s*\{[^}]*animation-play-state:\s*paused/s,
+    );
+    expect(styles).toMatch(
+      /\.hero__pipeline\.is-pipeline-visible[\s\S]*?animation-play-state:\s*running/,
+    );
+  });
+
+  it("fits hero contact actions on one desktop row", () => {
+    const actionsRule = styles.match(/\.hero__actions\s*\{([^}]*)\}/)?.[1];
+
+    expect(actionsRule).toBeDefined();
+    expect(actionsRule).toContain("width: min(100%, 42rem)");
+  });
+
+  it("fits hero contact actions on one mobile row", () => {
+    const mobileHeroBlock = styles.match(
+      /@media\s*\(\s*max-width:\s*40rem\s*\)\s*\{[\s\S]*?\.hero__actions[\s\S]*?\n\}/,
+    )?.[0];
+
+    expect(mobileHeroBlock).toBeDefined();
+
+    const actionsRule = mobileHeroBlock?.match(/\.hero__actions\s*\{([^}]*)\}/)?.[1];
+    const buttonRule = mobileHeroBlock?.match(/\.hero \.contact-action\s*\{([^}]*)\}/)?.[1];
+
+    expect(actionsRule).toContain("display: grid");
+    expect(actionsRule).toContain(
+      "grid-template-columns: repeat(3, minmax(0, 1fr))",
+    );
+    expect(buttonRule).toMatch(/min-height:\s*48px/);
+
+    const heroRule = mobileHeroBlock?.match(/\.hero\s*\{([^}]*)\}/)?.[1];
+
+    expect(heroRule).toContain("justify-content: flex-start");
+    expect(heroRule).toContain("padding-block-start: 1.5rem");
+  });
+
+  it("pulses only the node ring after the signal crosses", () => {
+    const nodeRule = styles.match(/\.hero-pipeline__node\s*\{([^}]*)\}/)?.[1];
+    const ringRule = styles.match(
+      /\.hero-pipeline__node-ring\s*\{([^}]*)\}/,
+    )?.[1];
+    const iconRule = styles.match(/\.hero-pipeline__icon\s*\{([^}]*)\}/)?.[1];
+    const labelRule = styles.match(
+      /\.hero-pipeline__node text\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(nodeRule).not.toContain("animation:");
+    expect(ringRule).toContain(
+      "animation: pipeline-node-ring-active 9s linear infinite",
+    );
+    expect(ringRule).toContain(
+      "animation-delay: calc(var(--pipeline-delay) + 140ms)",
+    );
+    expect(iconRule).not.toContain("animation:");
+    expect(labelRule).not.toContain("animation:");
+    expect(styles).toContain("@keyframes pipeline-node-ring-active");
+  });
+
+  it("does not apply a drop shadow to the pipeline signal", () => {
+    const signalRule = styles.match(
+      /\.hero-pipeline__signal\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(signalRule).toBeDefined();
+    expect(signalRule).not.toContain("filter:");
+    expect(signalRule).not.toContain("drop-shadow");
+  });
+
+  it("defaults to immediate scrolling and restores smooth scrolling for fine pointers", () => {
+    expect(scrollBehavior(topLevelHtmlRule(styles))).toBe("auto");
+    expect(scrollBehavior(finePointerHtmlRule(styles))).toBe("smooth");
+  });
+
+  it("anchors scroll contract to the top-level html rule, not reduced-motion overrides", () => {
+    const deceptiveStyles = `
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (pointer: fine) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+`;
+
+    expect(deceptiveStyles).toMatch(/html\s*\{[^}]*scroll-behavior:\s*auto/s);
+    expect(scrollBehavior(topLevelHtmlRule(deceptiveStyles))).toBe("smooth");
+    expect(scrollBehavior(topLevelHtmlRule(deceptiveStyles))).not.toBe("auto");
+  });
+
+  it("disables service artwork motion under reduced motion", () => {
+    expect(reducedMotionBlock).toContain(".service-art");
+    expect(reducedMotionBlock).toMatch(
+      /\.service-art[\s\S]*?animation:\s*none/,
+    );
+    expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?opacity:\s*1/);
+    expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?transform:\s*none/);
   });
 });
