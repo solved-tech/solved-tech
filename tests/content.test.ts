@@ -19,15 +19,40 @@ describe("site content", () => {
     ]);
   });
 
-  it("lists four concrete capabilities for every product", () => {
-    expect(siteContent.products.every(({ provides }) => provides.length === 4))
-      .toBe(true);
+  it("lists concrete capabilities for every product", () => {
+    expect(siteContent.products.map(({ provides }) => provides.length)).toEqual(
+      [5, 4, 4, 4, 4],
+    );
     expect(siteContent.products.flatMap(({ provides }) => provides)).toContain(
       "Technical SEO",
     );
     expect(siteContent.products.flatMap(({ provides }) => provides)).toContain(
       "MCP integrations",
     );
+  });
+
+  it("keeps MCP work in AI and leaves service 05 broad", () => {
+    const ai = siteContent.products.find(({ id }) => id === "ai");
+    const other = siteContent.products.find(({ id }) => id === "other");
+
+    expect(ai?.provides).toEqual([
+      "AI assistants",
+      "Agentic workflows",
+      "WhatsApp & voice agents",
+      "Custom MCPs",
+      "MCP integrations",
+    ]);
+    expect(other).toMatchObject({
+      title: "Whatever your business needs",
+      answer: "If it does not fit a box, bring it anyway.",
+      provides: [
+        "Bespoke solutions",
+        "Business automation",
+        "Connected systems",
+        "Unusual requests",
+      ],
+    });
+    expect(other?.provides.some((item) => item.includes("MCP"))).toBe(false);
   });
 
   it("uses explicit one-click trial contact placeholders", () => {

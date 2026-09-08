@@ -196,13 +196,15 @@ export const renderHomepage = (
       ({ id, question, title, answer, provides }, index) => `
         <article class="service-box service-box--${escapeHtml(id)}" data-reveal>
           <a class="service-box__link" href="#contact">
-            <span class="service-box__number">${String(index + 1).padStart(2, "0")}</span>
-            <strong>${escapeHtml(question)}</strong>
-            <span class="service-box__product">${escapeHtml(title)}</span>
-            <p>${escapeHtml(answer)}</p>
+            <div class="service-box__copy">
+              <span class="service-box__number">${String(index + 1).padStart(2, "0")}</span>
+              <strong>${escapeHtml(question)}</strong>
+              <span class="service-box__product">${escapeHtml(title)}</span>
+              <p>${escapeHtml(answer)}</p>
+              <span class="service-box__cta">Talk to us <span aria-hidden="true">→</span></span>
+            </div>
             ${renderCapabilities(provides)}
             <span class="service-box__artwork">${renderServiceArt(id)}</span>
-            <span class="service-box__cta">Talk to us <span aria-hidden="true">→</span></span>
           </a>
         </article>`,
     )

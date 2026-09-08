@@ -625,10 +625,11 @@ main > section + section {
 
 .service-box__link {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: auto auto auto auto 1fr auto auto;
-  gap: 0.35rem 1rem;
-  min-height: 26rem;
+  grid-template-areas:
+    "copy"
+    "provides"
+    "artwork";
+  gap: 1.5rem;
   padding: clamp(1.25rem, 3vw, 2rem);
   color: inherit;
   text-decoration: none;
@@ -637,6 +638,15 @@ main > section + section {
 .service-box__link:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -3px;
+}
+
+.service-box__copy {
+  grid-area: copy;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto 1fr auto;
+  gap: 0.35rem 1rem;
+  min-width: 0;
 }
 
 .service-box__number {
@@ -675,9 +685,7 @@ main > section + section {
 }
 
 .service-box__provides {
-  grid-column: 2;
-  grid-row: 4;
-  margin-block-start: 1rem;
+  grid-area: provides;
   padding-block-start: 0.8rem;
   border-block-start: 1px solid var(--line);
 }
@@ -709,12 +717,10 @@ main > section + section {
 }
 
 .service-box__artwork {
-  grid-column: 1 / -1;
-  grid-row: 6;
-  align-self: end;
+  grid-area: artwork;
+  align-self: center;
   display: block;
   width: 100%;
-  margin-block-start: 1rem;
   border-block: 1px solid var(--line);
 }
 
@@ -852,10 +858,12 @@ main > section + section {
 
 .service-box__cta {
   grid-column: 1 / -1;
-  grid-row: 7;
+  grid-row: 5;
+  align-self: end;
   display: flex;
   gap: 0.6rem;
   justify-content: space-between;
+  margin-block-start: 1.5rem;
   padding-block-start: 0.8rem;
   color: var(--ink-muted);
   font-family: var(--font-mono);
@@ -1012,83 +1020,47 @@ main > section + section {
 }
 
 @media (min-width: 48rem) {
-  .service-grid {
+  .service-box__link {
+    grid-template-areas:
+      "copy provides"
+      "artwork artwork";
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .service-box--other {
-    grid-column: 1 / -1;
+    gap: clamp(1.5rem, 3vw, 3rem);
   }
 }
 
-@media (min-width: 70rem) {
-  .service-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+@media (min-width: 64rem) {
+  .service-box__link {
+    grid-template-areas: "copy provides artwork";
+    grid-template-columns:
+      minmax(14rem, 0.72fr)
+      minmax(13rem, 0.66fr)
+      minmax(28rem, 1.62fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    min-height: 28rem;
+    align-items: center;
   }
 
-  .service-box--website,
-  .service-box--ai {
-    grid-column: span 4;
+  .service-box__copy,
+  .service-box__provides {
+    align-self: stretch;
   }
 
-  .service-box--app,
-  .service-box--customers {
-    grid-column: span 2;
+  .service-box__provides {
+    padding-block-start: 0;
+    padding-inline-start: clamp(1.25rem, 2vw, 2rem);
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--line);
   }
 
-  .service-box--other {
-    grid-column: span 6;
+  .service-box__capabilities {
+    grid-template-columns: 1fr;
   }
 
-  .service-box--website .service-box__link,
-  .service-box--ai .service-box__link {
-    grid-template-columns: minmax(15rem, 0.75fr) minmax(18rem, 1.25fr);
-    grid-template-rows: auto auto auto auto 1fr auto;
-    column-gap: clamp(2rem, 4vw, 4rem);
-  }
-
-  .service-box--website .service-box__number,
-  .service-box--ai .service-box__number {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .service-box--website strong,
-  .service-box--ai strong {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .service-box--website .service-box__product,
-  .service-box--ai .service-box__product {
-    grid-column: 1;
-    grid-row: 3;
-  }
-
-  .service-box--website p,
-  .service-box--ai p {
-    grid-column: 1;
-    grid-row: 4;
-  }
-
-  .service-box--website .service-box__provides,
-  .service-box--ai .service-box__provides {
-    grid-column: 1;
-    grid-row: 5;
-  }
-
-  .service-box--website .service-box__artwork,
-  .service-box--ai .service-box__artwork {
-    grid-column: 2;
-    grid-row: 1 / span 6;
-    align-self: center;
-    margin: 0;
-  }
-
-  .service-box--website .service-box__cta,
-  .service-box--ai .service-box__cta {
-    grid-column: 1;
-    grid-row: 6;
+  .service-box__artwork {
+    padding-inline-start: clamp(1.25rem, 2vw, 2rem);
+    border-block: 0;
+    border-inline-start: 1px solid var(--line);
   }
 }
 

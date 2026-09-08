@@ -49,7 +49,7 @@ describe("homepage renderer", () => {
 
   it("renders the service order and capability lists", () => {
     expect(html.match(/class="service-box__provides"/g)).toHaveLength(5);
-    expect(html.match(/class="service-box__capability"/g)).toHaveLength(20);
+    expect(html.match(/class="service-box__capability"/g)).toHaveLength(21);
     expect(html.indexOf("Want to use AI?")).toBeLessThan(
       html.indexOf("Need more customers?"),
     );
@@ -58,6 +58,12 @@ describe("homepage renderer", () => {
     );
     expect(html).not.toContain("Need more traffic?");
     expect(html).not.toContain('data-service-art="traffic"');
+  });
+
+  it("renders every service as the same three-region row", () => {
+    expect(html.match(/class="service-box__copy"/g)).toHaveLength(5);
+    expect(html.match(/class="service-box__provides"/g)).toHaveLength(5);
+    expect(html.match(/class="service-box__artwork"/g)).toHaveLength(5);
   });
 
   it("fills every service visual with meaningful interface detail", () => {

@@ -10,7 +10,7 @@ export interface ProductOffer {
   question: string;
   title: string;
   answer: string;
-  provides: [string, string, string, string];
+  provides: string[];
 }
 
 export interface FounderProfile {
@@ -43,8 +43,9 @@ export const siteContent: SiteContent = {
       provides: [
         "AI assistants",
         "Agentic workflows",
-        "WhatsApp agents",
-        "Voice agents",
+        "WhatsApp & voice agents",
+        "Custom MCPs",
+        "MCP integrations",
       ],
     },
     {
@@ -87,13 +88,13 @@ export const siteContent: SiteContent = {
     {
       id: "other",
       question: "Need something else?",
-      title: "Connected systems and custom builds",
-      answer: "Bring us the problem. We will find the simplest useful answer.",
+      title: "Whatever your business needs",
+      answer: "If it does not fit a box, bring it anyway.",
       provides: [
-        "API integrations",
+        "Bespoke solutions",
+        "Business automation",
         "Connected systems",
-        "MCP integrations",
-        "Custom automation",
+        "Unusual requests",
       ],
     },
   ],
