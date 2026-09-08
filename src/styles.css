@@ -681,6 +681,11 @@ main > section + section {
 }
 
 @media (max-width: 40rem) {
+  .hero {
+    justify-content: flex-start;
+    padding-block-start: 1.5rem;
+  }
+
   .hero__actions {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

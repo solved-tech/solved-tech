@@ -506,6 +506,11 @@ describe("stylesheet contracts", () => {
       "grid-template-columns: repeat(3, minmax(0, 1fr))",
     );
     expect(buttonRule).toMatch(/min-height:\s*48px/);
+
+    const heroRule = mobileHeroBlock?.match(/\.hero\s*\{([^}]*)\}/)?.[1];
+
+    expect(heroRule).toContain("justify-content: flex-start");
+    expect(heroRule).toContain("padding-block-start: 1.5rem");
   });
 
   it("pulses only the node ring after the signal crosses", () => {
