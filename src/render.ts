@@ -274,7 +274,7 @@ export const renderHomepage = (
         const questionId = `service-${id}-question`;
 
         return `
-        <article class="service-box service-box--${escapeHtml(id)}" data-reveal aria-labelledby="${questionId}">
+        <article class="service-box service-box--${escapeHtml(id)}" aria-labelledby="${questionId}">
           <header class="service-box__header">
             <div class="service-box__heading">
               <span class="service-box__number">${String(index + 1).padStart(2, "0")}</span>

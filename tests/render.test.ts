@@ -96,7 +96,7 @@ describe("homepage renderer", () => {
 
       expect(html).toContain(`data-service-art="${id}"`);
       expect(html).toContain(
-        `<article class="service-box service-box--${id}" data-reveal aria-labelledby="${questionId}">`,
+        `<article class="service-box service-box--${id}" aria-labelledby="${questionId}">`,
       );
       expect(html).toContain(
         `<h3 id="${questionId}" class="service-box__question">${question}</h3>`,
@@ -106,6 +106,21 @@ describe("homepage renderer", () => {
     expect(html).not.toContain("data-product-stage");
     expect(html).not.toContain('<section class="trust"');
     expect(html).not.toContain('<article class="service"');
+  });
+
+  it("keeps service rows visible and reveals only artwork", () => {
+    const serviceArticles = Array.from(
+      html.matchAll(/<article class="service-box[^"]*"[^>]*>/g),
+      (match) => match[0],
+    );
+
+    expect(serviceArticles).toHaveLength(5);
+    serviceArticles.forEach((openingTag) => {
+      expect(openingTag).not.toContain("data-reveal");
+    });
+    expect(
+      html.match(/class="service-box__artwork" data-reveal/g),
+    ).toHaveLength(5);
   });
 
   it("renders the service order and capability lists", () => {
