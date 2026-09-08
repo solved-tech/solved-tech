@@ -2,6 +2,7 @@ export interface ContactConfig {
   displayPhone: string;
   phone: string;
   whatsapp: string;
+  email: string;
   placeholder: boolean;
 }
 
@@ -29,6 +30,7 @@ export const contactConfig: ContactConfig = {
   displayPhone: "+44 20 0000 0000",
   phone: "+442000000000",
   whatsapp: "442000000000",
+  email: "contact@solvedtech.co.uk",
   placeholder: true,
 };
 

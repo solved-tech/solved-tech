@@ -60,6 +60,7 @@ describe("site content", () => {
       displayPhone: "+44 20 0000 0000",
       phone: "+442000000000",
       whatsapp: "442000000000",
+      email: "contact@solvedtech.co.uk",
       placeholder: true,
     });
   });

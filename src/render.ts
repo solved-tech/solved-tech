@@ -18,13 +18,26 @@ const publicAssetUrl = (path: string, baseUrl: string): string => {
   return `${base}${path.replace(/^\/+/, "")}`;
 };
 
+const whatsappIcon = `
+  <svg class="contact-action__icon contact-action__icon--whatsapp" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+    <path d="M20 11.6a8 8 0 0 1-11.8 7.1L4 20l1.3-4A8 8 0 1 1 20 11.6Z" />
+    <path d="M8.2 7.8c.3-.7.6-.7 1-.7h.3l1 2.3c.1.3.1.5-.1.8l-.8 1c.8 1.6 1.9 2.7 3.5 3.5l1-.8c.2-.2.5-.2.8-.1l2.2 1c.3.1.4.3.4.6 0 1.1-.6 2-1.6 2.4-1 .4-2.6.2-4.7-.9-1.7-.9-3.1-2.2-4.1-3.8-1.3-2-1.5-3.7-1.1-4.7.4-.7 1-1.3 2.2-.6Z" />
+  </svg>`;
+
+const emailIcon = `
+  <svg class="contact-action__icon contact-action__icon--email" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="14" rx="1.5" />
+    <path d="m4 7 8 6 8-6" />
+  </svg>`;
+
 const renderContactActions = (
   config: ContactConfig,
   className: string,
 ): string => `
   <div class="${className}">
     <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}">Call us</a>
-    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">WhatsApp us</a>
+    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">${whatsappIcon}<span>WhatsApp us</span></a>
+    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}">${emailIcon}<span>Email us</span></a>
   </div>`;
 
 export const pipelinePath =
@@ -407,7 +420,7 @@ export const renderHomepage = (
         <h2 id="contact-heading" data-reveal>Whatever you need to move forward, call us.</h2>
         <p data-reveal>One click starts the conversation.</p>
         <div data-reveal>${renderContactActions(config, "contact__actions")}</div>
-        ${config.placeholder ? `<p class="contact-note"><strong>Trial contact details:</strong> ${escapeHtml(config.displayPhone)} is a non-production placeholder and must be replaced before launch.</p>` : ""}
+        ${config.placeholder ? `<p class="contact-note"><strong>Trial contact details:</strong> ${escapeHtml(config.displayPhone)} and ${escapeHtml(config.email)} are non-production placeholders and must be replaced before launch.</p>` : ""}
       </section>
     </main>
     <footer>

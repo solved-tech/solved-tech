@@ -243,13 +243,31 @@ describe("homepage renderer", () => {
     expect(html).toContain('<section id="team" class="team"');
   });
 
-  it("renders one-click Call and WhatsApp placeholders", () => {
-    expect(html).toContain('href="tel:+442000000000"');
-    expect(html).toContain('href="https://wa.me/442000000000"');
-    expect(html).toContain("Trial contact details");
-    expect(html).not.toContain("mailto:");
-    expect(html).not.toContain("Voice note");
-    expect(html).not.toContain("Request a quote");
+  it("renders Call, WhatsApp, and Email in both contact groups", () => {
+    expect(html.match(/href="tel:\+442000000000"/g)).toHaveLength(2);
+    expect(
+      html.match(/href="https:\/\/wa\.me\/442000000000"/g),
+    ).toHaveLength(2);
+    expect(
+      html.match(/href="mailto:contact@solvedtech\.co\.uk"/g),
+    ).toHaveLength(2);
+    expect(
+      html.match(/contact-action__icon--whatsapp/g),
+    ).toHaveLength(2);
+    expect(html.match(/contact-action__icon--email/g)).toHaveLength(2);
+
+    const groups = Array.from(
+      html.matchAll(
+        /<div class="(?:hero__actions|contact__actions)">([\s\S]*?)<\/div>/g,
+      ),
+      (match) => match[1],
+    );
+
+    expect(groups).toHaveLength(2);
+    groups.forEach((group) => {
+      expect(group.indexOf("Call us")).toBeLessThan(group.indexOf("WhatsApp us"));
+      expect(group.indexOf("WhatsApp us")).toBeLessThan(group.indexOf("Email us"));
+    });
   });
 
   it("renders two founder cards with portraits and LinkedIn links", () => {
