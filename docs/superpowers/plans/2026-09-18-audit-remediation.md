@@ -123,6 +123,35 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 14 | F15 | [x] |
 | 15 | Full matrix + launch gate | [ ] |
 
+### 0.9 Status — 18 September 2026
+
+Tasks 1–14 are implemented, tested and committed. Task 15 (launch gate) is blocked on human inputs only.
+
+| Task | Commit | Notes |
+| --- | --- | --- |
+| 1 F05 | `d41d565` | |
+| 2 F06 | `cb453dc` | Step 2 predicted 2 red tests; only 1 failed (the guard passes vacuously) |
+| 3 F11 preview | `e1aeafa` | |
+| tooling | `0eb7a90` | ignores `test-results/`, tracks this plan |
+| 4 F01 | `796fc4a` | H1 pending |
+| 5 F02/F07 | `f81ce61` | article-tag regex widened for `id` + class order |
+| 6 F04 | `96ee9b3` | lead shortened via the Step 6 stress-compact fallback |
+| 7 F14 | `1688515` | H2 pending; pointer branch `feat/f14-privacy-notice` |
+| 8 F08 | `ca7bf51` | |
+| 9 F09 | `19ab503` | `statSync` added to `tests/test-env.d.ts` (no `@types/node`, and `tsc` covers `tests`); H3 pending |
+| 10 F16 | `c12853e` | |
+| 11 F03/FAQ | `6d5fcd3` | H4 pending |
+| 12 F10/F13 | `a6444b6` | actual 114 tests (plan said 109); the `class="service-box"` grep is stale |
+| 13 F12 | `285a1e4` | actual 124 tests (plan said 119); two test regexes tightened; `.prose { overflow-wrap: anywhere }` fixes a Task 7 privacy-page 2 px overflow found at 320 px |
+| 14 F15 | `4c0a775` | actual 126 tests (plan said 121); `style-src 'unsafe-inline'` follow-up recorded in `docs/hosting/security-headers.md` |
+| 15 | — | blocked, see below |
+
+**Verified at `4c0a775`:** 126 unit tests, `npm run check`, `npm run build` (prerenders homepage, privacy and the three service pages), `node scripts/check-csp.mts` ("CSP check passed" on all five pages), plus the e2e project subsets each task prescribes. `main` is current.
+
+**Task 15 is blocked.** At `4c0a775` its Step 1 checks report `grep -c '\[\[' src/content.ts` → 8, `placeholder: true`, `approved: false` ×3, and no `public/brand/solved-tech-social.png`. Outstanding inputs: H1 (real contact details), H2 (privacy facts), H4 (case studies + FAQ answers), H5 (production origin, 1200×630 social preview, host confirmation), H7 (service-page approval). H3 (Remus portrait ≥680 px) and H6 (analytics vendor) also remain open. Never invent these.
+
+**Resume:** a new session picks up Task 15 once those inputs are committed; everything before it is done.
+
 ---
 
 
