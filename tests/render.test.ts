@@ -491,9 +491,9 @@ describe("proof and FAQ sections", () => {
     result: "Example result.",
   };
 
-  it("renders neither section until approved content exists", () => {
+  it("renders the FAQ once its answers are approved and no proof until a case study exists", () => {
+    expect(html).toContain('id="faq"');
     expect(html).not.toContain('id="work"');
-    expect(html).not.toContain('id="faq"');
     expect(html).not.toMatch(/\[\[[A-Z_]+\]\]/);
   });
 

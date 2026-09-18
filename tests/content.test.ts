@@ -176,16 +176,7 @@ describe("site content", () => {
 
     const unfilled = siteContent.faq.filter(({ answer }) => /\[\[[A-Z_]+\]\]/.test(answer));
 
-    if (siteStatus.launched) {
-      expect(unfilled).toEqual([]);
-    } else {
-      expect(unfilled.map(({ answer }) => answer)).toEqual([
-        "[[FAQ_ANSWER_EXISTING_SOFTWARE]]",
-        "[[FAQ_ANSWER_INVESTIGATION]]",
-        "[[FAQ_ANSWER_ESTIMATE]]",
-        "[[FAQ_ANSWER_AFTER_DELIVERY]]",
-      ]);
-    }
+    expect(unfilled).toEqual([]);
   });
 
   it("names the production origin only once launched", () => {

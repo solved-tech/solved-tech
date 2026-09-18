@@ -175,19 +175,23 @@ export const siteContent: SiteContent = {
   faq: [
     {
       question: "Can you work on software built by another team?",
-      answer: "[[FAQ_ANSWER_EXISTING_SOFTWARE]]",
+      answer:
+        "Yes. We take on existing software, including code another team wrote or maintained. We start with a diagnosis: we look at the code and the problem with you, tell you what we find, and only then agree what we will change and how it will be tested.",
     },
     {
       question: "What do you need to investigate an issue?",
-      answer: "[[FAQ_ANSWER_INVESTIGATION]]",
+      answer:
+        "A description of what you see and what you expected, the steps that trigger it if you can reproduce it, when it started, and how it affects your business. Logs, screenshots or error messages help if you have them. We will tell you if we need access or anything else.",
     },
     {
       question: "How do you estimate the work and agree the scope?",
-      answer: "[[FAQ_ANSWER_ESTIMATE]]",
+      answer:
+        "We assess the problem first, then give you a short written assessment, a proposed scope and an estimate before work starts. We agree the scope together. On larger work we review progress in short stages, so you can see what is working and adjust before the next stage.",
     },
     {
       question: "What happens after delivery?",
-      answer: "[[FAQ_ANSWER_AFTER_DELIVERY]]",
+      answer:
+        "We hand over with documentation and agree what happens next. If you want us to keep working on the system, we will scope and estimate that separately.",
     },
   ],
 };
