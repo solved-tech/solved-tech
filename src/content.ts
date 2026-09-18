@@ -52,11 +52,11 @@ export interface SiteContent {
 }
 
 export const contactConfig: ContactConfig = {
-  displayPhone: "+44 20 0000 0000",
-  phone: "+442000000000",
-  whatsapp: "442000000000",
+  displayPhone: "+44 7903 833061",
+  phone: "+447903833061",
+  whatsapp: "447903833061",
   email: "contact@solvedtech.co.uk",
-  placeholder: true,
+  placeholder: false,
 };
 export type SiteStatus =
   | { launched: false }

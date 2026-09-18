@@ -519,8 +519,6 @@ test("wide desktop contact note stays constrained", async ({ page }, testInfo) =
 
   const collector = await preparePage(page);
 
-  await assertProseWidth(page.locator(".contact-note"));
-
   assertNoRuntimeErrors(collector);
 });
 

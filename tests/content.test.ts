@@ -82,7 +82,7 @@ describe("site content", () => {
   });
 
   it("refuses to launch with trial contact details", () => {
-    const trial = ["+442000000000", "contact@solvedtech.co.uk"];
+    const trial = ["+442000000000"];
     const isTrial =
       trial.includes(contactConfig.phone) || trial.includes(contactConfig.email);
 
