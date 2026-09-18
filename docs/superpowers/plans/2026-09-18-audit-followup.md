@@ -23,7 +23,7 @@ Everything in main-plan Section 0 stands. Differences for this file:
 | --- | --- | --- |
 | 16 | Red `wide-desktop` e2e project; assertion-less test | [x] |
 | 17 | CSP `<meta>` placed after the script/stylesheet; silent `noindex` on launch; `img-src data:` | [x] |
-| 18 | CSP verifier not wired into CI, undeclared import, weak signal; workflow permissions; `.nvmrc` | [ ] |
+| 18 | CSP verifier not wired into CI, undeclared import, weak signal; workflow permissions; `.nvmrc` | [x] |
 | 19 | Client re-render discards prerendered markup (paint → blank → fade) | [ ] |
 | 20 | Motion toggle announces two conflicting states | [ ] |
 | 21 | Need-selector border 1.96:1; back-to-top does not move focus; privacy page has no actionable contact | [ ] |
@@ -332,7 +332,7 @@ In every file the `Content-Security-Policy` line number must be lower than both 
 
 **Steps:**
 
-- [ ] **Step 1: Edit `scripts/check-csp.mts`.** Replace the first line
+- [x] **Step 1: Edit `scripts/check-csp.mts`.** Replace the first line
 
 ```ts
 import { chromium } from "playwright";
@@ -344,7 +344,7 @@ with
 import { chromium } from "@playwright/test";
 ```
 
-- [ ] **Step 2:** In the same file, directly after the line `page.on("pageerror", (error) => problems.push(\`${url}: ${error.message}\`));` and before `await page.goto(...)`, insert:
+- [x] **Step 2:** In the same file, directly after the line `page.on("pageerror", (error) => problems.push(\`${url}: ${error.message}\`));` and before `await page.goto(...)`, insert:
 
 ```ts
     await page.exposeFunction("reportCspViolation", (detail: string) => {
@@ -360,7 +360,7 @@ import { chromium } from "@playwright/test";
     });
 ```
 
-- [ ] **Step 3:** In the same file, directly after the `bodyBackground` declaration and before the `if (!csp)` check, insert:
+- [x] **Step 3:** In the same file, directly after the `bodyBackground` declaration and before the `if (!csp)` check, insert:
 
 ```ts
     const headerHeight = await page.evaluate(() =>
@@ -378,7 +378,7 @@ and directly after the `if (bodyBackground === "rgba(0, 0, 0, 0)") { … }` bloc
 
 `setupHeaderOffset` in `src/enhance.ts` writes `--header-height` on `<html>` synchronously on every page, so an empty value means the bundle was blocked or threw.
 
-- [ ] **Step 4: Edit `package.json`.** In `"scripts"`, directly after the `"check": "tsc"` line, add:
+- [x] **Step 4: Edit `package.json`.** In `"scripts"`, directly after the `"check": "tsc"` line, add:
 
 ```json
     "check:csp": "node scripts/check-csp.mts"
@@ -386,9 +386,9 @@ and directly after the `if (bodyBackground === "rgba(0, 0, 0, 0)") { … }` bloc
 
 Put a comma after `"check": "tsc"` so the JSON stays valid. Do not touch any other key.
 
-- [ ] **Step 5:** Run `npm run build && npm run check:csp`. Expect five `checked http://127.0.0.1:4174/solved-tech/…` lines and `CSP check passed`, exit 0.
+- [x] **Step 5:** Run `npm run build && npm run check:csp`. Expect five `checked http://127.0.0.1:4174/solved-tech/…` lines and `CSP check passed`, exit 0.
 
-- [ ] **Step 6: Prove the verifier can fail.** Temporarily edit `dist/index.html` (a build artefact, not source):
+- [x] **Step 6: Prove the verifier can fail.** Temporarily edit `dist/index.html` (a build artefact, not source):
 
 ```bash
 sed -i.bak 's/script-src '"'"'self'"'"'/script-src '"'"'none'"'"'/' dist/index.html && npm run check:csp; echo "exit=$?"; mv dist/index.html.bak dist/index.html
@@ -396,13 +396,13 @@ sed -i.bak 's/script-src '"'"'self'"'"'/script-src '"'"'none'"'"'/' dist/index.h
 
 Expect `exit=1` and a problems list containing both a `CSP violation: script-src-elem` line and `the module script did not run` for `/solved-tech/`. Run `npm run check:csp` once more; expect exit 0 again.
 
-- [ ] **Step 7: Edit `.nvmrc`.** Replace its content with the single line
+- [x] **Step 7: Edit `.nvmrc`.** Replace its content with the single line
 
 ```
 26
 ```
 
-- [ ] **Step 8: Replace `.github/workflows/deploy-pages.yml`** with the following file. Copy it exactly; the two SHAs are the ones already used in `.github/workflows/responsive.yml`. Do not invent SHAs for the three Pages actions — they stay on tags.
+- [x] **Step 8: Replace `.github/workflows/deploy-pages.yml`** with the following file. Copy it exactly; the two SHAs are the ones already used in `.github/workflows/responsive.yml`. Do not invent SHAs for the three Pages actions — they stay on tags.
 
 ```yaml
 name: Deploy GitHub Pages
@@ -474,7 +474,7 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-- [ ] **Step 9:** Run `npm test` (135 passed; `tests/responsive-workflow.test.ts` covers only `responsive.yml` and is unaffected) and `npm run check`.
+- [x] **Step 9:** Run `npm test` (135 passed; `tests/responsive-workflow.test.ts` covers only `responsive.yml` and is unaffected) and `npm run check`.
 
 **Downstream:** `docs/hosting/security-headers.md` already tells operators to run `node scripts/check-csp.mts`; that command still works, no edit needed. The main plan's Section 0.2 ritual says `v25.x or newer`; `26` satisfies it.
 

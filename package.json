@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:responsive": "playwright test",
-    "check": "tsc"
+    "check": "tsc",
+    "check:csp": "node scripts/check-csp.mts"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
