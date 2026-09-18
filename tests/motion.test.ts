@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import {
+  mount,
+  settlePrerenderedReveals,
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
@@ -8,7 +10,7 @@ import {
   setupPipelineMotion,
   setupRevealMotion,
   setupScrollProgress,
-} from "../src/main";
+} from "../src/enhance";
 import { pipelinePath } from "../src/render";
 
 const styles = readFileSync(
@@ -143,6 +145,47 @@ const createFakeView = (options: {
 
   return { fire, frames, header, listeners, properties, view };
 };
+
+describe("prerendered mount", () => {
+  it("renders into an empty mount and reports that nothing was prerendered", () => {
+    const render = vi.fn(() => "<h1>Rendered</h1>");
+    const app = { firstElementChild: null, innerHTML: "" };
+
+    expect(mount(app as unknown as HTMLElement, render)).toBe(false);
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(app.innerHTML).toBe("<h1>Rendered</h1>");
+  });
+
+  it("keeps prerendered markup and does not render again", () => {
+    const render = vi.fn(() => "<h1>Rendered</h1>");
+    const app = { firstElementChild: {}, innerHTML: "<h1>Prerendered</h1>" };
+
+    expect(mount(app as unknown as HTMLElement, render)).toBe(true);
+    expect(render).not.toHaveBeenCalled();
+    expect(app.innerHTML).toBe("<h1>Prerendered</h1>");
+  });
+
+  it("marks prerendered reveal targets already inside the viewport as visible", () => {
+    const makeTarget = (top: number) => {
+      const classes = new Set<string>();
+      return {
+        classes,
+        getBoundingClientRect: () => ({ top }),
+        classList: { add: (name: string) => classes.add(name) },
+      };
+    };
+    const onScreen = makeTarget(200);
+    const belowFold = makeTarget(1400);
+    const root = {
+      querySelectorAll: vi.fn(() => [onScreen, belowFold]),
+    } as unknown as ParentNode;
+
+    settlePrerenderedReveals(root, { innerHeight: 900 } as unknown as Window);
+
+    expect(onScreen.classes.has("is-visible")).toBe(true);
+    expect(belowFold.classes.has("is-visible")).toBe(false);
+  });
+});
 
 describe("reveal motion", () => {
   it("reveals immediately when reduced motion is preferred", () => {

@@ -2,7 +2,9 @@
 
 import { contactConfig, siteContent } from "./content";
 import {
+  mount,
   prefersReducedMotion,
+  settlePrerenderedReveals,
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
@@ -15,16 +17,6 @@ import {
 import { renderHomepage } from "./render";
 import "./styles.css";
 
-export {
-  setupHeaderOffset,
-  setupHeroInteraction,
-  setupMobileMenu,
-  setupMotionToggle,
-  setupPipelineMotion,
-  setupRevealMotion,
-  setupScrollProgress,
-} from "./enhance";
-
 const start = (view: Window): void => {
   const app = view.document.querySelector<HTMLDivElement>("#app");
 
@@ -34,8 +26,13 @@ const start = (view: Window): void => {
     );
   }
 
+  const prerendered = mount(app, () => renderHomepage(siteContent, contactConfig));
+
+  if (prerendered) {
+    settlePrerenderedReveals(app, view);
+  }
+
   view.document.documentElement.classList.add("has-enhancement");
-  app.innerHTML = renderHomepage(siteContent, contactConfig);
 
   const reducedMotion = prefersReducedMotion(view);
 

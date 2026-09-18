@@ -24,7 +24,7 @@ Everything in main-plan Section 0 stands. Differences for this file:
 | 16 | Red `wide-desktop` e2e project; assertion-less test | [x] |
 | 17 | CSP `<meta>` placed after the script/stylesheet; silent `noindex` on launch; `img-src data:` | [x] |
 | 18 | CSP verifier not wired into CI, undeclared import, weak signal; workflow permissions; `.nvmrc` | [x] |
-| 19 | Client re-render discards prerendered markup (paint → blank → fade) | [ ] |
+| 19 | Client re-render discards prerendered markup (paint → blank → fade) | [x] |
 | 20 | Motion toggle announces two conflicting states | [ ] |
 | 21 | Need-selector border 1.96:1; back-to-top does not move focus; privacy page has no actionable contact | [ ] |
 
@@ -500,7 +500,7 @@ jobs:
 
 **Steps:**
 
-- [ ] **Step 1: Point the test at `enhance.ts` and add the failing tests.** In `tests/motion.test.ts` replace the import block
+- [x] **Step 1: Point the test at `enhance.ts` and add the failing tests.** In `tests/motion.test.ts` replace the import block
 
 ```ts
 import {
@@ -575,9 +575,9 @@ describe("prerendered mount", () => {
 });
 ```
 
-- [ ] **Step 2:** Run `npm run check`. Expect errors: `mount` and `settlePrerenderedReveals` are not exported from `../src/enhance`.
+- [x] **Step 2:** Run `npm run check`. Expect errors: `mount` and `settlePrerenderedReveals` are not exported from `../src/enhance`.
 
-- [ ] **Step 3: Edit `src/enhance.ts`.** Directly before `export const stagger = (root: ParentNode): void => {` insert:
+- [x] **Step 3: Edit `src/enhance.ts`.** Directly before `export const stagger = (root: ParentNode): void => {` insert:
 
 ```ts
 export const mount = (app: HTMLElement, render: () => string): boolean => {
@@ -599,7 +599,7 @@ export const settlePrerenderedReveals = (root: ParentNode, view: Window): void =
 
 ```
 
-- [ ] **Step 4: Edit `src/main.ts`.** Delete the whole re-export block:
+- [x] **Step 4: Edit `src/main.ts`.** Delete the whole re-export block:
 
 ```ts
 export {
@@ -633,7 +633,7 @@ with
   view.document.documentElement.classList.add("has-enhancement");
 ```
 
-- [ ] **Step 5: Edit `src/service.ts`.** Add `mount,` to the front of the `./enhance` import list and replace
+- [x] **Step 5: Edit `src/service.ts`.** Add `mount,` to the front of the `./enhance` import list and replace
 
 ```ts
 app.innerHTML = renderServicePage(page, siteContent, contactConfig);
@@ -647,7 +647,7 @@ mount(app, () => renderServicePage(page, siteContent, contactConfig));
 
 `page` is narrowed by the `if (!page)` guard above it, so the closure is type-safe.
 
-- [ ] **Step 6: Edit `src/privacy.ts`.** Add `mount,` to the front of the `./enhance` import list and replace
+- [x] **Step 6: Edit `src/privacy.ts`.** Add `mount,` to the front of the `./enhance` import list and replace
 
 ```ts
 app.innerHTML = renderPrivacyPage(privacyContent, contactConfig);
@@ -659,11 +659,11 @@ with
 mount(app, () => renderPrivacyPage(privacyContent, contactConfig));
 ```
 
-- [ ] **Step 7:** Run `npm test` (135 → now 138 passed) and `npm run check`. Run `npm run build && npm run check:csp` — the verifier from Task 18 proves the bundle still executes on all five prerendered pages.
+- [x] **Step 7:** Run `npm test` (135 → now 138 passed) and `npm run check`. Run `npm run build && npm run check:csp` — the verifier from Task 18 proves the bundle still executes on all five prerendered pages.
 
-- [ ] **Step 8:** Run `npx playwright test --project=uk-phone-standard --project=uk-desktop`. Under `vite dev` the mount is empty, so `mount` renders as before and every existing behaviour test must still pass.
+- [x] **Step 8:** Run `npx playwright test --project=uk-phone-standard --project=uk-desktop`. Under `vite dev` the mount is empty, so `mount` renders as before and every existing behaviour test must still pass.
 
-- [ ] **Step 9 (look, do not assert):** Optional, at most 2 MCP calls. Start `npm run preview -- --port 4175 --host 127.0.0.1` in the background, `browser_navigate` to `http://127.0.0.1:4175/solved-tech/`, then `browser_snapshot`. The hero heading and lead must be present. Stop the preview server.
+- [x] **Step 9 (look, do not assert):** Optional, at most 2 MCP calls. Start `npm run preview -- --port 4175 --host 127.0.0.1` in the background, `browser_navigate` to `http://127.0.0.1:4175/solved-tech/`, then `browser_snapshot`. The hero heading and lead must be present. Stop the preview server.
 
 **Downstream:** `tests/motion.test.ts` import path (Step 1). No test counts in `tests/e2e/responsive.spec.ts` change.
 

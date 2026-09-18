@@ -1,3 +1,20 @@
+export const mount = (app: HTMLElement, render: () => string): boolean => {
+  if (app.firstElementChild) {
+    return true;
+  }
+
+  app.innerHTML = render();
+  return false;
+};
+
+export const settlePrerenderedReveals = (root: ParentNode, view: Window): void => {
+  root.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element) => {
+    if (element.getBoundingClientRect().top < view.innerHeight) {
+      element.classList.add("is-visible");
+    }
+  });
+};
+
 /**
  * Stagger each reveal target against its own siblings. The renderer owns which
  * elements carry `data-reveal`; nothing here depends on its class names.

@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 import { contactConfig, servicePages, siteContent } from "./content";
-import { setupHeaderOffset, setupMobileMenu, setupScrollProgress } from "./enhance";
+import { mount, setupHeaderOffset, setupMobileMenu, setupScrollProgress } from "./enhance";
 import { renderServicePage } from "./render";
 import "./styles.css";
 
@@ -17,7 +17,7 @@ if (!page) {
   throw new Error(`Cannot render the service page: unknown service "${slug ?? ""}".`);
 }
 
-app.innerHTML = renderServicePage(page, siteContent, contactConfig);
+mount(app, () => renderServicePage(page, siteContent, contactConfig));
 setupHeaderOffset(window);
 setupMobileMenu(app);
 setupScrollProgress(window);
