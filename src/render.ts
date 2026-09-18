@@ -389,7 +389,7 @@ export const renderHomepage = (
       </button>
       <nav id="primary-navigation" aria-label="Primary navigation">
         <a href="#services">Services</a>
-        <a href="#approach">Process</a>
+        <a href="#approach">How we work</a>
         <a href="#team">Team</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -406,9 +406,9 @@ export const renderHomepage = (
             <circle class="hero__signal-point" cx="252" cy="84" r="3" />
           </svg>
         </div>
-        <p class="hero__eyebrow" data-reveal>AI. Growth. Apps. Websites.</p>
-        <h1 id="hero-heading" data-reveal>Whatever your business needs next, we build it.</h1>
-        <p data-reveal>Bring us the problem. We will turn it into something useful.</p>
+        <p class="hero__eyebrow" data-reveal>Development. Bug fixes. Automation.</p>
+        <h1 id="hero-heading" data-reveal>We build, fix and connect business software.</h1>
+        <p data-reveal>We build new applications, fix existing software and connect your systems.</p>
         ${renderHeroPipeline()}
         ${renderContactActions(config, "hero__actions")}
       </section>
@@ -423,8 +423,8 @@ export const renderHomepage = (
       </section>
       <section id="approach" class="journey" aria-labelledby="approach-heading">
         <div class="journey__heading" data-reveal>
-          <p>What happens next</p>
-          <h2 id="approach-heading">One call. Then we make it simple.</h2>
+          <p>How we work</p>
+          <h2 id="approach-heading">Assess, agree, build, hand over.</h2>
         </div>
         <ol class="journey__moments" data-reveal>
           <li class="journey__moment">
@@ -432,30 +432,31 @@ export const renderHomepage = (
             <span class="journey__signal" aria-hidden="true">
               <svg viewBox="0 0 48 48"><path d="M12 29c6-10 14-16 24-18M12 29h9M12 29v-9" /><circle cx="36" cy="11" r="3" /></svg>
             </span>
-            <div><h3>Tell us what’s stuck.</h3><p>No polished brief needed.</p></div>
+            <div><h3>Tell us what is happening.</h3><p>Describe the problem or the goal. No polished brief needed.</p></div>
           </li>
           <li class="journey__moment">
             <span class="journey__number">02</span>
             <span class="journey__signal" aria-hidden="true">
               <svg viewBox="0 0 48 48"><path d="M9 24h27M29 16l8 8-8 8" /></svg>
             </span>
-            <div><h3>Get a clear next move.</h3><p>We explain the simplest useful route.</p></div>
+            <div><h3>We assess and agree the scope.</h3><p>You get a short written assessment, a proposed scope and an estimate before work starts.</p></div>
           </li>
           <li class="journey__moment">
             <span class="journey__number">03</span>
             <span class="journey__signal" aria-hidden="true">
               <svg viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="24" rx="2" /><path d="M17 40h14M24 34v6M13 16h22" /></svg>
             </span>
-            <div><h3>See something real, early.</h3><p>React to progress, not paperwork.</p></div>
+            <div><h3>We build and test.</h3><p>You see progress early and we test against the agreed scope.</p></div>
           </li>
           <li class="journey__moment">
             <span class="journey__number">04</span>
             <span class="journey__signal" aria-hidden="true">
               <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" /><path d="m16 24 6 6 11-13" /></svg>
             </span>
-            <div><h3>Move forward with confidence.</h3><p>We launch it with you.</p></div>
+            <div><h3>Handover you can rely on.</h3><p>We hand over with documentation and agree what happens after delivery.</p></div>
           </li>
         </ol>
+        <p class="journey__note" data-reveal>For a bug, the first step is a diagnosis. We confirm the cause before we promise a fix.</p>
       </section>
       <section id="team" class="team" aria-labelledby="team-heading">
         <div class="team__heading">
@@ -466,7 +467,8 @@ export const renderHomepage = (
       </section>
       <section class="contact" id="contact" aria-labelledby="contact-heading">
         <h2 id="contact-heading" data-reveal>Whatever you need to move forward, call us.</h2>
-        <p data-reveal>One click starts the conversation.</p>
+        <p data-reveal>Tell us what your business needs, which system is involved and what outcome you want. For a bug, include the steps that trigger it and any deadline that matters.</p>
+        <p class="contact-caution" data-reveal>Please do not send passwords or confidential customer data in your first message.</p>
         <div data-reveal>${renderContactActions(config, "contact__actions")}</div>
         <dl class="contact-details" data-reveal>
           <div><dt>Phone</dt><dd>${escapeHtml(config.displayPhone)}</dd></div>

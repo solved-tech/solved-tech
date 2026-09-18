@@ -20,16 +20,16 @@ describe("homepage renderer", () => {
       '<div class="hero__signal" aria-hidden="true">',
     );
     expect(html).toContain(
-      "Whatever your business needs next, we build it.",
+      "We build, fix and connect business software.",
     );
     expect(html).toContain(
-      "Bring us the problem. We will turn it into something useful.",
+      "We build new applications, fix existing software and connect your systems.",
     );
   });
 
   it("uses the approved hero eyebrow service order", () => {
     expect(html).toContain(
-      '<p class="hero__eyebrow" data-reveal>AI. Growth. Apps. Websites.</p>',
+      '<p class="hero__eyebrow" data-reveal>Development. Bug fixes. Automation.</p>',
     );
     expect(html).not.toContain("Websites. Apps. Growth. AI.");
   });
@@ -41,7 +41,7 @@ describe("homepage renderer", () => {
       ...html.matchAll(/<text y="43">([^<]+)<\/text>/g),
     ].map(([, label]) => label);
 
-    expect(pipeline).toBeGreaterThan(html.indexOf("Bring us the problem."));
+    expect(pipeline).toBeGreaterThan(html.indexOf("connect your systems."));
     expect(pipeline).toBeLessThan(actions);
     expect(html.match(/class="hero-pipeline__node(?:\s|")/g)).toHaveLength(7);
     expect(html).toContain("hero-pipeline__node--ai");
@@ -91,6 +91,7 @@ describe("homepage renderer", () => {
     expect(html).toContain('<section class="contact');
     expect(html).toContain('href="#team">Team</a>');
     expect(html).toContain('href="#services">Services</a>');
+    expect(html).toContain('href="#approach">How we work</a>');
     expect(html).not.toContain(">Products<");
   });
 
@@ -167,7 +168,7 @@ describe("homepage renderer", () => {
     expect(html).toContain(
       '<h2 id="services-heading" data-reveal>What do you need?</h2>',
     );
-    expect(html).toContain("<p>What happens next</p>");
+    expect(html).toContain("<p>How we work</p>");
   });
 
   it("reveals each service artwork when the diagram reaches the viewport", () => {
@@ -224,20 +225,37 @@ describe("homepage renderer", () => {
     );
   });
 
-  it("explains what happens after a client calls", () => {
-    expect(html).toContain("What happens next");
-    expect(html).toContain("One call. Then we make it simple.");
+  it("explains assessment, scope, build and handover", () => {
+    expect(html).toContain("How we work");
+    expect(html).toContain("Assess, agree, build, hand over.");
     expect(html.match(/class="journey__moment"/g)).toHaveLength(4);
     expect(html.match(/class="journey__signal"/g)).toHaveLength(4);
-    expect(html).toContain("Tell us what’s stuck.");
-    expect(html).toContain("No polished brief needed.");
-    expect(html).toContain("Get a clear next move.");
-    expect(html).toContain("We explain the simplest useful route.");
-    expect(html).toContain("See something real, early.");
-    expect(html).toContain("React to progress, not paperwork.");
-    expect(html).toContain("Move forward with confidence.");
-    expect(html).toContain("We launch it with you.");
-    expect(html).not.toContain("Three steps. No fog.");
+    expect(html).toContain("Tell us what is happening.");
+    expect(html).toContain("Describe the problem or the goal. No polished brief needed.");
+    expect(html).toContain("We assess and agree the scope.");
+    expect(html).toContain(
+      "You get a short written assessment, a proposed scope and an estimate before work starts.",
+    );
+    expect(html).toContain("We build and test.");
+    expect(html).toContain("You see progress early and we test against the agreed scope.");
+    expect(html).toContain("Handover you can rely on.");
+    expect(html).toContain("We hand over with documentation and agree what happens after delivery.");
+    expect(html).toContain(
+      '<p class="journey__note" data-reveal>For a bug, the first step is a diagnosis. We confirm the cause before we promise a fix.</p>',
+    );
+    expect(html).not.toContain("One call. Then we make it simple.");
+  });
+
+  it("tells a visitor what to send in the first message", () => {
+    const contact = html.match(/<section class="contact"[\s\S]*?<\/section>/)?.[0];
+
+    expect(contact).toContain(
+      "Tell us what your business needs, which system is involved and what outcome you want. For a bug, include the steps that trigger it and any deadline that matters.",
+    );
+    expect(contact).toContain(
+      '<p class="contact-caution" data-reveal>Please do not send passwords or confidential customer data in your first message.</p>',
+    );
+    expect(contact).not.toContain("One click starts the conversation.");
   });
 
   it("uses the professional logo lockup in the site header", () => {

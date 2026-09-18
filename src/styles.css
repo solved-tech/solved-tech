@@ -1269,6 +1269,12 @@ main > section + section {
   gap: clamp(2.5rem, 6vw, 5rem);
 }
 
+.journey__note {
+  max-width: 62ch;
+  color: var(--ink-muted);
+  font-size: var(--type-small);
+}
+
 .journey__heading p,
 .journey__number {
   color: var(--accent);
@@ -1661,6 +1667,11 @@ main > section + section {
   border-color: var(--line-strong);
   background-color: transparent;
   color: var(--ink);
+}
+
+.contact-caution {
+  color: var(--ink-muted);
+  font-size: var(--type-small);
 }
 
 .contact-details {

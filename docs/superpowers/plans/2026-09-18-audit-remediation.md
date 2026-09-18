@@ -112,7 +112,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 3 | F11 (preview) | [x] |
 | 4 | F01 | [x] |
 | 5 | F02, F07 | [x] |
-| 6 | F04, hero copy | [ ] |
+| 6 | F04, hero copy | [x] |
 | 7 | F14 | [ ] |
 | 8 | F08 | [ ] |
 | 9 | F09 | [ ] |
@@ -894,7 +894,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
 
 **Steps:**
 
-- [ ] **Step 1: Update pinned strings in `tests/render.test.ts`:**
+- [x] **Step 1: Update pinned strings in `tests/render.test.ts`:**
   - `"makes the hero a direct product offer"`: replace `"Whatever your business needs next, we build it."` with `"We build, fix and connect business software."` and `"Bring us the problem. We will turn it into something useful."` with `"We build new applications, fix problems in existing software and connect the systems your team relies on."`.
   - `"uses the approved hero eyebrow service order"`: the expected eyebrow becomes `'<p class="hero__eyebrow" data-reveal>Development. Bug fixes. Automation.</p>'`; keep the `not.toContain` line.
   - `"places the seven-service pipeline above the hero actions"`: replace `html.indexOf("Bring us the problem.")` with `html.indexOf("connect the systems your team relies on.")`.
@@ -937,9 +937,9 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
   });
 ```
 
-- [ ] **Step 2:** Run `npm test`. Expect failures only in the tests edited above.
+- [x] **Step 2:** Run `npm test`. Expect failures only in the tests edited above.
 
-- [ ] **Step 3: Edit `src/render.ts`.**
+- [x] **Step 3: Edit `src/render.ts`.**
   - Eyebrow: `<p class="hero__eyebrow" data-reveal>Development. Bug fixes. Automation.</p>`
   - H1: `<h1 id="hero-heading" data-reveal>We build, fix and connect business software.</h1>`
   - Lead: `<p data-reveal>We build new applications, fix problems in existing software and connect the systems your team relies on.</p>`
@@ -958,7 +958,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
         <p class="contact-caution" data-reveal>Please do not send passwords or confidential customer data in your first message.</p>
     ```
 
-- [ ] **Step 4: Add CSS** in `src/styles.css`. Immediately after the `.journey {` rule's closing brace:
+- [x] **Step 4: Add CSS** in `src/styles.css`. Immediately after the `.journey {` rule's closing brace:
 
 ```css
 .journey__note {
@@ -977,9 +977,9 @@ Immediately before `.contact-details {` (added in Task 4):
 }
 ```
 
-- [ ] **Step 5:** Run `npm test` (expect 86 passing) and `npm run check`.
+- [x] **Step 5:** Run `npm test` (expect 86 passing) and `npm run check`.
 
-- [ ] **Step 6:** Run `npx playwright test --project=stress-compact --project=phone-landscape --project=uk-desktop`. The hero tests (`"hero contact actions stay in complete bounds"` and the three `"hero geometry is continuous …"` tests) are the ones at risk. If `stress-compact` fails **only** on hero action bounds, shorten the lead paragraph to `We build new applications, fix existing software and connect your systems.` in both `src/render.ts` and the two test strings that pin it, then rerun once. Do not change CSS.
+- [x] **Step 6:** Run `npx playwright test --project=stress-compact --project=phone-landscape --project=uk-desktop`. The hero tests (`"hero contact actions stay in complete bounds"` and the three `"hero geometry is continuous …"` tests) are the ones at risk. If `stress-compact` fails **only** on hero action bounds, shorten the lead paragraph to `We build new applications, fix existing software and connect your systems.` in both `src/render.ts` and the two test strings that pin it, then rerun once. Do not change CSS.
 
 **Downstream:** covered in Step 1. The e2e `#hero-heading + p` prose-width check still applies to the new lead.
 
