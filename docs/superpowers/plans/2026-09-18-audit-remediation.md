@@ -125,7 +125,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 
 ### 0.9 Status — 18 September 2026
 
-Tasks 1–14 are implemented, tested and committed. Task 15 (launch gate) is blocked on human inputs only.
+Tasks 1–14 are implemented, tested and committed. Task 15 (launch gate) is blocked on a single product decision, D7 — whether the privacy notice stays `noindex` after launch — and on founder sign-off for going live; every other input it needs is in the tree.
 
 | Task | Commit | Notes |
 | --- | --- | --- |
@@ -160,9 +160,9 @@ Tasks 1–14 are implemented, tested and committed. Task 15 (launch gate) is blo
 
 **Task 14 follow-up implemented.** The hero pipeline's seven inline `style="--pipeline-delay: …"` attributes are gone: `renderHeroPipeline` emits a per-node modifier class and the delays live in `src/styles.css` as `--pipeline-delay` declarations keyed by that modifier. The CSP's `style-src` is now `'self'` with no `'unsafe-inline'`. `tests/render.test.ts` pins the measured crossing times against the stylesheet and asserts the homepage markup contains no inline styles; `scripts/check-csp.mts` passes on all five prerendered pages, and that check is the regression guard, because any inline style would log a CSP violation. `docs/hosting/security-headers.md` records the outcome under "Inline styles".
 
-**Task 15 is blocked on one asset.** The only precondition still missing is `public/brand/solved-tech-social.png` (1200×630). Once it exists: set `siteStatus = { launched: true, productionOrigin: "https://solved-tech.github.io" }`, run the full 13-project e2e matrix, `npm run check`, `npm run build`, `node scripts/check-csp.mts`, confirm the launch artefacts (`robots` removed, sitemap and `robots.txt` written, JSON-LD present), push, then run the live header checks from `docs/hosting/security-headers.md`. Optional extras still open: the case-study half of H4, H3 (Remus portrait ≥680 px — no larger source exists in the repo) and H6.
+**Task 15 is blocked on D7, not on an asset (updated 18 September 2026).** `public/brand/solved-tech-social.png` now exists at 1200×630, and Step 1's four checks all pass: no `[[` tokens in `src/content.ts`, `placeholder: false`, every service page `approved: true`. The switch is deliberately **not** flipped. Deferred item **D7** — whether the privacy notice stays `noindex` (`indexable: false` in `src/head.ts`) once the site is launched — needs a founder decision first, and so does the go-live itself, because `launched: true` makes the site indexable and writes the canonical, JSON-LD, sitemap and `robots.txt`. Once D7 is decided: set `siteStatus = { launched: true, productionOrigin: "https://solved-tech.github.io" }`, run the full 13-project e2e matrix, `npm run check`, `npm run build`, `node scripts/check-csp.mts`, confirm the launch artefacts (`robots` removed, sitemap and `robots.txt` written, JSON-LD present), then commit. **H8** (privacy notice recipients: the WhatsApp/Meta transfer and the unnamed email processor) is not ready and launches as a recorded gap — the notice must not be rewritten without it. Optional extras still open: the case-study half of H4, H3 (Remus portrait ≥680 px — no larger source exists in the repo) and H6.
 
-**Resume:** a new session picks up Task 15 once the remaining inputs are committed; everything else is done.
+**Resume:** a new session picks up Task 15 as soon as D7 is decided; every other task in both plans is done and committed.
 
 ---
 
@@ -3341,7 +3341,7 @@ If `check-csp.mts` reports a CSP violation, read the violated directive from the
 
 **Steps:**
 
-- [ ] **Step 1: Verify the human inputs are in the tree.** Run:
+- [x] **Step 1: Verify the human inputs are in the tree.** Run:
 
 ```bash
 grep -c '\[\[' src/content.ts                       # must print 0

@@ -68,7 +68,7 @@ Everything in main-plan Section 0 stands. Differences for this file:
 | D4 | Mobile menu: close on outside pointer-down / focus leaving the nav | Not in F06 acceptance; behaviour addition |
 | D5 | "(opens in new tab)" hint on WhatsApp and LinkedIn links; `noopener` alongside `noreferrer` | Cosmetic for AT users; no acceptance criterion |
 | D6 | Persist the motion-pause preference in `sessionStorage` | Not in F08 acceptance |
-| D7 | `privacyPage.indexable: false` keeps the notice `noindex` after launch | Product decision; flag to founders before Task 15 |
+| D7 | `privacyPage.indexable: false` keeps the notice `noindex` after launch | **Open — blocks Task 15.** Asked on 18 September 2026 and held pending a founder decision, so `siteStatus.launched` stays `false` |
 | D8 | `tsc` does not cover `scripts/*.mts` (needs `@types/node`, a new dev dependency) | Dependency change requires approval |
 
 ---
@@ -1007,6 +1007,8 @@ add
 ## 4. After these tasks
 
 Run main-plan **Task 15** (launch gate) next. Before flipping `siteStatus.launched`, obtain a decision on deferred item **D7** (`privacyPage.indexable`) and confirm whether **H8** (privacy recipients) is ready; if H8 arrives, apply it as a content-only commit before Task 15 (`src/content.ts` and `tests/content.test.ts` only).
+
+**Status, 18 September 2026:** Tasks 16–21 are done and committed. Every one of Task 15's Step 1 checks now passes — no `[[` tokens, `placeholder: false`, all service pages `approved: true`, and `public/brand/solved-tech-social.png` exists at 1200×630 — so the launch is **held only at D7**. The founders have not yet decided whether the privacy notice becomes indexable, so `siteStatus` stays `{ launched: false }` and nothing is flipped. H8 is not ready either; because the notice must not be rewritten without it, H8 stays a recorded gap rather than a launch blocker.
 
 ## 5. Test-count ledger
 
