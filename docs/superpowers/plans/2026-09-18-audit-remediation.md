@@ -148,9 +148,11 @@ Tasks 1–14 are implemented, tested and committed. Task 15 (launch gate) is blo
 
 **Verified at `4c0a775`:** 126 unit tests, `npm run check`, `npm run build` (prerenders homepage, privacy and the three service pages), `node scripts/check-csp.mts` ("CSP check passed" on all five pages), plus the e2e project subsets each task prescribes. `main` is current.
 
-**Task 15 is blocked.** At `4c0a775` its Step 1 checks report `grep -c '\[\[' src/content.ts` → 8, `placeholder: true`, `approved: false` ×3, and no `public/brand/solved-tech-social.png`. Outstanding inputs: H1 (real contact details), H2 (privacy facts), H4 (case studies + FAQ answers), H5 (production origin, 1200×630 social preview, host confirmation), H7 (service-page approval). H3 (Remus portrait ≥680 px) and H6 (analytics vendor) also remain open. Never invent these.
+**Inputs received.** H1 is applied at `12b3bcb`: `contactConfig` carries the real phone `+447903833061` (displayed `+44 7903 833061`), WhatsApp `447903833061` and email `contact@solvedtech.co.uk`, with `placeholder: false`. The `.contact-note` e2e assertion was removed, and the trial-email sentinel had to be dropped from the content guard in `tests/content.test.ts`: the live address *was* that sentinel, so `expect(contactConfig.placeholder).toBe(isTrial)` could never pass once the real values landed. All three channels are confirmed monitored. H2 is partially known from Companies House (company 16942628): **Solved Tech Limited**, registered office **31 Glendale Gardens, Wembley, England, HA9 8PR**. Still needed for H2: retention period, call/WhatsApp carrier, email provider, notice date, and the data-protection sign-off.
 
-**Resume:** a new session picks up Task 15 once those inputs are committed; everything before it is done.
+**Task 15 is still blocked.** Step 1 checks at `12b3bcb`: `grep -c '\[\[' src/content.ts` → 8 (four privacy lines, four FAQ lines), `placeholder: false`, `approved: false` ×3, `caseStudies: []`, and no `public/brand/solved-tech-social.png`. Outstanding inputs: H2 (remainder), H4 (case studies + FAQ answers), H5 (production origin, 1200×630 social preview, host confirmation) and H7 (service-page approval). H3 (Remus portrait ≥680 px) and H6 (analytics vendor) also remain open. Never invent these.
+
+**Resume:** a new session picks up Task 15 once the remaining inputs are committed; everything else is done.
 
 ---
 
