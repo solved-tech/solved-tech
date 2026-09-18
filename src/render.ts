@@ -1,4 +1,9 @@
-import type { ContactConfig, ProductOffer, SiteContent } from "./content";
+import type {
+  ContactConfig,
+  PrivacyContent,
+  ProductOffer,
+  SiteContent,
+} from "./content";
 
 const escapeHtml = (value: string): string =>
   value.replace(
@@ -305,6 +310,30 @@ const renderServiceArt = (id: ProductOffer["id"]): string => {
   }
 };
 
+export const renderSiteHeader = (baseUrl: string, homeHref: string): string => `
+    <div id="top" class="page-top"></div>
+    <header class="site-header">
+      <a class="wordmark" href="${escapeHtml(homeHref)}#top" aria-label="Solved Tech home">
+        <img src="${escapeHtml(publicAssetUrl("/brand/solved-tech-logo-dark.svg", baseUrl))}" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="primary-navigation" aria-label="Primary navigation">
+        <a href="${escapeHtml(homeHref)}#services">Services</a>
+        <a href="${escapeHtml(homeHref)}#approach">How we work</a>
+        <a href="${escapeHtml(homeHref)}#team">Team</a>
+        <a href="${escapeHtml(homeHref)}#contact">Contact</a>
+      </nav>
+    </header>`;
+
+export const renderSiteFooter = (baseUrl: string): string => `
+    <footer>
+      <p>&copy; ${new Date().getFullYear()} Solved Tech</p>
+      <a href="${escapeHtml(publicAssetUrl("/privacy/", baseUrl))}">Privacy notice</a>
+      <a href="#top">Back to top</a>
+    </footer>`;
+
 export const renderHomepage = (
   content: SiteContent,
   config: ContactConfig,
@@ -379,21 +408,7 @@ export const renderHomepage = (
       <code data-language="terraform">resource "progress" "next" {}</code>
       <code data-language="shell">$ ship --when-ready</code>
     </div>
-    <div id="top" class="page-top"></div>
-    <header class="site-header">
-      <a class="wordmark" href="#top" aria-label="Solved Tech home">
-        <img src="${escapeHtml(publicAssetUrl("/brand/solved-tech-logo-dark.svg", baseUrl))}" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
-      </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-      <nav id="primary-navigation" aria-label="Primary navigation">
-        <a href="#services">Services</a>
-        <a href="#approach">How we work</a>
-        <a href="#team">Team</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+    ${renderSiteHeader(baseUrl, "")}
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero__signal" aria-hidden="true">
@@ -474,12 +489,42 @@ export const renderHomepage = (
           <div><dt>Phone</dt><dd>${escapeHtml(config.displayPhone)}</dd></div>
           <div><dt>Email</dt><dd>${escapeHtml(config.email)}</dd></div>
         </dl>
+        <p class="contact-privacy" data-reveal><a href="${escapeHtml(publicAssetUrl("/privacy/", baseUrl))}">How we handle the details you send us</a></p>
         ${config.placeholder ? `<p class="contact-note"><strong>Trial contact details:</strong> ${escapeHtml(config.displayPhone)} and ${escapeHtml(config.email)} are non-production placeholders and must be replaced before launch.</p>` : ""}
       </section>
     </main>
-    <footer>
-      <p>&copy; ${new Date().getFullYear()} Solved Tech</p>
-      <a href="#top">Back to top</a>
-    </footer>
+    ${renderSiteFooter(baseUrl)}
+  `;
+};
+
+export const renderPrivacyPage = (
+  content: PrivacyContent,
+  config: ContactConfig,
+  baseUrl: string = import.meta.env.BASE_URL,
+): string => {
+  const sections = content.sections
+    .map(
+      ({ heading, paragraphs }) => `
+        <section>
+          <h2>${escapeHtml(heading)}</h2>
+          ${paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+        </section>`,
+    )
+    .join("");
+
+  return `
+    ${renderSiteHeader(baseUrl, baseUrl)}
+    <main id="main-content" class="page">
+      <article class="prose" aria-labelledby="privacy-heading">
+        <p class="page__eyebrow">Last updated ${escapeHtml(content.updated)}</p>
+        <h1 id="privacy-heading">${escapeHtml(content.title)}</h1>
+        ${sections}
+        <section>
+          <h2>Contact</h2>
+          <p>Email ${escapeHtml(config.email)} or call ${escapeHtml(config.displayPhone)} with any question about this notice or to exercise your rights.</p>
+        </section>
+      </article>
+    </main>
+    ${renderSiteFooter(baseUrl)}
   `;
 };

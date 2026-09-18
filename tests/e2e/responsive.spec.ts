@@ -127,7 +127,7 @@ test("interactive targets have complete bounds and minimum touch heights", async
   }
 
   const footerLinks = page.locator("footer a");
-  await expect(footerLinks).toHaveCount(1);
+  await expect(footerLinks).toHaveCount(2);
   for (const link of await footerLinks.all()) {
     await link.scrollIntoViewIfNeeded();
     await assertMinHeight(link, 44);
@@ -616,5 +616,22 @@ test("reduced motion renders completed static states", async ({ page }, testInfo
     pipelineMotion.signalAnimation === "none" || pipelineMotion.signalAnimation === "",
   ).toBeTruthy();
 
+  assertNoRuntimeErrors(collector);
+});
+
+test("privacy notice page shares the header and footer", async ({ page }) => {
+  const collector = setupErrorCollection(page);
+
+  await page.goto("privacy/");
+  await page.waitForLoadState("domcontentloaded");
+  expect(new URL(page.url()).pathname).toBe("/solved-tech/privacy/");
+
+  await expect(page.locator("h1")).toHaveText("Privacy notice");
+  await expect(page.locator("#primary-navigation a")).toHaveCount(4);
+  await expect(
+    page.locator('#primary-navigation a[href="/solved-tech/#services"]'),
+  ).toHaveCount(1);
+  await expect(page.locator('footer a[href="/solved-tech/privacy/"]')).toHaveCount(1);
+  await assertNoDocumentOverflow(page);
   assertNoRuntimeErrors(collector);
 });

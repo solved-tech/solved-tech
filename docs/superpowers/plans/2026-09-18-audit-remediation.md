@@ -113,7 +113,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 4 | F01 | [x] |
 | 5 | F02, F07 | [x] |
 | 6 | F04, hero copy | [x] |
-| 7 | F14 | [ ] |
+| 7 | F14 | [x] |
 | 8 | F08 | [ ] |
 | 9 | F09 | [ ] |
 | 10 | F16 | [ ] |
@@ -1005,7 +1005,7 @@ Immediately before `.contact-details {` (added in Task 4):
 
 **Steps:**
 
-- [ ] **Step 1: Move enhancement code.** Create `src/enhance.ts` containing, verbatim, everything from `src/main.ts` between the line `import "./styles.css";` and the line `const start = (view: Window): void => {` — that is `stagger`, `setupRevealMotion`, `setupPipelineMotion`, `setupHeroInteraction`, `setupMobileMenu`, `setupHeaderOffset`, `setupScrollProgress`, `prefersReducedMotion`. Add `export` to `stagger` and `prefersReducedMotion`. Then reduce `src/main.ts` to:
+- [x] **Step 1: Move enhancement code.** Create `src/enhance.ts` containing, verbatim, everything from `src/main.ts` between the line `import "./styles.css";` and the line `const start = (view: Window): void => {` — that is `stagger`, `setupRevealMotion`, `setupPipelineMotion`, `setupHeroInteraction`, `setupMobileMenu`, `setupHeaderOffset`, `setupScrollProgress`, `prefersReducedMotion`. Add `export` to `stagger` and `prefersReducedMotion`. Then reduce `src/main.ts` to:
 
 ```ts
 /// <reference types="vite/client" />
@@ -1064,7 +1064,7 @@ if (typeof window !== "undefined") {
 
 The `start` body above is today's body, unchanged. Run `npm test` and `npm run check` — both must still pass (the re-exports keep `tests/motion.test.ts` working).
 
-- [ ] **Step 2: Add privacy content to `src/content.ts`** (append at the end):
+- [x] **Step 2: Add privacy content to `src/content.ts`** (append at the end):
 
 ```ts
 export interface PrivacySection {
@@ -1123,7 +1123,7 @@ export const privacyContent: PrivacyContent = {
 };
 ```
 
-- [ ] **Step 3: Add tests to `tests/content.test.ts`** (import `privacyContent` alongside the others):
+- [x] **Step 3: Add tests to `tests/content.test.ts`** (import `privacyContent` alongside the others):
 
 ```ts
   it("covers the privacy topics the audit requires", () => {
@@ -1158,7 +1158,7 @@ export const privacyContent: PrivacyContent = {
   });
 ```
 
-- [ ] **Step 4: Add renderer tests.** In `tests/render.test.ts` import `privacyContent` and `renderPrivacyPage`, update `"renders semantic navigation and contact landmarks"` to also expect `'<a href="/privacy/">Privacy notice</a>'`, and append a new describe block:
+- [x] **Step 4: Add renderer tests.** In `tests/render.test.ts` import `privacyContent` and `renderPrivacyPage`, update `"renders semantic navigation and contact landmarks"` to also expect `'<a href="/privacy/">Privacy notice</a>'`, and append a new describe block:
 
 ```ts
 describe("privacy page renderer", () => {
@@ -1190,7 +1190,7 @@ describe("privacy page renderer", () => {
 });
 ```
 
-- [ ] **Step 5: Add to `tests/document.test.ts`:**
+- [x] **Step 5: Add to `tests/document.test.ts`:**
 
 ```ts
 const privacyHtml = readFileSync(
@@ -1209,9 +1209,9 @@ describe("privacy document shell", () => {
 });
 ```
 
-- [ ] **Step 6:** Run `npm test`; expect failures only in the new tests. `npm run check` fails until Step 7.
+- [x] **Step 6:** Run `npm test`; expect failures only in the new tests. `npm run check` fails until Step 7.
 
-- [ ] **Step 7: Edit `src/render.ts`.**
+- [x] **Step 7: Edit `src/render.ts`.**
 
   7a. Add two exported renderers above `renderHomepage`. Move the current header markup (from `<div id="top" class="page-top"></div>` through `</header>`) and footer markup (`<footer>…</footer>`) into them; the only edits inside the moved markup are the `${homeHref}` prefixes and the new footer link:
 
@@ -1286,7 +1286,7 @@ export const renderPrivacyPage = (
 
   Add `PrivacyContent` to the type import at the top of the file.
 
-- [ ] **Step 8: Create `privacy/index.html`:**
+- [x] **Step 8: Create `privacy/index.html`:**
 
 ```html
 <!doctype html>
@@ -1306,7 +1306,7 @@ export const renderPrivacyPage = (
 </html>
 ```
 
-- [ ] **Step 9: Create `src/privacy.ts`:**
+- [x] **Step 9: Create `src/privacy.ts`:**
 
 ```ts
 /// <reference types="vite/client" />
@@ -1328,7 +1328,7 @@ setupMobileMenu(app);
 setupScrollProgress(window);
 ```
 
-- [ ] **Step 10: Replace `vite.config.ts` with:**
+- [x] **Step 10: Replace `vite.config.ts` with:**
 
 ```ts
 import { resolve } from "node:path";
@@ -1347,7 +1347,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 11: Add CSS** at the end of `src/styles.css`, before the `/* Preferences` comment block:
+- [x] **Step 11: Add CSS** at the end of `src/styles.css`, before the `/* Preferences` comment block:
 
 ```css
 /* Secondary pages ------------------------------------------------------ */
@@ -1395,9 +1395,9 @@ export default defineConfig({
 }
 ```
 
-- [ ] **Step 12:** Run `npm test` (expect 92 passing), `npm run check`, `npm run build`. Confirm `ls dist/privacy/index.html` exists.
+- [x] **Step 12:** Run `npm test` (expect 92 passing), `npm run check`, `npm run build`. Confirm `ls dist/privacy/index.html` exists.
 
-- [ ] **Step 13: E2E.** In `tests/e2e/responsive.spec.ts` change `await expect(footerLinks).toHaveCount(1);` to `toHaveCount(2)`. Append:
+- [x] **Step 13: E2E.** In `tests/e2e/responsive.spec.ts` change `await expect(footerLinks).toHaveCount(1);` to `toHaveCount(2)`. Append:
 
 ```ts
 test("privacy notice page shares the header and footer", async ({ page }) => {

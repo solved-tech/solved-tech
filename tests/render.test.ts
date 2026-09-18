@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { contactConfig, siteContent } from "../src/content";
-import { renderHomepage } from "../src/render";
+import { contactConfig, privacyContent, siteContent } from "../src/content";
+import { renderHomepage, renderPrivacyPage } from "../src/render";
 
 const escapeRegExp = (value: string): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -92,6 +92,7 @@ describe("homepage renderer", () => {
     expect(html).toContain('href="#team">Team</a>');
     expect(html).toContain('href="#services">Services</a>');
     expect(html).toContain('href="#approach">How we work</a>');
+    expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
     expect(html).not.toContain(">Products<");
   });
 
@@ -416,5 +417,33 @@ describe("homepage renderer", () => {
     ["fix", "ai", "customers", "website", "app", "other"].forEach((id) =>
       expect(html).toContain(`<article id="service-${id}"`),
     );
+  });
+});
+
+describe("privacy page renderer", () => {
+  const html = renderPrivacyPage(privacyContent, contactConfig, "/solved-tech/");
+
+  it("renders the notice with every section and a contact section from config", () => {
+    expect(html.match(/<h1/g)).toHaveLength(1);
+    expect(html).toContain('<h1 id="privacy-heading">Privacy notice</h1>');
+    expect(html.match(/<h2>/g)).toHaveLength(privacyContent.sections.length + 1);
+    expect(html).toContain("<h2>Contact</h2>");
+    expect(html).toContain(contactConfig.email);
+    expect(html).toContain(contactConfig.displayPhone);
+    expect(html).not.toContain("ambient-grid");
+    expect(html).not.toContain("data-reveal");
+  });
+
+  it("points the shared header at the homepage sections", () => {
+    expect(html).toContain('<a class="wordmark" href="/solved-tech/#top"');
+    expect(html).toContain('<a href="/solved-tech/#services">Services</a>');
+    expect(html).toContain('<a href="/solved-tech/#contact">Contact</a>');
+    expect(html).toContain('<nav id="primary-navigation"');
+    expect(html).toContain('<main id="main-content" class="page">');
+  });
+
+  it("links back to the notice and to the top from the footer", () => {
+    expect(html).toContain('<a href="/solved-tech/privacy/">Privacy notice</a>');
+    expect(html).toContain('<a href="#top">Back to top</a>');
   });
 });

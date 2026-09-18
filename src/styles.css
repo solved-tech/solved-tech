@@ -1772,6 +1772,50 @@ footer a:hover {
   transform: none;
 }
 
+/* Secondary pages ------------------------------------------------------ */
+
+.page {
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding: clamp(3rem, 8vh, 6rem) var(--gutter) var(--section-space);
+}
+
+.prose {
+  display: grid;
+  gap: 1rem;
+  max-width: 68ch;
+}
+
+.prose h1 {
+  font-size: var(--type-title);
+}
+
+.prose section {
+  display: grid;
+  gap: 0.75rem;
+  margin-block-start: 1.5rem;
+}
+
+.prose h2 {
+  font-size: var(--type-heading);
+}
+
+.page__eyebrow {
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contact-privacy a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink-muted);
+  text-underline-offset: 0.3em;
+}
+
 /* Preferences ----------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {

@@ -143,3 +143,59 @@ export const siteContent: SiteContent = {
     },
   ],
 };
+
+export interface PrivacySection {
+  heading: string;
+  paragraphs: string[];
+}
+
+export interface PrivacyContent {
+  title: string;
+  updated: string;
+  sections: PrivacySection[];
+}
+
+export const privacyContent: PrivacyContent = {
+  title: "Privacy notice",
+  updated: "[[PRIVACY_UPDATED_DATE]]",
+  sections: [
+    {
+      heading: "Who we are",
+      paragraphs: [
+        "Solved Tech is operated by [[COMPANY_LEGAL_NAME]], [[COMPANY_REGISTERED_ADDRESS]]. We are the data controller for the personal data described in this notice.",
+      ],
+    },
+    {
+      heading: "What we collect and why",
+      paragraphs: [
+        "When you call us, message us on WhatsApp or email us, we receive the contact details you use and the content of your message. We use this information to answer your enquiry, to assess the work you ask about and to prepare a proposal.",
+        "This website does not use cookies, analytics scripts or contact forms.",
+      ],
+    },
+    {
+      heading: "Legal basis",
+      paragraphs: [
+        "We rely on our legitimate interest in responding to business enquiries and, where we agree to work together, on taking steps to enter into a contract with you.",
+      ],
+    },
+    {
+      heading: "Who receives your data",
+      paragraphs: [
+        "Calls and WhatsApp messages are carried by [[PHONE_AND_WHATSAPP_PROVIDER]]. Email is processed by [[EMAIL_PROVIDER]]. We do not sell or share your details for marketing.",
+      ],
+    },
+    {
+      heading: "How long we keep it",
+      paragraphs: [
+        "We keep enquiry correspondence for [[RETENTION_PERIOD]] after our last contact, or for the duration of a contract and the period required afterwards for accounting and legal purposes.",
+      ],
+    },
+    {
+      heading: "Your rights",
+      paragraphs: [
+        "You can ask for access to, correction of or deletion of your personal data, object to or restrict our processing, and ask for a copy of the data you gave us. You can also complain to the Information Commissioner's Office at ico.org.uk.",
+      ],
+    },
+  ],
+};
+

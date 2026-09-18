@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contactConfig, siteContent, siteStatus } from "../src/content";
+import { contactConfig, privacyContent, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
   it("uses the approved commercial service order with bug fixing first", () => {
@@ -115,5 +115,36 @@ describe("site content", () => {
       .join(" ");
 
     expect(productCopy).not.toMatch(/\b(?:SaaS|APIs?|agentic|MCP|SEO)\b/i);
+  });
+
+  it("covers the privacy topics the audit requires", () => {
+    expect(privacyContent.sections.map(({ heading }) => heading)).toEqual([
+      "Who we are",
+      "What we collect and why",
+      "Legal basis",
+      "Who receives your data",
+      "How long we keep it",
+      "Your rights",
+    ]);
+    expect(privacyContent.sections.every(({ paragraphs }) => paragraphs.length > 0)).toBe(true);
+  });
+
+  it("refuses to launch with unfilled privacy placeholders", () => {
+    const tokens = JSON.stringify(privacyContent).match(/\[\[[A-Z_]+\]\]/g) ?? [];
+
+    if (siteStatus.launched) {
+      expect(tokens).toEqual([]);
+    } else {
+      expect(new Set(tokens)).toEqual(
+        new Set([
+          "[[PRIVACY_UPDATED_DATE]]",
+          "[[COMPANY_LEGAL_NAME]]",
+          "[[COMPANY_REGISTERED_ADDRESS]]",
+          "[[PHONE_AND_WHATSAPP_PROVIDER]]",
+          "[[EMAIL_PROVIDER]]",
+          "[[RETENTION_PERIOD]]",
+        ]),
+      );
+    }
   });
 });
