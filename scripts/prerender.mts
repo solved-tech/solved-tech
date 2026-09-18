@@ -52,7 +52,7 @@ try {
 
   const sitemap = head.renderSitemap(siteStatus, pages.map(({ page }) => page), baseUrl);
 
-  if (sitemap) {
+  if (sitemap && siteStatus.launched) {
     const sitemapUrl = new URL(`${baseUrl}sitemap.xml`, siteStatus.productionOrigin).toString();
 
     writeFileSync(resolve(distDir, "sitemap.xml"), sitemap);

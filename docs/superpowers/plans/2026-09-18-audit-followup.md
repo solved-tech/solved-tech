@@ -22,7 +22,7 @@ Everything in main-plan Section 0 stands. Differences for this file:
 | Task | Fixes | Status |
 | --- | --- | --- |
 | 16 | Red `wide-desktop` e2e project; assertion-less test | [x] |
-| 17 | CSP `<meta>` placed after the script/stylesheet; silent `noindex` on launch; `img-src data:` | [ ] |
+| 17 | CSP `<meta>` placed after the script/stylesheet; silent `noindex` on launch; `img-src data:` | [x] |
 | 18 | CSP verifier not wired into CI, undeclared import, weak signal; workflow permissions; `.nvmrc` | [ ] |
 | 19 | Client re-render discards prerendered markup (paint → blank → fade) | [ ] |
 | 20 | Motion toggle announces two conflicting states | [ ] |
@@ -145,7 +145,7 @@ Leave exactly one blank line between the hero-lead test and the `reduced motion 
 
 **Steps:**
 
-- [ ] **Step 1: Add three failing tests** at the end of the `describe("prerender injection")` block in `tests/head.test.ts` (after the `refuses a shell without the mount` test):
+- [x] **Step 1: Add three failing tests** at the end of the `describe("prerender injection")` block in `tests/head.test.ts` (after the `refuses a shell without the mount` test):
 
 ```ts
   it("places injected head tags right after the charset, ahead of every link and script", () => {
@@ -188,7 +188,7 @@ Leave exactly one blank line between the hero-lead test and the `reduced motion 
   });
 ```
 
-- [ ] **Step 2: Update two existing assertions** in `tests/head.test.ts`:
+- [x] **Step 2: Update two existing assertions** in `tests/head.test.ts`:
 
 In `strips noindex and injects tags for indexable pages after launch`, replace
 
@@ -216,9 +216,9 @@ with
     expect(directives["img-src"]).toEqual(["'self'"]);
 ```
 
-- [ ] **Step 3:** Run `npm test`. Expect exactly 5 failures: the three new tests, `strips noindex and injects tags for indexable pages after launch`, and `declares a policy that forbids inline and third-party scripts`.
+- [x] **Step 3:** Run `npm test`. Expect exactly 5 failures: the three new tests, `strips noindex and injects tags for indexable pages after launch`, and `declares a policy that forbids inline and third-party scripts`.
 
-- [ ] **Step 4: Edit `src/head.ts`.** Directly under the line
+- [x] **Step 4: Edit `src/head.ts`.** Directly under the line
 
 ```ts
 const MOUNT = '<div id="app"></div>';
@@ -264,7 +264,7 @@ with
 
 Finally, in `CONTENT_SECURITY_POLICY`, replace `"img-src 'self' data:",` with `"img-src 'self'",`.
 
-- [ ] **Step 5: Edit `scripts/prerender.mts`.** Replace
+- [x] **Step 5: Edit `scripts/prerender.mts`.** Replace
 
 ```ts
   if (sitemap) {
@@ -276,7 +276,7 @@ with
   if (sitemap && siteStatus.launched) {
 ```
 
-- [ ] **Step 6: Edit `docs/hosting/security-headers.md`.** Replace the paragraph sentence
+- [x] **Step 6: Edit `docs/hosting/security-headers.md`.** Replace the paragraph sentence
 
 ```
 cannot be expressed in `<meta>` at all, or because a header is the authoritative form.
@@ -301,7 +301,7 @@ with
 `frame-ancestors`, `report-to`/`report-uri` and `sandbox` are ignored in `<meta>`; the header adds them
 ```
 
-- [ ] **Step 7:** Run `npm test` (135 passed), `npm run check`, `npm run build`. Then confirm placement in the built output:
+- [x] **Step 7:** Run `npm test` (135 passed), `npm run check`, `npm run build`. Then confirm placement in the built output:
 
 ```bash
 grep -n 'Content-Security-Policy\|<script type="module"\|rel="stylesheet"' dist/index.html dist/privacy/index.html dist/services/bug-fixing/index.html

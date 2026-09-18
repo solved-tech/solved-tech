@@ -87,6 +87,7 @@ export interface PrerenderInput {
 }
 
 const MOUNT = '<div id="app"></div>';
+const CHARSET = '<meta charset="UTF-8" />';
 const NOINDEX = /^[ \t]*<meta name="robots" content="noindex" \/>\r?\n/m;
 
 export const injectPrerender = ({ shell, appHtml, headTags, page, status }: PrerenderInput): string => {
@@ -104,10 +105,18 @@ export const injectPrerender = ({ shell, appHtml, headTags, page, status }: Prer
 
   if (status.launched && page.indexable) {
     html = html.replace(NOINDEX, "");
+
+    if (/name="robots"/.test(html)) {
+      throw new Error(`Cannot prerender "${page.path}": noindex is still present after launch.`);
+    }
   }
 
   if (headTags) {
-    html = html.replace("</head>", `  ${headTags}\n  </head>`);
+    if (!html.includes(CHARSET)) {
+      throw new Error(`Cannot prerender "${page.path}": the shell has no ${CHARSET} element.`);
+    }
+
+    html = html.replace(CHARSET, () => `${CHARSET}\n    ${headTags}`);
   }
 
   return html;
@@ -146,7 +155,7 @@ const CONTENT_SECURITY_POLICY = [
   "default-src 'none'",
   "script-src 'self'",
   "style-src 'self'",
-  "img-src 'self' data:",
+  "img-src 'self'",
   "font-src 'self'",
   "connect-src 'self'",
   "base-uri 'self'",

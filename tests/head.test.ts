@@ -103,7 +103,9 @@ describe("prerender injection", () => {
     });
 
     expect(html).not.toContain('name="robots"');
-    expect(html).toContain('<link rel="canonical" href="https://example.test/" />\n  </head>');
+    expect(html).toContain(
+      '<meta charset="UTF-8" />\n    <link rel="canonical" href="https://example.test/" />',
+    );
   });
 
   it("refuses a shell without the mount", () => {
@@ -116,6 +118,45 @@ describe("prerender injection", () => {
         status: preview,
       }),
     ).toThrow('Cannot prerender "/": the shell has no <div id="app"></div> mount.');
+  });
+
+  it("places injected head tags right after the charset, ahead of every link and script", () => {
+    const html = injectPrerender({
+      shell,
+      appHtml: "",
+      headTags: renderSecurityMeta(),
+      page: homePage,
+      status: preview,
+    });
+    const cspIndex = html.indexOf('http-equiv="Content-Security-Policy"');
+
+    expect(cspIndex).toBeGreaterThan(html.indexOf('<meta charset="UTF-8" />'));
+    expect(cspIndex).toBeLessThan(html.indexOf("<link"));
+    expect(cspIndex).toBeLessThan(html.indexOf("<script"));
+    expect(cspIndex).toBeLessThan(html.indexOf("<title>"));
+  });
+
+  it("fails the build when a launched indexable page still carries noindex", () => {
+    const stubborn = shell.replace(
+      '<meta name="robots" content="noindex" />',
+      '<meta name="robots" content="noindex"/>',
+    );
+
+    expect(() =>
+      injectPrerender({ shell: stubborn, appHtml: "", headTags: "", page: homePage, status: live }),
+    ).toThrow('Cannot prerender "/": noindex is still present after launch.');
+  });
+
+  it("refuses a shell without the charset when head tags must be injected", () => {
+    expect(() =>
+      injectPrerender({
+        shell: '<html><head></head><body><div id="app"></div></body></html>',
+        appHtml: "",
+        headTags: renderSecurityMeta(),
+        page: homePage,
+        status: preview,
+      }),
+    ).toThrow('Cannot prerender "/": the shell has no <meta charset="UTF-8" /> element.');
   });
 });
 
@@ -164,7 +205,7 @@ describe("security metadata", () => {
     expect(directives["default-src"]).toEqual(["'none'"]);
     expect(directives["script-src"]).toEqual(["'self'"]);
     expect(directives["style-src"]).toEqual(["'self'"]);
-    expect(directives["img-src"]).toEqual(["'self'", "data:"]);
+    expect(directives["img-src"]).toEqual(["'self'"]);
     expect(directives["connect-src"]).toEqual(["'self'"]);
     expect(directives["font-src"]).toEqual(["'self'"]);
     expect(directives["base-uri"]).toEqual(["'self'"]);

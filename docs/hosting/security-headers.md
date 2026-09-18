@@ -3,11 +3,12 @@
 GitHub Pages cannot send custom response headers. The repository ships a Content-Security-Policy
 and a referrer policy as `<meta>` elements in every prerendered page (`src/head.ts`,
 `renderSecurityMeta`). The headers below must be configured on the final host (H5) because they
-cannot be expressed in `<meta>` at all, or because a header is the authoritative form.
+cannot be expressed in `<meta>` at all. When both a header and a `<meta>` policy are present the
+browser enforces both; a request must satisfy every policy.
 
 | Header | Value | Why |
 | --- | --- | --- |
-| `Content-Security-Policy` | same value as the `<meta>` in `src/head.ts`, plus `; frame-ancestors 'none'` | `frame-ancestors` is ignored in `<meta>`; the header form is authoritative |
+| `Content-Security-Policy` | same value as the `<meta>` in `src/head.ts`, plus `; frame-ancestors 'none'` | `frame-ancestors`, `report-to`/`report-uri` and `sandbox` are ignored in `<meta>`; the header adds them |
 | `X-Frame-Options` | `DENY` | Fallback for clients without CSP 2 support |
 | `X-Content-Type-Options` | `nosniff` | Prevents MIME sniffing of assets |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | Mirrors the `<meta>` value |
