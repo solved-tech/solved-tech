@@ -1772,6 +1772,32 @@ footer a:hover {
   transform: none;
 }
 
+.motion-toggle {
+  justify-self: start;
+  align-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  border: 0;
+  border-block-end: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink-muted);
+  font: inherit;
+  font-size: var(--type-small);
+  cursor: pointer;
+}
+
+.motion-toggle[hidden] {
+  display: none;
+}
+
+html.motion-paused .code-field code,
+html.motion-paused .hero__pipeline .hero-pipeline__signal,
+html.motion-paused .hero__pipeline .hero-pipeline__node-ring {
+  animation-play-state: paused;
+}
+
 /* Secondary pages ------------------------------------------------------ */
 
 .page {

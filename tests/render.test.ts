@@ -418,6 +418,16 @@ describe("homepage renderer", () => {
       expect(html).toContain(`<article id="service-${id}"`),
     );
   });
+
+  it("offers a visible control to pause background motion after the hero actions", () => {
+    const actions = html.indexOf('class="hero__actions"');
+    const toggle = html.indexOf(
+      '<button class="motion-toggle" type="button" aria-pressed="false">Pause background motion</button>',
+    );
+
+    expect(toggle).toBeGreaterThan(actions);
+    expect(toggle).toBeLessThan(html.indexOf('id="services"'));
+  });
 });
 
 describe("privacy page renderer", () => {

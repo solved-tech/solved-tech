@@ -635,3 +635,34 @@ test("privacy notice page shares the header and footer", async ({ page }) => {
   await assertNoDocumentOverflow(page);
   assertNoRuntimeErrors(collector);
 });
+
+test("background motion can be paused from a visible control", async ({ page }) => {
+  const collector = setupErrorCollection(page);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await gotoHome(page);
+
+  const toggle = page.locator(".motion-toggle");
+  const signal = page.locator(".hero-pipeline__signal");
+  const playState = () =>
+    signal.evaluate((element) => getComputedStyle(element).animationPlayState);
+
+  await page.locator(".hero__pipeline").scrollIntoViewIfNeeded();
+  await expect(toggle).toBeVisible();
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect.poll(playState).toBe("running");
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await expect(toggle).toHaveText("Resume background motion");
+  await expect(page.locator("html")).toHaveClass(/motion-paused/);
+  await expect.poll(playState).toBe("paused");
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect.poll(playState).toBe("running");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(toggle).toBeHidden();
+
+  assertNoRuntimeErrors(collector);
+});

@@ -6,6 +6,7 @@ import {
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
+  setupMotionToggle,
   setupPipelineMotion,
   setupRevealMotion,
   setupScrollProgress,
@@ -18,6 +19,7 @@ export {
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
+  setupMotionToggle,
   setupPipelineMotion,
   setupRevealMotion,
   setupScrollProgress,
@@ -44,6 +46,7 @@ const start = (view: Window): void => {
   const finePointer = view.matchMedia("(pointer: fine)").matches;
   setupHeroInteraction(app, reducedMotion, finePointer);
   setupMobileMenu(app);
+  setupMotionToggle(app, view);
   setupScrollProgress(view);
 };
 

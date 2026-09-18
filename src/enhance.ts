@@ -150,6 +150,35 @@ export const setupMobileMenu = (root: ParentNode): void => {
   });
 };
 
+export const setupMotionToggle = (root: ParentNode, view: Window): void => {
+  const button = root.querySelector<HTMLButtonElement>(".motion-toggle");
+
+  if (!button) {
+    return;
+  }
+
+  const query = view.matchMedia("(prefers-reduced-motion: reduce)");
+  const html = view.document.documentElement;
+
+  const setPaused = (paused: boolean): void => {
+    html.classList.toggle("motion-paused", paused);
+    button.setAttribute("aria-pressed", String(paused));
+    button.textContent = paused
+      ? "Resume background motion"
+      : "Pause background motion";
+  };
+
+  const syncPreference = (): void => {
+    button.hidden = query.matches;
+  };
+
+  button.addEventListener("click", () => {
+    setPaused(button.getAttribute("aria-pressed") !== "true");
+  });
+  query.addEventListener("change", syncPreference);
+  syncPreference();
+};
+
 /**
  * Publish the measured header height so anchor scroll padding and the hero
  * height stay correct when the header wraps onto more rows.

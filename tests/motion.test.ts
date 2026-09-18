@@ -4,6 +4,7 @@ import {
   setupHeaderOffset,
   setupHeroInteraction,
   setupMobileMenu,
+  setupMotionToggle,
   setupPipelineMotion,
   setupRevealMotion,
   setupScrollProgress,
@@ -555,7 +556,98 @@ describe("scroll progress", () => {
   });
 });
 
+describe("motion toggle", () => {
+  const createToggle = (reduceMotion: boolean) => {
+    const attributes = new Map([["aria-pressed", "false"]]);
+    const handlers = new Map<string, () => void>();
+    const classes = new Set<string>();
+    const button = {
+      hidden: false,
+      textContent: "Pause background motion",
+      getAttribute: (name: string) => attributes.get(name) ?? null,
+      setAttribute: (name: string, value: string) => attributes.set(name, value),
+      addEventListener: (type: string, handler: () => void) =>
+        handlers.set(type, handler),
+    };
+    let onChange: (() => void) | undefined;
+    const query = {
+      matches: reduceMotion,
+      addEventListener: (_type: string, handler: () => void) => {
+        onChange = handler;
+      },
+    };
+    const view = {
+      matchMedia: vi.fn(() => query),
+      document: {
+        documentElement: {
+          classList: {
+            toggle: (name: string, force: boolean) => {
+              if (force) {
+                classes.add(name);
+              } else {
+                classes.delete(name);
+              }
+              return force;
+            },
+          },
+        },
+      },
+    };
+    const root = { querySelector: vi.fn(() => button) } as unknown as ParentNode;
+
+    setupMotionToggle(root, view as unknown as Window);
+
+    return { attributes, button, classes, handlers, query, fireChange: () => onChange?.() };
+  };
+
+  it("pauses and resumes continuous motion through a pressed state", () => {
+    const { attributes, button, classes, handlers } = createToggle(false);
+
+    expect(button.hidden).toBe(false);
+
+    handlers.get("click")?.();
+    expect(attributes.get("aria-pressed")).toBe("true");
+    expect(button.textContent).toBe("Resume background motion");
+    expect(classes.has("motion-paused")).toBe(true);
+
+    handlers.get("click")?.();
+    expect(attributes.get("aria-pressed")).toBe("false");
+    expect(button.textContent).toBe("Pause background motion");
+    expect(classes.has("motion-paused")).toBe(false);
+  });
+
+  it("hides the control while the system reduces motion and follows live changes", () => {
+    const { button, query, fireChange } = createToggle(true);
+
+    expect(button.hidden).toBe(true);
+
+    query.matches = false;
+    fireChange();
+    expect(button.hidden).toBe(false);
+  });
+
+  it("does nothing without a toggle in the document", () => {
+    const matchMedia = vi.fn();
+
+    setupMotionToggle(
+      { querySelector: vi.fn(() => null) } as unknown as ParentNode,
+      { matchMedia } as unknown as Window,
+    );
+
+    expect(matchMedia).not.toHaveBeenCalled();
+  });
+});
+
 describe("stylesheet contracts", () => {
+  it("pauses every infinite animation when motion is paused", () => {
+    expect(styles).toMatch(
+      /html\.motion-paused \.code-field code[\s\S]*?animation-play-state:\s*paused/,
+    );
+    expect(styles).toContain("html.motion-paused .hero__pipeline .hero-pipeline__signal");
+    expect(styles).toContain("html.motion-paused .hero__pipeline .hero-pipeline__node-ring");
+    expect(styles.match(/\binfinite\b/g)).toHaveLength(3);
+  });
+
   it("uses the rendered pipeline path as the exact CSS motion path", () => {
     expect(pipelinePath).toBeTypeOf("string");
     expect(styles).toContain(`offset-path: path("${pipelinePath}");`);

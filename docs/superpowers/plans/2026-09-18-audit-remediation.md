@@ -114,7 +114,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 5 | F02, F07 | [x] |
 | 6 | F04, hero copy | [x] |
 | 7 | F14 | [x] |
-| 8 | F08 | [ ] |
+| 8 | F08 | [x] |
 | 9 | F09 | [ ] |
 | 10 | F16 | [ ] |
 | 11 | F03, FAQ | [ ] |
@@ -1446,7 +1446,7 @@ Then run `npx playwright test --project=uk-phone-standard --project=uk-desktop`.
 
 **Steps:**
 
-- [ ] **Step 1: Unit tests.** In `tests/motion.test.ts` add `setupMotionToggle` to the import from `../src/main`, then append this describe block before `describe("stylesheet contracts")`:
+- [x] **Step 1: Unit tests.** In `tests/motion.test.ts` add `setupMotionToggle` to the import from `../src/main`, then append this describe block before `describe("stylesheet contracts")`:
 
 ```ts
 describe("motion toggle", () => {
@@ -1559,9 +1559,9 @@ In `tests/render.test.ts` append:
   });
 ```
 
-- [ ] **Step 2:** Run `npm test`; expect 5 failures. `npm run check` fails (missing export) — expected.
+- [x] **Step 2:** Run `npm test`; expect 5 failures. `npm run check` fails (missing export) — expected.
 
-- [ ] **Step 3: Add to `src/enhance.ts`** (after `setupMobileMenu`):
+- [x] **Step 3: Add to `src/enhance.ts`** (after `setupMobileMenu`):
 
 ```ts
 export const setupMotionToggle = (root: ParentNode, view: Window): void => {
@@ -1594,15 +1594,15 @@ export const setupMotionToggle = (root: ParentNode, view: Window): void => {
 };
 ```
 
-- [ ] **Step 4: Wire it in `src/main.ts`.** Add `setupMotionToggle` to both the import list and the `export { … } from "./enhance"` list, and call `setupMotionToggle(app, view);` directly after `setupMobileMenu(app);` in `start`.
+- [x] **Step 4: Wire it in `src/main.ts`.** Add `setupMotionToggle` to both the import list and the `export { … } from "./enhance"` list, and call `setupMotionToggle(app, view);` directly after `setupMobileMenu(app);` in `start`.
 
-- [ ] **Step 5: Render the button.** In `src/render.ts`, directly after `${renderContactActions(config, "hero__actions")}` insert:
+- [x] **Step 5: Render the button.** In `src/render.ts`, directly after `${renderContactActions(config, "hero__actions")}` insert:
 
 ```html
         <button class="motion-toggle" type="button" aria-pressed="false">Pause background motion</button>
 ```
 
-- [ ] **Step 6: CSS.** Add to `src/styles.css` immediately before the `/* Secondary pages` comment:
+- [x] **Step 6: CSS.** Add to `src/styles.css` immediately before the `/* Secondary pages` comment:
 
 ```css
 .motion-toggle {
@@ -1634,9 +1634,9 @@ html.motion-paused .hero__pipeline .hero-pipeline__node-ring {
 
 The three-class selector for the pipeline is required: `.hero__pipeline.is-pipeline-visible .hero-pipeline__signal { animation-play-state: running }` already has three class selectors, and the `html` type selector makes the paused rule win without `!important`.
 
-- [ ] **Step 7:** Run `npm test` (expect 97 passing) and `npm run check`.
+- [x] **Step 7:** Run `npm test` (expect 97 passing) and `npm run check`.
 
-- [ ] **Step 8: E2E.** Append to `tests/e2e/responsive.spec.ts`:
+- [x] **Step 8: E2E.** Append to `tests/e2e/responsive.spec.ts`:
 
 ```ts
 test("background motion can be paused from a visible control", async ({ page }) => {
