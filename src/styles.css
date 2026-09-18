@@ -541,6 +541,35 @@ main > section + section {
   color: var(--ink-muted);
 }
 
+/* Node delays are the measured signal crossings on the rendered route. */
+.hero-pipeline__node--ai {
+  --pipeline-delay: 0s;
+}
+
+.hero-pipeline__node--customers {
+  --pipeline-delay: 0.911s;
+}
+
+.hero-pipeline__node--websites {
+  --pipeline-delay: 1.952s;
+}
+
+.hero-pipeline__node--web-apps {
+  --pipeline-delay: 3.059s;
+}
+
+.hero-pipeline__node--mobile-apps {
+  --pipeline-delay: 4.302s;
+}
+
+.hero-pipeline__node--desktop-apps {
+  --pipeline-delay: 5.313s;
+}
+
+.hero-pipeline__node--custom-systems {
+  --pipeline-delay: 7.045s;
+}
+
 .hero-pipeline__node-ring {
   fill: rgb(18 17 16 / 0.92);
   stroke: var(--ink-muted);

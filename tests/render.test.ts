@@ -1,6 +1,9 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { contactConfig, privacyContent, servicePages, siteContent } from "../src/content";
 import { renderHomepage, renderPrivacyPage, renderServicePage } from "../src/render";
+
+const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 
 const escapeRegExp = (value: string): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -59,9 +62,15 @@ describe("homepage renderer", () => {
   it("aligns node ring delays with measured signal crossings", () => {
     const nodes = Array.from(
       html.matchAll(
-        /<g class="hero-pipeline__node[^"]*"[^>]*style="--pipeline-delay:\s*([^"]+)"[\s\S]*?<text y="43">([^<]+)<\/text>/g,
+        /<g class="hero-pipeline__node hero-pipeline__node--([a-z-]+)" transform="[^"]*"[\s\S]*?<text y="43">([^<]+)<\/text>/g,
       ),
-      ([, delay, label]) => ({ delay, label }),
+      ([, modifier, label]) => ({ modifier, label }),
+    );
+    const delays = new Map<string, string>(
+      Array.from(
+        styles.matchAll(/\.hero-pipeline__node--([a-z-]+) \{\s*--pipeline-delay: ([^;]+);/g),
+        ([, modifier, delay]) => [modifier, delay] as [string, string],
+      ),
     );
 
     expect(nodes.map(({ label }) => label)).toEqual([
@@ -73,7 +82,16 @@ describe("homepage renderer", () => {
       "Desktop apps",
       "Custom systems",
     ]);
-    expect(nodes.map(({ delay }) => delay)).toEqual([
+    expect(nodes.map(({ modifier }) => modifier)).toEqual([
+      "ai",
+      "customers",
+      "websites",
+      "web-apps",
+      "mobile-apps",
+      "desktop-apps",
+      "custom-systems",
+    ]);
+    expect(nodes.map(({ modifier }) => delays.get(modifier))).toEqual([
       "0s",
       "0.911s",
       "1.952s",
@@ -82,6 +100,7 @@ describe("homepage renderer", () => {
       "5.313s",
       "7.045s",
     ]);
+    expect(html).not.toContain('style="');
   });
 
   it("renders semantic navigation and contact landmarks", () => {

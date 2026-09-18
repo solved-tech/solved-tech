@@ -69,20 +69,19 @@ const renderContactActions = (
 export const pipelinePath =
   "M80 140C80 58 178 25 320 28C478 31 560 76 560 140C560 218 470 250 320 252C164 254 80 218 80 140Z";
 
-// Node delays are measured closest crossings on the rendered route.
 const renderHeroPipeline = (): string => `
   <div class="hero__pipeline" data-reveal aria-hidden="true">
     <svg viewBox="0 0 640 300" focusable="false">
       <path class="hero-pipeline__route" d="${pipelinePath}" />
       <circle class="hero-pipeline__signal" r="5" />
 
-      <g class="hero-pipeline__node hero-pipeline__node--ai" transform="translate(80 140)" style="--pipeline-delay: 0s">
+      <g class="hero-pipeline__node hero-pipeline__node--ai" transform="translate(80 140)">
         <circle class="hero-pipeline__node-ring" r="25" />
         <path class="hero-pipeline__icon" d="M-9-7H9V8H-9ZM-5-12V-7M5-12V-7M-4-1h1M3-1h1M-4 4h8" />
         <text y="43">AI</text>
       </g>
 
-      <g class="hero-pipeline__node" transform="translate(150 58)" style="--pipeline-delay: 0.911s">
+      <g class="hero-pipeline__node hero-pipeline__node--customers" transform="translate(150 58)">
         <circle class="hero-pipeline__node-ring" r="25" />
         <circle class="hero-pipeline__icon" r="10" />
         <circle class="hero-pipeline__icon" r="5" />
@@ -90,35 +89,35 @@ const renderHeroPipeline = (): string => `
         <text y="43">Customers</text>
       </g>
 
-      <g class="hero-pipeline__node" transform="translate(280 36)" style="--pipeline-delay: 1.952s">
+      <g class="hero-pipeline__node hero-pipeline__node--websites" transform="translate(280 36)">
         <circle class="hero-pipeline__node-ring" r="25" />
         <rect class="hero-pipeline__icon" x="-13" y="-10" width="26" height="20" rx="1" />
         <path class="hero-pipeline__icon" d="M-13-4H13M-9-7h1M-5-7h1" />
         <text y="43">Websites</text>
       </g>
 
-      <g class="hero-pipeline__node" transform="translate(420 54)" style="--pipeline-delay: 3.059s">
+      <g class="hero-pipeline__node hero-pipeline__node--web-apps" transform="translate(420 54)">
         <circle class="hero-pipeline__node-ring" r="25" />
         <rect class="hero-pipeline__icon" x="-13" y="-11" width="26" height="22" rx="1" />
         <path class="hero-pipeline__icon" d="M-13-5H13M-8 0h6v6h-6M2 0h6M2 5h6" />
         <text y="43">Web apps</text>
       </g>
 
-      <g class="hero-pipeline__node" transform="translate(552 118)" style="--pipeline-delay: 4.302s">
+      <g class="hero-pipeline__node hero-pipeline__node--mobile-apps" transform="translate(552 118)">
         <circle class="hero-pipeline__node-ring" r="25" />
         <rect class="hero-pipeline__icon" x="-8" y="-14" width="16" height="28" rx="2" />
         <path class="hero-pipeline__icon" d="M-3-10H3M-2 10H2" />
         <text y="43">Mobile apps</text>
       </g>
 
-      <g class="hero-pipeline__node" transform="translate(500 220)" style="--pipeline-delay: 5.313s">
+      <g class="hero-pipeline__node hero-pipeline__node--desktop-apps" transform="translate(500 220)">
         <circle class="hero-pipeline__node-ring" r="25" />
         <rect class="hero-pipeline__icon" x="-14" y="-11" width="28" height="19" rx="1" />
         <path class="hero-pipeline__icon" d="M0 8V13M-7 13H7" />
         <text y="43">Desktop apps</text>
       </g>
 
-      <g class="hero-pipeline__node" transform="translate(280 246)" style="--pipeline-delay: 7.045s">
+      <g class="hero-pipeline__node hero-pipeline__node--custom-systems" transform="translate(280 246)">
         <circle class="hero-pipeline__node-ring" r="25" />
         <path class="hero-pipeline__icon" d="M-9-6L8-10M-9-6L-2 10M8-10L10 7M-2 10L10 7" />
         <circle class="hero-pipeline__icon hero-pipeline__icon-dot" cx="-9" cy="-6" r="3" />

@@ -163,7 +163,7 @@ describe("security metadata", () => {
 
     expect(directives["default-src"]).toEqual(["'none'"]);
     expect(directives["script-src"]).toEqual(["'self'"]);
-    expect(directives["style-src"]).toEqual(["'self'", "'unsafe-inline'"]);
+    expect(directives["style-src"]).toEqual(["'self'"]);
     expect(directives["img-src"]).toEqual(["'self'", "data:"]);
     expect(directives["connect-src"]).toEqual(["'self'"]);
     expect(directives["font-src"]).toEqual(["'self'"]);

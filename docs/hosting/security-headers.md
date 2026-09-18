@@ -24,9 +24,10 @@ npm run build && node scripts/check-csp.mts
 The second command loads every built page under the meta policy in headless Chromium and fails on
 any console error, so run it before tightening the policy further.
 
-## Known follow-up
+## Inline styles
 
-`style-src` includes `'unsafe-inline'` because the hero pipeline renders seven
-`style="--pipeline-delay: …"` attributes (`src/render.ts`, pinned by `tests/render.test.ts`).
-Moving those delays into `src/styles.css` would allow `style-src 'self'`. Do this in its own
-change with the render test updated alongside it.
+The hero pipeline's seven node delays live in `src/styles.css` as `--pipeline-delay` declarations
+keyed by node modifier, and `src/render.ts` emits no `style` attributes at all, so `style-src`
+needs no `'unsafe-inline'`. `tests/render.test.ts` pins the measured crossing times in the
+stylesheet, and `scripts/check-csp.mts` fails on any console error, so an inline style creeping
+back in would be caught.
