@@ -116,7 +116,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 7 | F14 | [x] |
 | 8 | F08 | [x] |
 | 9 | F09 | [x] |
-| 10 | F16 | [ ] |
+| 10 | F16 | [x] |
 | 11 | F03, FAQ | [ ] |
 | 12 | F10, F13, F11 (launch) | [ ] |
 | 13 | F12 | [ ] |
@@ -1814,7 +1814,7 @@ and `<img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="Port
 
 **Steps:**
 
-- [ ] **Step 1: Failing test** appended to `tests/render.test.ts`:
+- [x] **Step 1: Failing test** appended to `tests/render.test.ts`:
 
 ```ts
   it("annotates intent targets for measurement without loading any script", () => {
@@ -1836,14 +1836,14 @@ and `<img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="Port
   });
 ```
 
-- [ ] **Step 2:** Run `npm test`; expect 1 failure.
+- [x] **Step 2:** Run `npm test`; expect 1 failure.
 
-- [ ] **Step 3: Edit `src/render.ts`.**
+- [x] **Step 3: Edit `src/render.ts`.**
   - In `renderContactActions` add `const placement = isHero ? "hero" : "contact";` after `isHero`, and append ` data-analytics="contact_click" data-channel="call" data-placement="${placement}"` to the call link, `data-channel="whatsapp"` to the WhatsApp link and `data-channel="email"` to the email link, in **both** branches, placing the attributes immediately before the closing `>` of each `<a …>` opening tag.
   - Service CTA opening tag becomes `<a class="service-box__cta" href="#contact" aria-label="…" data-analytics="service_interest" data-service-id="${escapeHtml(id)}" data-placement="service-box">`.
   - Each need link gains ` data-analytics="service_interest" data-service-id="fix|app|other" data-placement="need-selector"` after its `href`.
 
-- [ ] **Step 4:** Run `npm test` (expect 99 passing), `npm run check`, and `npx playwright test --project=uk-phone-standard`.
+- [x] **Step 4:** Run `npm test` (expect 99 passing), `npm run check`, and `npx playwright test --project=uk-phone-standard`.
 
 **Downstream:** none (the contact-group regexes in `render.test.ts` tolerate extra attributes).
 

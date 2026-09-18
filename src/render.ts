@@ -43,21 +43,22 @@ const renderContactActions = (
   className: string,
 ): string => {
   const isHero = className === "hero__actions";
+  const placement = isHero ? "hero" : "contact";
 
   if (isHero) {
     return `
   <div class="${className}">
-    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}" aria-label="Call us">${renderHeroLabel("Call")}</a>
-    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer" aria-label="WhatsApp us">${whatsappIcon}<span>${renderHeroLabel("WhatsApp")}</span></a>
-    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}" aria-label="Email us">${emailIcon}<span>${renderHeroLabel("Email")}</span></a>
+    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}" aria-label="Call us" data-analytics="contact_click" data-channel="call" data-placement="${placement}">${renderHeroLabel("Call")}</a>
+    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer" aria-label="WhatsApp us" data-analytics="contact_click" data-channel="whatsapp" data-placement="${placement}">${whatsappIcon}<span>${renderHeroLabel("WhatsApp")}</span></a>
+    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}" aria-label="Email us" data-analytics="contact_click" data-channel="email" data-placement="${placement}">${emailIcon}<span>${renderHeroLabel("Email")}</span></a>
   </div>`;
   }
 
   return `
   <div class="${className}">
-    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}">Call us</a>
-    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer">${whatsappIcon}<span>WhatsApp us</span></a>
-    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}">${emailIcon}<span>Email us</span></a>
+    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}" data-analytics="contact_click" data-channel="call" data-placement="${placement}">Call us</a>
+    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer" data-analytics="contact_click" data-channel="whatsapp" data-placement="${placement}">${whatsappIcon}<span>WhatsApp us</span></a>
+    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}" data-analytics="contact_click" data-channel="email" data-placement="${placement}">${emailIcon}<span>Email us</span></a>
   </div>`;
 };
 
@@ -358,7 +359,7 @@ export const renderHomepage = (
             <span class="service-box__artwork" data-reveal>${renderServiceArt(id)}</span>
             ${renderCapabilities(provides)}
           </div>
-          <a class="service-box__cta" href="#contact" aria-label="${escapeHtml(cta)}: ${escapeHtml(title)}">
+          <a class="service-box__cta" href="#contact" aria-label="${escapeHtml(cta)}: ${escapeHtml(title)}" data-analytics="service_interest" data-service-id="${escapeHtml(id)}" data-placement="service-box">
             ${escapeHtml(cta)} <span aria-hidden="true">→</span>
           </a>
         </article>`;
@@ -439,9 +440,9 @@ export const renderHomepage = (
       <section id="services" class="services" aria-labelledby="services-heading">
         <h2 id="services-heading" data-reveal>What do you need?</h2>
         <nav class="need-selector" aria-label="Choose your need" data-reveal>
-          <a class="need-link" href="#service-fix"><strong>Fix a system</strong><span>Bugs, failed integrations and code built by someone else.</span></a>
-          <a class="need-link" href="#service-app"><strong>Build a product</strong><span>Web, mobile and desktop applications.</span></a>
-          <a class="need-link" href="#service-other"><strong>Automate a process</strong><span>Repetitive work and tools that should talk to each other.</span></a>
+          <a class="need-link" href="#service-fix" data-analytics="service_interest" data-service-id="fix" data-placement="need-selector"><strong>Fix a system</strong><span>Bugs, failed integrations and code built by someone else.</span></a>
+          <a class="need-link" href="#service-app" data-analytics="service_interest" data-service-id="app" data-placement="need-selector"><strong>Build a product</strong><span>Web, mobile and desktop applications.</span></a>
+          <a class="need-link" href="#service-other" data-analytics="service_interest" data-service-id="other" data-placement="need-selector"><strong>Automate a process</strong><span>Repetitive work and tools that should talk to each other.</span></a>
         </nav>
         <div class="service-grid">${services}</div>
       </section>

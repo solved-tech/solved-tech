@@ -430,6 +430,24 @@ describe("homepage renderer", () => {
     expect(toggle).toBeGreaterThan(actions);
     expect(toggle).toBeLessThan(html.indexOf('id="services"'));
   });
+
+  it("annotates intent targets for measurement without loading any script", () => {
+    expect(html.match(/data-analytics="contact_click"/g)).toHaveLength(6);
+    expect(html.match(/data-channel="call"/g)).toHaveLength(2);
+    expect(html.match(/data-channel="whatsapp"/g)).toHaveLength(2);
+    expect(html.match(/data-channel="email"/g)).toHaveLength(2);
+    expect(html.match(/data-placement="hero"/g)).toHaveLength(3);
+    expect(html.match(/data-placement="contact"/g)).toHaveLength(3);
+    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(9);
+    siteContent.products.forEach(({ id }) =>
+      expect(html).toContain(`data-service-id="${id}" data-placement="service-box"`),
+    );
+    ["fix", "app", "other"].forEach((id) =>
+      expect(html).toContain(`data-service-id="${id}" data-placement="need-selector"`),
+    );
+    expect(html).not.toContain("<script");
+    expect(html).not.toMatch(/gtag|googletagmanager|plausible|umami|analytics\.js/);
+  });
 });
 
 describe("privacy page renderer", () => {
