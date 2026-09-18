@@ -137,18 +137,7 @@ describe("site content", () => {
   it("refuses to launch with unfilled privacy placeholders", () => {
     const tokens = JSON.stringify(privacyContent).match(/\[\[[A-Z_]+\]\]/g) ?? [];
 
-    if (siteStatus.launched) {
-      expect(tokens).toEqual([]);
-    } else {
-      expect(new Set(tokens)).toEqual(
-        new Set([
-          "[[PRIVACY_UPDATED_DATE]]",
-          "[[PHONE_AND_WHATSAPP_PROVIDER]]",
-          "[[EMAIL_PROVIDER]]",
-          "[[RETENTION_PERIOD]]",
-        ]),
-      );
-    }
+    expect(tokens).toEqual([]);
   });
 
   it("ships no case study until one is approved for publication", () => {

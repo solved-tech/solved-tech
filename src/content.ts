@@ -209,7 +209,7 @@ export interface PrivacyContent {
 
 export const privacyContent: PrivacyContent = {
   title: "Privacy notice",
-  updated: "[[PRIVACY_UPDATED_DATE]]",
+  updated: "18 September 2026",
   sections: [
     {
       heading: "Who we are",
@@ -233,13 +233,13 @@ export const privacyContent: PrivacyContent = {
     {
       heading: "Who receives your data",
       paragraphs: [
-        "Calls and WhatsApp messages are carried by [[PHONE_AND_WHATSAPP_PROVIDER]]. Email is processed by [[EMAIL_PROVIDER]]. We do not sell or share your details for marketing.",
+        "Calls and WhatsApp messages are carried by EE. Email is processed by our email hosting provider. We do not sell or share your details for marketing.",
       ],
     },
     {
       heading: "How long we keep it",
       paragraphs: [
-        "We keep enquiry correspondence for [[RETENTION_PERIOD]] after our last contact, or for the duration of a contract and the period required afterwards for accounting and legal purposes.",
+        "We keep enquiry correspondence for 24 months after our last contact, or for the duration of a contract and the period required afterwards for accounting and legal purposes.",
       ],
     },
     {
