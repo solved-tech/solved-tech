@@ -28,9 +28,27 @@ export interface FounderProfile {
   linkedin: string;
 }
 
+export interface CaseStudy {
+  id: string;
+  title: string;
+  client: string;
+  situation: string;
+  contribution: string;
+  deliverable: string;
+  technologies: string[];
+  result: string;
+}
+
+export interface FaqEntry {
+  question: string;
+  answer: string;
+}
+
 export interface SiteContent {
   products: ProductOffer[];
   founders: FounderProfile[];
+  caseStudies: CaseStudy[];
+  faq: FaqEntry[];
 }
 
 export const contactConfig: ContactConfig = {
@@ -151,6 +169,25 @@ export const siteContent: SiteContent = {
       image: "/team/remus_baciu-340.webp",
       imageSources: [],
       linkedin: "https://www.linkedin.com/in/remus-baciu-4a11a7105/",
+    },
+  ],
+  caseStudies: [],
+  faq: [
+    {
+      question: "Can you work on software built by another team?",
+      answer: "[[FAQ_ANSWER_EXISTING_SOFTWARE]]",
+    },
+    {
+      question: "What do you need to investigate an issue?",
+      answer: "[[FAQ_ANSWER_INVESTIGATION]]",
+    },
+    {
+      question: "How do you estimate the work and agree the scope?",
+      answer: "[[FAQ_ANSWER_ESTIMATE]]",
+    },
+    {
+      question: "What happens after delivery?",
+      answer: "[[FAQ_ANSWER_AFTER_DELIVERY]]",
     },
   ],
 };

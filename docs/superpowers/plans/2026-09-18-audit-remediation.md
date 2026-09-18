@@ -117,7 +117,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 8 | F08 | [x] |
 | 9 | F09 | [x] |
 | 10 | F16 | [x] |
-| 11 | F03, FAQ | [ ] |
+| 11 | F03, FAQ | [x] |
 | 12 | F10, F13, F11 (launch) | [ ] |
 | 13 | F12 | [ ] |
 | 14 | F15 | [ ] |
@@ -1869,7 +1869,7 @@ and `<img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="Port
 
 **Steps:**
 
-- [ ] **Step 1: Content tests.** Append inside `describe("site content")` in `tests/content.test.ts`:
+- [x] **Step 1: Content tests.** Append inside `describe("site content")` in `tests/content.test.ts`:
 
 ```ts
   it("ships no case study until one is approved for publication", () => {
@@ -1908,7 +1908,7 @@ and `<img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="Port
   });
 ```
 
-- [ ] **Step 2: Renderer tests.** Append a new describe block at the end of `tests/render.test.ts` (outside `describe("homepage renderer")`):
+- [x] **Step 2: Renderer tests.** Append a new describe block at the end of `tests/render.test.ts` (outside `describe("homepage renderer")`):
 
 ```ts
 describe("proof and FAQ sections", () => {
@@ -1978,9 +1978,9 @@ describe("proof and FAQ sections", () => {
 });
 ```
 
-- [ ] **Step 3:** Run `npm test`. Expect the 2 content tests and 3 render tests to fail; `npm run check` fails on the missing properties — expected.
+- [x] **Step 3:** Run `npm test`. Expect the 2 content tests and 3 render tests to fail; `npm run check` fails on the missing properties — expected.
 
-- [ ] **Step 4: Edit `src/content.ts`.** Add the two interfaces directly above `export interface SiteContent`:
+- [x] **Step 4: Edit `src/content.ts`.** Add the two interfaces directly above `export interface SiteContent`:
 
 ```ts
 export interface CaseStudy {
@@ -2031,7 +2031,7 @@ Append to the `siteContent` object literal after the `founders: [ … ],` entry:
   ],
 ```
 
-- [ ] **Step 5: Edit `src/render.ts`.** Add `CaseStudy` and `FaqEntry` to the type import. Add these three constants above `renderHomepage`:
+- [x] **Step 5: Edit `src/render.ts`.** Add `CaseStudy` and `FaqEntry` to the type import. Add these three constants above `renderHomepage`:
 
 ```ts
 const hasPlaceholder = (value: string): boolean => /\[\[[A-Z_]+\]\]/.test(value);
@@ -2098,7 +2098,7 @@ const renderFaq = (entries: FaqEntry[]): string => {
 
 In `renderHomepage`'s returned template, insert `${renderFaq(content.faq)}` on its own line between the closing `</section>` of the journey (`id="approach"`) section and `<section id="team"`, and insert `${renderCaseStudies(content.caseStudies)}` between the closing `</section>` of the team section and `<section class="contact"`.
 
-- [ ] **Step 6: CSS.** Add to `src/styles.css` immediately after the `.founder__details a` rules end (search for the last rule whose selector starts with `.founder` and insert after its closing brace):
+- [x] **Step 6: CSS.** Add to `src/styles.css` immediately after the `.founder__details a` rules end (search for the last rule whose selector starts with `.founder` and insert after its closing brace):
 
 ```css
 /* Proof and FAQ ------------------------------------------------------- */
@@ -2217,7 +2217,7 @@ In `renderHomepage`'s returned template, insert `${renderFaq(content.faq)}` on i
 }
 ```
 
-- [ ] **Step 7:** Run `npm test` (expect 104 passing), `npm run check`, `npm run build`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`. Because both sections are empty at baseline, the rendered homepage is byte-identical to Task 10's output; the e2e run only confirms nothing regressed.
+- [x] **Step 7:** Run `npm test` (expect 104 passing), `npm run check`, `npm run build`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`. Because both sections are empty at baseline, the rendered homepage is byte-identical to Task 10's output; the e2e run only confirms nothing regressed.
 
 **Downstream:** none. No nav link is added (the `#primary-navigation a` count of 4 stays pinned).
 

@@ -477,3 +477,69 @@ describe("privacy page renderer", () => {
     expect(html).toContain('<a href="#top">Back to top</a>');
   });
 });
+
+describe("proof and FAQ sections", () => {
+  const html = renderHomepage(siteContent, contactConfig, "/");
+  const study = {
+    id: "example",
+    title: "Example title",
+    client: "Example client (anonymised)",
+    situation: "Example situation.",
+    contribution: "Example contribution.",
+    deliverable: "Example deliverable.",
+    technologies: ["TypeScript", "PostgreSQL"],
+    result: "Example result.",
+  };
+
+  it("renders neither section until approved content exists", () => {
+    expect(html).not.toContain('id="work"');
+    expect(html).not.toContain('id="faq"');
+    expect(html).not.toMatch(/\[\[[A-Z_]+\]\]/);
+  });
+
+  it("renders approved case studies between the team and contact sections", () => {
+    const withProof = renderHomepage(
+      { ...siteContent, caseStudies: [study] },
+      contactConfig,
+      "/",
+    );
+    const work = withProof.indexOf('<section id="work" class="work" aria-labelledby="work-heading">');
+
+    expect(work).toBeGreaterThan(withProof.indexOf('id="team"'));
+    expect(work).toBeLessThan(withProof.indexOf('id="contact"'));
+    expect(withProof).toContain('<h2 id="work-heading" data-reveal>Problems we have solved</h2>');
+    expect(withProof).toContain('<article class="case-study" id="work-example" data-reveal>');
+    expect(withProof).toContain('<p class="case-study__client">Example client (anonymised)</p>');
+    expect(withProof).toContain("<h3>Example title</h3>");
+    expect(withProof).toContain("<dt>Situation</dt><dd>Example situation.</dd>");
+    expect(withProof).toContain("<dt>What we did</dt><dd>Example contribution.</dd>");
+    expect(withProof).toContain("<dt>Delivered</dt><dd>Example deliverable.</dd>");
+    expect(withProof).toContain("<dt>Result</dt><dd>Example result.</dd>");
+    expect(withProof).toContain(
+      '<ul class="case-study__stack" aria-label="Technologies"><li>TypeScript</li><li>PostgreSQL</li></ul>',
+    );
+  });
+
+  it("renders only FAQ entries whose answers are approved", () => {
+    const withFaq = renderHomepage(
+      {
+        ...siteContent,
+        faq: [
+          { question: "Answered question?", answer: "Answered." },
+          { question: "Pending question?", answer: "[[FAQ_ANSWER_PENDING]]" },
+        ],
+      },
+      contactConfig,
+      "/",
+    );
+    const faq = withFaq.indexOf('<section id="faq" class="faq" aria-labelledby="faq-heading">');
+
+    expect(faq).toBeGreaterThan(withFaq.indexOf('id="approach"'));
+    expect(faq).toBeLessThan(withFaq.indexOf('id="team"'));
+    expect(withFaq).toContain('<h2 id="faq-heading" data-reveal>Questions we are often asked</h2>');
+    expect(withFaq).toContain("<dt>Answered question?</dt>");
+    expect(withFaq).toContain("<dd>Answered.</dd>");
+    expect(withFaq).not.toContain("Pending question?");
+    expect(withFaq).not.toContain("[[FAQ_ANSWER_PENDING]]");
+  });
+});

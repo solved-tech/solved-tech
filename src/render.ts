@@ -1,5 +1,7 @@
 import type {
+  CaseStudy,
   ContactConfig,
+  FaqEntry,
   PrivacyContent,
   ProductOffer,
   SiteContent,
@@ -335,6 +337,67 @@ export const renderSiteFooter = (baseUrl: string): string => `
       <a href="#top">Back to top</a>
     </footer>`;
 
+const hasPlaceholder = (value: string): boolean => /\[\[[A-Z_]+\]\]/.test(value);
+
+const renderCaseStudies = (studies: CaseStudy[]): string => {
+  if (studies.length === 0) {
+    return "";
+  }
+
+  const cards = studies
+    .map(
+      ({ id, title, client, situation, contribution, deliverable, technologies, result }) => `
+          <article class="case-study" id="work-${escapeHtml(id)}" data-reveal>
+            <p class="case-study__client">${escapeHtml(client)}</p>
+            <h3>${escapeHtml(title)}</h3>
+            <dl class="case-study__facts">
+              <div><dt>Situation</dt><dd>${escapeHtml(situation)}</dd></div>
+              <div><dt>What we did</dt><dd>${escapeHtml(contribution)}</dd></div>
+              <div><dt>Delivered</dt><dd>${escapeHtml(deliverable)}</dd></div>
+              <div><dt>Result</dt><dd>${escapeHtml(result)}</dd></div>
+            </dl>
+            <ul class="case-study__stack" aria-label="Technologies">${technologies.map((technology) => `<li>${escapeHtml(technology)}</li>`).join("")}</ul>
+          </article>`,
+    )
+    .join("");
+
+  return `
+      <section id="work" class="work" aria-labelledby="work-heading">
+        <div class="work__heading">
+          <p data-reveal>Recent work</p>
+          <h2 id="work-heading" data-reveal>Problems we have solved</h2>
+        </div>
+        <div class="work__grid">${cards}</div>
+      </section>`;
+};
+
+const renderFaq = (entries: FaqEntry[]): string => {
+  const answered = entries.filter(({ answer }) => !hasPlaceholder(answer));
+
+  if (answered.length === 0) {
+    return "";
+  }
+
+  const items = answered
+    .map(
+      ({ question, answer }) => `
+          <div class="faq__item" data-reveal>
+            <dt>${escapeHtml(question)}</dt>
+            <dd>${escapeHtml(answer)}</dd>
+          </div>`,
+    )
+    .join("");
+
+  return `
+      <section id="faq" class="faq" aria-labelledby="faq-heading">
+        <div class="faq__heading">
+          <p data-reveal>Before you get in touch</p>
+          <h2 id="faq-heading" data-reveal>Questions we are often asked</h2>
+        </div>
+        <dl class="faq__list">${items}</dl>
+      </section>`;
+};
+
 export const renderHomepage = (
   content: SiteContent,
   config: ContactConfig,
@@ -483,6 +546,7 @@ export const renderHomepage = (
         </ol>
         <p class="journey__note" data-reveal>For a bug, the first step is a diagnosis. We confirm the cause before we promise a fix.</p>
       </section>
+      ${renderFaq(content.faq)}
       <section id="team" class="team" aria-labelledby="team-heading">
         <div class="team__heading">
           <p data-reveal>Who you will work with</p>
@@ -490,6 +554,7 @@ export const renderHomepage = (
         </div>
         <div class="team__grid">${founders}</div>
       </section>
+      ${renderCaseStudies(content.caseStudies)}
       <section class="contact" id="contact" aria-labelledby="contact-heading">
         <h2 id="contact-heading" data-reveal>Whatever you need to move forward, call us.</h2>
         <p data-reveal>Tell us what your business needs, which system is involved and what outcome you want. For a bug, include the steps that trigger it and any deadline that matters.</p>

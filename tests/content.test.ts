@@ -152,4 +152,39 @@ describe("site content", () => {
       );
     }
   });
+
+  it("ships no case study until one is approved for publication", () => {
+    siteContent.caseStudies.forEach((study) => {
+      expect(study.id).toMatch(/^[a-z0-9-]+$/);
+      expect(study.technologies.length).toBeGreaterThan(0);
+      Object.values(study).forEach((value) =>
+        expect(JSON.stringify(value)).not.toMatch(/\[\[[A-Z_]+\]\]/),
+      );
+    });
+    if (!siteStatus.launched) {
+      expect(siteContent.caseStudies).toEqual([]);
+    }
+  });
+
+  it("asks the four audit questions and refuses to launch with unfilled answers", () => {
+    expect(siteContent.faq.map(({ question }) => question)).toEqual([
+      "Can you work on software built by another team?",
+      "What do you need to investigate an issue?",
+      "How do you estimate the work and agree the scope?",
+      "What happens after delivery?",
+    ]);
+
+    const unfilled = siteContent.faq.filter(({ answer }) => /\[\[[A-Z_]+\]\]/.test(answer));
+
+    if (siteStatus.launched) {
+      expect(unfilled).toEqual([]);
+    } else {
+      expect(unfilled.map(({ answer }) => answer)).toEqual([
+        "[[FAQ_ANSWER_EXISTING_SOFTWARE]]",
+        "[[FAQ_ANSWER_INVESTIGATION]]",
+        "[[FAQ_ANSWER_ESTIMATE]]",
+        "[[FAQ_ANSWER_AFTER_DELIVERY]]",
+      ]);
+    }
+  });
 });
