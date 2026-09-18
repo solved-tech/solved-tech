@@ -179,7 +179,6 @@ export const setupMotionToggle = (root: ParentNode, view: Window): void => {
 
   const setPaused = (paused: boolean): void => {
     html.classList.toggle("motion-paused", paused);
-    button.setAttribute("aria-pressed", String(paused));
     button.textContent = paused
       ? "Resume background motion"
       : "Pause background motion";
@@ -190,7 +189,7 @@ export const setupMotionToggle = (root: ParentNode, view: Window): void => {
   };
 
   button.addEventListener("click", () => {
-    setPaused(button.getAttribute("aria-pressed") !== "true");
+    setPaused(!html.classList.contains("motion-paused"));
   });
   query.addEventListener("change", syncPreference);
   syncPreference();

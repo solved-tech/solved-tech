@@ -506,7 +506,7 @@ export const renderHomepage = (
         <p data-reveal>We build new applications, fix existing software and connect your systems.</p>
         ${renderHeroPipeline()}
         ${renderContactActions(config, "hero__actions")}
-        <button class="motion-toggle" type="button" aria-pressed="false">Pause background motion</button>
+        <button class="motion-toggle" type="button">Pause background motion</button>
       </section>
       <section id="services" class="services" aria-labelledby="services-heading">
         <h2 id="services-heading" data-reveal>What do you need?</h2>

@@ -443,7 +443,7 @@ describe("homepage renderer", () => {
   it("offers a visible control to pause background motion after the hero actions", () => {
     const actions = html.indexOf('class="hero__actions"');
     const toggle = html.indexOf(
-      '<button class="motion-toggle" type="button" aria-pressed="false">Pause background motion</button>',
+      '<button class="motion-toggle" type="button">Pause background motion</button>',
     );
 
     expect(toggle).toBeGreaterThan(actions);

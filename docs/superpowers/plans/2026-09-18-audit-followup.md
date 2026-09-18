@@ -25,7 +25,7 @@ Everything in main-plan Section 0 stands. Differences for this file:
 | 17 | CSP `<meta>` placed after the script/stylesheet; silent `noindex` on launch; `img-src data:` | [x] |
 | 18 | CSP verifier not wired into CI, undeclared import, weak signal; workflow permissions; `.nvmrc` | [x] |
 | 19 | Client re-render discards prerendered markup (paint → blank → fade) | [x] |
-| 20 | Motion toggle announces two conflicting states | [ ] |
+| 20 | Motion toggle announces two conflicting states | [x] |
 | 21 | Need-selector border 1.96:1; back-to-top does not move focus; privacy page has no actionable contact | [ ] |
 
 ### 0.2 Facts only humans can supply (in addition to main-plan H1–H7)
@@ -690,7 +690,7 @@ mount(app, () => renderPrivacyPage(privacyContent, contactConfig));
 
 **Steps:**
 
-- [ ] **Step 1: Update the unit test fake and assertions** in `tests/motion.test.ts`, `describe("motion toggle")`:
+- [x] **Step 1: Update the unit test fake and assertions** in `tests/motion.test.ts`, `describe("motion toggle")`:
 
 Replace
 
@@ -768,7 +768,7 @@ Replace the first `it` block's body so it reads:
   });
 ```
 
-- [ ] **Step 2: Update `tests/render.test.ts` line 427.** Replace
+- [x] **Step 2: Update `tests/render.test.ts` line 427.** Replace
 
 ```ts
       '<button class="motion-toggle" type="button" aria-pressed="false">Pause background motion</button>',
@@ -780,9 +780,9 @@ with
       '<button class="motion-toggle" type="button">Pause background motion</button>',
 ```
 
-- [ ] **Step 3:** Run `npm test`. Expect exactly 2 failures: the render assertion and `pauses and resumes…` (the click handler calls `getAttribute`, which the fake no longer has).
+- [x] **Step 3:** Run `npm test`. Expect exactly 2 failures: the render assertion and `pauses and resumes…` (the click handler calls `getAttribute`, which the fake no longer has).
 
-- [ ] **Step 4: Edit `src/enhance.ts`.** In `setupMotionToggle` replace
+- [x] **Step 4: Edit `src/enhance.ts`.** In `setupMotionToggle` replace
 
 ```ts
   const setPaused = (paused: boolean): void => {
@@ -821,9 +821,9 @@ with
   });
 ```
 
-- [ ] **Step 5: Edit `src/render.ts` line 510.** Replace `<button class="motion-toggle" type="button" aria-pressed="false">Pause background motion</button>` with `<button class="motion-toggle" type="button">Pause background motion</button>`.
+- [x] **Step 5: Edit `src/render.ts` line 510.** Replace `<button class="motion-toggle" type="button" aria-pressed="false">Pause background motion</button>` with `<button class="motion-toggle" type="button">Pause background motion</button>`.
 
-- [ ] **Step 6: Edit the e2e test** `background motion can be paused from a visible control` in `tests/e2e/responsive.spec.ts`. Replace the three `aria-pressed` assertions:
+- [x] **Step 6: Edit the e2e test** `background motion can be paused from a visible control` in `tests/e2e/responsive.spec.ts`. Replace the three `aria-pressed` assertions:
 
 ```ts
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
@@ -853,9 +853,9 @@ with
   await expect.poll(playState).toBe("running");
 ```
 
-- [ ] **Step 7:** Run `npm test` (138 passed), `npm run check`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`.
+- [x] **Step 7:** Run `npm test` (138 passed), `npm run check`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`.
 
-- [ ] **Step 8:** Confirm nothing else references the attribute: `grep -rn 'aria-pressed' src tests` must print exactly one line — the `not.toHaveAttribute` assertion from Step 6.
+- [x] **Step 8:** Confirm nothing else references the attribute: `grep -rn 'aria-pressed' src tests` must print exactly one line — the `not.toHaveAttribute` assertion from Step 6.
 
 **Downstream:** `tests/render.test.ts:427` (Step 2), `tests/e2e/responsive.spec.ts` (Step 6). `src/styles.css` has no `[aria-pressed]` selector, so no CSS change.
 

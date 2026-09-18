@@ -651,17 +651,17 @@ test("background motion can be paused from a visible control", async ({ page }) 
 
   await page.locator(".hero__pipeline").scrollIntoViewIfNeeded();
   await expect(toggle).toBeVisible();
-  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect(toggle).toHaveText("Pause background motion");
+  await expect(toggle).not.toHaveAttribute("aria-pressed");
   await expect.poll(playState).toBe("running");
 
   await toggle.click();
-  await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await expect(toggle).toHaveText("Resume background motion");
   await expect(page.locator("html")).toHaveClass(/motion-paused/);
   await expect.poll(playState).toBe("paused");
 
   await toggle.click();
-  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect(toggle).toHaveText("Pause background motion");
   await expect.poll(playState).toBe("running");
 
   await page.emulateMedia({ reducedMotion: "reduce" });

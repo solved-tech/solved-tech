@@ -601,14 +601,11 @@ describe("scroll progress", () => {
 
 describe("motion toggle", () => {
   const createToggle = (reduceMotion: boolean) => {
-    const attributes = new Map([["aria-pressed", "false"]]);
     const handlers = new Map<string, () => void>();
     const classes = new Set<string>();
     const button = {
       hidden: false,
       textContent: "Pause background motion",
-      getAttribute: (name: string) => attributes.get(name) ?? null,
-      setAttribute: (name: string, value: string) => attributes.set(name, value),
       addEventListener: (type: string, handler: () => void) =>
         handlers.set(type, handler),
     };
@@ -624,6 +621,7 @@ describe("motion toggle", () => {
       document: {
         documentElement: {
           classList: {
+            contains: (name: string) => classes.has(name),
             toggle: (name: string, force: boolean) => {
               if (force) {
                 classes.add(name);
@@ -640,21 +638,19 @@ describe("motion toggle", () => {
 
     setupMotionToggle(root, view as unknown as Window);
 
-    return { attributes, button, classes, handlers, query, fireChange: () => onChange?.() };
+    return { button, classes, handlers, query, fireChange: () => onChange?.() };
   };
 
-  it("pauses and resumes continuous motion through a pressed state", () => {
-    const { attributes, button, classes, handlers } = createToggle(false);
+  it("pauses and resumes continuous motion through the label and the html class", () => {
+    const { button, classes, handlers } = createToggle(false);
 
     expect(button.hidden).toBe(false);
 
     handlers.get("click")?.();
-    expect(attributes.get("aria-pressed")).toBe("true");
     expect(button.textContent).toBe("Resume background motion");
     expect(classes.has("motion-paused")).toBe(true);
 
     handlers.get("click")?.();
-    expect(attributes.get("aria-pressed")).toBe("false");
     expect(button.textContent).toBe("Pause background motion");
     expect(classes.has("motion-paused")).toBe(false);
   });
