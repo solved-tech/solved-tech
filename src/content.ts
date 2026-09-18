@@ -214,7 +214,7 @@ export const privacyContent: PrivacyContent = {
     {
       heading: "Who we are",
       paragraphs: [
-        "Solved Tech is operated by [[COMPANY_LEGAL_NAME]], [[COMPANY_REGISTERED_ADDRESS]]. We are the data controller for the personal data described in this notice.",
+        "Solved Tech is operated by Solved Tech Limited, 31 Glendale Gardens, Wembley, England, HA9 8PR. We are the data controller for the personal data described in this notice.",
       ],
     },
     {

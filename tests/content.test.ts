@@ -143,8 +143,6 @@ describe("site content", () => {
       expect(new Set(tokens)).toEqual(
         new Set([
           "[[PRIVACY_UPDATED_DATE]]",
-          "[[COMPANY_LEGAL_NAME]]",
-          "[[COMPANY_REGISTERED_ADDRESS]]",
           "[[PHONE_AND_WHATSAPP_PROVIDER]]",
           "[[EMAIL_PROVIDER]]",
           "[[RETENTION_PERIOD]]",
