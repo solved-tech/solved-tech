@@ -1624,6 +1624,39 @@ main > section + section {
   color: var(--ink);
 }
 
+.contact-details {
+  display: grid;
+  gap: 0.5rem 2rem;
+  margin: 1.5rem 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-small);
+}
+
+.contact-details div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+}
+
+.contact-details dt {
+  color: var(--ink-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contact-details dd {
+  margin: 0;
+  color: var(--ink);
+  user-select: all;
+  -webkit-user-select: all;
+}
+
+@media (min-width: 40rem) {
+  .contact-details {
+    grid-template-columns: repeat(2, max-content);
+  }
+}
+
 .contact-note {
   margin-block-start: clamp(1.5rem, 3vw, 2rem);
   padding: 1rem 1.25rem;

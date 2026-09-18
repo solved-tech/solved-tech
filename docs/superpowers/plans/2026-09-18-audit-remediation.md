@@ -110,7 +110,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 1 | F05 | [x] |
 | 2 | F06 | [x] |
 | 3 | F11 (preview) | [x] |
-| 4 | F01 | [ ] |
+| 4 | F01 | [x] |
 | 5 | F02, F07 | [ ] |
 | 6 | F04, hero copy | [ ] |
 | 7 | F14 | [ ] |
@@ -486,7 +486,7 @@ describe("document shell", () => {
 
 **Steps:**
 
-- [ ] **Step 1: Add a launch switch to `src/content.ts`.** Append after `contactConfig`:
+- [x] **Step 1: Add a launch switch to `src/content.ts`.** Append after `contactConfig`:
 
 ```ts
 export interface SiteStatus {
@@ -498,7 +498,7 @@ export const siteStatus: SiteStatus = {
 };
 ```
 
-- [ ] **Step 2: Replace the test `"uses explicit one-click trial contact placeholders"`** in `tests/content.test.ts` with:
+- [x] **Step 2: Replace the test `"uses explicit one-click trial contact placeholders"`** in `tests/content.test.ts` with:
 
 ```ts
   it("keeps every contact channel derived from one phone number", () => {
@@ -522,7 +522,7 @@ export const siteStatus: SiteStatus = {
 
 Update the import at the top of the file to `import { contactConfig, siteContent, siteStatus } from "../src/content";`.
 
-- [ ] **Step 3: In `tests/render.test.ts`**, add this helper after the imports:
+- [x] **Step 3: In `tests/render.test.ts`**, add this helper after the imports:
 
 ```ts
 const escapeRegExp = (value: string): string =>
@@ -545,7 +545,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
     ).toHaveLength(2);
 ```
 
-- [ ] **Step 4: Add the failing renderer test** at the end of the describe block:
+- [x] **Step 4: Add the failing renderer test** at the end of the describe block:
 
 ```ts
   it("shows the phone number and email as copyable text in the contact section", () => {
@@ -561,9 +561,9 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
   });
 ```
 
-- [ ] **Step 5:** Run `npm test`. Expect exactly 1 failure (Step 4's test). If Step 2 or 3 tests fail, the helper or import was copied wrongly; fix that before continuing.
+- [x] **Step 5:** Run `npm test`. Expect exactly 1 failure (Step 4's test). If Step 2 or 3 tests fail, the helper or import was copied wrongly; fix that before continuing.
 
-- [ ] **Step 6: Edit the contact section in `src/render.ts`.** Directly after the line `<div data-reveal>${renderContactActions(config, "contact__actions")}</div>` insert:
+- [x] **Step 6: Edit the contact section in `src/render.ts`.** Directly after the line `<div data-reveal>${renderContactActions(config, "contact__actions")}</div>` insert:
 
 ```html
         <dl class="contact-details" data-reveal>
@@ -572,7 +572,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
         </dl>
 ```
 
-- [ ] **Step 7: Add CSS** in `src/styles.css` immediately before the `.contact-note {` rule:
+- [x] **Step 7: Add CSS** in `src/styles.css` immediately before the `.contact-note {` rule:
 
 ```css
 .contact-details {
@@ -609,7 +609,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
 }
 ```
 
-- [ ] **Step 8:** Run `npm test` (expect 84 passing), `npm run check`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`.
+- [x] **Step 8:** Run `npm test` (expect 84 passing), `npm run check`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`.
 
 **Downstream:** none for the agent. The `.contact-note` paragraph remains until H1.
 

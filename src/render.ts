@@ -437,6 +437,10 @@ export const renderHomepage = (
         <h2 id="contact-heading" data-reveal>Whatever you need to move forward, call us.</h2>
         <p data-reveal>One click starts the conversation.</p>
         <div data-reveal>${renderContactActions(config, "contact__actions")}</div>
+        <dl class="contact-details" data-reveal>
+          <div><dt>Phone</dt><dd>${escapeHtml(config.displayPhone)}</dd></div>
+          <div><dt>Email</dt><dd>${escapeHtml(config.email)}</dd></div>
+        </dl>
         ${config.placeholder ? `<p class="contact-note"><strong>Trial contact details:</strong> ${escapeHtml(config.displayPhone)} and ${escapeHtml(config.email)} are non-production placeholders and must be replaced before launch.</p>` : ""}
       </section>
     </main>

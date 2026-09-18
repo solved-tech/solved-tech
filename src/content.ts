@@ -33,6 +33,14 @@ export const contactConfig: ContactConfig = {
   email: "contact@solvedtech.co.uk",
   placeholder: true,
 };
+export interface SiteStatus {
+  launched: boolean;
+}
+
+export const siteStatus: SiteStatus = {
+  launched: false,
+};
+
 
 export const siteContent: SiteContent = {
   products: [

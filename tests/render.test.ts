@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { contactConfig, siteContent } from "../src/content";
 import { renderHomepage } from "../src/render";
 
+const escapeRegExp = (value: string): string =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 describe("homepage renderer", () => {
   const html = renderHomepage(siteContent, contactConfig);
 
@@ -291,12 +294,16 @@ describe("homepage renderer", () => {
   });
 
   it("renders Call, WhatsApp, and Email in both contact groups", () => {
-    expect(html.match(/href="tel:\+442000000000"/g)).toHaveLength(2);
     expect(
-      html.match(/href="https:\/\/wa\.me\/442000000000"/g),
+      html.match(new RegExp(`href="tel:${escapeRegExp(contactConfig.phone)}"`, "g")),
     ).toHaveLength(2);
     expect(
-      html.match(/href="mailto:contact@solvedtech\.co\.uk"/g),
+      html.match(
+        new RegExp(`href="https://wa\\.me/${escapeRegExp(contactConfig.whatsapp)}"`, "g"),
+      ),
+    ).toHaveLength(2);
+    expect(
+      html.match(new RegExp(`href="mailto:${escapeRegExp(contactConfig.email)}"`, "g")),
     ).toHaveLength(2);
     expect(
       html.match(/contact-action__icon--whatsapp/g),
@@ -353,5 +360,17 @@ describe("homepage renderer", () => {
       html.indexOf('class="site-header"'),
     );
     expect(html.match(/href="#top"/g)).toHaveLength(2);
+  });
+
+  it("shows the phone number and email as copyable text in the contact section", () => {
+    const contact = html.match(/<section class="contact"[\s\S]*?<\/section>/)?.[0];
+
+    expect(contact).toBeDefined();
+    expect(contact).toContain('<dl class="contact-details" data-reveal>');
+    expect(contact).toContain(`<dt>Phone</dt><dd>${contactConfig.displayPhone}</dd>`);
+    expect(contact).toContain(`<dt>Email</dt><dd>${contactConfig.email}</dd>`);
+    expect(contact!.indexOf('class="contact__actions"')).toBeLessThan(
+      contact!.indexOf('class="contact-details"'),
+    );
   });
 });

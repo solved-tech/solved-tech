@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contactConfig, siteContent } from "../src/content";
+import { contactConfig, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
   it("uses the approved commercial service order", () => {
@@ -55,14 +55,22 @@ describe("site content", () => {
     expect(other?.provides.some((item) => item.includes("MCP"))).toBe(false);
   });
 
-  it("uses explicit one-click trial contact placeholders", () => {
-    expect(contactConfig).toEqual({
-      displayPhone: "+44 20 0000 0000",
-      phone: "+442000000000",
-      whatsapp: "442000000000",
-      email: "contact@solvedtech.co.uk",
-      placeholder: true,
-    });
+  it("keeps every contact channel derived from one phone number", () => {
+    expect(contactConfig.phone).toBe(contactConfig.displayPhone.replace(/\s+/g, ""));
+    expect(contactConfig.phone).toMatch(/^\+44\d{10}$/);
+    expect(contactConfig.whatsapp).toBe(contactConfig.phone.slice(1));
+    expect(contactConfig.email).toMatch(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i);
+  });
+
+  it("refuses to launch with trial contact details", () => {
+    const trial = ["+442000000000", "contact@solvedtech.co.uk"];
+    const isTrial =
+      trial.includes(contactConfig.phone) || trial.includes(contactConfig.email);
+
+    expect(contactConfig.placeholder).toBe(isTrial);
+    if (siteStatus.launched) {
+      expect(contactConfig.placeholder).toBe(false);
+    }
   });
 
   it("defines the approved founders with Razvan first", () => {
