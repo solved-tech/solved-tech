@@ -7,3 +7,6 @@ coverage/
 !.env.example
 .superpowers/
 .notes/
+.playwright-mcp/
+test-results/
+.augment/settings.local.json
