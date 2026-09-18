@@ -279,11 +279,12 @@ describe("homepage renderer", () => {
       'src="/solved-tech/brand/solved-tech-logo-dark.svg"',
     );
     expect(pagesHtml).toContain(
-      'src="/solved-tech/team/razvan_cristofor.png"',
+      'src="/solved-tech/team/razvan_cristofor-520.webp"',
     );
     expect(pagesHtml).toContain(
-      'src="/solved-tech/team/remus_baciu.png"',
+      'src="/solved-tech/team/remus_baciu-340.webp"',
     );
+    expect(pagesHtml).toContain('srcset="/solved-tech/team/razvan_cristofor-520.webp 520w, /solved-tech/team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
   });
 
   it("renders one assistive-technology-hidden background grid", () => {
@@ -375,6 +376,7 @@ describe("homepage renderer", () => {
       expect(html).toContain(`aria-label="LinkedIn profile for ${name}"`);
     });
     expect(html.match(/class="founder__portrait-frame"/g)).toHaveLength(2);
+    expect(html.match(/ srcset="/g)).toHaveLength(1);
     expect(html).not.toContain("Placeholder portrait");
     expect(html).not.toContain("Photo placeholder");
   });

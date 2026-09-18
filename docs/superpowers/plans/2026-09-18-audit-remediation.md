@@ -115,7 +115,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 6 | F04, hero copy | [x] |
 | 7 | F14 | [x] |
 | 8 | F08 | [x] |
-| 9 | F09 | [ ] |
+| 9 | F09 | [x] |
 | 10 | F16 | [ ] |
 | 11 | F03, FAQ | [ ] |
 | 12 | F10, F13, F11 (launch) | [ ] |
@@ -1698,7 +1698,7 @@ Run `npx playwright test --project=uk-phone-standard --project=uk-desktop --proj
 
 **Steps:**
 
-- [ ] **Step 1: Check for an encoder.** Run `command -v cwebp; command -v magick; command -v convert`. Use the first one found:
+- [x] **Step 1: Check for an encoder.** Run `command -v cwebp; command -v magick; command -v convert`. Use the first one found:
   - `cwebp`:
     ```bash
     cwebp -q 82 -resize 520 0 public/team/razvan_cristofor.png -o public/team/razvan_cristofor-520.webp
@@ -1710,7 +1710,7 @@ Run `npx playwright test --project=uk-phone-standard --project=uk-desktop --proj
 
   Verify sizes with `ls -l public/team/*.webp`; each must be under 153,600 bytes. If the 1040 variant is larger, re-encode it with `-q 74` once. If still larger, report and stop.
 
-- [ ] **Step 2: Create `tests/assets.test.ts`:**
+- [x] **Step 2: Create `tests/assets.test.ts`:**
 
 ```ts
 import { statSync } from "node:fs";
@@ -1734,7 +1734,7 @@ describe("portrait assets", () => {
 });
 ```
 
-- [ ] **Step 3: Update `src/content.ts`.** Change `FounderProfile` to:
+- [x] **Step 3: Update `src/content.ts`.** Change `FounderProfile` to:
 
 ```ts
 export interface FounderImageSource {
@@ -1773,9 +1773,9 @@ and the founders to:
     },
 ```
 
-- [ ] **Step 4: Update tests.** In `tests/content.test.ts` `"defines the approved founders with Razvan first"` expect the two objects from Step 3. In `tests/render.test.ts` `"prefixes public assets for a GitHub Pages project site"` replace the two `.png` expectations with `src="/solved-tech/team/razvan_cristofor-520.webp"` and `src="/solved-tech/team/remus_baciu-340.webp"`, and add `expect(pagesHtml).toContain('srcset="/solved-tech/team/razvan_cristofor-520.webp 520w, /solved-tech/team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');`. In `"renders two founder cards with portraits and LinkedIn links"` add `expect(html.match(/ srcset="/g)).toHaveLength(1);`.
+- [x] **Step 4: Update tests.** In `tests/content.test.ts` `"defines the approved founders with Razvan first"` expect the two objects from Step 3. In `tests/render.test.ts` `"prefixes public assets for a GitHub Pages project site"` replace the two `.png` expectations with `src="/solved-tech/team/razvan_cristofor-520.webp"` and `src="/solved-tech/team/remus_baciu-340.webp"`, and add `expect(pagesHtml).toContain('srcset="/solved-tech/team/razvan_cristofor-520.webp 520w, /solved-tech/team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');`. In `"renders two founder cards with portraits and LinkedIn links"` add `expect(html.match(/ srcset="/g)).toHaveLength(1);`.
 
-- [ ] **Step 5: Update the renderer.** In `renderHomepage`'s founders map, destructure `imageSources` and build the image tag as:
+- [x] **Step 5: Update the renderer.** In `renderHomepage`'s founders map, destructure `imageSources` and build the image tag as:
 
 ```ts
         const srcset = imageSources.length
@@ -1787,7 +1787,7 @@ and the founders to:
 
 and `<img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="Portrait of ${escapeHtml(name)}" width="520" height="620" loading="lazy" />`. (Convert the arrow body to a block with a `return` to hold the `srcset` constant.)
 
-- [ ] **Step 6:** `git rm public/team/razvan_cristofor.png public/team/remus_baciu.png`. Run `npm test` (expect 98 passing), `npm run check`, `npm run build`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`.
+- [x] **Step 6:** `git rm public/team/razvan_cristofor.png public/team/remus_baciu.png`. Run `npm test` (expect 98 passing), `npm run check`, `npm run build`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`.
 
 **Downstream:** covered in Step 4.
 

@@ -367,11 +367,18 @@ export const renderHomepage = (
     .join("");
   const founders = content.founders
     .map(
-      ({ name, role, image, linkedin }) => `
+      ({ name, role, image, imageSources, linkedin }) => {
+        const srcset = imageSources.length
+          ? ` srcset="${imageSources
+              .map(({ path, width }) => `${escapeHtml(publicAssetUrl(path, baseUrl))} ${width}w`)
+              .join(", ")}" sizes="(min-width: 48rem) 26rem, 80vw"`
+          : "";
+
+        return `
         <article class="founder" data-reveal>
           <div class="founder__portrait">
             <div class="founder__portrait-frame">
-              <img src="${escapeHtml(publicAssetUrl(image, baseUrl))}" alt="Portrait of ${escapeHtml(name)}" width="520" height="620" loading="lazy" />
+              <img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="Portrait of ${escapeHtml(name)}" width="520" height="620" loading="lazy" />
             </div>
           </div>
           <div class="founder__details">
@@ -381,7 +388,8 @@ export const renderHomepage = (
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6.5 8.25H3.25V20H6.5V8.25ZM4.88 3A1.88 1.88 0 1 0 4.88 6.75 1.88 1.88 0 0 0 4.88 3ZM20.75 13.25c0-3.54-1.89-5.19-4.42-5.19-2.04 0-2.95 1.12-3.46 1.91V8.25H9.62V20h3.25v-5.82c0-1.53.29-3.01 2.19-3.01 1.87 0 1.89 1.75 1.89 3.11V20h3.25l.55-6.75Z"/></svg>
             </a>
           </div>
-        </article>`,
+        </article>`;
+      },
     )
     .join("");
 

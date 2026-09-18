@@ -15,10 +15,16 @@ export interface ProductOffer {
   cta: string;
 }
 
+export interface FounderImageSource {
+  path: string;
+  width: number;
+}
+
 export interface FounderProfile {
   name: string;
   role: string;
   image: string;
+  imageSources: FounderImageSource[];
   linkedin: string;
 }
 
@@ -132,13 +138,18 @@ export const siteContent: SiteContent = {
     {
       name: "Razvan Cristofor",
       role: "Co-founder — Apps & SEO Expert",
-      image: "/team/razvan_cristofor.png",
+      image: "/team/razvan_cristofor-520.webp",
+      imageSources: [
+        { path: "/team/razvan_cristofor-520.webp", width: 520 },
+        { path: "/team/razvan_cristofor-1040.webp", width: 1040 },
+      ],
       linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
     },
     {
       name: "Remus Baciu",
       role: "Co-founder — Senior Software Engineer",
-      image: "/team/remus_baciu.png",
+      image: "/team/remus_baciu-340.webp",
+      imageSources: [],
       linkedin: "https://www.linkedin.com/in/remus-baciu-4a11a7105/",
     },
   ],
