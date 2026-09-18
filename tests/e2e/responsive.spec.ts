@@ -505,19 +505,8 @@ test("wide desktop hero lead stays constrained", async ({ page }, testInfo) => {
   const collector = await preparePage(page);
   const heroLead = page.locator("#hero-heading + p");
 
-  await expect(heroLead).toHaveText(/Bring us the problem/);
+  await expect(heroLead).toHaveText(/connect your systems\.$/);
   await assertProseWidth(heroLead);
-
-  assertNoRuntimeErrors(collector);
-});
-
-test("wide desktop contact note stays constrained", async ({ page }, testInfo) => {
-  test.skip(
-    testInfo.project.name !== WIDE_DESKTOP_PROJECT,
-    "2560×1440 project only",
-  );
-
-  const collector = await preparePage(page);
 
   assertNoRuntimeErrors(collector);
 });

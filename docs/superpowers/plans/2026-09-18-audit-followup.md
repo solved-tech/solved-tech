@@ -21,7 +21,7 @@ Everything in main-plan Section 0 stands. Differences for this file:
 
 | Task | Fixes | Status |
 | --- | --- | --- |
-| 16 | Red `wide-desktop` e2e project; assertion-less test | [ ] |
+| 16 | Red `wide-desktop` e2e project; assertion-less test | [x] |
 | 17 | CSP `<meta>` placed after the script/stylesheet; silent `noindex` on launch; `img-src data:` | [ ] |
 | 18 | CSP verifier not wired into CI, undeclared import, weak signal; workflow permissions; `.nvmrc` | [ ] |
 | 19 | Client re-render discards prerendered markup (paint → blank → fade) | [ ] |
@@ -87,9 +87,9 @@ Everything in main-plan Section 0 stands. Differences for this file:
 
 **Steps:**
 
-- [ ] **Step 1:** Run `npx playwright test --project=wide-desktop`. Expect exactly 1 failure: `wide desktop hero lead stays constrained` at line 508.
+- [x] **Step 1:** Run `npx playwright test --project=wide-desktop`. Expect exactly 1 failure: `wide desktop hero lead stays constrained` at line 508.
 
-- [ ] **Step 2: Edit `tests/e2e/responsive.spec.ts`.** Replace the line
+- [x] **Step 2: Edit `tests/e2e/responsive.spec.ts`.** Replace the line
 
 ```ts
   await expect(heroLead).toHaveText(/Bring us the problem/);
@@ -101,7 +101,7 @@ with
   await expect(heroLead).toHaveText(/connect your systems\.$/);
 ```
 
-- [ ] **Step 3: Delete the vacuous test.** Remove this whole block (it follows the hero-lead test):
+- [x] **Step 3: Delete the vacuous test.** Remove this whole block (it follows the hero-lead test):
 
 ```ts
 test("wide desktop contact note stays constrained", async ({ page }, testInfo) => {
@@ -118,9 +118,9 @@ test("wide desktop contact note stays constrained", async ({ page }, testInfo) =
 
 Leave exactly one blank line between the hero-lead test and the `reduced motion renders completed static states` test that followed it.
 
-- [ ] **Step 4:** Run `npx playwright test --project=wide-desktop`. All tests pass (one fewer than before).
+- [x] **Step 4:** Run `npx playwright test --project=wide-desktop`. All tests pass (one fewer than before).
 
-- [ ] **Step 5:** Run `npm test` (132 passed) and `npm run check`.
+- [x] **Step 5:** Run `npm test` (132 passed) and `npm run check`.
 
 **Downstream:** none. Unit tests are untouched.
 
