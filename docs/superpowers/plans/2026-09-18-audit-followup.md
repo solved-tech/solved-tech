@@ -64,7 +64,7 @@ Everything in main-plan Section 0 stands. Differences for this file:
 | --- | --- | --- |
 | D1 | Remus portrait resolution (F09) | Needs H3 |
 | D2 | Privacy notice recipients (WhatsApp/Meta, email provider, transfers) | Needs H8; legal accuracy, not code |
-| D3 | `style-src 'unsafe-inline'` → `'self'` by moving the seven `--pipeline-delay` values into CSS | Already recorded in `docs/hosting/security-headers.md`; separate change |
+| D3 | `style-src 'unsafe-inline'` → `'self'` by moving the seven `--pipeline-delay` values into CSS | **Done in `8138c2c`** (ahead of this plan): the delays are now `--pipeline-delay` declarations in `src/styles.css` keyed by node modifier, `style-src` is `'self'`, and `tests/render.test.ts` pins them |
 | D4 | Mobile menu: close on outside pointer-down / focus leaving the nav | Not in F06 acceptance; behaviour addition |
 | D5 | "(opens in new tab)" hint on WhatsApp and LinkedIn links; `noopener` alongside `noreferrer` | Cosmetic for AT users; no acceptance criterion |
 | D6 | Persist the motion-pause preference in `sessionStorage` | Not in F08 acceptance |
