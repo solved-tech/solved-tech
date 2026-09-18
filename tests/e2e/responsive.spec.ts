@@ -50,6 +50,25 @@ test("header controls stay in complete bounds", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
+test("back to top brings the hero into view from the footer", async ({ page }) => {
+  const collector = await preparePage(page);
+  const backToTop = page.locator('footer a[href="#top"]');
+
+  await backToTop.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBeGreaterThan(1000);
+
+  await backToTop.click();
+  await expect(page).toHaveURL(/#top$/);
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBeLessThanOrEqual(1);
+  await expect(page.locator("#hero-heading")).toBeInViewport();
+
+  assertNoRuntimeErrors(collector);
+});
+
 test("interactive targets have complete bounds and minimum touch heights", async ({
   page,
 }) => {

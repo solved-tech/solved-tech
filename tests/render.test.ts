@@ -345,4 +345,13 @@ describe("homepage renderer", () => {
     expect(html).not.toContain("Placeholder portrait");
     expect(html).not.toContain("Photo placeholder");
   });
+  it("targets back-to-top links at an in-flow anchor above the sticky header", () => {
+    expect(html).toContain('<div id="top" class="page-top"></div>');
+    expect(html).toContain('<header class="site-header">');
+    expect(html).not.toContain('<header id="top"');
+    expect(html.indexOf('id="top"')).toBeLessThan(
+      html.indexOf('class="site-header"'),
+    );
+    expect(html.match(/href="#top"/g)).toHaveLength(2);
+  });
 });

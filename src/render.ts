@@ -353,7 +353,8 @@ export const renderHomepage = (
       <code data-language="terraform">resource "progress" "next" {}</code>
       <code data-language="shell">$ ship --when-ready</code>
     </div>
-    <header id="top" class="site-header">
+    <div id="top" class="page-top"></div>
+    <header class="site-header">
       <a class="wordmark" href="#top" aria-label="Solved Tech home">
         <img src="${escapeHtml(publicAssetUrl("/brand/solved-tech-logo-dark.svg", baseUrl))}" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
       </a>
