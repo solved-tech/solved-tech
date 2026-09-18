@@ -40,6 +40,27 @@ describe("privacy document shell", () => {
   });
 });
 
+describe("document icons", () => {
+  const shells: Array<[string, string]> = [
+    ["the homepage", indexHtml],
+    ["the privacy notice", privacyHtml],
+    ...servicePages.map(
+      ({ slug }): [string, string] => [
+        `the ${slug} service page`,
+        readFileSync(new URL(`../services/${slug}/index.html`, import.meta.url), "utf8"),
+      ],
+    ),
+  ];
+
+  shells.forEach(([name, html]) => {
+    it(`links the favicon and touch icon from ${name}`, () => {
+      expect(html).toContain('<link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />');
+      expect(html).toContain('<link rel="icon" href="%BASE_URL%favicon-32.png" sizes="32x32" type="image/png" />');
+      expect(html).toContain('<link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />');
+    });
+  });
+});
+
 describe("service document shells", () => {
   servicePages.forEach(({ slug, title, description }) => {
     it(`mirrors the shell for /services/${slug}/`, () => {
