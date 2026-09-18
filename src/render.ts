@@ -135,6 +135,32 @@ const renderCapabilities = (provides: ProductOffer["provides"]): string => `
 
 const renderServiceArt = (id: ProductOffer["id"]): string => {
   switch (id) {
+    case "fix":
+      return `
+        <svg class="service-art service-art--fix" data-service-art="fix" aria-hidden="true" viewBox="0 0 520 300">
+          <rect class="art-stroke art-browser" x="38" y="28" width="284" height="244" rx="4" />
+          <path class="art-stroke art-browser-bar" d="M38 62H322M58 45H66M74 45H82M90 45H98" />
+          <g class="art-detail art-detail--one">
+            <text class="art-label art-label--strong" x="62" y="88">Log</text>
+            <path class="art-ui-line" d="M62 110h180M62 126h132M62 142h204" />
+            <rect class="art-accent" x="62" y="156" width="196" height="18" rx="1" />
+            <text class="art-label art-label--strong" x="70" y="169">Error</text>
+            <path class="art-ui-line" d="M62 194h150M62 210h96M62 226h170" />
+          </g>
+          <g class="art-detail art-detail--two">
+            <rect class="art-panel" x="362" y="42" width="124" height="96" rx="4" />
+            <text class="art-label art-label--strong" x="424" y="66" text-anchor="middle" dominant-baseline="middle">Reproduce</text>
+            <circle class="art-icon" cx="418" cy="100" r="11" />
+            <path class="art-icon" d="m426 108 12 12M412 100h12M418 94v12" />
+          </g>
+          <g class="art-detail art-detail--three">
+            <rect class="art-panel" x="362" y="166" width="124" height="96" rx="4" />
+            <text class="art-label art-label--strong" x="424" y="190" text-anchor="middle" dominant-baseline="middle">Fixed</text>
+            <circle class="art-status art-status--active" cx="424" cy="226" r="12" />
+            <path class="art-check-small" d="m417 226 5 5 10-11" />
+          </g>
+          <path class="art-data-route" d="M322 90H362M322 214H362" />
+        </svg>`;
     case "website":
       return `
         <svg class="service-art service-art--website" data-service-art="website" aria-hidden="true" viewBox="0 0 520 300">
@@ -286,11 +312,11 @@ export const renderHomepage = (
 ): string => {
   const services = content.products
     .map(
-      ({ id, question, title, answer, provides }, index) => {
+      ({ id, question, title, answer, provides, cta }, index) => {
         const questionId = `service-${id}-question`;
 
         return `
-        <article class="service-box service-box--${escapeHtml(id)}" aria-labelledby="${questionId}">
+        <article id="service-${escapeHtml(id)}" class="service-box service-box--${escapeHtml(id)}" aria-labelledby="${questionId}">
           <header class="service-box__header">
             <div class="service-box__heading">
               <span class="service-box__number">${String(index + 1).padStart(2, "0")}</span>
@@ -303,8 +329,8 @@ export const renderHomepage = (
             <span class="service-box__artwork" data-reveal>${renderServiceArt(id)}</span>
             ${renderCapabilities(provides)}
           </div>
-          <a class="service-box__cta" href="#contact" aria-label="Talk to us about ${escapeHtml(title)}">
-            Talk to us <span aria-hidden="true">→</span>
+          <a class="service-box__cta" href="#contact" aria-label="${escapeHtml(cta)}: ${escapeHtml(title)}">
+            ${escapeHtml(cta)} <span aria-hidden="true">→</span>
           </a>
         </article>`;
       },
@@ -362,7 +388,7 @@ export const renderHomepage = (
         <span></span><span></span><span></span>
       </button>
       <nav id="primary-navigation" aria-label="Primary navigation">
-        <a href="#services">Products</a>
+        <a href="#services">Services</a>
         <a href="#approach">Process</a>
         <a href="#team">Team</a>
         <a href="#contact">Contact</a>
@@ -388,6 +414,11 @@ export const renderHomepage = (
       </section>
       <section id="services" class="services" aria-labelledby="services-heading">
         <h2 id="services-heading" data-reveal>What do you need?</h2>
+        <nav class="need-selector" aria-label="Choose your need" data-reveal>
+          <a class="need-link" href="#service-fix"><strong>Fix a system</strong><span>Bugs, failed integrations and code built by someone else.</span></a>
+          <a class="need-link" href="#service-app"><strong>Build a product</strong><span>Web, mobile and desktop applications.</span></a>
+          <a class="need-link" href="#service-other"><strong>Automate a process</strong><span>Repetitive work and tools that should talk to each other.</span></a>
+        </nav>
         <div class="service-grid">${services}</div>
       </section>
       <section id="approach" class="journey" aria-labelledby="approach-heading">

@@ -7,11 +7,12 @@ export interface ContactConfig {
 }
 
 export interface ProductOffer {
-  id: "website" | "app" | "customers" | "ai" | "other";
+  id: "fix" | "website" | "app" | "customers" | "ai" | "other";
   question: string;
   title: string;
   answer: string;
   provides: string[];
+  cta: string;
 }
 
 export interface FounderProfile {
@@ -45,6 +46,21 @@ export const siteStatus: SiteStatus = {
 export const siteContent: SiteContent = {
   products: [
     {
+      id: "fix",
+      question: "Something broken?",
+      title: "Bug fixes and improvements to existing software",
+      answer:
+        "We investigate the problem, reproduce it where possible, agree the fix and test it.",
+      provides: [
+        "Bug diagnosis and fixes",
+        "Failed integrations",
+        "Software built by another team",
+        "Regression testing",
+        "Documented handover",
+      ],
+      cta: "Discuss a software issue",
+    },
+    {
       id: "ai",
       question: "Want to use AI?",
       title: "Useful digital assistants",
@@ -53,9 +69,10 @@ export const siteContent: SiteContent = {
         "AI assistants",
         "Agentic workflows",
         "WhatsApp & voice agents",
-        "Custom MCPs",
-        "MCP integrations",
+        "AI connected to your tools (MCP)",
+        "AI that reads and updates your systems",
       ],
+      cta: "Talk to us",
     },
     {
       id: "customers",
@@ -68,6 +85,7 @@ export const siteContent: SiteContent = {
         "Google Ads",
         "Conversion tracking",
       ],
+      cta: "Talk to us",
     },
     {
       id: "website",
@@ -81,6 +99,7 @@ export const siteContent: SiteContent = {
         "Landing pages",
         "Ongoing improvements",
       ],
+      cta: "Talk to us",
     },
     {
       id: "app",
@@ -93,18 +112,20 @@ export const siteContent: SiteContent = {
         "Desktop apps",
         "SaaS platforms",
       ],
+      cta: "Talk to us",
     },
     {
       id: "other",
-      question: "Need something else?",
-      title: "Whatever your business needs",
-      answer: "If it does not fit a box, bring it anyway.",
+      question: "Need to automate a process?",
+      title: "Business automation and integrations",
+      answer: "Reduce repetitive work and connect the tools your team relies on.",
       provides: [
-        "Bespoke solutions",
         "Business automation",
         "Connected systems",
-        "Unusual requests",
+        "Data moving between your tools",
+        "Bespoke solutions",
       ],
+      cta: "Talk to us",
     },
   ],
   founders: [

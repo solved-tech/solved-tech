@@ -96,7 +96,7 @@ test("interactive targets have complete bounds and minimum touch heights", async
   }
 
   const serviceActions = page.locator(".service-box__cta");
-  await expect(serviceActions).toHaveCount(5);
+  await expect(serviceActions).toHaveCount(6);
   for (const action of await serviceActions.all()) {
     await action.scrollIntoViewIfNeeded();
     await assertMinHeight(action, 48);
@@ -308,7 +308,7 @@ test("service text stays visible before artwork reveal", async ({ page }) => {
   const collector = await preparePage(page);
   const serviceBoxes = page.locator(".service-box");
 
-  await expect(serviceBoxes).toHaveCount(5);
+  await expect(serviceBoxes).toHaveCount(6);
   await page.evaluate(() => window.scrollTo(0, 0));
 
   for (const serviceBox of await serviceBoxes.all()) {
@@ -331,7 +331,7 @@ test("service and journey diagrams render in complete bounds", async ({ page }) 
   const collector = await preparePage(page);
   const viewport = viewportSize(page);
 
-  await expect(page.locator(".service-box__artwork .service-art")).toHaveCount(5);
+  await expect(page.locator(".service-box__artwork .service-art")).toHaveCount(6);
   await expect(page.locator(".journey__signal svg")).toHaveCount(4);
 
   await scrollArtworkIntoReveal(page, viewport);
@@ -539,7 +539,7 @@ test("reduced motion renders completed static states", async ({ page }, testInfo
   const journeySignals = page.locator(".journey__signal svg");
   const revealTargets = page.locator("[data-reveal]");
 
-  await expect(serviceArtworks).toHaveCount(5);
+  await expect(serviceArtworks).toHaveCount(6);
   await expect(journeySignals).toHaveCount(4);
   await expect(page.locator(".journey__moment")).toHaveCount(4);
 

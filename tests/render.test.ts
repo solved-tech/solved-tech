@@ -90,16 +90,18 @@ describe("homepage renderer", () => {
     expect(html).toContain('<main id="main-content">');
     expect(html).toContain('<section class="contact');
     expect(html).toContain('href="#team">Team</a>');
+    expect(html).toContain('href="#services">Services</a>');
+    expect(html).not.toContain(">Products<");
   });
 
   it("renders every service as an animated visual box", () => {
-    expect(html.match(/class="service-box service-box--/g)).toHaveLength(5);
+    expect(html.match(/class="service-box service-box--/g)).toHaveLength(6);
     siteContent.products.forEach(({ id, question }) => {
       const questionId = `service-${id}-question`;
 
       expect(html).toContain(`data-service-art="${id}"`);
       expect(html).toContain(
-        `<article class="service-box service-box--${id}" aria-labelledby="${questionId}">`,
+        `<article id="service-${id}" class="service-box service-box--${id}" aria-labelledby="${questionId}">`,
       );
       expect(html).toContain(
         `<h3 id="${questionId}" class="service-box__question">${question}</h3>`,
@@ -113,22 +115,23 @@ describe("homepage renderer", () => {
 
   it("keeps service rows visible and reveals only artwork", () => {
     const serviceArticles = Array.from(
-      html.matchAll(/<article class="service-box[^"]*"[^>]*>/g),
+      html.matchAll(/<article[^>]*class="service-box[^"]*"[^>]*>/g),
       (match) => match[0],
     );
 
-    expect(serviceArticles).toHaveLength(5);
+    expect(serviceArticles).toHaveLength(6);
     serviceArticles.forEach((openingTag) => {
       expect(openingTag).not.toContain("data-reveal");
     });
     expect(
       html.match(/class="service-box__artwork" data-reveal/g),
-    ).toHaveLength(5);
+    ).toHaveLength(6);
   });
 
   it("renders the service order and capability lists", () => {
-    expect(html.match(/class="service-box__provides"/g)).toHaveLength(5);
-    expect(html.match(/class="service-box__capability"/g)).toHaveLength(21);
+    expect(html.indexOf("Something broken?")).toBeLessThan(html.indexOf("Want to use AI?"));
+    expect(html.match(/class="service-box__provides"/g)).toHaveLength(6);
+    expect(html.match(/class="service-box__capability"/g)).toHaveLength(26);
     expect(html.indexOf("Want to use AI?")).toBeLessThan(
       html.indexOf("Need more customers?"),
     );
@@ -140,23 +143,24 @@ describe("homepage renderer", () => {
   });
 
   it("uses a full header, diagram-first body, and dedicated CTA per service", () => {
-    expect(html.match(/class="service-box__header"/g)).toHaveLength(5);
-    expect(html.match(/class="service-box__body"/g)).toHaveLength(5);
+    expect(html.match(/class="service-box__header"/g)).toHaveLength(6);
+    expect(html.match(/class="service-box__body"/g)).toHaveLength(6);
     expect(
       html.match(/class="service-box__cta" href="#contact"/g),
-    ).toHaveLength(5);
+    ).toHaveLength(6);
     expect(
       html.match(
         /<div class="service-box__body">\s*<span class="service-box__artwork" data-reveal>[\s\S]*?<div class="service-box__provides">/g,
       ),
-    ).toHaveLength(5);
+    ).toHaveLength(6);
     expect(html).not.toContain('class="service-box__link"');
   });
 
   it("gives every service contact link a distinct accessible name", () => {
-    siteContent.products.forEach(({ title }) => {
-      expect(html).toContain(`aria-label="Talk to us about ${title}"`);
+    siteContent.products.forEach(({ cta, title }) => {
+      expect(html).toContain(`aria-label="${cta}: ${title}"`);
     });
+    expect(html).toContain('href="#contact" aria-label="Discuss a software issue: Bug fixes and improvements to existing software"');
   });
 
   it("keeps the two section labels on a single semantic line", () => {
@@ -169,11 +173,14 @@ describe("homepage renderer", () => {
   it("reveals each service artwork when the diagram reaches the viewport", () => {
     expect(
       html.match(/class="service-box__artwork" data-reveal/g),
-    ).toHaveLength(5);
+    ).toHaveLength(6);
   });
 
   it("fills every service visual with meaningful interface detail", () => {
     [
+      "Log",
+      "Reproduce",
+      "Fixed",
       "Home",
       "Shop",
       "Contact",
@@ -371,6 +378,25 @@ describe("homepage renderer", () => {
     expect(contact).toContain(`<dt>Email</dt><dd>${contactConfig.email}</dd>`);
     expect(contact!.indexOf('class="contact__actions"')).toBeLessThan(
       contact!.indexOf('class="contact-details"'),
+    );
+  });
+
+  it("offers a three-way need selector that deep-links into services", () => {
+    const selector = html.match(/<nav class="need-selector"[\s\S]*?<\/nav>/)?.[0];
+
+    expect(selector).toBeDefined();
+    expect(html.indexOf('id="services-heading"')).toBeLessThan(html.indexOf('class="need-selector"'));
+    expect(html.indexOf('class="need-selector"')).toBeLessThan(html.indexOf('class="service-grid"'));
+    expect(selector).toContain('aria-label="Choose your need"');
+    expect(selector!.match(/class="need-link"/g)).toHaveLength(3);
+    expect(selector).toContain('href="#service-fix"');
+    expect(selector).toContain('href="#service-app"');
+    expect(selector).toContain('href="#service-other"');
+    expect(selector).toContain("<strong>Fix a system</strong>");
+    expect(selector).toContain("<strong>Build a product</strong>");
+    expect(selector).toContain("<strong>Automate a process</strong>");
+    ["fix", "ai", "customers", "website", "app", "other"].forEach((id) =>
+      expect(html).toContain(`<article id="service-${id}"`),
     );
   });
 });

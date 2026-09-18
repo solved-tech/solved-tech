@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest";
 import { contactConfig, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
-  it("uses the approved commercial service order", () => {
+  it("uses the approved commercial service order with bug fixing first", () => {
     expect(siteContent.products.map(({ id }) => id)).toEqual([
+      "fix",
       "ai",
       "customers",
       "website",
@@ -11,48 +12,66 @@ describe("site content", () => {
       "other",
     ]);
     expect(siteContent.products.map(({ question }) => question)).toEqual([
+      "Something broken?",
       "Want to use AI?",
       "Need more customers?",
       "Need a website?",
       "Need an app?",
-      "Need something else?",
+      "Need to automate a process?",
     ]);
   });
 
-  it("lists concrete capabilities for every product", () => {
+  it("lists concrete capabilities and a CTA for every product", () => {
     expect(siteContent.products.map(({ provides }) => provides.length)).toEqual(
-      [5, 4, 4, 4, 4],
+      [5, 5, 4, 4, 4, 4],
     );
+    expect(siteContent.products.every(({ cta }) => cta.length > 0)).toBe(true);
     expect(siteContent.products.flatMap(({ provides }) => provides)).toContain(
       "Technical SEO",
     );
-    expect(siteContent.products.flatMap(({ provides }) => provides)).toContain(
-      "MCP integrations",
-    );
   });
 
-  it("keeps MCP work in AI and leaves service 05 broad", () => {
+  it("describes bug fixing, AI and automation in business language", () => {
+    const fix = siteContent.products.find(({ id }) => id === "fix");
     const ai = siteContent.products.find(({ id }) => id === "ai");
     const other = siteContent.products.find(({ id }) => id === "other");
 
+    expect(fix).toEqual({
+      id: "fix",
+      question: "Something broken?",
+      title: "Bug fixes and improvements to existing software",
+      answer:
+        "We investigate the problem, reproduce it where possible, agree the fix and test it.",
+      provides: [
+        "Bug diagnosis and fixes",
+        "Failed integrations",
+        "Software built by another team",
+        "Regression testing",
+        "Documented handover",
+      ],
+      cta: "Discuss a software issue",
+    });
     expect(ai?.provides).toEqual([
       "AI assistants",
       "Agentic workflows",
       "WhatsApp & voice agents",
-      "Custom MCPs",
-      "MCP integrations",
+      "AI connected to your tools (MCP)",
+      "AI that reads and updates your systems",
     ]);
     expect(other).toMatchObject({
-      title: "Whatever your business needs",
-      answer: "If it does not fit a box, bring it anyway.",
+      title: "Business automation and integrations",
+      answer: "Reduce repetitive work and connect the tools your team relies on.",
       provides: [
-        "Bespoke solutions",
         "Business automation",
         "Connected systems",
-        "Unusual requests",
+        "Data moving between your tools",
+        "Bespoke solutions",
       ],
+      cta: "Talk to us",
     });
-    expect(other?.provides.some((item) => item.includes("MCP"))).toBe(false);
+    expect(siteContent.products.flatMap(({ provides }) => provides)).not.toContain(
+      "Custom MCPs",
+    );
   });
 
   it("keeps every contact channel derived from one phone number", () => {

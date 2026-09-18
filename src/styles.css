@@ -777,6 +777,45 @@ main > section + section {
 
 /* Animated service boxes ---------------------------------------------- */
 
+.need-selector {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1.5rem 3rem;
+}
+
+.need-link {
+  display: grid;
+  gap: 0.25rem;
+  min-height: 44px;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 240ms var(--ease);
+}
+
+.need-link:hover,
+.need-link:focus-visible {
+  border-color: var(--accent);
+}
+
+.need-link strong {
+  font-family: var(--font-display);
+  font-size: var(--type-body);
+  font-weight: 600;
+}
+
+.need-link span {
+  color: var(--ink-muted);
+  font-size: var(--type-small);
+}
+
+@media (min-width: 48rem) {
+  .need-selector {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .service-grid {
   display: grid;
   gap: 1px;

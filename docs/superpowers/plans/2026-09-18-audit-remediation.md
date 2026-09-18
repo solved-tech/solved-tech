@@ -111,7 +111,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 2 | F06 | [x] |
 | 3 | F11 (preview) | [x] |
 | 4 | F01 | [x] |
-| 5 | F02, F07 | [ ] |
+| 5 | F02, F07 | [x] |
 | 6 | F04, hero copy | [ ] |
 | 7 | F14 | [ ] |
 | 8 | F08 | [ ] |
@@ -641,7 +641,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
 
 **Steps:**
 
-- [ ] **Step 1: Update `tests/content.test.ts`.** Replace the three tests `"uses the approved commercial service order"`, `"lists concrete capabilities for every product"`, `"keeps MCP work in AI and leaves service 05 broad"` with:
+- [x] **Step 1: Update `tests/content.test.ts`.** Replace the three tests `"uses the approved commercial service order"`, `"lists concrete capabilities for every product"`, `"keeps MCP work in AI and leaves service 05 broad"` with:
 
 ```ts
   it("uses the approved commercial service order with bug fixing first", () => {
@@ -717,7 +717,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
   });
 ```
 
-- [ ] **Step 2: Update `src/content.ts`.**
+- [x] **Step 2: Update `src/content.ts`.**
   - Change the `id` union to `"fix" | "website" | "app" | "customers" | "ai" | "other"`.
   - Add `cta: string;` to `ProductOffer` after `provides`.
   - Insert the `fix` product object from Step 1 as the **first** element of `products`.
@@ -725,9 +725,9 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
   - In `ai.provides` replace `"Custom MCPs"` with `"AI connected to your tools (MCP)"` and `"MCP integrations"` with `"AI that reads and updates your systems"`.
   - Replace the `other` object's `question`, `title`, `answer`, `provides` with the values in Step 1 (keep `id: "other"`).
 
-- [ ] **Step 3:** Run `npm test`. Content tests pass; several render tests now fail (expected). `npm run check` fails until Step 5 (renderer does not yet use `cta`) — that is expected.
+- [x] **Step 3:** Run `npm test`. Content tests pass; several render tests now fail (expected). `npm run check` fails until Step 5 (renderer does not yet use `cta`) — that is expected.
 
-- [ ] **Step 4: Update `tests/render.test.ts`** (existing assertions; each bullet names one test):
+- [x] **Step 4: Update `tests/render.test.ts`** (existing assertions; each bullet names one test):
   - `"renders every service as an animated visual box"`: `toHaveLength(5)` → `toHaveLength(6)`; the article string becomes `` `<article id="service-${id}" class="service-box service-box--${id}" aria-labelledby="${questionId}">` ``.
   - `"keeps service rows visible and reveals only artwork"`: both `5` → `6`.
   - `"renders the service order and capability lists"`: `provides` `5` → `6`, `capability` `21` → `26`; add as first assertion `expect(html.indexOf("Something broken?")).toBeLessThan(html.indexOf("Want to use AI?"));`.
@@ -766,7 +766,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
   });
 ```
 
-- [ ] **Step 5: Edit `src/render.ts`.**
+- [x] **Step 5: Edit `src/render.ts`.**
 
   5a. In the `services` map, destructure `cta` too: `({ id, question, title, answer, provides, cta }, index)`. Change the article opening tag to:
   ```html
@@ -820,7 +820,7 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
         </nav>
   ```
 
-- [ ] **Step 6: Add CSS** in `src/styles.css` immediately before the `.service-grid {` rule:
+- [x] **Step 6: Add CSS** in `src/styles.css` immediately before the `.service-grid {` rule:
 
 ```css
 .need-selector {
@@ -863,11 +863,11 @@ Then inside `"renders Call, WhatsApp, and Email in both contact groups"` replace
 }
 ```
 
-- [ ] **Step 7:** Run `npm test` (expect 85 passing: 84 − 3 + 3 + 1) and `npm run check`.
+- [x] **Step 7:** Run `npm test` (expect 85 passing: 84 − 3 + 3 + 1) and `npm run check`.
 
-- [ ] **Step 8: Update e2e counts** in `tests/e2e/responsive.spec.ts`: change `toHaveCount(5)` to `toHaveCount(6)` on the four lines that count `.service-box__cta` (≈80), `.service-box` (≈284), `.service-box__artwork .service-art` (≈307) and `serviceArtworks` (≈515). Do not change the `4` counts.
+- [x] **Step 8: Update e2e counts** in `tests/e2e/responsive.spec.ts`: change `toHaveCount(5)` to `toHaveCount(6)` on the four lines that count `.service-box__cta` (≈80), `.service-box` (≈284), `.service-box__artwork .service-art` (≈307) and `serviceArtworks` (≈515). Do not change the `4` counts.
 
-- [ ] **Step 9:** Run `npx playwright test --project=uk-phone-standard --project=uk-desktop --project=stress-compact`.
+- [x] **Step 9:** Run `npx playwright test --project=uk-phone-standard --project=uk-desktop --project=stress-compact`.
 
 **Downstream:** all covered in Steps 4 and 8. `hero__eyebrow` and hero copy are intentionally untouched here (Task 6).
 
