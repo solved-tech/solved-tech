@@ -283,7 +283,7 @@ export const servicePages: ServicePage[] = [
       "The fix, tested against the steps that triggered the problem",
       "A short handover note describing what changed",
     ],
-    approved: false,
+    approved: true,
   },
   {
     slug: "software-development",
@@ -305,7 +305,7 @@ export const servicePages: ServicePage[] = [
       "Testing against the agreed scope",
       "Documentation and a handover you can rely on",
     ],
-    approved: false,
+    approved: true,
   },
   {
     slug: "automation",
@@ -327,7 +327,7 @@ export const servicePages: ServicePage[] = [
       "The integration or automation, tested with your real data flows",
       "Documentation of what runs where and how to change it",
     ],
-    approved: false,
+    approved: true,
   },
 ];
 
