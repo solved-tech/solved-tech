@@ -1,9 +1,11 @@
+import { servicePages } from "./content";
 import type {
   CaseStudy,
   ContactConfig,
   FaqEntry,
   PrivacyContent,
   ProductOffer,
+  ServicePage,
   SiteContent,
 } from "./content";
 
@@ -425,6 +427,13 @@ export const renderHomepage = (
           <a class="service-box__cta" href="#contact" aria-label="${escapeHtml(cta)}: ${escapeHtml(title)}" data-analytics="service_interest" data-service-id="${escapeHtml(id)}" data-placement="service-box">
             ${escapeHtml(cta)} <span aria-hidden="true">→</span>
           </a>
+          ${servicePages
+            .filter((page) => page.productId === id)
+            .map(
+              ({ slug, title: pageTitle }) =>
+                `<a class="service-box__more" href="${escapeHtml(publicAssetUrl(`/services/${slug}/`, baseUrl))}">Read about ${escapeHtml(pageTitle.toLowerCase())}</a>`,
+            )
+            .join("")}
         </article>`;
       },
     )
@@ -597,6 +606,42 @@ export const renderPrivacyPage = (
         <section>
           <h2>Contact</h2>
           <p>Email ${escapeHtml(config.email)} or call ${escapeHtml(config.displayPhone)} with any question about this notice or to exercise your rights.</p>
+        </section>
+      </article>
+    </main>
+    ${renderSiteFooter(baseUrl)}
+  `;
+};
+
+export const renderServicePage = (
+  page: ServicePage,
+  content: SiteContent,
+  config: ContactConfig,
+  baseUrl: string = import.meta.env.BASE_URL,
+): string => {
+  const product = content.products.find(({ id }) => id === page.productId);
+  const list = (items: string[]): string => items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+
+  return `
+    ${renderSiteHeader(baseUrl, baseUrl)}
+    <main id="main-content" class="page">
+      <article class="prose prose--service" aria-labelledby="service-heading">
+        <p class="page__eyebrow">${escapeHtml(product?.question ?? "Services")}</p>
+        <h1 id="service-heading">${escapeHtml(page.title)}</h1>
+        <p class="prose__lead">${escapeHtml(page.intro)}</p>
+        <section>
+          <h2>Typical requests</h2>
+          <ul>${list(page.requests)}</ul>
+        </section>
+        <section>
+          <h2>What you receive</h2>
+          <ul>${list(page.deliverables)}</ul>
+          <p><a href="${escapeHtml(baseUrl)}#approach">See how we work</a></p>
+        </section>
+        <section class="service-contact" aria-labelledby="service-contact-heading">
+          <h2 id="service-contact-heading">Tell us what is happening</h2>
+          <p>Describe the problem or the goal, which system is involved and what outcome you want. Please do not send passwords or confidential customer data in your first message.</p>
+          ${renderContactActions(config, "contact__actions")}
         </section>
       </article>
     </main>

@@ -1925,6 +1925,7 @@ html.motion-paused .hero__pipeline .hero-pipeline__node-ring {
   display: grid;
   gap: 1rem;
   max-width: 68ch;
+  overflow-wrap: anywhere;
 }
 
 .prose h1 {
@@ -1955,6 +1956,31 @@ html.motion-paused .hero__pipeline .hero-pipeline__node-ring {
   min-height: 44px;
   color: var(--ink-muted);
   text-underline-offset: 0.3em;
+}
+
+.prose__lead {
+  font-size: var(--type-lead);
+  line-height: 1.4;
+}
+
+.prose ul {
+  display: grid;
+  gap: 0.5rem;
+  padding-inline-start: 1.25rem;
+}
+
+.prose a {
+  color: var(--ink);
+  text-underline-offset: 0.3em;
+}
+
+.service-contact {
+  border-block-start: 1px solid var(--line);
+  padding-block-start: 2rem;
+}
+
+.service-contact .contact__actions {
+  margin-block-start: 1rem;
 }
 
 /* Preferences ----------------------------------------------------------- */

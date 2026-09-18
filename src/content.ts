@@ -247,3 +247,83 @@ export const privacyContent: PrivacyContent = {
   ],
 };
 
+export interface ServicePage {
+  slug: string;
+  productId: string;
+  title: string;
+  description: string;
+  intro: string;
+  requests: string[];
+  deliverables: string[];
+  approved: boolean;
+}
+
+export const servicePages: ServicePage[] = [
+  {
+    slug: "bug-fixing",
+    productId: "fix",
+    title: "Bug fixing for business software",
+    description:
+      "Help with bugs, failed integrations and problems in existing applications, with a diagnosis before any fix is promised.",
+    intro:
+      "Get help with bugs, failed integrations and problems in existing applications. We start by understanding the issue and reproducing it where possible, then agree the scope of the fix and how it will be tested.",
+    requests: [
+      "An error your customers or staff keep running into",
+      "An integration that stopped working after a change",
+      "Software built by a team that is no longer available",
+      "Slow or unreliable behaviour nobody has pinned down",
+    ],
+    deliverables: [
+      "A written diagnosis with the confirmed cause",
+      "An agreed scope and estimate before the fix starts",
+      "The fix, tested against the steps that triggered the problem",
+      "A short handover note describing what changed",
+    ],
+    approved: false,
+  },
+  {
+    slug: "software-development",
+    productId: "app",
+    title: "Software development for your business",
+    description:
+      "Web, mobile and desktop applications built around the way your business already works, from first scope to handover.",
+    intro:
+      "We build web, mobile and desktop applications around the way your business already works. Tell us what you want to improve, and we will help define the next step.",
+    requests: [
+      "A manual process that has outgrown spreadsheets",
+      "A customer-facing portal or booking flow",
+      "An internal tool your team needs every day",
+      "A product idea that needs a first working version",
+    ],
+    deliverables: [
+      "A proposed scope and estimate before work starts",
+      "Working software you can review early and often",
+      "Testing against the agreed scope",
+      "Documentation and a handover you can rely on",
+    ],
+    approved: false,
+  },
+  {
+    slug: "automation",
+    productId: "other",
+    title: "Business automation and integrations",
+    description:
+      "Reduce repetitive work and connect the tools your team relies on, with AI used only where it fits the job.",
+    intro:
+      "Reduce repetitive work and connect your business tools. We help map the process, identify what can be automated and build the connections your team needs. AI is an option when it fits the job.",
+    requests: [
+      "Data copied by hand between two systems",
+      "Reports assembled manually every week",
+      "Tools that should talk to each other but do not",
+      "Approvals and notifications that depend on someone remembering",
+    ],
+    deliverables: [
+      "A map of the current process and what can be automated",
+      "An agreed scope and estimate before work starts",
+      "The integration or automation, tested with your real data flows",
+      "Documentation of what runs where and how to change it",
+    ],
+    approved: false,
+  },
+];
+

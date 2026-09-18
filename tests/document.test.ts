@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { homePage } from "../src/head";
+import { servicePages } from "../src/content";
 
 const indexHtml = readFileSync(
   new URL("../index.html", import.meta.url),
@@ -36,5 +37,20 @@ describe("privacy document shell", () => {
     expect(privacyHtml).toContain('<meta name="robots" content="noindex" />');
     expect(privacyHtml).toContain('<script type="module" src="/src/privacy.ts"></script>');
     expect(privacyHtml).toContain('<a class="skip-link" href="#main-content">Skip to content</a>');
+  });
+});
+
+describe("service document shells", () => {
+  servicePages.forEach(({ slug, title, description }) => {
+    it(`mirrors the shell for /services/${slug}/`, () => {
+      const html = readFileSync(new URL(`../services/${slug}/index.html`, import.meta.url), "utf8");
+
+      expect(html).toContain('<html lang="en-GB">');
+      expect(html).toContain(`<title>${title} — Solved Tech</title>`);
+      expect(html).toContain(`<meta name="description" content="${description}" />`);
+      expect(html).toContain('<meta name="robots" content="noindex" />');
+      expect(html).toContain(`<body data-service="${slug}">`);
+      expect(html).toContain('<script type="module" src="/src/service.ts"></script>');
+    });
   });
 });

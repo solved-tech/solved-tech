@@ -119,7 +119,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 10 | F16 | [x] |
 | 11 | F03, FAQ | [x] |
 | 12 | F10, F13, F11 (launch) | [x] |
-| 13 | F12 | [ ] |
+| 13 | F12 | [x] |
 | 14 | F15 | [ ] |
 | 15 | Full matrix + launch gate | [ ] |
 
@@ -2619,7 +2619,7 @@ grep -c '<h1' dist/privacy/index.html               # 1
 
 **Steps:**
 
-- [ ] **Step 1: Content tests.** Append inside `describe("site content")` in `tests/content.test.ts` (import `servicePages` from `../src/content`):
+- [x] **Step 1: Content tests.** Append inside `describe("site content")` in `tests/content.test.ts` (import `servicePages` from `../src/content`):
 
 ```ts
   it("defines three distinct service pages mapped to fix, app and other", () => {
@@ -2645,7 +2645,7 @@ grep -c '<h1' dist/privacy/index.html               # 1
   });
 ```
 
-- [ ] **Step 2: Renderer tests.** In `tests/render.test.ts` import `servicePages` and `renderServicePage`, then append a describe block:
+- [x] **Step 2: Renderer tests.** In `tests/render.test.ts` import `servicePages` and `renderServicePage`, then append a describe block:
 
 ```ts
 describe("service page renderer", () => {
@@ -2694,7 +2694,7 @@ describe("service page renderer", () => {
 
 If `id="service-${productId}"` does not match the attribute order produced in Task 5 (open `src/render.ts` and copy the exact opening tag of the service article), adjust only the regex in this test to the real attribute order.
 
-- [ ] **Step 3: Shell and head tests.** Append to `tests/document.test.ts`:
+- [x] **Step 3: Shell and head tests.** Append to `tests/document.test.ts`:
 
 ```ts
 describe("service document shells", () => {
@@ -2747,9 +2747,9 @@ describe("service page metadata", () => {
 });
 ```
 
-- [ ] **Step 4:** Run `npm test`; expect 2 content, 3 render, 3 document and 2 head failures. `npm run check` fails — expected.
+- [x] **Step 4:** Run `npm test`; expect 2 content, 3 render, 3 document and 2 head failures. `npm run check` fails — expected.
 
-- [ ] **Step 5: Content.** Append to `src/content.ts`:
+- [x] **Step 5: Content.** Append to `src/content.ts`:
 
 ```ts
 export interface ServicePage {
@@ -2833,7 +2833,7 @@ export const servicePages: ServicePage[] = [
 ];
 ```
 
-- [ ] **Step 6: Renderer.** In `src/render.ts`:
+- [x] **Step 6: Renderer.** In `src/render.ts`:
 
   6a. Add `ServicePage` to the type import and `servicePages` to the value import from `./content`.
 
@@ -2891,7 +2891,7 @@ export const renderServicePage = (
 };
 ```
 
-- [ ] **Step 7: Head.** Append to `src/head.ts` (add `ServicePage` to the type import):
+- [x] **Step 7: Head.** Append to `src/head.ts` (add `ServicePage` to the type import):
 
 ```ts
 export const servicePageMeta = (page: ServicePage): PageMeta => ({
@@ -2924,7 +2924,7 @@ export const renderSitemap = (
 };
 ```
 
-- [ ] **Step 8: Shells.** Create the three files below. Only `data-service`, `<title>` and description differ; copy the values from `servicePages` exactly.
+- [x] **Step 8: Shells.** Create the three files below. Only `data-service`, `<title>` and description differ; copy the values from `servicePages` exactly.
 
 `services/bug-fixing/index.html`:
 
@@ -2950,7 +2950,7 @@ export const renderSitemap = (
 
 `services/automation/index.html`: same file with `data-service="automation"`, `<title>Business automation and integrations — Solved Tech</title>` and the `automation` description string.
 
-- [ ] **Step 9: Entry.** Create `src/service.ts`:
+- [x] **Step 9: Entry.** Create `src/service.ts`:
 
 ```ts
 /// <reference types="vite/client" />
@@ -2978,7 +2978,7 @@ setupMobileMenu(app);
 setupScrollProgress(window);
 ```
 
-- [ ] **Step 10: Vite inputs.** In `vite.config.ts` add three entries to `rollupOptions.input` after `privacy`:
+- [x] **Step 10: Vite inputs.** In `vite.config.ts` add three entries to `rollupOptions.input` after `privacy`:
 
 ```ts
         "services/bug-fixing": resolve(import.meta.dirname, "services/bug-fixing/index.html"),
@@ -2986,7 +2986,7 @@ setupScrollProgress(window);
         "services/automation": resolve(import.meta.dirname, "services/automation/index.html"),
 ```
 
-- [ ] **Step 11: Prerender.** In `scripts/prerender.mts` replace the `const pages = [ … ];` literal with:
+- [x] **Step 11: Prerender.** In `scripts/prerender.mts` replace the `const pages = [ … ];` literal with:
 
 ```ts
   const pages = [
@@ -3025,7 +3025,7 @@ and, after the `for` loop, add:
   }
 ```
 
-- [ ] **Step 12: CSS.** Add to `src/styles.css` directly after the `.contact-privacy a` rule (end of the `/* Secondary pages` block):
+- [x] **Step 12: CSS.** Add to `src/styles.css` directly after the `.contact-privacy a` rule (end of the `/* Secondary pages` block):
 
 ```css
 .prose__lead {
@@ -3056,9 +3056,9 @@ and, after the `for` loop, add:
 
 If `.contact__actions` already declares a `margin-block-start` in the contact section rules, omit the last rule.
 
-- [ ] **Step 13:** Run `npm test` (expect 119 passing), `npm run check`, `npm run build`. Confirm `ls dist/services/*/index.html` lists three files and `grep -c '<h1' dist/services/bug-fixing/index.html` → `1`. `dist/sitemap.xml` must **not** exist (not launched).
+- [x] **Step 13:** Run `npm test` (expect 119 passing), `npm run check`, `npm run build`. Confirm `ls dist/services/*/index.html` lists three files and `grep -c '<h1' dist/services/bug-fixing/index.html` → `1`. `dist/sitemap.xml` must **not** exist (not launched).
 
-- [ ] **Step 14: E2E.** Append to `tests/e2e/responsive.spec.ts`:
+- [x] **Step 14: E2E.** Append to `tests/e2e/responsive.spec.ts`:
 
 ```ts
 test("service pages render their own heading and link back home", async ({ page }) => {

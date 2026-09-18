@@ -97,6 +97,7 @@ test("interactive targets have complete bounds and minimum touch heights", async
 
   const serviceActions = page.locator(".service-box__cta");
   await expect(serviceActions).toHaveCount(6);
+  await expect(page.locator(".service-box__more")).toHaveCount(3);
   for (const action of await serviceActions.all()) {
     await action.scrollIntoViewIfNeeded();
     await assertMinHeight(action, 48);
@@ -632,6 +633,21 @@ test("privacy notice page shares the header and footer", async ({ page }) => {
     page.locator('#primary-navigation a[href="/solved-tech/#services"]'),
   ).toHaveCount(1);
   await expect(page.locator('footer a[href="/solved-tech/privacy/"]')).toHaveCount(1);
+  await assertNoDocumentOverflow(page);
+  assertNoRuntimeErrors(collector);
+});
+
+test("service pages render their own heading and link back home", async ({ page }) => {
+  const collector = setupErrorCollection(page);
+
+  await page.goto("services/bug-fixing/");
+  await page.waitForLoadState("domcontentloaded");
+  expect(new URL(page.url()).pathname).toBe("/solved-tech/services/bug-fixing/");
+
+  await expect(page.locator("h1")).toHaveText("Bug fixing for business software");
+  await expect(page.locator(".prose section h2")).toHaveCount(3);
+  await expect(page.locator(".contact-action")).toHaveCount(3);
+  await expect(page.locator('#primary-navigation a[href="/solved-tech/#services"]')).toHaveCount(1);
   await assertNoDocumentOverflow(page);
   assertNoRuntimeErrors(collector);
 });

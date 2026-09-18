@@ -1,12 +1,14 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { contactConfig, siteContent } from "../src/content";
+import { contactConfig, servicePages, siteContent } from "../src/content";
 import {
   homePage,
   injectPrerender,
   privacyPage,
   renderHeadTags,
   renderOrganizationJsonLd,
+  renderSitemap,
+  servicePageMeta,
 } from "../src/head";
 
 const shell = readFileSync(new URL("../index.html", import.meta.url), "utf8");
@@ -113,5 +115,35 @@ describe("prerender injection", () => {
         status: preview,
       }),
     ).toThrow('Cannot prerender "/": the shell has no <div id="app"></div> mount.');
+  });
+});
+
+describe("service page metadata", () => {
+  it("indexes a service page only once its copy is approved", () => {
+    const [draft] = servicePages;
+
+    expect(servicePageMeta({ ...draft, approved: false }).indexable).toBe(false);
+    expect(servicePageMeta({ ...draft, approved: true })).toEqual({
+      path: `/services/${draft.slug}/`,
+      title: `${draft.title} — Solved Tech`,
+      description: draft.description,
+      indexable: true,
+    });
+  });
+
+  it("lists indexable pages in the sitemap after launch", () => {
+    const pages = [homePage, privacyPage, servicePageMeta({ ...servicePages[0], approved: true })];
+
+    expect(renderSitemap(preview, pages, "/solved-tech/")).toBe("");
+    expect(renderSitemap(live, pages, "/solved-tech/")).toBe(
+      [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        "  <url><loc>https://example.test/solved-tech/</loc></url>",
+        `  <url><loc>https://example.test/solved-tech/services/${servicePages[0].slug}/</loc></url>`,
+        "</urlset>",
+        "",
+      ].join("\n"),
+    );
   });
 });

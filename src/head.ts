@@ -1,4 +1,4 @@
-import type { ContactConfig, SiteContent, SiteStatus } from "./content";
+import type { ContactConfig, ServicePage, SiteContent, SiteStatus } from "./content";
 import { escapeHtml, publicAssetUrl } from "./render";
 
 export interface PageMeta {
@@ -111,4 +111,33 @@ export const injectPrerender = ({ shell, appHtml, headTags, page, status }: Prer
   }
 
   return html;
+};
+
+export const servicePageMeta = (page: ServicePage): PageMeta => ({
+  path: `/services/${page.slug}/`,
+  title: `${page.title} — Solved Tech`,
+  description: page.description,
+  indexable: page.approved,
+});
+
+export const renderSitemap = (
+  status: SiteStatus,
+  pages: PageMeta[],
+  baseUrl: string,
+): string => {
+  if (!status.launched) {
+    return "";
+  }
+
+  const urls = pages
+    .filter(({ indexable }) => indexable)
+    .map(({ path }) => `  <url><loc>${escapeHtml(absoluteUrl(status.productionOrigin, path, baseUrl))}</loc></url>`);
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...urls,
+    "</urlset>",
+    "",
+  ].join("\n");
 };

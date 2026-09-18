@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { contactConfig, privacyContent, siteContent } from "../src/content";
-import { renderHomepage, renderPrivacyPage } from "../src/render";
+import { contactConfig, privacyContent, servicePages, siteContent } from "../src/content";
+import { renderHomepage, renderPrivacyPage, renderServicePage } from "../src/render";
 
 const escapeRegExp = (value: string): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -541,5 +541,48 @@ describe("proof and FAQ sections", () => {
     expect(withFaq).toContain("<dd>Answered.</dd>");
     expect(withFaq).not.toContain("Pending question?");
     expect(withFaq).not.toContain("[[FAQ_ANSWER_PENDING]]");
+  });
+});
+
+describe("service page renderer", () => {
+  const [bugFixing] = servicePages;
+  const html = renderServicePage(bugFixing, siteContent, contactConfig, "/solved-tech/");
+
+  it("renders one page per service with its own heading, lists and contact block", () => {
+    expect(html.match(/<h1/g)).toHaveLength(1);
+    expect(html).toContain(`<h1 id="service-heading">${bugFixing.title}</h1>`);
+    expect(html).toContain(`<p class="prose__lead">${bugFixing.intro}</p>`);
+    expect(html).toContain("<h2>Typical requests</h2>");
+    expect(html).toContain("<h2>What you receive</h2>");
+    bugFixing.requests.forEach((request) => expect(html).toContain(`<li>${request}</li>`));
+    bugFixing.deliverables.forEach((item) => expect(html).toContain(`<li>${item}</li>`));
+    expect(html).toContain('<a href="/solved-tech/#approach">See how we work</a>');
+    expect(html).toContain('<h2 id="service-contact-heading">Tell us what is happening</h2>');
+    expect(html.match(/<a class="contact-action /g)).toHaveLength(3);
+    expect(html).toContain('<a class="wordmark" href="/solved-tech/#top"');
+    expect(html).not.toContain("data-reveal");
+  });
+
+  it("links every service page from its service box on the homepage", () => {
+    const home = renderHomepage(siteContent, contactConfig, "/solved-tech/");
+
+    servicePages.forEach(({ slug, productId, title }) => {
+      const box = home.match(
+        new RegExp(`<article id="service-${productId}" class="service-box[^"]*"[\\s\\S]*?</article>`),
+      )?.[0];
+
+      expect(box).toContain(
+        `<a class="service-box__more" href="/solved-tech/services/${slug}/">Read about ${title.toLowerCase()}</a>`,
+      );
+    });
+    expect(home.match(/class="service-box__more"/g)).toHaveLength(3);
+  });
+
+  it("gives each service page distinct content", () => {
+    const pages = servicePages.map((page) =>
+      renderServicePage(page, siteContent, contactConfig, "/").match(/<article[\s\S]*<\/article>/)?.[0],
+    );
+
+    expect(new Set(pages).size).toBe(3);
   });
 });

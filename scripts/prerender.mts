@@ -31,6 +31,12 @@ try {
       appHtml: render.renderPrivacyPage(content.privacyContent, content.contactConfig, baseUrl),
       extraHead: "",
     },
+    ...content.servicePages.map((servicePage) => ({
+      file: `services/${servicePage.slug}/index.html`,
+      page: head.servicePageMeta(servicePage),
+      appHtml: render.renderServicePage(servicePage, content.siteContent, content.contactConfig, baseUrl),
+      extraHead: "",
+    })),
   ];
 
   for (const { file, page, appHtml, extraHead } of pages) {
@@ -42,6 +48,16 @@ try {
 
     writeFileSync(target, head.injectPrerender({ shell, appHtml, headTags, page, status: siteStatus }));
     console.log(`prerendered ${file}`);
+  }
+
+  const sitemap = head.renderSitemap(siteStatus, pages.map(({ page }) => page), baseUrl);
+
+  if (sitemap) {
+    const sitemapUrl = new URL(`${baseUrl}sitemap.xml`, siteStatus.productionOrigin).toString();
+
+    writeFileSync(resolve(distDir, "sitemap.xml"), sitemap);
+    writeFileSync(resolve(distDir, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${sitemapUrl}\n`);
+    console.log("wrote sitemap.xml and robots.txt");
   }
 } finally {
   await server.close();

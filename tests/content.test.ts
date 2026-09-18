@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contactConfig, privacyContent, siteContent, siteStatus } from "../src/content";
+import { contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
   it("uses the approved commercial service order with bug fixing first", () => {
@@ -193,6 +193,28 @@ describe("site content", () => {
       expect(siteStatus.productionOrigin).toMatch(/^https:\/\/[a-z0-9.-]+$/);
     } else {
       expect("productionOrigin" in siteStatus).toBe(false);
+    }
+  });
+
+  it("defines three distinct service pages mapped to fix, app and other", () => {
+    expect(servicePages.map(({ slug, productId }) => [slug, productId])).toEqual([
+      ["bug-fixing", "fix"],
+      ["software-development", "app"],
+      ["automation", "other"],
+    ]);
+    expect(new Set(servicePages.map(({ title }) => title)).size).toBe(3);
+    expect(new Set(servicePages.map(({ intro }) => intro)).size).toBe(3);
+    expect(new Set(servicePages.map(({ description }) => description)).size).toBe(3);
+    servicePages.forEach((page) => {
+      expect(page.requests.length).toBeGreaterThanOrEqual(3);
+      expect(page.deliverables.length).toBeGreaterThanOrEqual(3);
+      expect(siteContent.products.map(({ id }) => id)).toContain(page.productId);
+    });
+  });
+
+  it("refuses to launch with unapproved service copy", () => {
+    if (siteStatus.launched) {
+      expect(servicePages.every(({ approved }) => approved)).toBe(true);
     }
   });
 });
