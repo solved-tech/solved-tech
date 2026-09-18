@@ -7,7 +7,7 @@ import type {
   SiteContent,
 } from "./content";
 
-const escapeHtml = (value: string): string =>
+export const escapeHtml = (value: string): string =>
   value.replace(
     /[&<>"']/g,
     (character) =>
@@ -20,7 +20,7 @@ const escapeHtml = (value: string): string =>
       })[character] ?? character,
   );
 
-const publicAssetUrl = (path: string, baseUrl: string): string => {
+export const publicAssetUrl = (path: string, baseUrl: string): string => {
   const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return `${base}${path.replace(/^\/+/, "")}`;
 };

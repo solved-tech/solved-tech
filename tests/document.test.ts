@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { homePage } from "../src/head";
 
 const indexHtml = readFileSync(
   new URL("../index.html", import.meta.url),
@@ -14,6 +15,11 @@ const privacyHtml = readFileSync(
 describe("document shell", () => {
   it("keeps the GitHub Pages preview out of search indexes", () => {
     expect(indexHtml).toContain('<meta name="robots" content="noindex" />');
+  });
+
+  it("uses the descriptive title and description owned by head.ts", () => {
+    expect(indexHtml).toContain(`<title>${homePage.title}</title>`);
+    expect(indexHtml).toContain(`<meta name="description" content="${homePage.description}" />`);
   });
 
   it("declares language, viewport and description once", () => {

@@ -58,9 +58,9 @@ export const contactConfig: ContactConfig = {
   email: "contact@solvedtech.co.uk",
   placeholder: true,
 };
-export interface SiteStatus {
-  launched: boolean;
-}
+export type SiteStatus =
+  | { launched: false }
+  | { launched: true; productionOrigin: string };
 
 export const siteStatus: SiteStatus = {
   launched: false,

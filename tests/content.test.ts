@@ -187,4 +187,12 @@ describe("site content", () => {
       ]);
     }
   });
+
+  it("names the production origin only once launched", () => {
+    if (siteStatus.launched) {
+      expect(siteStatus.productionOrigin).toMatch(/^https:\/\/[a-z0-9.-]+$/);
+    } else {
+      expect("productionOrigin" in siteStatus).toBe(false);
+    }
+  });
 });

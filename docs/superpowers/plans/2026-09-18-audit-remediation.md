@@ -118,7 +118,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 9 | F09 | [x] |
 | 10 | F16 | [x] |
 | 11 | F03, FAQ | [x] |
-| 12 | F10, F13, F11 (launch) | [ ] |
+| 12 | F10, F13, F11 (launch) | [x] |
 | 13 | F12 | [ ] |
 | 14 | F15 | [ ] |
 | 15 | Full matrix + launch gate | [ ] |
@@ -2245,7 +2245,7 @@ In `renderHomepage`'s returned template, insert `${renderFaq(content.faq)}` on i
 
 **Steps:**
 
-- [ ] **Step 1: Make the launch state carry its origin.** In `src/content.ts` replace the `SiteStatus` interface from Task 4 with:
+- [x] **Step 1: Make the launch state carry its origin.** In `src/content.ts` replace the `SiteStatus` interface from Task 4 with:
 
 ```ts
 export type SiteStatus =
@@ -2265,9 +2265,9 @@ export type SiteStatus =
   });
 ```
 
-- [ ] **Step 2: Export the two helpers.** In `src/render.ts` add `export` in front of `const escapeHtml` and `const publicAssetUrl`. Nothing else changes in this file.
+- [x] **Step 2: Export the two helpers.** In `src/render.ts` add `export` in front of `const escapeHtml` and `const publicAssetUrl`. Nothing else changes in this file.
 
-- [ ] **Step 3: Create `tests/head.test.ts`:**
+- [x] **Step 3: Create `tests/head.test.ts`:**
 
 ```ts
 import { readFileSync } from "node:fs";
@@ -2389,7 +2389,7 @@ describe("prerender injection", () => {
 });
 ```
 
-- [ ] **Step 4: Document shell tests.** In `tests/document.test.ts` import `homePage` from `../src/head` and append inside `describe("document shell")`:
+- [x] **Step 4: Document shell tests.** In `tests/document.test.ts` import `homePage` from `../src/head` and append inside `describe("document shell")`:
 
 ```ts
   it("uses the descriptive title and description owned by head.ts", () => {
@@ -2398,9 +2398,9 @@ describe("prerender injection", () => {
   });
 ```
 
-- [ ] **Step 5:** Run `npm test`; expect the 1 content, 8 head and 1 document tests to fail (`head.ts` missing). `npm run check` fails — expected.
+- [x] **Step 5:** Run `npm test`; expect the 1 content, 8 head and 1 document tests to fail (`head.ts` missing). `npm run check` fails — expected.
 
-- [ ] **Step 6: Create `src/head.ts`:**
+- [x] **Step 6: Create `src/head.ts`:**
 
 ```ts
 import type { ContactConfig, SiteContent, SiteStatus } from "./content";
@@ -2519,9 +2519,9 @@ export const injectPrerender = ({ shell, appHtml, headTags, page, status }: Prer
 };
 ```
 
-- [ ] **Step 7: Update `index.html`.** Replace the `<title>` line with `<title>Solved Tech — Software development, bug fixes and automation</title>` and the description line with `<meta name="description" content="Solved Tech builds new applications, fixes problems in existing software and connects the systems UK businesses rely on." />`. Keep the robots line from Task 3.
+- [x] **Step 7: Update `index.html`.** Replace the `<title>` line with `<title>Solved Tech — Software development, bug fixes and automation</title>` and the description line with `<meta name="description" content="Solved Tech builds new applications, fixes problems in existing software and connects the systems UK businesses rely on." />`. Keep the robots line from Task 3.
 
-- [ ] **Step 8: Create `scripts/prerender.mts`:**
+- [x] **Step 8: Create `scripts/prerender.mts`:**
 
 ```ts
 import { readFileSync, writeFileSync } from "node:fs";
@@ -2576,9 +2576,9 @@ try {
 
 `scripts/` is outside `tsconfig.json`'s `include`, so `tsc` does not check it; Node ≥ 23.6 runs `.mts` directly by stripping types. If `node scripts/prerender.mts` fails with `createServerModuleRunner is not a function`, replace the three `runner.import(...)` calls with `server.ssrLoadModule(...)` and delete the `runner` line; do not try any other variation.
 
-- [ ] **Step 9: Update `package.json`.** Change the `build` script to `"build": "tsc && vite build && node scripts/prerender.mts"`. Touch nothing else in the file.
+- [x] **Step 9: Update `package.json`.** Change the `build` script to `"build": "tsc && vite build && node scripts/prerender.mts"`. Touch nothing else in the file.
 
-- [ ] **Step 10:** Run `npm test` (expect 109 passing), `npm run check`, then `npm run build`. Verify the output:
+- [x] **Step 10:** Run `npm test` (expect 109 passing), `npm run check`, then `npm run build`. Verify the output:
 
 ```bash
 grep -c '<h1' dist/index.html                       # 1
@@ -2590,7 +2590,7 @@ grep -c 'application/ld+json' dist/index.html       # 0 (not launched)
 grep -c '<h1' dist/privacy/index.html               # 1
 ```
 
-- [ ] **Step 11:** Run `npx playwright test --project=uk-phone-standard --project=uk-desktop`. Playwright uses `vite dev`, which does not prerender, so this only confirms the runtime path still works.
+- [x] **Step 11:** Run `npx playwright test --project=uk-phone-standard --project=uk-desktop`. Playwright uses `vite dev`, which does not prerender, so this only confirms the runtime path still works.
 
 **Downstream:** `tests/document.test.ts` (Step 4). The deploy workflow already runs `npm run build`, so GitHub Pages receives the prerendered HTML without workflow edits.
 
