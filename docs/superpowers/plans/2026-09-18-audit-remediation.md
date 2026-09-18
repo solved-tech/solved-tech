@@ -120,7 +120,7 @@ Tick here when a task's commit exists. This table is the resume point after comp
 | 11 | F03, FAQ | [x] |
 | 12 | F10, F13, F11 (launch) | [x] |
 | 13 | F12 | [x] |
-| 14 | F15 | [ ] |
+| 14 | F15 | [x] |
 | 15 | Full matrix + launch gate | [ ] |
 
 ---
@@ -3106,7 +3106,7 @@ Also add, inside the existing homepage test that counts `.service-box__cta` (≈
 
 **Steps:**
 
-- [ ] **Step 1: Tests.** Append to `tests/head.test.ts` (import `renderSecurityMeta` from `../src/head`):
+- [x] **Step 1: Tests.** Append to `tests/head.test.ts` (import `renderSecurityMeta` from `../src/head`):
 
 ```ts
 describe("security metadata", () => {
@@ -3142,9 +3142,9 @@ describe("security metadata", () => {
 });
 ```
 
-- [ ] **Step 2:** Run `npm test`; expect 2 failures.
+- [x] **Step 2:** Run `npm test`; expect 2 failures.
 
-- [ ] **Step 3: Implement.** Append to `src/head.ts`:
+- [x] **Step 3: Implement.** Append to `src/head.ts`:
 
 ```ts
 const CONTENT_SECURITY_POLICY = [
@@ -3174,7 +3174,7 @@ In `scripts/prerender.mts` change the `headTags` expression inside the loop to:
       .join("\n    ");
 ```
 
-- [ ] **Step 4: Create `scripts/check-csp.mts`** — loads every built page under the meta CSP in headless Chromium and fails on any console error or page error:
+- [x] **Step 4: Create `scripts/check-csp.mts`** — loads every built page under the meta CSP in headless Chromium and fails on any console error or page error:
 
 ```ts
 import { chromium } from "playwright";
@@ -3236,7 +3236,7 @@ console.log("CSP check passed");
 
 `playwright` is already installed as a dependency of `@playwright/test`; do not add anything to `package.json`.
 
-- [ ] **Step 5: Create `docs/hosting/security-headers.md`** (the file content is the block below, without the outer four-backtick fence):
+- [x] **Step 5: Create `docs/hosting/security-headers.md`** (the file content is the block below, without the outer four-backtick fence):
 
 ````markdown
 # Response headers for the production host
@@ -3273,7 +3273,7 @@ Moving those delays into `src/styles.css` would allow `style-src 'self'`. Do thi
 change with the render test updated alongside it.
 ````
 
-- [ ] **Step 6:** Run `npm test` (expect 121 passing), `npm run check`, `npm run build`, then `node scripts/check-csp.mts` (expect `CSP check passed`, exit 0). Confirm `grep -c 'Content-Security-Policy' dist/index.html` → `1`.
+- [x] **Step 6:** Run `npm test` (expect 121 passing), `npm run check`, `npm run build`, then `node scripts/check-csp.mts` (expect `CSP check passed`, exit 0). Confirm `grep -c 'Content-Security-Policy' dist/index.html` → `1`.
 
 If `check-csp.mts` reports a CSP violation, read the violated directive from the message, record it under OPEN QUESTIONS with the exact console text, and stop. Do not loosen the policy to make the check pass.
 

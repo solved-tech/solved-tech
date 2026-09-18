@@ -42,9 +42,9 @@ try {
   for (const { file, page, appHtml, extraHead } of pages) {
     const target = resolve(distDir, file);
     const shell = readFileSync(target, "utf8");
-    const headTags = [head.renderHeadTags(page, siteStatus, baseUrl), extraHead]
-      .filter(Boolean)
-      .join("\n    ");
+  const headTags = [head.renderSecurityMeta(), head.renderHeadTags(page, siteStatus, baseUrl), extraHead]
+    .filter(Boolean)
+    .join("\n    ");
 
     writeFileSync(target, head.injectPrerender({ shell, appHtml, headTags, page, status: siteStatus }));
     console.log(`prerendered ${file}`);

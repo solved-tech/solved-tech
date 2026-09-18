@@ -7,6 +7,7 @@ import {
   privacyPage,
   renderHeadTags,
   renderOrganizationJsonLd,
+  renderSecurityMeta,
   renderSitemap,
   servicePageMeta,
 } from "../src/head";
@@ -145,5 +146,37 @@ describe("service page metadata", () => {
         "",
       ].join("\n"),
     );
+  });
+});
+
+describe("security metadata", () => {
+  const meta = renderSecurityMeta();
+
+  it("declares a policy that forbids inline and third-party scripts", () => {
+    const policy = meta.match(/Content-Security-Policy" content="([^"]+)"/)?.[1] ?? "";
+    const directives = Object.fromEntries(
+      policy.split(";").map((directive) => {
+        const [name, ...values] = directive.trim().split(/\s+/);
+        return [name, values];
+      }),
+    );
+
+    expect(directives["default-src"]).toEqual(["'none'"]);
+    expect(directives["script-src"]).toEqual(["'self'"]);
+    expect(directives["style-src"]).toEqual(["'self'", "'unsafe-inline'"]);
+    expect(directives["img-src"]).toEqual(["'self'", "data:"]);
+    expect(directives["connect-src"]).toEqual(["'self'"]);
+    expect(directives["font-src"]).toEqual(["'self'"]);
+    expect(directives["base-uri"]).toEqual(["'self'"]);
+    expect(directives["form-action"]).toEqual(["'none'"]);
+    expect(directives["object-src"]).toEqual(["'none'"]);
+    expect(policy).not.toMatch(/unsafe-eval|https?:/);
+  });
+
+  it("sets a referrer policy and is injected on every page regardless of launch", () => {
+    expect(meta).toContain('<meta name="referrer" content="strict-origin-when-cross-origin" />');
+    expect(
+      injectPrerender({ shell, appHtml: "", headTags: meta, page: privacyPage, status: preview }),
+    ).toContain('http-equiv="Content-Security-Policy"');
   });
 });

@@ -141,3 +141,21 @@ export const renderSitemap = (
     "",
   ].join("\n");
 };
+
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'none'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "base-uri 'self'",
+  "form-action 'none'",
+  "object-src 'none'",
+].join("; ");
+
+export const renderSecurityMeta = (): string =>
+  [
+    `<meta http-equiv="Content-Security-Policy" content="${CONTENT_SECURITY_POLICY}" />`,
+    '<meta name="referrer" content="strict-origin-when-cross-origin" />',
+  ].join("\n    ");
