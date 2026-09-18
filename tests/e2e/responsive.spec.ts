@@ -162,6 +162,14 @@ test("mobile menu opens, contains usable links, and closes on navigation", async
     await assertCompleteBounds(page, link, viewport);
   }
   await assertNoDocumentOverflow(page);
+  await page.keyboard.press("Escape");
+  await expect(menuToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(navigation).not.toHaveClass(/is-open/);
+  await expect(menuToggle).toBeFocused();
+  await expect(links.first()).toBeHidden();
+
+  await menuToggle.click();
+  await expect(menuToggle).toHaveAttribute("aria-expanded", "true");
 
   await navigation.locator('a[href="#services"]').click();
   await expect(page).toHaveURL(/#services$/);

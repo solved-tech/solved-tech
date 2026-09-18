@@ -138,6 +138,19 @@ export const setupMobileMenu = (root: ParentNode): void => {
     setOpen(button.getAttribute("aria-expanded") !== "true");
   });
 
+  button.ownerDocument.addEventListener("keydown", (event: KeyboardEvent) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    if (button.getAttribute("aria-expanded") !== "true") {
+      return;
+    }
+
+    setOpen(false);
+    button.focus();
+  });
+
   nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
     link.addEventListener("click", () => setOpen(false));
   });

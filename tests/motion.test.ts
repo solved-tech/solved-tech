@@ -344,16 +344,22 @@ describe("hero interaction", () => {
 });
 
 describe("mobile menu", () => {
-  it("toggles navigation visibility and its accessible state", () => {
+  const createMenu = () => {
     const attributes = new Map([["aria-expanded", "false"]]);
-    const handlers = new Map<string, () => void>();
+    const handlers = new Map<string, (event?: unknown) => void>();
     const toggle = vi.fn();
+    const focus = vi.fn();
     const button = {
+      focus,
       getAttribute: (name: string) => attributes.get(name) ?? null,
       setAttribute: (name: string, value: string) =>
         attributes.set(name, value),
       addEventListener: (type: string, handler: () => void) =>
         handlers.set(type, handler),
+      ownerDocument: {
+        addEventListener: (type: string, handler: (event?: unknown) => void) =>
+          handlers.set(type, handler),
+      },
     };
     const nav = {
       classList: { toggle },
@@ -366,14 +372,43 @@ describe("mobile menu", () => {
     } as unknown as ParentNode;
 
     setupMobileMenu(root);
-    handlers.get("click")?.();
 
+    return { attributes, focus, handlers, toggle };
+  };
+
+  it("toggles navigation visibility and its accessible state", () => {
+    const { attributes, handlers, toggle } = createMenu();
+
+    handlers.get("click")?.();
     expect(attributes.get("aria-expanded")).toBe("true");
     expect(toggle).toHaveBeenCalledWith("is-open", true);
 
     handlers.get("click")?.();
     expect(attributes.get("aria-expanded")).toBe("false");
     expect(toggle).toHaveBeenLastCalledWith("is-open", false);
+  });
+
+  it("closes on Escape and returns focus to the toggle", () => {
+    const { attributes, focus, handlers, toggle } = createMenu();
+
+    handlers.get("click")?.();
+    handlers.get("keydown")?.({ key: "Escape" });
+
+    expect(attributes.get("aria-expanded")).toBe("false");
+    expect(attributes.get("aria-label")).toBe("Open menu");
+    expect(toggle).toHaveBeenLastCalledWith("is-open", false);
+    expect(focus).toHaveBeenCalledTimes(1);
+  });
+
+  it("ignores Escape and other keys while the menu is closed", () => {
+    const { attributes, focus, handlers, toggle } = createMenu();
+
+    handlers.get("keydown")?.({ key: "Escape" });
+    handlers.get("keydown")?.({ key: "Enter" });
+
+    expect(attributes.get("aria-expanded")).toBe("false");
+    expect(toggle).not.toHaveBeenCalled();
+    expect(focus).not.toHaveBeenCalled();
   });
 });
 
