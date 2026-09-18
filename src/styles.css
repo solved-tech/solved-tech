@@ -817,7 +817,7 @@ main > section + section {
   gap: 0.25rem;
   min-height: 44px;
   padding: 1rem 1.25rem;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--ink-faint);
   color: var(--ink);
   text-decoration: none;
   transition: border-color 240ms var(--ease);
@@ -826,6 +826,10 @@ main > section + section {
 .need-link:hover,
 .need-link:focus-visible {
   border-color: var(--accent);
+}
+
+.page-top:focus {
+  outline: none;
 }
 
 .need-link strong {

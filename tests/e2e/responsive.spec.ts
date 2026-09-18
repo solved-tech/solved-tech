@@ -65,6 +65,7 @@ test("back to top brings the hero into view from the footer", async ({ page }) =
     .poll(() => page.evaluate(() => window.scrollY))
     .toBeLessThanOrEqual(1);
   await expect(page.locator("#hero-heading")).toBeInViewport();
+  await expect(page.locator("#top")).toBeFocused();
 
   assertNoRuntimeErrors(collector);
 });

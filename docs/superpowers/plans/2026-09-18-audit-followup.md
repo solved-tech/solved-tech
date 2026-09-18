@@ -26,7 +26,7 @@ Everything in main-plan Section 0 stands. Differences for this file:
 | 18 | CSP verifier not wired into CI, undeclared import, weak signal; workflow permissions; `.nvmrc` | [x] |
 | 19 | Client re-render discards prerendered markup (paint → blank → fade) | [x] |
 | 20 | Motion toggle announces two conflicting states | [x] |
-| 21 | Need-selector border 1.96:1; back-to-top does not move focus; privacy page has no actionable contact | [ ] |
+| 21 | Need-selector border 1.96:1; back-to-top does not move focus; privacy page has no actionable contact | [x] |
 
 ### 0.2 Facts only humans can supply (in addition to main-plan H1–H7)
 
@@ -884,7 +884,7 @@ with
 
 **Steps:**
 
-- [ ] **Step 1: Add the contrast test** at the end of `describe("stylesheet contracts")` in `tests/motion.test.ts`:
+- [x] **Step 1: Add the contrast test** at the end of `describe("stylesheet contracts")` in `tests/motion.test.ts`:
 
 ```ts
   it("gives the need-link boundary at least 3:1 contrast against the surface", () => {
@@ -906,7 +906,7 @@ with
   });
 ```
 
-- [ ] **Step 2: Update the back-to-top render assertion** in `tests/render.test.ts`. Replace
+- [x] **Step 2: Update the back-to-top render assertion** in `tests/render.test.ts`. Replace
 
 ```ts
     expect(html).toContain('<div id="top" class="page-top"></div>');
@@ -918,7 +918,7 @@ with
     expect(html).toContain('<div id="top" class="page-top" tabindex="-1"></div>');
 ```
 
-- [ ] **Step 3: Add the privacy-link test** at the end of `describe("privacy page renderer")` in `tests/render.test.ts`:
+- [x] **Step 3: Add the privacy-link test** at the end of `describe("privacy page renderer")` in `tests/render.test.ts`:
 
 ```ts
   it("links the email and phone for questions about the notice", () => {
@@ -931,9 +931,9 @@ with
   });
 ```
 
-- [ ] **Step 4:** Run `npm test`. Expect exactly 3 failures (Steps 1–3).
+- [x] **Step 4:** Run `npm test`. Expect exactly 3 failures (Steps 1–3).
 
-- [ ] **Step 5: Edit `src/styles.css`.** In the `.need-link {` rule replace
+- [x] **Step 5: Edit `src/styles.css`.** In the `.need-link {` rule replace
 
 ```css
   border: 1px solid var(--line-strong);
@@ -955,7 +955,7 @@ Then, directly after the closing `}` of the `.need-link:hover, .need-link:focus-
 
 (`#top` is a zero-height programmatic target, never reachable by Tab; the outline would otherwise draw a stray 8 px-tall box at the top of the page after "Back to top".)
 
-- [ ] **Step 6: Edit `src/render.ts`.** Replace line 319
+- [x] **Step 6: Edit `src/render.ts`.** Replace line 319
 
 ```html
     <div id="top" class="page-top"></div>
@@ -979,7 +979,7 @@ with
           <p>Email <a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a> or call <a href="tel:${escapeHtml(config.phone)}">${escapeHtml(config.displayPhone)}</a> with any question about this notice or to exercise your rights.</p>
 ```
 
-- [ ] **Step 7: Extend the e2e back-to-top test.** In `tests/e2e/responsive.spec.ts`, inside `back to top brings the hero into view from the footer`, directly after
+- [x] **Step 7: Extend the e2e back-to-top test.** In `tests/e2e/responsive.spec.ts`, inside `back to top brings the hero into view from the footer`, directly after
 
 ```ts
   await expect(page.locator("#hero-heading")).toBeInViewport();
@@ -991,7 +991,7 @@ add
   await expect(page.locator("#top")).toBeFocused();
 ```
 
-- [ ] **Step 8:** Run `npm test` (140 passed), `npm run check`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`. If `toBeFocused` fails on **one** engine only, stop and report it under OPEN QUESTIONS with the project name — do not weaken the assertion.
+- [x] **Step 8:** Run `npm test` (140 passed), `npm run check`, then `npx playwright test --project=uk-phone-standard --project=uk-desktop`. If `toBeFocused` fails on **one** engine only, stop and report it under OPEN QUESTIONS with the project name — do not weaken the assertion.
 
 **Downstream:** `tests/render.test.ts` back-to-top string (Step 2). The homepage `data-channel` counts are unaffected because the new links are on the privacy page and carry no `data-analytics` attributes. `prefers-contrast: more` override for `.need-link` (`styles.css` ≈ line 2058) stays as is.
 

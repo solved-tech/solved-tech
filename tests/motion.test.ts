@@ -882,4 +882,22 @@ html {
       /@media\s*\(\s*min-width:\s*96rem\s*\)[\s\S]*?--shell:\s*96rem/,
     );
   });
+
+  it("gives the need-link boundary at least 3:1 contrast against the surface", () => {
+    const token = (name: string): string =>
+      styles.match(new RegExp(`--${name}: (#[0-9a-f]{6});`))?.[1] ?? "";
+    const luminance = (hex: string): number => {
+      const channel = (offset: number): number => {
+        const value = parseInt(hex.slice(offset, offset + 2), 16) / 255;
+        return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+      };
+      return 0.2126 * channel(1) + 0.7152 * channel(3) + 0.0722 * channel(5);
+    };
+    const borderToken =
+      styles.match(/\.need-link \{[^}]*border: 1px solid var\(--([a-z-]+)\)/)?.[1] ?? "";
+
+    expect(borderToken).not.toBe("");
+    const ratio = (luminance(token(borderToken)) + 0.05) / (luminance(token("surface")) + 0.05);
+    expect(ratio).toBeGreaterThanOrEqual(3);
+  });
 });

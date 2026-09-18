@@ -315,7 +315,7 @@ const renderServiceArt = (id: ProductOffer["id"]): string => {
 };
 
 export const renderSiteHeader = (baseUrl: string, homeHref: string): string => `
-    <div id="top" class="page-top"></div>
+    <div id="top" class="page-top" tabindex="-1"></div>
     <header class="site-header">
       <a class="wordmark" href="${escapeHtml(homeHref)}#top" aria-label="Solved Tech home">
         <img src="${escapeHtml(publicAssetUrl("/brand/solved-tech-logo-dark.svg", baseUrl))}" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
@@ -604,7 +604,7 @@ export const renderPrivacyPage = (
         ${sections}
         <section>
           <h2>Contact</h2>
-          <p>Email ${escapeHtml(config.email)} or call ${escapeHtml(config.displayPhone)} with any question about this notice or to exercise your rights.</p>
+          <p>Email <a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a> or call <a href="tel:${escapeHtml(config.phone)}">${escapeHtml(config.displayPhone)}</a> with any question about this notice or to exercise your rights.</p>
         </section>
       </article>
     </main>

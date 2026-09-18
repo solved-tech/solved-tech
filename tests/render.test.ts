@@ -400,7 +400,7 @@ describe("homepage renderer", () => {
     expect(html).not.toContain("Photo placeholder");
   });
   it("targets back-to-top links at an in-flow anchor above the sticky header", () => {
-    expect(html).toContain('<div id="top" class="page-top"></div>');
+    expect(html).toContain('<div id="top" class="page-top" tabindex="-1"></div>');
     expect(html).toContain('<header class="site-header">');
     expect(html).not.toContain('<header id="top"');
     expect(html.indexOf('id="top"')).toBeLessThan(
@@ -494,6 +494,14 @@ describe("privacy page renderer", () => {
   it("links back to the notice and to the top from the footer", () => {
     expect(html).toContain('<a href="/solved-tech/privacy/">Privacy notice</a>');
     expect(html).toContain('<a href="#top">Back to top</a>');
+  });
+  it("links the email and phone for questions about the notice", () => {
+    expect(html).toContain(
+      `<a href="mailto:${contactConfig.email}">${contactConfig.email}</a>`,
+    );
+    expect(html).toContain(
+      `<a href="tel:${contactConfig.phone}">${contactConfig.displayPhone}</a>`,
+    );
   });
 });
 
