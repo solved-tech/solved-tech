@@ -9,6 +9,7 @@ Baseline: main at e33e57705ee0e19cfef25afaa349ef4f9beaa163. The five live HTML p
 - F07: all six services are reachable from the need selector. Agentic/MCP jargon is replaced with business language. Decorative service artwork is capped at its 520px design width to shorten wide-screen rows without removing content.
 - F13: canonical, social tags and Organization data use the confirmed GitHub Pages origin independently of the launch switch. Preview noindex remains in place; sitemap generation remains reserved for launch. An unconfirmed origin still emits no metadata. Privacy noindex does not block metadata for the commercial pages.
 - F14: separate EE's phone connection from the WhatsApp service. The official WhatsApp policy names WhatsApp LLC for UK users; link to that policy rather than repeating the old plan's unverified WhatsApp Ireland assumption. The email provider and complete real processing arrangements still need confirmation.
+- Mobile regression found by full CI: simplify hero contact labels below 640px, omit redundant icons below 368px, and tighten vertical spacing on short phones. Keep the 48px tap targets and full accessible names.
 - Verification: responsive checks now build and exercise the prerendered production artifact, and run unit/type/CSP checks before browser tests.
 - F16: an empty private-use lead register and operating instructions are supplied as an option. No tracking vendor, fake conversion or claim of operational collection has been added.
 

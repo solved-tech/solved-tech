@@ -629,7 +629,7 @@ main > section + section {
 }
 
 @media (max-width: 22.999rem) {
-  .hero .contact-action__suffix {
+  .hero .contact-action__icon {
     display: none;
   }
 
@@ -737,9 +737,21 @@ main > section + section {
 }
 
 @media (max-width: 39.999rem) {
+  .hero .contact-action__suffix {
+    display: none;
+  }
+
   .hero .contact-action .contact-action__icon {
     width: 0.95rem;
     height: 0.95rem;
+  }
+}
+
+/* Keep contact actions visible on short phones without shrinking tap targets. */
+@media (max-width: 39.999rem) and (max-height: 40rem) {
+  .hero {
+    gap: 0.4rem;
+    padding-block: 0.65rem;
   }
 }
 
