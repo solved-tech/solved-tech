@@ -17,6 +17,17 @@ const preview = { launched: false } as const;
 const live = { launched: true, productionOrigin: "https://example.test" } as const;
 
 describe("head metadata", () => {
+  it("provides sharing metadata at the confirmed origin while keeping preview noindex", () => {
+    const knownPreview = { launched: false, productionOrigin: "https://solved-tech.github.io" } as const;
+    const tags = renderHeadTags(homePage, knownPreview, "/solved-tech/");
+    const html = injectPrerender({ shell, appHtml: "<h1>Preview</h1>", headTags: tags, page: homePage, status: knownPreview });
+    expect(html).toContain('name="robots" content="noindex"');
+    expect(html).toContain('rel="canonical" href="https://solved-tech.github.io/solved-tech/"');
+    expect(html).toContain('property="og:image"');
+    expect(renderOrganizationJsonLd(knownPreview, siteContent, contactConfig, "/solved-tech/")).toContain('"@type":"Organization"');
+    expect(renderSitemap(knownPreview, [homePage], "/solved-tech/")).toBe("");
+  });
+
   it("adds nothing to the shell before launch", () => {
     expect(renderHeadTags(homePage, preview, "/solved-tech/")).toBe("");
     expect(renderOrganizationJsonLd(preview, siteContent, contactConfig, "/solved-tech/")).toBe("");

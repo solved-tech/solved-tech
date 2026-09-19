@@ -29,8 +29,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run unit tests
+        run: npm test
+
+      - name: Check types
+        run: npm run check
+
+      - name: Build the prerendered site
+        run: npm run build
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium webkit
+
+      - name: Check built-page CSP
+        run: npm run check:csp
 
       - name: Run responsive tests
         run: npm run test:responsive
