@@ -421,14 +421,15 @@ describe("homepage renderer", () => {
     );
   });
 
-  it("offers a three-way need selector that deep-links into services", () => {
+  it("offers a need selector that deep-links into every service", () => {
     const selector = html.match(/<nav class="need-selector"[\s\S]*?<\/nav>/)?.[0];
 
     expect(selector).toBeDefined();
     expect(html.indexOf('id="services-heading"')).toBeLessThan(html.indexOf('class="need-selector"'));
     expect(html.indexOf('class="need-selector"')).toBeLessThan(html.indexOf('class="service-grid"'));
     expect(selector).toContain('aria-label="Choose your need"');
-    expect(selector!.match(/class="need-link"/g)).toHaveLength(3);
+    expect(selector!.match(/class="need-link"/g)).toHaveLength(6);
+    siteContent.products.forEach(({ id }) => expect(selector).toContain(`href="#service-${id}"`));
     expect(selector).toContain('href="#service-fix"');
     expect(selector).toContain('href="#service-app"');
     expect(selector).toContain('href="#service-other"');
@@ -457,7 +458,7 @@ describe("homepage renderer", () => {
     expect(html.match(/data-channel="email"/g)).toHaveLength(2);
     expect(html.match(/data-placement="hero"/g)).toHaveLength(3);
     expect(html.match(/data-placement="contact"/g)).toHaveLength(3);
-    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(9);
+    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(12);
     siteContent.products.forEach(({ id }) =>
       expect(html).toContain(`data-service-id="${id}" data-placement="service-box"`),
     );

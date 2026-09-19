@@ -31,7 +31,7 @@ export const renderHeadTags = (
   status: SiteStatus,
   baseUrl: string,
 ): string => {
-  if (!status.launched || !page.indexable) {
+  if (!status.productionOrigin || !page.indexable) {
     return "";
   }
 
@@ -56,7 +56,7 @@ export const renderOrganizationJsonLd = (
   config: ContactConfig,
   baseUrl: string,
 ): string => {
-  if (!status.launched) {
+  if (!status.productionOrigin) {
     return "";
   }
 

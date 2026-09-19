@@ -53,9 +53,9 @@ describe("site content", () => {
     });
     expect(ai?.provides).toEqual([
       "AI assistants",
-      "Agentic workflows",
+      "AI that completes multi-step tasks",
       "WhatsApp & voice agents",
-      "AI connected to your tools (MCP)",
+      "Connect AI to business tools",
       "AI that reads and updates your systems",
     ]);
     expect(other).toMatchObject({
@@ -166,12 +166,8 @@ describe("site content", () => {
     expect(unfilled).toEqual([]);
   });
 
-  it("names the production origin only once launched", () => {
-    if (siteStatus.launched) {
-      expect(siteStatus.productionOrigin).toMatch(/^https:\/\/[a-z0-9.-]+$/);
-    } else {
-      expect("productionOrigin" in siteStatus).toBe(false);
-    }
+  it("uses the confirmed public origin independently of launch status", () => {
+    expect(siteStatus.productionOrigin).toBe("https://solved-tech.github.io");
   });
 
   it("defines three distinct service pages mapped to fix, app and other", () => {

@@ -514,6 +514,9 @@ export const renderHomepage = (
           <a class="need-link" href="#service-fix" data-analytics="service_interest" data-service-id="fix" data-placement="need-selector"><strong>Fix a system</strong><span>Bugs, failed integrations and code built by someone else.</span></a>
           <a class="need-link" href="#service-app" data-analytics="service_interest" data-service-id="app" data-placement="need-selector"><strong>Build a product</strong><span>Web, mobile and desktop applications.</span></a>
           <a class="need-link" href="#service-other" data-analytics="service_interest" data-service-id="other" data-placement="need-selector"><strong>Automate a process</strong><span>Repetitive work and tools that should talk to each other.</span></a>
+          <a class="need-link" href="#service-ai" data-analytics="service_interest" data-service-id="ai" data-placement="need-selector"><strong>Put AI to work</strong><span>Assistants for routine tasks, calls and messages.</span></a>
+          <a class="need-link" href="#service-website" data-analytics="service_interest" data-service-id="website" data-placement="need-selector"><strong>Build a website</strong><span>Business websites, online shops and landing pages.</span></a>
+          <a class="need-link" href="#service-customers" data-analytics="service_interest" data-service-id="customers" data-placement="need-selector"><strong>Reach more customers</strong><span>Search visibility and paid campaigns.</span></a>
         </nav>
         <div class="service-grid">${services}</div>
       </section>
@@ -587,10 +590,11 @@ export const renderPrivacyPage = (
 ): string => {
   const sections = content.sections
     .map(
-      ({ heading, paragraphs }) => `
+      ({ heading, paragraphs, links = [] }) => `
         <section>
           <h2>${escapeHtml(heading)}</h2>
           ${paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+          ${links.map(({ label, href }) => `<p><a href="${escapeHtml(href)}">${escapeHtml(label)}</a></p>`).join("")}
         </section>`,
     )
     .join("");

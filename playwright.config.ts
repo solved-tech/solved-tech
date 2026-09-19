@@ -55,7 +55,7 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: "npm run dev -- --host 127.0.0.1 --port 4173",
+    command: "npm run preview -- --host 127.0.0.1 --port 4173 --strictPort",
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
   },

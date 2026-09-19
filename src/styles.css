@@ -960,6 +960,7 @@ main > section + section {
   display: block;
   align-self: center;
   width: 100%;
+  max-width: 32.5rem;
 }
 
 .service-art {

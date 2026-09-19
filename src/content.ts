@@ -59,11 +59,12 @@ export const contactConfig: ContactConfig = {
   placeholder: false,
 };
 export type SiteStatus =
-  | { launched: false }
+  | { launched: false; productionOrigin?: string }
   | { launched: true; productionOrigin: string };
 
 export const siteStatus: SiteStatus = {
   launched: false,
+  productionOrigin: "https://solved-tech.github.io",
 };
 
 
@@ -91,9 +92,9 @@ export const siteContent: SiteContent = {
       answer: "Take routine work, calls and messages off your team.",
       provides: [
         "AI assistants",
-        "Agentic workflows",
+        "AI that completes multi-step tasks",
         "WhatsApp & voice agents",
-        "AI connected to your tools (MCP)",
+        "Connect AI to business tools",
         "AI that reads and updates your systems",
       ],
       cta: "Talk to us",
@@ -199,6 +200,7 @@ export const siteContent: SiteContent = {
 export interface PrivacySection {
   heading: string;
   paragraphs: string[];
+  links?: { label: string; href: string }[];
 }
 
 export interface PrivacyContent {
@@ -209,7 +211,7 @@ export interface PrivacyContent {
 
 export const privacyContent: PrivacyContent = {
   title: "Privacy notice",
-  updated: "18 September 2026",
+  updated: "19 September 2026",
   sections: [
     {
       heading: "Who we are",
@@ -233,8 +235,10 @@ export const privacyContent: PrivacyContent = {
     {
       heading: "Who receives your data",
       paragraphs: [
-        "Calls and WhatsApp messages are carried by EE. Email is processed by our email hosting provider. We do not sell or share your details for marketing.",
+        "EE provides our phone connection. WhatsApp is a separate service provided by WhatsApp LLC for UK users; it processes information to operate its messaging service under its own privacy policy. EE is not the provider of the WhatsApp service.",
+        "Email is processed by our email hosting provider. We do not sell or share your details for marketing.",
       ],
+      links: [{ label: "WhatsApp privacy policy", href: "https://www.whatsapp.com/legal/privacy-policy" }],
     },
     {
       heading: "How long we keep it",
