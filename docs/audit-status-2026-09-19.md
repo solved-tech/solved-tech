@@ -12,11 +12,12 @@ Baseline: main at e33e57705ee0e19cfef25afaa349ef4f9beaa163. The five live HTML p
 - Mobile regression found by full CI: simplify hero contact labels below 640px, omit redundant icons below 368px, and tighten vertical spacing on short phones. Keep the 48px tap targets and full accessible names.
 - Verification: responsive checks now build and exercise the prerendered production artifact, and run unit/type/CSP checks before browser tests.
 - F16: an empty private-use lead register and operating instructions are supplied as an option. No tracking vendor, fake conversion or claim of operational collection has been added.
+- F03: the owner confirmed there are no clients yet. The homepage now identifies this website as an own project and links its public source and test history. No client case study or testimonial is fabricated; missing client work is not a launch blocker.
 
 ## Open facts and external configuration
 
 - F01: verify the mailbox/provider, DNS and actual delivery. The earlier plan says both that all channels are monitored and that the mailbox is not set up. MX was absent in the retest; no test messages or calls were sent.
-- F03: two or three real case studies and permission to publish are still needed. Empty case-study content remains empty.
+- F03: client case studies are a future improvement once real projects exist and publication permission is available. Until then, use clearly identified own projects or working demos. The client case-study list remains empty intentionally.
 - F14: identify the email processor and confirm retention, actual providers, transfers and the notice with the owner. The WhatsApp correction alone is not full legal verification.
 - F15: custom HTTP headers cannot be applied by this static GitHub Pages repository. Existing CSP/referrer meta are active; anti-framing and nosniff require control of HTTP delivery. No hosting migration is authorised or performed by this change.
 - F16: owner must select/operate the measurement process. A private manual register is an option, not proof of received events or qualified leads.

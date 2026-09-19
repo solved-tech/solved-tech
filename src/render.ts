@@ -558,6 +558,12 @@ export const renderHomepage = (
         <p class="journey__note" data-reveal>For a bug, the first step is a diagnosis. We confirm the cause before we promise a fix.</p>
       </section>
       ${renderFaq(content.faq)}
+      <section id="own-project" class="own-project" aria-labelledby="own-project-heading">
+        <p class="own-project__label">Our own project</p>
+        <h2 id="own-project-heading">See how we build</h2>
+        <p>This website is one of our own projects. Its code and test history are public, so you can inspect how we build and maintain it.</p>
+        <a class="own-project__link" href="https://github.com/solved-tech/solved-tech">Explore our website project</a>
+      </section>
       <section id="team" class="team" aria-labelledby="team-heading">
         <div class="team__heading">
           <p data-reveal>Who you will work with</p>

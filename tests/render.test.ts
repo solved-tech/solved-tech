@@ -522,6 +522,8 @@ describe("proof and FAQ sections", () => {
   it("renders the FAQ once its answers are approved and no proof until a case study exists", () => {
     expect(html).toContain('id="faq"');
     expect(html).not.toContain('id="work"');
+    expect(html).toContain('Our own project');
+    expect(html).toContain('href="https://github.com/solved-tech/solved-tech"');
     expect(html).not.toMatch(/\[\[[A-Z_]+\]\]/);
   });
 
