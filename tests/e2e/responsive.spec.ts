@@ -830,6 +830,31 @@ test("wide desktop hero lead stays constrained", async ({ page }, testInfo) => {
   assertNoRuntimeErrors(collector);
 });
 
+test("wide desktop hero fills the width without wasting vertical space", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== WIDE_DESKTOP_PROJECT,
+    "2560×1440 project only",
+  );
+
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  const heroBox = await page.locator(".hero").boundingBox();
+  const processBox = await page.locator(".hero-process").boundingBox();
+  const servicesBox = await page.locator("#services").boundingBox();
+
+  expect(heroBox).not.toBeNull();
+  expect(processBox).not.toBeNull();
+  expect(servicesBox).not.toBeNull();
+  expect(heroBox!.width / viewport.width).toBeGreaterThanOrEqual(0.68);
+  expect(heroBox!.height).toBeLessThanOrEqual(58 * 16 + 1);
+  expect(processBox!.width).toBeGreaterThanOrEqual(34 * 16 - 1);
+  expect(servicesBox!.y).toBeLessThan(viewport.height);
+
+  assertNoRuntimeErrors(collector);
+});
+
 test("reduced motion renders completed static states", async ({ page }, testInfo) => {
   test.skip(
     testInfo.project.name !== REDUCED_MOTION_PROJECT,

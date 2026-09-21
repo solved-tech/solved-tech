@@ -804,6 +804,7 @@ html {
   it("uses an automatic base height and a desktop-only viewport minimum", () => {
     expect([...styles.matchAll(/[sd]vh/g)].map(([unit]) => unit)).toEqual([
       "svh",
+      "svh",
     ]);
 
     const baseRule = styles.match(/^\.hero\s*\{([^}]*)\}/m)?.[1] ?? "";
@@ -919,6 +920,18 @@ html {
   it("widens the content shell at 96rem and above", () => {
     expect(styles).toMatch(
       /@media\s*\(\s*min-width:\s*96rem\s*\)[\s\S]*?--shell:\s*96rem/,
+    );
+  });
+
+  it("uses a wider, shorter hero composition on large displays", () => {
+    expect(styles).toMatch(
+      /@media\s*\(\s*min-width:\s*120rem\s*\)[\s\S]*?--shell:\s*112rem/,
+    );
+    expect(styles).toMatch(
+      /@media\s*\(\s*min-width:\s*120rem\s*\)[\s\S]*?\.hero\s*\{[^}]*min-height:\s*min\(calc\(100svh - var\(--header-height\)\), 58rem\)/s,
+    );
+    expect(styles).toMatch(
+      /@media\s*\(\s*min-width:\s*120rem\s*\)[\s\S]*?\.hero-process\s*\{[^}]*width:\s*min\(100%, 34rem\)/s,
     );
   });
 

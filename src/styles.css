@@ -45,6 +45,12 @@
   }
 }
 
+@media (min-width: 120rem) {
+  :root {
+    --shell: 112rem;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -900,6 +906,21 @@ main > section + section {
 
   .hero__actions .contact-action--call {
     grid-column: auto;
+  }
+}
+
+@media (min-width: 120rem) {
+  .hero {
+    min-height: min(calc(100svh - var(--header-height)), 58rem);
+  }
+
+  .hero__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(30rem, 34rem);
+    gap: clamp(4.5rem, 6vw, 7rem);
+  }
+
+  .hero-process {
+    width: min(100%, 34rem);
   }
 }
 
