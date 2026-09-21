@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { contactConfig, privacyContent, servicePages, siteContent } from "../src/content";
-import { renderHomepage, renderPrivacyPage, renderServicePage } from "../src/render";
+import { escapeHtml, renderHomepage, renderPrivacyPage, renderServicePage } from "../src/render";
 
 const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 
@@ -115,134 +115,130 @@ describe("homepage renderer", () => {
     expect(html).not.toContain(">Products<");
   });
 
-  it("renders every service as an animated visual box", () => {
-    expect(html.match(/class="service-box service-box--/g)).toHaveLength(6);
-    siteContent.products.forEach(({ id, question }) => {
-      const questionId = `service-${id}-question`;
+  it("renders six product cards, one full link each, in the approved order", () => {
+    const cards = Array.from(
+      html.matchAll(/<article class="product-card product-card--([a-z]+)">/g),
+      ([, id]) => id,
+    );
 
-      expect(html).toContain(`data-service-art="${id}"`);
-      expect(html).toContain(
-        `<article id="service-${id}" class="service-box service-box--${id}" aria-labelledby="${questionId}">`,
+    expect(cards).toEqual([
+      "ai",
+      "app",
+      "customers",
+      "website",
+      "fix",
+      "other",
+    ]);
+    expect(html.match(/class="product-card__link"/g)).toHaveLength(6);
+    expect(html).not.toContain("need-selector");
+    expect(html).not.toContain("service-box");
+    expect(html).not.toContain("data-service-art");
+    expect(html).not.toContain("product-card__tags");
+    expect(html).not.toContain("Explore service");
+  });
+
+  it("renders the structured services header above the grid", () => {
+    expect(html).toContain('<div class="services__header" data-reveal>');
+    expect(html).toContain(
+      '<p class="services__eyebrow">Services / 01—06</p>',
+    );
+    expect(html).toContain(
+      '<h2 id="services-heading">What does your business need?</h2>',
+    );
+    expect(html).toContain(
+      '<p class="services__intro">Choose the closest fit. You do not need a finished brief—we will help define the next step.</p>',
+    );
+    expect(html.indexOf('class="services__header"')).toBeLessThan(
+      html.indexOf('class="product-grid"'),
+    );
+  });
+
+  it("links each card to its service page with a top rail, title, outcome and action", () => {
+    expect(html).toContain('<div class="product-grid">');
+
+    servicePages.forEach(({ slug, productId }) => {
+      const product = siteContent.products.find(
+        ({ id }) => id === productId,
+      )!;
+
+      expect(product).toBeDefined();
+
+      const card = html.match(
+        new RegExp(
+          `<article class="product-card product-card--${productId}">[\\s\\S]*?</article>`,
+        ),
+      )?.[0];
+
+      expect(card).toBeDefined();
+      expect(card).toContain(`href="/services/${slug}/"`);
+      expect(card).toContain('<span class="product-card__top">');
+      expect(card).toContain('<span class="product-card__meta">');
+      expect(card).toContain(
+        `<span class="product-card__eyebrow">${product.question}</span>`,
       );
-      expect(html).toContain(
-        `<h3 id="${questionId}" class="service-box__question">${question}</h3>`,
+      expect(card).toContain(
+        `<h3 class="product-card__title">${escapeHtml(product.title)}</h3>`,
+      );
+      expect(card).toContain(
+        `<p class="product-card__outcome">${escapeHtml(product.outcome)}</p>`,
+      );
+      expect(card).toContain("View service");
+      expect(card).toContain(`product-glyph--${productId}`);
+      expect(card).toContain(
+        `data-service-id="${productId}" data-placement="product-card"`,
       );
     });
-    expect(html).not.toContain("data-product-option");
-    expect(html).not.toContain("data-product-stage");
-    expect(html).not.toContain('<section class="trust"');
-    expect(html).not.toContain('<article class="service"');
   });
 
-  it("keeps service rows visible and reveals only artwork", () => {
-    const serviceArticles = Array.from(
-      html.matchAll(/<article[^>]*class="service-box[^"]*"[^>]*>/g),
-      (match) => match[0],
+  it("numbers the cards and keeps each card link free of nested controls", () => {
+    const indexes = Array.from(
+      html.matchAll(/class="product-card__index" aria-hidden="true">(\d{2})</g),
+      ([, index]) => index,
     );
 
-    expect(serviceArticles).toHaveLength(6);
-    serviceArticles.forEach((openingTag) => {
-      expect(openingTag).not.toContain("data-reveal");
-    });
-    expect(
-      html.match(/class="service-box__artwork" data-reveal/g),
-    ).toHaveLength(6);
-  });
+    expect(indexes).toEqual(["01", "02", "03", "04", "05", "06"]);
+    expect(html.match(/class="product-card__action"/g)).toHaveLength(6);
 
-  it("renders the service order and capability lists", () => {
-    expect(html.indexOf("Something broken?")).toBeLessThan(html.indexOf("Want to use AI?"));
-    expect(html.match(/class="service-box__provides"/g)).toHaveLength(6);
-    expect(html.match(/class="service-box__capability"/g)).toHaveLength(26);
-    expect(html.indexOf("Want to use AI?")).toBeLessThan(
-      html.indexOf("Need more customers?"),
-    );
-    expect(html.indexOf("Need more customers?")).toBeLessThan(
-      html.indexOf("Need a website?"),
-    );
-    expect(html).not.toContain("Need more traffic?");
-    expect(html).not.toContain('data-service-art="traffic"');
-  });
+    const grid = html.match(
+      /<div class="product-grid">([\s\S]*?)<\/section>/,
+    )?.[1];
 
-  it("uses a full header, diagram-first body, and dedicated CTA per service", () => {
-    expect(html.match(/class="service-box__header"/g)).toHaveLength(6);
-    expect(html.match(/class="service-box__body"/g)).toHaveLength(6);
-    expect(
-      html.match(/class="service-box__cta" href="#contact"/g),
-    ).toHaveLength(6);
-    expect(
-      html.match(
-        /<div class="service-box__body">\s*<span class="service-box__artwork" data-reveal>[\s\S]*?<div class="service-box__provides">/g,
-      ),
-    ).toHaveLength(6);
-    expect(html).not.toContain('class="service-box__link"');
-  });
-
-  it("gives every service contact link a distinct accessible name", () => {
-    siteContent.products.forEach(({ cta, title }) => {
-      expect(html).toContain(`aria-label="${cta}: ${title}"`);
-    });
-    expect(html).toContain('href="#contact" aria-label="Discuss a software issue: Bug fixes and improvements to existing software"');
+    expect(grid).toBeDefined();
+    expect(grid!.match(/<a /g)).toHaveLength(6);
+    expect(grid).not.toContain("<ul");
+    expect(grid).not.toContain("<button");
+    expect(grid).not.toContain('href="#contact"');
+    expect(grid).not.toContain("Explore service");
   });
 
   it("keeps the two section labels on a single semantic line", () => {
     expect(html).toContain(
-      '<h2 id="services-heading" data-reveal>What do you need?</h2>',
+      '<h2 id="services-heading">What does your business need?</h2>',
     );
     expect(html).toContain("<p>How we work</p>");
   });
 
-  it("reveals each service artwork when the diagram reaches the viewport", () => {
-    expect(
-      html.match(/class="service-box__artwork" data-reveal/g),
-    ).toHaveLength(6);
-  });
-
-  it("fills every service visual with meaningful interface detail", () => {
-    [
-      "Log",
-      "Reproduce",
-      "Fixed",
-      "Home",
-      "Shop",
-      "Contact",
-      "Tasks",
-      "Search",
-      "Ads",
-      "Visit",
-      "Request",
-      "Agent",
-      "Memory",
-      "Calendar",
-      "Messages",
-      "Done",
-      "Payments",
-      "CRM",
-      "Data",
-    ].forEach((label) => expect(html).toContain(`>${label}</text>`));
-
-    expect(html.match(/class="art-detail/g)?.length).toBeGreaterThanOrEqual(15);
-    expect(html.match(/class="art-packet/g)?.length).toBeGreaterThanOrEqual(5);
-  });
-
-  it("keeps the app and system diagrams visually restrained", () => {
-    const appScene = html.match(
-      /data-service-art="app"[\s\S]*?<\/svg>/,
-    )?.[0];
-    const aiScene = html.match(
-      /data-service-art="ai"[\s\S]*?<\/svg>/,
-    )?.[0];
-    const systemsScene = html.match(
-      /data-service-art="other"[\s\S]*?<\/svg>/,
+  it("renders one decorative glyph per product id", () => {
+    const services = html.match(
+      /<section id="services"[\s\S]*?<\/section>/,
     )?.[0];
 
-    expect(appScene).toBeDefined();
-    expect(appScene).not.toContain("art-data-line");
-    expect(aiScene).toContain(">Tools</text>");
-    expect(aiScene).not.toContain("art-data-route--arrow");
-    expect(systemsScene?.match(/text-anchor="middle"/g)).toHaveLength(6);
-    expect(systemsScene).toContain(
-      'class="art-accent art-hub art-hub--solid"',
+    expect(services).toBeDefined();
+
+    (["fix", "ai", "customers", "website", "app", "other"] as const).forEach(
+      (id) => expect(services).toContain(`product-glyph--${id}`),
     );
+
+    expect(
+      html.match(/<svg class="product-glyph product-glyph--[a-z]+"/g),
+    ).toHaveLength(6);
+    expect(services).toContain('viewBox="0 0 64 64"');
+    expect(services).toContain('aria-hidden="true"');
+    expect(services).toContain('focusable="false"');
+    expect(services).not.toContain("<text");
+    expect(services).not.toContain("data-service-art");
+    expect(services).not.toContain("service-art");
+    expect(services).not.toContain("<ul");
   });
 
   it("explains assessment, scope, build and handover", () => {
@@ -335,7 +331,7 @@ describe("homepage renderer", () => {
   it("marks every element the enhancement layer reveals", () => {
     expect(html.match(/ data-reveal(?=[ >])/g)?.length).toBeGreaterThan(8);
     expect(html).toContain('<h1 id="hero-heading" data-reveal>');
-    expect(html).toContain('<div class="service-grid">');
+    expect(html).toContain('<div class="product-grid">');
     expect(html).toContain('<section id="team" class="team"');
   });
 
@@ -421,23 +417,11 @@ describe("homepage renderer", () => {
     );
   });
 
-  it("offers a three-way need selector that deep-links into services", () => {
-    const selector = html.match(/<nav class="need-selector"[\s\S]*?<\/nav>/)?.[0];
-
-    expect(selector).toBeDefined();
-    expect(html.indexOf('id="services-heading"')).toBeLessThan(html.indexOf('class="need-selector"'));
-    expect(html.indexOf('class="need-selector"')).toBeLessThan(html.indexOf('class="service-grid"'));
-    expect(selector).toContain('aria-label="Choose your need"');
-    expect(selector!.match(/class="need-link"/g)).toHaveLength(3);
-    expect(selector).toContain('href="#service-fix"');
-    expect(selector).toContain('href="#service-app"');
-    expect(selector).toContain('href="#service-other"');
-    expect(selector).toContain("<strong>Fix a system</strong>");
-    expect(selector).toContain("<strong>Build a product</strong>");
-    expect(selector).toContain("<strong>Automate a process</strong>");
-    ["fix", "ai", "customers", "website", "app", "other"].forEach((id) =>
-      expect(html).toContain(`<article id="service-${id}"`),
+  it("orders the product grid directly below the services heading", () => {
+    expect(html.indexOf('id="services-heading"')).toBeLessThan(
+      html.indexOf('class="product-grid"'),
     );
+    expect(html.match(/class="product-grid"/g)).toHaveLength(1);
   });
 
   it("offers a visible control to pause background motion after the hero actions", () => {
@@ -457,12 +441,9 @@ describe("homepage renderer", () => {
     expect(html.match(/data-channel="email"/g)).toHaveLength(2);
     expect(html.match(/data-placement="hero"/g)).toHaveLength(3);
     expect(html.match(/data-placement="contact"/g)).toHaveLength(3);
-    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(9);
+    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(6);
     siteContent.products.forEach(({ id }) =>
-      expect(html).toContain(`data-service-id="${id}" data-placement="service-box"`),
-    );
-    ["fix", "app", "other"].forEach((id) =>
-      expect(html).toContain(`data-service-id="${id}" data-placement="need-selector"`),
+      expect(html).toContain(`data-service-id="${id}" data-placement="product-card"`),
     );
     expect(html).not.toContain("<script");
     expect(html).not.toMatch(/gtag|googletagmanager|plausible|umami|analytics\.js/);
@@ -575,41 +556,126 @@ describe("service page renderer", () => {
   const [bugFixing] = servicePages;
   const html = renderServicePage(bugFixing, siteContent, contactConfig, "/solved-tech/");
 
-  it("renders one page per service with its own heading, lists and contact block", () => {
+  it("renders the detail hero, body, navigation and contact block", () => {
     expect(html.match(/<h1/g)).toHaveLength(1);
+    expect(html).toContain(
+      '<article class="service-detail" aria-labelledby="service-heading">',
+    );
+    expect(html).toContain('<div class="service-hero__copy">');
+    expect(html).toContain('<div class="service-hero__visual">');
+    expect(html).toContain(`data-service-art="${bugFixing.productId}"`);
     expect(html).toContain(`<h1 id="service-heading">${bugFixing.title}</h1>`);
     expect(html).toContain(`<p class="prose__lead">${bugFixing.intro}</p>`);
+    expect(html).toContain('<div class="service-detail__body">');
     expect(html).toContain("<h2>Typical requests</h2>");
     expect(html).toContain("<h2>What you receive</h2>");
     bugFixing.requests.forEach((request) => expect(html).toContain(`<li>${request}</li>`));
     bugFixing.deliverables.forEach((item) => expect(html).toContain(`<li>${item}</li>`));
+    expect(html).toContain(
+      '<nav class="service-detail__navigation" aria-label="Service navigation">',
+    );
     expect(html).toContain('<a href="/solved-tech/#approach">See how we work</a>');
+    expect(html).toContain(
+      '<a href="/solved-tech/#services">Back to all services</a>',
+    );
     expect(html).toContain('<h2 id="service-contact-heading">Tell us what is happening</h2>');
     expect(html.match(/<a class="contact-action /g)).toHaveLength(3);
     expect(html).toContain('<a class="wordmark" href="/solved-tech/#top"');
     expect(html).not.toContain("data-reveal");
   });
 
-  it("links every service page from its service box on the homepage", () => {
+  it("links every product card to its service page", () => {
     const home = renderHomepage(siteContent, contactConfig, "/solved-tech/");
 
-    servicePages.forEach(({ slug, productId, title }) => {
-      const box = home.match(
-        new RegExp(`<article id="service-${productId}" class="service-box[^"]*"[\\s\\S]*?</article>`),
+    servicePages.forEach(({ slug, productId }) => {
+      const card = home.match(
+        new RegExp(
+          `<article class="product-card product-card--${productId}">[\\s\\S]*?</article>`,
+        ),
       )?.[0];
 
-      expect(box).toContain(
-        `<a class="service-box__more" href="/solved-tech/services/${slug}/">Read about ${title.toLowerCase()}</a>`,
-      );
+      expect(card).toBeDefined();
+      expect(card).toContain(`href="/solved-tech/services/${slug}/"`);
+      expect(card).toContain("View service");
     });
-    expect(home.match(/class="service-box__more"/g)).toHaveLength(3);
   });
 
-  it("gives each service page distinct content", () => {
+  it("gives each service page distinct content and matching artwork", () => {
     const pages = servicePages.map((page) =>
-      renderServicePage(page, siteContent, contactConfig, "/").match(/<article[\s\S]*<\/article>/)?.[0],
+      renderServicePage(page, siteContent, contactConfig, "/"),
     );
 
-    expect(new Set(pages).size).toBe(3);
+    expect(new Set(pages).size).toBe(6);
+    pages.forEach((pageHtml, index) => {
+      expect(pageHtml).toContain(
+        `data-service-art="${servicePages[index].productId}"`,
+      );
+    });
+  });
+
+  it("marks every detail artwork as decorative", () => {
+    servicePages.forEach((page) => {
+      const pageHtml = renderServicePage(page, siteContent, contactConfig, "/");
+
+      expect(pageHtml).toMatch(
+        new RegExp(
+          `<svg class="service-art service-art--${page.productId}" data-service-art="${page.productId}" aria-hidden="true"`,
+        ),
+      );
+    });
+  });
+});
+
+describe("service detail artwork", () => {
+  const detailHtml = servicePages
+    .map((page) => renderServicePage(page, siteContent, contactConfig, "/"))
+    .join("");
+
+  it("fills every service visual with meaningful interface detail", () => {
+    [
+      "Log",
+      "Reproduce",
+      "Fixed",
+      "Home",
+      "Shop",
+      "Contact",
+      "Tasks",
+      "Search",
+      "Ads",
+      "Visit",
+      "Request",
+      "Agent",
+      "Memory",
+      "Calendar",
+      "Messages",
+      "Done",
+      "Payments",
+      "CRM",
+      "Data",
+    ].forEach((label) => expect(detailHtml).toContain(`>${label}</text>`));
+
+    expect(detailHtml.match(/class="art-detail/g)?.length).toBeGreaterThanOrEqual(15);
+    expect(detailHtml.match(/class="art-packet/g)?.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it("keeps the app and system diagrams visually restrained", () => {
+    const appScene = detailHtml.match(
+      /data-service-art="app"[\s\S]*?<\/svg>/,
+    )?.[0];
+    const aiScene = detailHtml.match(
+      /data-service-art="ai"[\s\S]*?<\/svg>/,
+    )?.[0];
+    const systemsScene = detailHtml.match(
+      /data-service-art="other"[\s\S]*?<\/svg>/,
+    )?.[0];
+
+    expect(appScene).toBeDefined();
+    expect(appScene).not.toContain("art-data-line");
+    expect(aiScene).toContain(">Tools</text>");
+    expect(aiScene).not.toContain("art-data-route--arrow");
+    expect(systemsScene?.match(/text-anchor="middle"/g)).toHaveLength(6);
+    expect(systemsScene).toContain(
+      'class="art-accent art-hub art-hub--solid"',
+    );
   });
 });

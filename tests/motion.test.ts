@@ -805,18 +805,44 @@ html {
     expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?transform:\s*none/);
   });
 
-  it("uses continuous viewport-aware hero geometry in base rules", () => {
-    const heroRule = styles.match(/\.hero\s*\{([^}]*)\}/)?.[1];
-    const headingRule = styles.match(/\.hero h1\s*\{([^}]*)\}/)?.[1];
-    const pipelineRule = styles.match(/\.hero__pipeline\s*\{([^}]*)\}/)?.[1];
+  it("keeps viewport-height sizing on the hero container min-height only", () => {
+    expect([...styles.matchAll(/[sd]vh/g)].map(([unit]) => unit)).toEqual([
+      "svh",
+      "dvh",
+    ]);
 
-    for (const rule of [heroRule, headingRule, pipelineRule]) {
-      expect(rule).toMatch(/dvh/);
-      expect(rule).toMatch(/(?:vw|100%)/);
-      expect(rule).toMatch(/(?:clamp|min|max)\(/);
-    }
-    expect(heroRule).toMatch(/gap:[^;]*dvh/);
-    expect(heroRule).toMatch(/padding-block:[^;]*dvh/);
+    const heroRule = styles.match(/\.hero\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(heroRule).toContain("min-height: calc(100svh - var(--header-height))");
+    expect(heroRule).toContain("min-height: calc(100dvh - var(--header-height))");
+    expect(heroRule.indexOf("100svh")).toBeLessThan(heroRule.indexOf("100dvh"));
+
+    const gap = heroRule.match(/gap:\s*([^;]+);/)?.[1] ?? "";
+    const padding = heroRule.match(/padding-block:\s*([^;]+);/)?.[1] ?? "";
+
+    expect(gap).toMatch(/clamp\(/);
+    expect(gap).toMatch(/vw/);
+    expect(gap).not.toMatch(/vh/);
+    expect(padding).toMatch(/clamp\(/);
+    expect(padding).toMatch(/vw/);
+    expect(padding).not.toMatch(/vh/);
+
+    const childRules: Record<string, string> = {
+      heading: styles.match(/\.hero h1\s*\{([^}]*)\}/)?.[1] ?? "",
+      pipeline: styles.match(/\.hero__pipeline\s*\{([^}]*)\}/)?.[1] ?? "",
+      signal: styles.match(/\.hero__signal\s*\{([^}]*)\}/)?.[1] ?? "",
+      labels: styles.match(/\.hero-pipeline__node text\s*\{([^}]*)\}/)?.[1] ?? "",
+    };
+
+    Object.entries(childRules).forEach(([name, rule]) => {
+      expect(rule, name).not.toBe("");
+      expect(rule, name).not.toMatch(/[sd]vh/);
+      expect(rule, name).toMatch(/clamp\(/);
+    });
+
+    expect(childRules.pipeline).toContain("min(100%, clamp(");
+    expect(childRules.signal).toMatch(/inset-block-start:\s*clamp\([^)]*vw/);
+    expect(childRules.labels).toMatch(/font-size:\s*clamp\([^;]*vw/);
   });
 
   it("defines a compact threshold strictly below 23rem", () => {
@@ -858,7 +884,7 @@ html {
   it("never hides hero pipeline or service diagrams", () => {
     const protectedSelectors = [
       ".hero__pipeline",
-      ".service-box__artwork",
+      ".service-hero__visual",
       ".service-art",
     ] as const;
 
@@ -883,7 +909,7 @@ html {
     );
   });
 
-  it("gives the need-link boundary at least 3:1 contrast against the surface", () => {
+  it("gives the product card focus boundary at least 3:1 contrast against the surface", () => {
     const token = (name: string): string =>
       styles.match(new RegExp(`--${name}: (#[0-9a-f]{6});`))?.[1] ?? "";
     const luminance = (hex: string): number => {
@@ -893,11 +919,55 @@ html {
       };
       return 0.2126 * channel(1) + 0.7152 * channel(3) + 0.0722 * channel(5);
     };
-    const borderToken =
-      styles.match(/\.need-link \{[^}]*border: 1px solid var\(--([a-z-]+)\)/)?.[1] ?? "";
+    const focusToken =
+      styles.match(
+        /\.product-card__link:focus-visible \{[^}]*outline: 2px solid var\(--([a-z-]+)\)/,
+      )?.[1] ?? "";
 
-    expect(borderToken).not.toBe("");
-    const ratio = (luminance(token(borderToken)) + 0.05) / (luminance(token("surface")) + 0.05);
+    expect(focusToken).not.toBe("");
+    const ratio =
+      (luminance(token(focusToken)) + 0.05) /
+      (luminance(token("surface")) + 0.05);
     expect(ratio).toBeGreaterThanOrEqual(3);
+  });
+
+  it("gates product card hover transforms behind hover and fine-pointer media", () => {
+    const hoverBlock =
+      styles.match(
+        /@media\s*\(hover:\s*hover\)\s*and\s*\(pointer:\s*fine\)\s*\{([\s\S]*?)\n\}/,
+      )?.[1] ?? "";
+
+    expect(hoverBlock).toContain(".product-card__link:hover");
+    expect(hoverBlock).toMatch(/translateY\(-2px\)/);
+    expect(hoverBlock).toMatch(/translateX\(0\.25rem\)/);
+
+    expect(styles).not.toMatch(/^\.product-card__link:hover/m);
+    expect(styles).not.toMatch(/^\.product-card__link:hover .*arrow/m);
+  });
+
+  it("keeps product card focus geometric and removes active lift", () => {
+    expect(styles).toMatch(
+      /\.product-card__link:focus-visible \{[^}]*outline: 2px solid var\(--accent\)/,
+    );
+    expect(styles).not.toMatch(
+      /\.product-card__link:focus-visible \{[^}]*outline:\s*none/,
+    );
+    expect(styles).toMatch(
+      /\.product-card__link:active\s*\{[^}]*transform:\s*none/,
+    );
+  });
+
+  it("neutralises product card and arrow transforms under reduced motion", () => {
+    expect(reducedMotionBlock).toMatch(
+      /\.product-card__link[\s\S]*?transform:\s*none/,
+    );
+    expect(reducedMotionBlock).toMatch(
+      /\.product-card__action span[\s\S]*?transform:\s*none/,
+    );
+  });
+
+  it("renders product glyphs without any animation", () => {
+    expect(styles).not.toMatch(/@keyframes[^{]*\bglyph/i);
+    expect(styles).not.toMatch(/\.product-glyph[^{]*\{[^}]*animation/);
   });
 });

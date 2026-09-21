@@ -5,18 +5,23 @@ import {
   assertMotionDisabled,
   assertNoDocumentOverflow,
   assertNoRuntimeErrors,
+  assertStable,
   assertVisibleLayout,
+  cardColumnCount,
   geometryDelta,
   gotoHome,
   gridColumnCount,
+  groupByRow,
+  measureCardGrid,
   measureHeroGeometry,
-  PHONE_LANDSCAPE_PROJECT,
+  measureHeroSizing,
+  rectSpread,
+  PIPELINE_LABEL_MIN_HEIGHT,
   preparePage,
   REDUCED_MOTION_PROJECT,
   assertPipelineLabelsRendered,
   measurePipelineLayout,
   assertProseWidth,
-  scrollArtworkIntoReveal,
   scrollJourneyIntoReveal,
   setupErrorCollection,
   viewportSize,
@@ -96,13 +101,18 @@ test("interactive targets have complete bounds and minimum touch heights", async
     await assertCompleteBounds(page, action, viewport);
   }
 
-  const serviceActions = page.locator(".service-box__cta");
-  await expect(serviceActions).toHaveCount(6);
-  await expect(page.locator(".service-box__more")).toHaveCount(3);
-  for (const action of await serviceActions.all()) {
-    await action.scrollIntoViewIfNeeded();
-    await assertMinHeight(action, 48);
-    await assertCompleteBounds(page, action, viewport);
+  const cardLinks = page.locator(".product-card__link");
+  await expect(cardLinks).toHaveCount(6);
+  for (const link of await cardLinks.all()) {
+    await link.scrollIntoViewIfNeeded();
+    await assertMinHeight(link, 44);
+
+    const box = await link.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.width).toBeGreaterThan(0);
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width + 0.5);
+    await expect(link).toBeInViewport();
   }
 
   const navigationLinks = page.locator("#primary-navigation a");
@@ -181,21 +191,15 @@ test("mobile menu opens, contains usable links, and closes on navigation", async
   assertNoRuntimeErrors(collector);
 });
 
-test("hero contact actions stay in complete bounds", async ({ page }, testInfo) => {
+test("hero contact actions stay in complete bounds without clipped labels", async ({
+  page,
+}) => {
   const collector = await preparePage(page);
   const viewport = viewportSize(page);
-  const projectName = testInfo.project.name;
   const heroActions = page.locator(".hero__actions .contact-action");
 
-  if (projectName !== PHONE_LANDSCAPE_PROJECT) {
-    await page.evaluate(() => window.scrollTo(0, 0));
-  }
-
   for (const action of await heroActions.all()) {
-    if (projectName === PHONE_LANDSCAPE_PROJECT) {
-      await action.scrollIntoViewIfNeeded();
-    }
-
+    await action.scrollIntoViewIfNeeded();
     await assertCompleteBounds(page, action, viewport);
 
     const labelOverflow = await action.evaluate((element) => ({
@@ -227,24 +231,143 @@ test("contact actions stack below 40rem", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("service body splits at 48rem", async ({ page }) => {
+test("product grid splits into one, two and three columns", async ({ page }) => {
   const collector = await preparePage(page);
   const viewport = viewportSize(page);
-  const serviceBody = page
-    .locator(".service-box")
-    .first()
-    .locator(".service-box__body");
+  const columns = await cardColumnCount(page);
 
-  await serviceBody.scrollIntoViewIfNeeded();
-  const serviceColumns = await serviceBody.evaluate(
+  if (viewport.width >= 1152) {
+    expect(columns).toBe(3);
+  } else if (viewport.width >= 768) {
+    expect(columns).toBe(2);
+  } else {
+    expect(columns).toBe(1);
+  }
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("product grid respects the 48rem and 72rem column boundaries", async ({
+  page,
+}) => {
+  const collector = setupErrorCollection(page);
+
+  for (const [width, expected] of [
+    [767, 1],
+    [768, 2],
+    [1024, 2],
+    [1151, 2],
+    [1152, 3],
+  ] as const) {
+    await page.setViewportSize({ width, height: 900 });
+    await gotoHome(page);
+    expect(await cardColumnCount(page), `columns at ${width}px`).toBe(expected);
+    await assertNoDocumentOverflow(page);
+  }
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("services catalogue fits the 390px height budget", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  test.skip(viewport.width !== 390, "390px profiles only");
+
+  const grid = page.locator(".product-grid");
+  await grid.scrollIntoViewIfNeeded();
+
+  const gridBox = await grid.boundingBox();
+  expect(gridBox).not.toBeNull();
+  expect(gridBox!.height).toBeLessThanOrEqual(1500);
+
+  await expect(page.locator(".product-card")).toHaveCount(6);
+  await expect(page.locator(".product-card .product-glyph")).toHaveCount(6);
+
+  for (const glyph of await page.locator(".product-card .product-glyph").all()) {
+    await glyph.scrollIntoViewIfNeeded();
+    await assertVisibleLayout(glyph);
+  }
+
+  await assertNoDocumentOverflow(page);
+  assertNoRuntimeErrors(collector);
+});
+
+test("multi-column cards share equal heights and aligned CTA rails", async ({
+  page,
+}) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  test.skip(viewport.width < 768, "Multi-column profiles only");
+
+  const metrics = await measureCardGrid(page);
+
+  expect(metrics.cards).toHaveLength(6);
+  expect(metrics.links).toHaveLength(6);
+  expect(metrics.ctas).toHaveLength(6);
+
+  expect(rectSpread(metrics.links, "height")).toBeLessThanOrEqual(1);
+  expect(rectSpread(metrics.cards, "height")).toBeLessThanOrEqual(1);
+
+  for (const row of groupByRow(metrics.ctas)) {
+    expect(rectSpread(row, "y")).toBeLessThanOrEqual(1);
+  }
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("services header aligns to the grid edges and stacks below 48rem", async ({
+  page,
+}) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  const header = page.locator(".services__header");
+  const grid = page.locator(".product-grid");
+
+  await grid.scrollIntoViewIfNeeded();
+  const [headerBox, gridBox] = await Promise.all([
+    header.boundingBox(),
+    grid.boundingBox(),
+  ]);
+
+  expect(headerBox).not.toBeNull();
+  expect(gridBox).not.toBeNull();
+  expect(Math.abs(headerBox!.x - gridBox!.x)).toBeLessThanOrEqual(1);
+  expect(
+    Math.abs(headerBox!.x + headerBox!.width - (gridBox!.x + gridBox!.width)),
+  ).toBeLessThanOrEqual(1);
+
+  const headerColumns = await header.evaluate(
     (element) => getComputedStyle(element).gridTemplateColumns,
   );
+  expect(gridColumnCount(headerColumns)).toBe(viewport.width >= 768 ? 2 : 1);
 
-  if (viewport.width >= 768) {
-    expect(serviceColumns.split(" ").length).toBeGreaterThanOrEqual(2);
-  } else {
-    expect(serviceColumns.split(" ").length).toBe(1);
-  }
+  assertNoRuntimeErrors(collector);
+});
+
+test("services heading stays on a single line inside the header", async ({
+  page,
+}) => {
+  const collector = await preparePage(page);
+  const heading = page.locator("#services-heading");
+
+  await heading.scrollIntoViewIfNeeded();
+
+  const metrics = await heading.evaluate((element) => {
+    const container = element.closest(".services__heading");
+    const containerBox = container?.getBoundingClientRect() ?? null;
+    const box = element.getBoundingClientRect();
+    const lineHeight = Number.parseFloat(getComputedStyle(element).lineHeight);
+
+    return {
+      lines: Math.round(box.height / lineHeight),
+      overflow: element.scrollWidth - element.clientWidth,
+      outside: containerBox ? box.right - containerBox.right : 0,
+    };
+  });
+
+  expect(metrics.lines).toBe(1);
+  expect(metrics.overflow).toBeLessThanOrEqual(0.5);
+  expect(metrics.outside).toBeLessThanOrEqual(0.5);
 
   assertNoRuntimeErrors(collector);
 });
@@ -306,37 +429,63 @@ test("contact heading is sticky at 64rem", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("service text stays visible before artwork reveal", async ({ page }) => {
+test("product card text stays visible before any reveal", async ({ page }) => {
   const collector = await preparePage(page);
-  const serviceBoxes = page.locator(".service-box");
+  const cards = page.locator(".product-card");
 
-  await expect(serviceBoxes).toHaveCount(6);
+  await expect(cards).toHaveCount(6);
   await page.evaluate(() => window.scrollTo(0, 0));
 
-  for (const serviceBox of await serviceBoxes.all()) {
-    const artwork = serviceBox.locator(".service-box__artwork");
-    const question = serviceBox.locator(".service-box__question");
-    const answer = serviceBox.locator(".service-box__header > p");
-    const provides = serviceBox.locator(".service-box__provides");
-
-    await expect(artwork).not.toHaveClass(/is-visible/);
-
-    await assertVisibleLayout(question);
-    await assertVisibleLayout(answer);
-    await assertVisibleLayout(provides);
+  for (const card of await cards.all()) {
+    await assertVisibleLayout(card.locator(".product-card__top"));
+    await assertVisibleLayout(card.locator(".product-glyph"));
+    await assertVisibleLayout(card.locator(".product-card__eyebrow"));
+    await assertVisibleLayout(card.locator(".product-card__title"));
+    await assertVisibleLayout(card.locator(".product-card__outcome"));
+    await assertVisibleLayout(card.locator(".product-card__action"));
   }
 
   assertNoRuntimeErrors(collector);
 });
 
-test("service and journey diagrams render in complete bounds", async ({ page }) => {
+test("product card titles stay on a single line inside the card", async ({
+  page,
+}) => {
+  const collector = await preparePage(page);
+  const titles = page.locator(".product-card__title");
+
+  await expect(titles).toHaveCount(6);
+
+  for (const title of await titles.all()) {
+    await title.scrollIntoViewIfNeeded();
+
+    const metrics = await title.evaluate((element) => {
+      const link = element.closest(".product-card__link");
+      const linkBox = link?.getBoundingClientRect() ?? null;
+      const box = element.getBoundingClientRect();
+      const lineHeight = Number.parseFloat(getComputedStyle(element).lineHeight);
+
+      return {
+        lines: Math.round(box.height / lineHeight),
+        overflow: element.scrollWidth - element.clientWidth,
+        outside: linkBox ? box.right - linkBox.right : 0,
+      };
+    });
+
+    expect(metrics.lines).toBe(1);
+    expect(metrics.overflow).toBeLessThanOrEqual(0.5);
+    expect(metrics.outside).toBeLessThanOrEqual(0.5);
+  }
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("journey diagrams render in complete bounds", async ({ page }) => {
   const collector = await preparePage(page);
   const viewport = viewportSize(page);
 
-  await expect(page.locator(".service-box__artwork .service-art")).toHaveCount(6);
   await expect(page.locator(".journey__signal svg")).toHaveCount(4);
 
-  await scrollArtworkIntoReveal(page, viewport);
   await scrollJourneyIntoReveal(page, viewport);
 
   assertNoRuntimeErrors(collector);
@@ -399,7 +548,7 @@ test("40rem boundary preserves hero geometry and contact columns", async ({
   expect(widthDelta).toBeLessThanOrEqual(0.05);
 
   for (const height of [...narrow.labelHeights, ...wide.labelHeights]) {
-    expect(height).toBeGreaterThanOrEqual(9 - 0.5);
+    expect(height).toBeGreaterThanOrEqual(PIPELINE_LABEL_MIN_HEIGHT - 0.5);
   }
 
   assertNoRuntimeErrors(collector);
@@ -430,7 +579,7 @@ const assertSmoothHeroBoundary = async (
   }
 
   for (const height of [...before.labelHeights, ...after.labelHeights]) {
-    expect(height).toBeGreaterThanOrEqual(9 - 0.5);
+    expect(height).toBeGreaterThanOrEqual(PIPELINE_LABEL_MIN_HEIGHT - 0.5);
   }
 };
 
@@ -478,6 +627,33 @@ test("hero geometry is continuous at the compact-width boundary", async ({
   assertNoRuntimeErrors(collector);
 });
 
+test("hero child geometry is stable when only the viewport height changes", async ({
+  page,
+}) => {
+  const collector = setupErrorCollection(page);
+
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await gotoHome(page);
+  const short = await measureHeroSizing(page);
+
+  await page.setViewportSize({ width: 1366, height: 1080 });
+  await gotoHome(page);
+  const tall = await measureHeroSizing(page);
+
+  assertStable(short.headingWidth, tall.headingWidth, "heading width");
+  assertStable(short.pipelineWidth, tall.pipelineWidth, "pipeline width");
+  assertStable(short.headingFontSize, tall.headingFontSize, "heading font size");
+
+  expect(tall.labelFontSizes).toHaveLength(short.labelFontSizes.length);
+  short.labelFontSizes.forEach((size, index) =>
+    assertStable(size, tall.labelFontSizes[index], `label ${index} font size`),
+  );
+
+  expect(tall.heroHeight).toBeGreaterThan(short.heroHeight);
+
+  assertNoRuntimeErrors(collector);
+});
+
 test("wide desktop service grid spans viewport", async ({ page }, testInfo) => {
   test.skip(
     testInfo.project.name !== WIDE_DESKTOP_PROJECT,
@@ -486,11 +662,11 @@ test("wide desktop service grid spans viewport", async ({ page }, testInfo) => {
 
   const collector = await preparePage(page);
   const viewport = viewportSize(page);
-  const serviceGrid = page.locator(".service-grid");
+  const productGrid = page.locator(".product-grid");
 
-  await serviceGrid.scrollIntoViewIfNeeded();
+  await productGrid.scrollIntoViewIfNeeded();
 
-  const gridBox = await serviceGrid.boundingBox();
+  const gridBox = await productGrid.boundingBox();
   expect(gridBox).not.toBeNull();
   expect(gridBox!.width / viewport.width).toBeGreaterThanOrEqual(0.52);
 
@@ -524,11 +700,11 @@ test("reduced motion renders completed static states", async ({ page }, testInfo
 
   await assertNoDocumentOverflow(page);
 
-  const serviceArtworks = page.locator(".service-box__artwork .service-art");
+  const productCards = page.locator(".product-card");
   const journeySignals = page.locator(".journey__signal svg");
   const revealTargets = page.locator("[data-reveal]");
 
-  await expect(serviceArtworks).toHaveCount(6);
+  await expect(productCards).toHaveCount(6);
   await expect(journeySignals).toHaveCount(4);
   await expect(page.locator(".journey__moment")).toHaveCount(4);
 
@@ -537,10 +713,10 @@ test("reduced motion renders completed static states", async ({ page }, testInfo
     await assertVisibleLayout(target);
   }
 
-  for (const artwork of await serviceArtworks.all()) {
-    await artwork.scrollIntoViewIfNeeded();
-    await assertVisibleLayout(artwork);
-    const motion = await artwork.evaluate((element) => {
+  for (const card of await productCards.all()) {
+    await card.scrollIntoViewIfNeeded();
+    await assertVisibleLayout(card);
+    const motion = await card.evaluate((element) => {
       const style = getComputedStyle(element);
       return {
         animationName: style.animationName,
@@ -625,19 +801,45 @@ test("privacy notice page shares the header and footer", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("service pages render their own heading and link back home", async ({ page }) => {
-  const collector = setupErrorCollection(page);
+test("every service page renders its own hero, lists and navigation", async ({
+  page,
+}) => {
+  const serviceRoutes = [
+    { slug: "bug-fixing", productId: "fix", title: "Bug fixing for business software" },
+    { slug: "ai-assistants", productId: "ai", title: "AI assistants for everyday business work" },
+    { slug: "seo-paid-campaigns", productId: "customers", title: "SEO and paid campaigns that drive enquiries" },
+    { slug: "websites-online-shops", productId: "website", title: "Websites and online shops built to convert" },
+    { slug: "software-development", productId: "app", title: "Software development for your business" },
+    { slug: "automation", productId: "other", title: "Business automation and integrations" },
+  ];
 
-  await page.goto("services/bug-fixing/");
-  await page.waitForLoadState("domcontentloaded");
-  expect(new URL(page.url()).pathname).toBe("/solved-tech/services/bug-fixing/");
+  for (const { slug, productId, title } of serviceRoutes) {
+    const collector = setupErrorCollection(page);
 
-  await expect(page.locator("h1")).toHaveText("Bug fixing for business software");
-  await expect(page.locator(".prose section h2")).toHaveCount(3);
-  await expect(page.locator(".contact-action")).toHaveCount(3);
-  await expect(page.locator('#primary-navigation a[href="/solved-tech/#services"]')).toHaveCount(1);
-  await assertNoDocumentOverflow(page);
-  assertNoRuntimeErrors(collector);
+    await page.goto(`services/${slug}/`);
+    await page.waitForLoadState("domcontentloaded");
+    expect(new URL(page.url()).pathname).toBe(`/solved-tech/services/${slug}/`);
+
+    await expect(page.locator("h1")).toHaveText(title);
+    await expect(page.locator(".service-hero__visual .service-art")).toHaveAttribute(
+      "data-service-art",
+      productId,
+    );
+    await expect(page.locator(".service-detail__body section")).toHaveCount(2);
+    await expect(page.locator(".service-detail__body section").first().locator("li")).not.toHaveCount(0);
+    await expect(
+      page.locator('.service-detail__navigation a[href="/solved-tech/#approach"]'),
+    ).toHaveCount(1);
+    await expect(
+      page.locator('.service-detail__navigation a[href="/solved-tech/#services"]'),
+    ).toHaveCount(1);
+    await expect(page.locator(".contact-action")).toHaveCount(3);
+    await expect(
+      page.locator('#primary-navigation a[href="/solved-tech/#services"]'),
+    ).toHaveCount(1);
+    await assertNoDocumentOverflow(page);
+    assertNoRuntimeErrors(collector);
+  }
 });
 
 test("background motion can be paused from a visible control", async ({ page }) => {

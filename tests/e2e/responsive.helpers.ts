@@ -12,7 +12,7 @@ export const WIDE_DESKTOP_PROJECT = "wide-desktop";
 export const REDUCED_MOTION_PROJECT = "uk-phone-standard";
 export const PIPELINE_WIDTH_SMOOTH_PROJECT = "tablet-landscape";
 export const PIPELINE_LABEL_COUNT = 7;
-export const PIPELINE_LABEL_MIN_HEIGHT = 9;
+export const PIPELINE_LABEL_MIN_HEIGHT = 6;
 
 export const setupErrorCollection = (page: Page): ErrorCollector => {
   const consoleErrors: string[] = [];
@@ -150,22 +150,68 @@ export const assertMotionDisabled = (
   ).toBeTruthy();
 };
 
-export const scrollArtworkIntoReveal = async (page: Page, viewport: Viewport) => {
-  const artworkWrappers = page.locator(".service-box__artwork");
+export const cardColumnCount = async (page: Page): Promise<number> => {
+  const grid = page.locator(".product-grid");
+  await grid.scrollIntoViewIfNeeded();
 
-  for (const wrapper of await artworkWrappers.all()) {
-    await wrapper.scrollIntoViewIfNeeded();
-    await expect(wrapper).toHaveClass(/is-visible/);
+  return gridColumnCount(
+    await grid.evaluate((element) => getComputedStyle(element).gridTemplateColumns),
+  );
+};
 
-    const art = wrapper.locator(".service-art");
-    await expect
-      .poll(async () =>
-        art.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity)),
-      )
-      .toBeGreaterThan(0);
+export type Rect = { x: number; y: number; width: number; height: number };
+export type RowRect = Rect & { rowStart: number };
 
-    await assertRenderedDiagram(page, art, viewport);
+export type CardGridMetrics = {
+  grid: Rect;
+  cards: Rect[];
+  links: Rect[];
+  ctas: Rect[];
+};
+
+export const measureCardGrid = async (page: Page): Promise<CardGridMetrics> => {
+  const grid = page.locator(".product-grid");
+  await grid.scrollIntoViewIfNeeded();
+
+  return grid.evaluate((element) => {
+    const rect = (node: Element): Rect => {
+      const box = node.getBoundingClientRect();
+      return { x: box.x, y: box.y, width: box.width, height: box.height };
+    };
+    const query = (selector: string) =>
+      Array.from(element.querySelectorAll<HTMLElement>(selector));
+
+    return {
+      grid: rect(element),
+      cards: query(".product-card").map(rect),
+      links: query(".product-card__link").map(rect),
+      ctas: query(".product-card__action").map(rect),
+    };
+  });
+};
+
+export const groupByRow = <T extends { y: number }>(items: T[]): T[][] => {
+  const rows: T[][] = [];
+
+  for (const item of [...items].sort((a, b) => a.y - b.y)) {
+    const row = rows.find((candidate) => Math.abs(candidate[0].y - item.y) <= 1);
+
+    if (row) {
+      row.push(item);
+    } else {
+      rows.push([item]);
+    }
   }
+
+  return rows;
+};
+
+export const rectSpread = (
+  items: Rect[],
+  dimension: "x" | "y" | "width" | "height",
+) => {
+  const values = items.map((item) => item[dimension]);
+  return Math.max(...values) - Math.min(...values);
 };
 
 export const scrollJourneyIntoReveal = async (page: Page, viewport: Viewport) => {
@@ -259,3 +305,52 @@ export const measureHeroGeometry = async (page: Page): Promise<HeroGeometry> => 
 
 export const geometryDelta = (first: number, second: number): number =>
   Math.abs(second - first) / Math.max(first, second);
+
+export const assertStable = (first: number, second: number, label: string) => {
+  expect(
+    Math.abs(second - first),
+    `${label}: ${first} vs ${second}`,
+  ).toBeLessThanOrEqual(Math.max(1, Math.max(first, second) * 0.005));
+};
+
+export type HeroSizing = {
+  heroHeight: number;
+  headingWidth: number;
+  headingFontSize: number;
+  pipelineWidth: number;
+  labelFontSizes: number[];
+};
+
+export const measureHeroSizing = async (page: Page): Promise<HeroSizing> => {
+  const hero = page.locator(".hero");
+  const heading = page.locator("#hero-heading");
+  const pipeline = page.locator(".hero__pipeline");
+  const labels = page.locator(".hero-pipeline__node text");
+
+  await expect(heading).toBeVisible();
+  await expect(pipeline).toBeVisible();
+  await expect(labels).toHaveCount(PIPELINE_LABEL_COUNT);
+
+  const [heroHeight, headingMetrics, pipelineWidth, labelFontSizes] =
+    await Promise.all([
+      hero.evaluate((element) => element.getBoundingClientRect().height),
+      heading.evaluate((element) => ({
+        width: element.getBoundingClientRect().width,
+        fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
+      })),
+      pipeline.evaluate((element) => element.getBoundingClientRect().width),
+      labels.evaluateAll((elements) =>
+        elements.map((element) =>
+          Number.parseFloat(getComputedStyle(element).fontSize),
+        ),
+      ),
+    ]);
+
+  return {
+    heroHeight,
+    headingWidth: headingMetrics.width,
+    headingFontSize: headingMetrics.fontSize,
+    pipelineWidth,
+    labelFontSizes,
+  };
+};

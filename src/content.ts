@@ -6,13 +6,19 @@ export interface ContactConfig {
   placeholder: boolean;
 }
 
+export type ProductId =
+  | "fix"
+  | "ai"
+  | "customers"
+  | "website"
+  | "app"
+  | "other";
+
 export interface ProductOffer {
-  id: "fix" | "website" | "app" | "customers" | "ai" | "other";
+  id: ProductId;
   question: string;
   title: string;
-  answer: string;
-  provides: string[];
-  cta: string;
+  outcome: string;
 }
 
 export interface FounderImageSource {
@@ -70,86 +76,42 @@ export const siteStatus: SiteStatus = {
 export const siteContent: SiteContent = {
   products: [
     {
-      id: "fix",
-      question: "Something broken?",
-      title: "Bug fixes and improvements to existing software",
-      answer:
-        "We investigate the problem, reproduce it where possible, agree the fix and test it.",
-      provides: [
-        "Bug diagnosis and fixes",
-        "Failed integrations",
-        "Software built by another team",
-        "Regression testing",
-        "Documented handover",
-      ],
-      cta: "Discuss a software issue",
-    },
-    {
       id: "ai",
       question: "Want to use AI?",
-      title: "Useful digital assistants",
-      answer: "Take routine work, calls and messages off your team.",
-      provides: [
-        "AI assistants",
-        "Agentic workflows",
-        "WhatsApp & voice agents",
-        "AI connected to your tools (MCP)",
-        "AI that reads and updates your systems",
-      ],
-      cta: "Talk to us",
-    },
-    {
-      id: "customers",
-      question: "Need more customers?",
-      title: "SEO and paid campaigns",
-      answer: "Help the right people find you when they are ready to act.",
-      provides: [
-        "Technical SEO",
-        "On-page SEO",
-        "Google Ads",
-        "Conversion tracking",
-      ],
-      cta: "Talk to us",
-    },
-    {
-      id: "website",
-      question: "Need a website?",
-      title: "Websites and online shops",
-      answer:
-        "A clear, fast place built to turn attention into action.",
-      provides: [
-        "Business websites",
-        "Online shops",
-        "Landing pages",
-        "Ongoing improvements",
-      ],
-      cta: "Talk to us",
+      title: "AI Assistants and Integrations",
+      outcome: "Take routine work, calls and messages off your team.",
     },
     {
       id: "app",
       question: "Need an app?",
-      title: "Web, mobile and desktop apps",
-      answer: "A useful product built around the job it needs to do.",
-      provides: [
-        "Web apps",
-        "Mobile apps",
-        "Desktop apps",
-        "SaaS platforms",
-      ],
-      cta: "Talk to us",
+      title: "Web, mobile & desktop apps",
+      outcome: "A useful product built around the job it needs to do.",
+    },
+    {
+      id: "customers",
+      question: "Need more customers?",
+      title: "SEO & paid campaigns",
+      outcome: "Help the right people find you when they are ready to act.",
+    },
+    {
+      id: "website",
+      question: "Need a website?",
+      title: "Websites & online shops",
+      outcome: "A clear, fast place built to turn attention into action.",
+    },
+    {
+      id: "fix",
+      question: "Something broken?",
+      title: "Bug fixes & improvements",
+      outcome:
+        "We investigate the problem, reproduce it where possible, agree the fix and test it.",
     },
     {
       id: "other",
       question: "Need to automate a process?",
-      title: "Business automation and integrations",
-      answer: "Reduce repetitive work and connect the tools your team relies on.",
-      provides: [
-        "Business automation",
-        "Connected systems",
-        "Data moving between your tools",
-        "Bespoke solutions",
-      ],
-      cta: "Talk to us",
+      title: "Automation & integrations",
+      outcome:
+        "Reduce repetitive work and connect the tools your team relies on.",
     },
   ],
   founders: [
@@ -253,7 +215,7 @@ export const privacyContent: PrivacyContent = {
 
 export interface ServicePage {
   slug: string;
-  productId: string;
+  productId: ProductId;
   title: string;
   description: string;
   intro: string;
@@ -282,6 +244,72 @@ export const servicePages: ServicePage[] = [
       "An agreed scope and estimate before the fix starts",
       "The fix, tested against the steps that triggered the problem",
       "A short handover note describing what changed",
+    ],
+    approved: true,
+  },
+  {
+    slug: "ai-assistants",
+    productId: "ai",
+    title: "AI assistants for everyday business work",
+    description:
+      "Practical AI assistants that handle routine messages, calls and admin while working with the tools your team already uses.",
+    intro:
+      "We design AI assistants around a clear business task, such as answering common questions, handling enquiries or updating a system. Your team stays in control, and we test the assistant against real examples before it goes live.",
+    requests: [
+      "Customer questions are taking too much of your team's time",
+      "Calls or messages need a consistent first response",
+      "Staff repeatedly copy information into a CRM, calendar or back-office tool",
+      "You want to test where AI could save time without replacing a whole system",
+    ],
+    deliverables: [
+      "A mapped task, boundaries and hand-off points for people",
+      "A working assistant connected only to the agreed tools and information",
+      "Tests using representative requests, including unclear and unsafe cases",
+      "Documentation, team guidance and a monitored handover",
+    ],
+    approved: true,
+  },
+  {
+    slug: "seo-paid-campaigns",
+    productId: "customers",
+    title: "SEO and paid campaigns that drive enquiries",
+    description:
+      "Technical SEO and paid search campaigns focused on qualified visits, measurable actions and useful reporting.",
+    intro:
+      "We improve how the right people find your business and what happens after they arrive. Work starts with the offer, audience and measurement, then focuses on the search and campaign changes most likely to produce useful enquiries.",
+    requests: [
+      "Your business is hard to find for the services you sell",
+      "Paid search is spending money without clear enquiries",
+      "A new service needs a focused landing page and campaign",
+      "You cannot tell which searches or adverts lead to calls and messages",
+    ],
+    deliverables: [
+      "A prioritised search and campaign plan",
+      "Technical and on-page SEO changes within the agreed scope",
+      "Paid campaign structure, adverts and targeting where required",
+      "Conversion tracking and plain-English performance reporting",
+    ],
+    approved: true,
+  },
+  {
+    slug: "websites-online-shops",
+    productId: "website",
+    title: "Websites and online shops built to convert",
+    description:
+      "Fast, clear business websites and online shops designed around the actions customers need to take.",
+    intro:
+      "We design and build clear, fast websites around the decision your customer needs to make. That may be a business website, a focused landing page or an online shop, with content and journeys shaped around useful action.",
+    requests: [
+      "An outdated site no longer reflects the business",
+      "A service needs a clearer route from visit to enquiry",
+      "Products need a straightforward online shop",
+      "A campaign needs a focused landing page that can be measured",
+    ],
+    deliverables: [
+      "A clear page and content structure agreed before build",
+      "Responsive, accessible pages using the approved design",
+      "The agreed enquiry, checkout or campaign journey",
+      "Launch checks, measurement setup and handover notes",
     ],
     approved: true,
   },

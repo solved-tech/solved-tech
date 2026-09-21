@@ -2,33 +2,42 @@ import { describe, expect, it } from "vitest";
 import { contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
-  it("uses the approved commercial service order with bug fixing first", () => {
+  it("uses the approved commercial service order with AI assistants first", () => {
     expect(siteContent.products.map(({ id }) => id)).toEqual([
-      "fix",
       "ai",
+      "app",
       "customers",
       "website",
-      "app",
+      "fix",
       "other",
     ]);
     expect(siteContent.products.map(({ question }) => question)).toEqual([
-      "Something broken?",
       "Want to use AI?",
+      "Need an app?",
       "Need more customers?",
       "Need a website?",
-      "Need an app?",
+      "Something broken?",
       "Need to automate a process?",
     ]);
   });
 
-  it("lists concrete capabilities and a CTA for every product", () => {
-    expect(siteContent.products.map(({ provides }) => provides.length)).toEqual(
-      [5, 5, 4, 4, 4, 4],
-    );
-    expect(siteContent.products.every(({ cta }) => cta.length > 0)).toBe(true);
-    expect(siteContent.products.flatMap(({ provides }) => provides)).toContain(
-      "Technical SEO",
-    );
+  it("gives every product one outcome sentence and no tags", () => {
+    siteContent.products.forEach((product) => {
+      expect(product.outcome.trim()).not.toBe("");
+      expect(product.outcome.trim().split(/(?<=\.)\s+/)).toHaveLength(1);
+      expect(Object.prototype.hasOwnProperty.call(product, "tags")).toBe(false);
+    });
+  });
+
+  it("uses the approved short homepage titles in order", () => {
+    expect(siteContent.products.map(({ title }) => title)).toEqual([
+      "AI Assistants and Integrations",
+      "Web, mobile & desktop apps",
+      "SEO & paid campaigns",
+      "Websites & online shops",
+      "Bug fixes & improvements",
+      "Automation & integrations",
+    ]);
   });
 
   it("describes bug fixing, AI and automation in business language", () => {
@@ -39,39 +48,19 @@ describe("site content", () => {
     expect(fix).toEqual({
       id: "fix",
       question: "Something broken?",
-      title: "Bug fixes and improvements to existing software",
-      answer:
+      title: "Bug fixes & improvements",
+      outcome:
         "We investigate the problem, reproduce it where possible, agree the fix and test it.",
-      provides: [
-        "Bug diagnosis and fixes",
-        "Failed integrations",
-        "Software built by another team",
-        "Regression testing",
-        "Documented handover",
-      ],
-      cta: "Discuss a software issue",
     });
-    expect(ai?.provides).toEqual([
-      "AI assistants",
-      "Agentic workflows",
-      "WhatsApp & voice agents",
-      "AI connected to your tools (MCP)",
-      "AI that reads and updates your systems",
-    ]);
-    expect(other).toMatchObject({
-      title: "Business automation and integrations",
-      answer: "Reduce repetitive work and connect the tools your team relies on.",
-      provides: [
-        "Business automation",
-        "Connected systems",
-        "Data moving between your tools",
-        "Bespoke solutions",
-      ],
-      cta: "Talk to us",
-    });
-    expect(siteContent.products.flatMap(({ provides }) => provides)).not.toContain(
-      "Custom MCPs",
+    expect(ai?.outcome).toBe(
+      "Take routine work, calls and messages off your team.",
     );
+    expect(other).toMatchObject({
+      title: "Automation & integrations",
+      outcome:
+        "Reduce repetitive work and connect the tools your team relies on.",
+    });
+    expect(JSON.stringify(siteContent.products)).not.toContain("Custom MCPs");
   });
 
   it("keeps every contact channel derived from one phone number", () => {
@@ -116,7 +105,7 @@ describe("site content", () => {
 
   it("keeps visible product copy free from unexplained jargon", () => {
     const productCopy = siteContent.products
-      .flatMap(({ question, answer }) => [question, answer])
+      .flatMap(({ question, outcome }) => [question, outcome])
       .join(" ");
 
     expect(productCopy).not.toMatch(/\b(?:SaaS|APIs?|agentic|MCP|SEO)\b/i);
@@ -174,19 +163,55 @@ describe("site content", () => {
     }
   });
 
-  it("defines three distinct service pages mapped to fix, app and other", () => {
+  it("defines one distinct service page per product in card order", () => {
     expect(servicePages.map(({ slug, productId }) => [slug, productId])).toEqual([
       ["bug-fixing", "fix"],
+      ["ai-assistants", "ai"],
+      ["seo-paid-campaigns", "customers"],
+      ["websites-online-shops", "website"],
       ["software-development", "app"],
       ["automation", "other"],
     ]);
-    expect(new Set(servicePages.map(({ title }) => title)).size).toBe(3);
-    expect(new Set(servicePages.map(({ intro }) => intro)).size).toBe(3);
-    expect(new Set(servicePages.map(({ description }) => description)).size).toBe(3);
+    expect(new Set(servicePages.map(({ title }) => title)).size).toBe(6);
+    expect(new Set(servicePages.map(({ intro }) => intro)).size).toBe(6);
+    expect(new Set(servicePages.map(({ description }) => description)).size).toBe(6);
     servicePages.forEach((page) => {
       expect(page.requests.length).toBeGreaterThanOrEqual(3);
       expect(page.deliverables.length).toBeGreaterThanOrEqual(3);
       expect(siteContent.products.map(({ id }) => id)).toContain(page.productId);
+    });
+    siteContent.products.forEach(({ id }) => {
+      expect(servicePages.filter((page) => page.productId === id)).toHaveLength(1);
+    });
+  });
+
+  it("ships the approved AI, campaign and website copy", () => {
+    const pageFor = (slug: string) => {
+      const page = servicePages.find((candidate) => candidate.slug === slug);
+      expect(page).toBeDefined();
+      return page!;
+    };
+
+    expect(pageFor("ai-assistants")).toMatchObject({
+      title: "AI assistants for everyday business work",
+      description:
+        "Practical AI assistants that handle routine messages, calls and admin while working with the tools your team already uses.",
+      requests: [
+        "Customer questions are taking too much of your team's time",
+        "Calls or messages need a consistent first response",
+        "Staff repeatedly copy information into a CRM, calendar or back-office tool",
+        "You want to test where AI could save time without replacing a whole system",
+      ],
+    });
+    expect(pageFor("seo-paid-campaigns")).toMatchObject({
+      title: "SEO and paid campaigns that drive enquiries",
+      description:
+        "Technical SEO and paid search campaigns focused on qualified visits, measurable actions and useful reporting.",
+    });
+    expect(pageFor("websites-online-shops")).toMatchObject({
+      title: "Websites and online shops built to convert",
+      description:
+        "Fast, clear business websites and online shops designed around the actions customers need to take.",
     });
   });
 

@@ -4,7 +4,7 @@ import type {
   ContactConfig,
   FaqEntry,
   PrivacyContent,
-  ProductOffer,
+  ProductId,
   ServicePage,
   SiteContent,
 } from "./content";
@@ -129,20 +129,65 @@ const renderHeroPipeline = (): string => `
     </svg>
   </div>`;
 
-const renderCapabilities = (provides: ProductOffer["provides"]): string => `
-  <div class="service-box__provides">
-    <span>We provide</span>
-    <ul class="service-box__capabilities">
-      ${provides
-        .map(
-          (capability) =>
-            `<li class="service-box__capability">${escapeHtml(capability)}</li>`,
-        )
-        .join("")}
-    </ul>
-  </div>`;
+const renderProductGlyph = (id: ProductId): string => {
+  const open = `<svg class="product-glyph product-glyph--${id}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">`;
 
-const renderServiceArt = (id: ProductOffer["id"]): string => {
+  switch (id) {
+    case "fix":
+      return `${open}
+          <rect class="product-glyph__line" x="8" y="12" width="48" height="40" rx="3" />
+          <path class="product-glyph__muted" d="M8 22h48M14 17h1M19 17h1M24 17h1" />
+          <path class="product-glyph__line" d="M16 33h8M30 33h8" />
+          <path class="product-glyph__line" d="M22 43l4 4 9-10" />
+          <circle class="product-glyph__accent" cx="27" cy="33" r="3" />
+        </svg>`;
+    case "ai":
+      return `${open}
+          <path class="product-glyph__muted" d="M16 20l11 8M48 20l-11 8M32 46v-9" />
+          <circle class="product-glyph__line" cx="16" cy="18" r="4" />
+          <circle class="product-glyph__line" cx="48" cy="18" r="4" />
+          <circle class="product-glyph__line" cx="32" cy="48" r="4" />
+          <circle class="product-glyph__accent" cx="32" cy="30" r="7" />
+        </svg>`;
+    case "customers":
+      return `${open}
+          <circle class="product-glyph__line" cx="27" cy="27" r="14" />
+          <circle class="product-glyph__muted" cx="27" cy="27" r="6" />
+          <path class="product-glyph__line" d="M37 37l11 11" />
+          <circle class="product-glyph__accent" cx="27" cy="27" r="3" />
+        </svg>`;
+    case "website":
+      return `${open}
+          <rect class="product-glyph__line" x="8" y="12" width="48" height="40" rx="3" />
+          <path class="product-glyph__muted" d="M8 22h48M14 17h1M19 17h1M24 17h1" />
+          <path class="product-glyph__line" d="M16 30h16M16 37h10" />
+          <rect class="product-glyph__muted" x="38" y="30" width="12" height="12" rx="2" />
+          <circle class="product-glyph__accent" cx="44" cy="36" r="2.5" />
+        </svg>`;
+    case "app":
+      return `${open}
+          <rect class="product-glyph__line" x="6" y="14" width="34" height="24" rx="2" />
+          <path class="product-glyph__muted" d="M6 30h34M18 44h10M23 38v6" />
+          <rect class="product-glyph__line" x="44" y="18" width="14" height="30" rx="3" />
+          <circle class="product-glyph__accent" cx="51" cy="43" r="2" />
+        </svg>`;
+    case "other":
+      return `${open}
+          <path class="product-glyph__muted" d="M15 15l10 10M49 15L39 25M15 49l10-10M49 49L39 39" />
+          <circle class="product-glyph__line" cx="13" cy="13" r="3" />
+          <circle class="product-glyph__line" cx="51" cy="13" r="3" />
+          <circle class="product-glyph__line" cx="13" cy="51" r="3" />
+          <circle class="product-glyph__line" cx="51" cy="51" r="3" />
+          <circle class="product-glyph__accent" cx="32" cy="32" r="8" />
+        </svg>`;
+    default: {
+      const exhaustive: never = id;
+      return exhaustive;
+    }
+  }
+};
+
+const renderServiceArt = (id: ProductId): string => {
   switch (id) {
     case "fix":
       return `
@@ -399,43 +444,47 @@ const renderFaq = (entries: FaqEntry[]): string => {
       </section>`;
 };
 
+const resolveServicePage = (
+  pages: ServicePage[],
+  productId: ProductId,
+): ServicePage => {
+  const matches = pages.filter((page) => page.productId === productId);
+
+  if (matches.length !== 1) {
+    throw new Error(
+      `Cannot render the product card for "${productId}": expected exactly one matching service page, found ${matches.length}.`,
+    );
+  }
+
+  return matches[0];
+};
+
 export const renderHomepage = (
   content: SiteContent,
   config: ContactConfig,
   baseUrl: string = import.meta.env.BASE_URL,
 ): string => {
-  const services = content.products
-    .map(
-      ({ id, question, title, answer, provides, cta }, index) => {
-        const questionId = `service-${id}-question`;
+  const cards = content.products
+    .map(({ id, question, title, outcome }, index) => {
+      const page = resolveServicePage(servicePages, id);
+      const href = publicAssetUrl(`/services/${page.slug}/`, baseUrl);
 
-        return `
-        <article id="service-${escapeHtml(id)}" class="service-box service-box--${escapeHtml(id)}" aria-labelledby="${questionId}">
-          <header class="service-box__header">
-            <div class="service-box__heading">
-              <span class="service-box__number">${String(index + 1).padStart(2, "0")}</span>
-              <h3 id="${questionId}" class="service-box__question">${escapeHtml(question)}</h3>
-            </div>
-            <span class="service-box__product">${escapeHtml(title)}</span>
-            <p>${escapeHtml(answer)}</p>
-          </header>
-          <div class="service-box__body">
-            <span class="service-box__artwork" data-reveal>${renderServiceArt(id)}</span>
-            ${renderCapabilities(provides)}
-          </div>
-          <a class="service-box__cta" href="#contact" aria-label="${escapeHtml(cta)}: ${escapeHtml(title)}" data-analytics="service_interest" data-service-id="${escapeHtml(id)}" data-placement="service-box">
-            ${escapeHtml(cta)} <span aria-hidden="true">→</span>
+      return `
+        <article class="product-card product-card--${escapeHtml(id)}">
+          <a class="product-card__link" href="${escapeHtml(href)}" data-analytics="service_interest" data-service-id="${escapeHtml(id)}" data-placement="product-card">
+            <span class="product-card__top">
+              <span class="product-card__meta">
+                <span class="product-card__index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
+                <span class="product-card__eyebrow">${escapeHtml(question)}</span>
+              </span>
+              ${renderProductGlyph(id)}
+            </span>
+            <h3 class="product-card__title">${escapeHtml(title)}</h3>
+            <p class="product-card__outcome">${escapeHtml(outcome)}</p>
+            <span class="product-card__action">View service <span aria-hidden="true">→</span></span>
           </a>
-          ${servicePages
-            .filter((page) => page.productId === id)
-            .map(
-              ({ slug, title: pageTitle }) =>
-                `<a class="service-box__more" href="${escapeHtml(publicAssetUrl(`/services/${slug}/`, baseUrl))}">Read about ${escapeHtml(pageTitle.toLowerCase())}</a>`,
-            )
-            .join("")}
         </article>`;
-      },
-    )
+    })
     .join("");
   const founders = content.founders
     .map(
@@ -509,13 +558,14 @@ export const renderHomepage = (
         <button class="motion-toggle" type="button">Pause background motion</button>
       </section>
       <section id="services" class="services" aria-labelledby="services-heading">
-        <h2 id="services-heading" data-reveal>What do you need?</h2>
-        <nav class="need-selector" aria-label="Choose your need" data-reveal>
-          <a class="need-link" href="#service-fix" data-analytics="service_interest" data-service-id="fix" data-placement="need-selector"><strong>Fix a system</strong><span>Bugs, failed integrations and code built by someone else.</span></a>
-          <a class="need-link" href="#service-app" data-analytics="service_interest" data-service-id="app" data-placement="need-selector"><strong>Build a product</strong><span>Web, mobile and desktop applications.</span></a>
-          <a class="need-link" href="#service-other" data-analytics="service_interest" data-service-id="other" data-placement="need-selector"><strong>Automate a process</strong><span>Repetitive work and tools that should talk to each other.</span></a>
-        </nav>
-        <div class="service-grid">${services}</div>
+        <div class="services__header" data-reveal>
+          <div class="services__heading">
+            <p class="services__eyebrow">Services / 01—06</p>
+            <h2 id="services-heading">What does your business need?</h2>
+          </div>
+          <p class="services__intro">Choose the closest fit. You do not need a finished brief—we will help define the next step.</p>
+        </div>
+        <div class="product-grid">${cards}</div>
       </section>
       <section id="approach" class="journey" aria-labelledby="approach-heading">
         <div class="journey__heading" data-reveal>
@@ -619,24 +669,42 @@ export const renderServicePage = (
   baseUrl: string = import.meta.env.BASE_URL,
 ): string => {
   const product = content.products.find(({ id }) => id === page.productId);
-  const list = (items: string[]): string => items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+
+  if (!product) {
+    throw new Error(
+      `Cannot render the service page "${page.slug}": no product is defined for "${page.productId}".`,
+    );
+  }
+
+  const list = (items: string[]): string =>
+    items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
 
   return `
     ${renderSiteHeader(baseUrl, baseUrl)}
     <main id="main-content" class="page">
-      <article class="prose prose--service" aria-labelledby="service-heading">
-        <p class="page__eyebrow">${escapeHtml(product?.question ?? "Services")}</p>
-        <h1 id="service-heading">${escapeHtml(page.title)}</h1>
-        <p class="prose__lead">${escapeHtml(page.intro)}</p>
-        <section>
-          <h2>Typical requests</h2>
-          <ul>${list(page.requests)}</ul>
-        </section>
-        <section>
-          <h2>What you receive</h2>
-          <ul>${list(page.deliverables)}</ul>
-          <p><a href="${escapeHtml(baseUrl)}#approach">See how we work</a></p>
-        </section>
+      <article class="service-detail" aria-labelledby="service-heading">
+        <div class="service-hero">
+          <div class="service-hero__copy">
+            <p class="page__eyebrow">${escapeHtml(product.question)}</p>
+            <h1 id="service-heading">${escapeHtml(page.title)}</h1>
+            <p class="prose__lead">${escapeHtml(page.intro)}</p>
+          </div>
+          <div class="service-hero__visual">${renderServiceArt(page.productId)}</div>
+        </div>
+        <div class="service-detail__body">
+          <section>
+            <h2>Typical requests</h2>
+            <ul>${list(page.requests)}</ul>
+          </section>
+          <section>
+            <h2>What you receive</h2>
+            <ul>${list(page.deliverables)}</ul>
+          </section>
+        </div>
+        <nav class="service-detail__navigation" aria-label="Service navigation">
+          <a href="${escapeHtml(baseUrl)}#approach">See how we work</a>
+          <a href="${escapeHtml(baseUrl)}#services">Back to all services</a>
+        </nav>
         <section class="service-contact" aria-labelledby="service-contact-heading">
           <h2 id="service-contact-heading">Tell us what is happening</h2>
           <p>Describe the problem or the goal, which system is involved and what outcome you want. Please do not send passwords or confidential customer data in your first message.</p>

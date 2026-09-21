@@ -62,6 +62,12 @@ describe("document icons", () => {
 });
 
 describe("service document shells", () => {
+  it("ships exactly one shell per service record with unique paths", () => {
+    expect(servicePages).toHaveLength(6);
+    expect(new Set(servicePages.map(({ slug }) => slug)).size).toBe(6);
+    expect(new Set(servicePages.map(({ productId }) => productId)).size).toBe(6);
+  });
+
   servicePages.forEach(({ slug, title, description }) => {
     it(`mirrors the shell for /services/${slug}/`, () => {
       const html = readFileSync(new URL(`../services/${slug}/index.html`, import.meta.url), "utf8");
@@ -71,6 +77,8 @@ describe("service document shells", () => {
       expect(html).toContain(`<meta name="description" content="${description}" />`);
       expect(html).toContain('<meta name="robots" content="noindex" />');
       expect(html).toContain(`<body data-service="${slug}">`);
+      expect(html).toContain('<a class="skip-link" href="#main-content">Skip to content</a>');
+      expect(html).toContain('<div id="app"></div>');
       expect(html).toContain('<script type="module" src="/src/service.ts"></script>');
     });
   });

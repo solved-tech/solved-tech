@@ -188,6 +188,33 @@ describe("service page metadata", () => {
       ].join("\n"),
     );
   });
+
+  it("maps six unique service pages that are indexable once approved", () => {
+    const metas = servicePages.map(servicePageMeta);
+
+    expect(metas).toHaveLength(6);
+    expect(new Set(metas.map(({ path }) => path)).size).toBe(6);
+    metas.forEach((meta, index) => {
+      expect(meta.path).toBe(`/services/${servicePages[index].slug}/`);
+      expect(meta.title).toBe(`${servicePages[index].title} — Solved Tech`);
+      expect(meta.description).toBe(servicePages[index].description);
+      expect(meta.indexable).toBe(servicePages[index].approved);
+    });
+  });
+
+  it("lists the homepage and all six service pages but not privacy in the sitemap", () => {
+    const pages = [homePage, privacyPage, ...servicePages.map(servicePageMeta)];
+    const sitemap = renderSitemap(live, pages, "/solved-tech/");
+
+    expect(sitemap).toContain("<loc>https://example.test/solved-tech/</loc>");
+    servicePages.forEach(({ slug }) =>
+      expect(sitemap).toContain(
+        `<loc>https://example.test/solved-tech/services/${slug}/</loc>`,
+      ),
+    );
+    expect(sitemap).not.toContain("/privacy/");
+    expect(sitemap.match(/<loc>/g)).toHaveLength(7);
+  });
 });
 
 describe("security metadata", () => {
