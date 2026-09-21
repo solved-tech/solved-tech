@@ -14,6 +14,7 @@ export default defineConfig({
         "services/websites-online-shops": resolve(import.meta.dirname, "services/websites-online-shops/index.html"),
         "services/software-development": resolve(import.meta.dirname, "services/software-development/index.html"),
         "services/automation": resolve(import.meta.dirname, "services/automation/index.html"),
+        "services/vorbio": resolve(import.meta.dirname, "services/vorbio/index.html"),
       },
     },
   },

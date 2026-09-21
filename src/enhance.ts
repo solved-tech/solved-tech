@@ -59,7 +59,7 @@ export const setupRevealMotion = (
   targets.forEach((target) => observer.observe(target));
 };
 
-export const setupPipelineMotion = (
+export const setupHeroProcessMotion = (
   root: ParentNode,
   reducedMotion: boolean,
 ): void => {
@@ -67,68 +67,27 @@ export const setupPipelineMotion = (
     return;
   }
 
-  const pipeline = root.querySelector<HTMLElement>(".hero__pipeline");
+  const process = root.querySelector<HTMLElement>(".hero-process");
 
-  if (!pipeline) {
+  if (!process) {
     return;
   }
 
   if (typeof IntersectionObserver === "undefined") {
-    pipeline.classList.add("is-pipeline-visible");
+    process.classList.add("is-process-visible");
     return;
   }
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       entry.target.classList.toggle(
-        "is-pipeline-visible",
+        "is-process-visible",
         entry.isIntersecting,
       );
     });
   });
 
-  observer.observe(pipeline);
-};
-
-export const setupHeroInteraction = (
-  root: ParentNode,
-  reducedMotion: boolean,
-  finePointer = true,
-): void => {
-  const hero = root.querySelector<HTMLElement>(".hero");
-
-  if (!hero || reducedMotion || !finePointer) {
-    return;
-  }
-
-  const update = (event: PointerEvent): void => {
-    const bounds = hero.getBoundingClientRect();
-
-    if (bounds.width <= 0 || bounds.height <= 0) {
-      return;
-    }
-
-    const x = Math.max(
-      -0.5,
-      Math.min(0.5, (event.clientX - bounds.left) / bounds.width - 0.5),
-    );
-    const y = Math.max(
-      -0.5,
-      Math.min(0.5, (event.clientY - bounds.top) / bounds.height - 0.5),
-    );
-
-    hero.style.setProperty("--hero-shift-x", `${(x * 36).toFixed(2)}px`);
-    hero.style.setProperty("--hero-shift-y", `${(y * 36).toFixed(2)}px`);
-  };
-
-  const reset = (): void => {
-    hero.style.setProperty("--hero-shift-x", "0px");
-    hero.style.setProperty("--hero-shift-y", "0px");
-  };
-
-  hero.addEventListener("pointermove", update, { passive: true });
-  hero.addEventListener("pointerdown", update, { passive: true });
-  hero.addEventListener("pointerleave", reset);
+  observer.observe(process);
 };
 
 export const setupMobileMenu = (root: ParentNode): void => {
@@ -168,7 +127,9 @@ export const setupMobileMenu = (root: ParentNode): void => {
 };
 
 export const setupMotionToggle = (root: ParentNode, view: Window): void => {
-  const button = root.querySelector<HTMLButtonElement>(".motion-toggle");
+  const button = root.querySelector<HTMLButtonElement>(
+    ".hero-process__control",
+  );
 
   if (!button) {
     return;
@@ -179,13 +140,21 @@ export const setupMotionToggle = (root: ParentNode, view: Window): void => {
 
   const setPaused = (paused: boolean): void => {
     html.classList.toggle("motion-paused", paused);
-    button.textContent = paused
-      ? "Resume background motion"
-      : "Pause background motion";
+    button.setAttribute("aria-pressed", String(paused));
+    button.setAttribute(
+      "aria-label",
+      paused ? "Resume diagram motion" : "Pause diagram motion",
+    );
   };
 
   const syncPreference = (): void => {
-    button.hidden = query.matches;
+    if (query.matches) {
+      setPaused(false);
+      button.disabled = true;
+      return;
+    }
+
+    button.disabled = false;
   };
 
   button.addEventListener("click", () => {

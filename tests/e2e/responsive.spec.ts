@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { vorbioProduct } from "../../src/content";
 import {
   assertCompleteBounds,
   assertMinHeight,
@@ -13,14 +14,16 @@ import {
   gridColumnCount,
   groupByRow,
   measureCardGrid,
+  measureHeroActions,
+  measureHeroFold,
   measureHeroGeometry,
   measureHeroSizing,
+  measureHeroProcess,
   rectSpread,
-  PIPELINE_LABEL_MIN_HEIGHT,
+  HERO_PROCESS_LABEL_MIN_HEIGHT,
   preparePage,
   REDUCED_MOTION_PROJECT,
-  assertPipelineLabelsRendered,
-  measurePipelineLayout,
+  assertHeroProcessLabelsRendered,
   assertProseWidth,
   scrollJourneyIntoReveal,
   setupErrorCollection,
@@ -46,7 +49,7 @@ test("header controls stay in complete bounds", async ({ page }) => {
     await assertCompleteBounds(page, menuToggle, viewport);
   } else {
     const navLinks = page.locator("#primary-navigation a");
-    await expect(navLinks).toHaveCount(4);
+    await expect(navLinks).toHaveCount(5);
     for (const link of await navLinks.all()) {
       await assertCompleteBounds(page, link, viewport);
     }
@@ -116,7 +119,7 @@ test("interactive targets have complete bounds and minimum touch heights", async
   }
 
   const navigationLinks = page.locator("#primary-navigation a");
-  await expect(navigationLinks).toHaveCount(4);
+  await expect(navigationLinks).toHaveCount(5);
   if (viewport.width < 768) {
     const menuToggle = page.locator(".menu-toggle");
     await menuToggle.scrollIntoViewIfNeeded();
@@ -163,7 +166,7 @@ test("mobile menu opens, contains usable links, and closes on navigation", async
 
   await expect(menuToggle).toHaveAttribute("aria-expanded", "false");
   await expect(navigation).not.toHaveClass(/is-open/);
-  await expect(links).toHaveCount(4);
+  await expect(links).toHaveCount(5);
 
   await menuToggle.click();
   await expect(menuToggle).toHaveAttribute("aria-expanded", "true");
@@ -491,7 +494,7 @@ test("journey diagrams render in complete bounds", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("hero clips decorative pipeline overflow", async ({ page }) => {
+test("hero clips decorative system overflow", async ({ page }) => {
   const collector = await preparePage(page);
 
   const heroOverflow = await page.locator(".hero").evaluate((element) => {
@@ -502,54 +505,189 @@ test("hero clips decorative pipeline overflow", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("hero pipeline labels stay legible when rendered", async ({ page }) => {
+test("hero process labels stay legible when rendered", async ({ page }) => {
   const collector = await preparePage(page);
+  const viewport = viewportSize(page);
 
-  await assertPipelineLabelsRendered(page);
+  if (viewport.width < 1024) {
+    await expect(page.locator(".hero-process")).toBeHidden();
+    assertNoRuntimeErrors(collector);
+    return;
+  }
+
+  await assertHeroProcessLabelsRendered(page);
 
   assertNoRuntimeErrors(collector);
 });
 
-test("40rem boundary preserves hero geometry and contact columns", async ({
+test("hero actions stack one then two on mobile and one row on desktop", async ({
+  page,
+}) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+  const { rects, rows } = await measureHeroActions(page);
+
+  expect(rects).toHaveLength(3);
+
+  if (viewport.width >= 1024) {
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveLength(3);
+    expect(rects[0].width).toBeGreaterThan(rects[1].width);
+    expect(rects[0].y).toBeCloseTo(rects[1].y, 0);
+    expect(rects[1].width).toBeCloseTo(rects[2].width, 0);
+  } else {
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveLength(1);
+    expect(rows[1]).toHaveLength(2);
+    expect(rects[0].width).toBeGreaterThan(rects[1].width);
+  }
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero process renders unboxed without document overflow", async ({
   page,
 }) => {
   const collector = setupErrorCollection(page);
 
-  await page.setViewportSize({ width: 639, height: 844 });
-  await gotoHome(page);
-  const narrowContact = page.locator(".contact__actions");
-  await narrowContact.scrollIntoViewIfNeeded();
-  expect(
-    gridColumnCount(
-      await narrowContact.evaluate(
-        (element) => getComputedStyle(element).gridTemplateColumns,
-      ),
-    ),
-  ).toBe(1);
-  const narrow = await measurePipelineLayout(page);
+  for (const width of [320, 390, 768, 1024, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await gotoHome(page);
 
-  await page.setViewportSize({ width: 640, height: 844 });
-  await gotoHome(page);
-  const wideContact = page.locator(".contact__actions");
-  await wideContact.scrollIntoViewIfNeeded();
-  expect(
-    gridColumnCount(
-      await wideContact.evaluate(
-        (element) => getComputedStyle(element).gridTemplateColumns,
-      ),
-    ),
-  ).toBe(3);
-  const wide = await measurePipelineLayout(page);
+    const process = page.locator(".hero-process");
 
-  const widthDelta =
-    Math.abs(wide.pipelineWidth - narrow.pipelineWidth) /
-    Math.max(narrow.pipelineWidth, wide.pipelineWidth);
+    if (width < 1024) {
+      await expect(process).toBeHidden();
+      await assertNoDocumentOverflow(page);
+      continue;
+    }
 
-  expect(widthDelta).toBeLessThanOrEqual(0.05);
+    await process.scrollIntoViewIfNeeded();
+    await expect(process).toBeVisible();
 
-  for (const height of [...narrow.labelHeights, ...wide.labelHeights]) {
-    expect(height).toBeGreaterThanOrEqual(PIPELINE_LABEL_MIN_HEIGHT - 0.5);
+    const metrics = await process.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const interfaceElement = element.querySelector(".hero-process__interface");
+      const interfaceStyle = interfaceElement
+        ? getComputedStyle(interfaceElement)
+        : null;
+      const interfaceBox = interfaceElement?.getBoundingClientRect() ?? null;
+      const signalBox = element
+        .querySelector(".hero-process__signal")
+        ?.getBoundingClientRect();
+      const nodeCenters = Array.from(
+        element.querySelectorAll(".hero-process__node"),
+        (node) => {
+          const box = node.getBoundingClientRect();
+          return box.x + box.width / 2;
+        },
+      );
+
+      return {
+        background: style.backgroundColor,
+        borderWidth: style.borderTopWidth,
+        boxShadow: style.boxShadow,
+        interfaceBackground: interfaceStyle?.backgroundColor ?? "",
+        interfaceBorderWidth: interfaceStyle?.borderTopWidth ?? "",
+        interfaceWidth: interfaceBox?.width ?? 0,
+        interfaceHeight: interfaceBox?.height ?? 0,
+        signalCenter: signalBox ? signalBox.x + signalBox.width / 2 : 0,
+        nodeCenters,
+      };
+    });
+
+    expect(metrics.background, `background at ${width}px`).toBe(
+      "rgba(0, 0, 0, 0)",
+    );
+    expect(metrics.borderWidth, `border at ${width}px`).toBe("0px");
+    expect(metrics.boxShadow, `shadow at ${width}px`).toBe("none");
+    expect(metrics.interfaceBackground, `interface background at ${width}px`).toBe(
+      "rgba(0, 0, 0, 0)",
+    );
+    expect(metrics.interfaceBorderWidth, `interface border at ${width}px`).toBe(
+      "0px",
+    );
+    expect(metrics.interfaceWidth, `interface width at ${width}px`).toBeGreaterThan(0);
+    expect(
+      metrics.interfaceHeight,
+      `interface height at ${width}px`,
+    ).toBeGreaterThan(0);
+    expect(metrics.nodeCenters).toHaveLength(4);
+    metrics.nodeCenters.forEach((nodeCenter) => {
+      expect(
+        Math.abs(nodeCenter - metrics.signalCenter),
+        `signal and node alignment at ${width}px`,
+      ).toBeLessThanOrEqual(0.5);
+    });
+
+    await assertNoDocumentOverflow(page);
   }
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero geometry does not react to pointer movement", async ({ page }) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+
+  test.skip(viewport.width < 1024, "Hero process is hidden below 64rem");
+
+  await page.mouse.move(viewport.width * 0.2, viewport.height * 0.2);
+  const first = await measureHeroProcess(page);
+  await page.mouse.move(viewport.width * 0.8, viewport.height * 0.6);
+  const second = await measureHeroProcess(page);
+
+  assertStable(first.visual.width, second.visual.width, "visual width");
+  assertStable(first.visual.height, second.visual.height, "visual height");
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero folds within the first viewport on desktop sizes", async ({
+  page,
+}) => {
+  const collector = setupErrorCollection(page);
+
+  for (const [width, height] of [
+    [1024, 768],
+    [1366, 768],
+    [1440, 900],
+    [1920, 1080],
+  ] as const) {
+    await page.setViewportSize({ width, height });
+    await gotoHome(page);
+    const { heroBottom, servicesTop } = await measureHeroFold(page, {
+      width,
+      height,
+    });
+
+    expect(
+      servicesTop,
+      `services top at ${width}x${height}`,
+    ).toBeGreaterThanOrEqual(heroBottom - 1);
+    expect(
+      heroBottom,
+      `hero bottom at ${width}x${height}`,
+    ).toBeLessThanOrEqual(height + 1);
+  }
+
+  assertNoRuntimeErrors(collector);
+});
+
+test("hero actions reach the first fold without the process on portrait phones", async ({
+  page,
+}) => {
+  const collector = await preparePage(page);
+  const viewport = viewportSize(page);
+
+  test.skip(viewport.width > 480, "Portrait phone targets only");
+
+  for (const action of await page.locator(".hero__actions .contact-action").all()) {
+    await expect(action).toBeInViewport();
+  }
+
+  const process = page.locator(".hero-process");
+  await expect(process).toBeHidden();
 
   assertNoRuntimeErrors(collector);
 });
@@ -573,13 +711,13 @@ const assertSmoothHeroBoundary = async (
       `heading ${dimension} at ${first.width}x${first.height}/${second.width}x${second.height}`,
     ).toBeLessThanOrEqual(0.05);
     expect(
-      geometryDelta(before.pipeline[dimension], after.pipeline[dimension]),
-      `pipeline ${dimension} at ${first.width}x${first.height}/${second.width}x${second.height}`,
+      geometryDelta(before.visual[dimension], after.visual[dimension]),
+      `visual ${dimension} at ${first.width}x${first.height}/${second.width}x${second.height}`,
     ).toBeLessThanOrEqual(0.05);
   }
 
   for (const height of [...before.labelHeights, ...after.labelHeights]) {
-    expect(height).toBeGreaterThanOrEqual(PIPELINE_LABEL_MIN_HEIGHT - 0.5);
+    expect(height).toBeGreaterThanOrEqual(HERO_PROCESS_LABEL_MIN_HEIGHT - 0.5);
   }
 };
 
@@ -615,15 +753,19 @@ test("hero geometry is continuous across former height thresholds", async ({
   assertNoRuntimeErrors(collector);
 });
 
-test("hero geometry is continuous at the compact-width boundary", async ({
+test("hero process appears only when the viewport can support it", async ({
   page,
 }) => {
   const collector = setupErrorCollection(page);
-  await assertSmoothHeroBoundary(
-    page,
-    { width: 367, height: 844 },
-    { width: 368, height: 844 },
-  );
+
+  await page.setViewportSize({ width: 1023, height: 900 });
+  await gotoHome(page);
+  await expect(page.locator(".hero-process")).toBeHidden();
+
+  await page.setViewportSize({ width: 1024, height: 900 });
+  await gotoHome(page);
+  await expect(page.locator(".hero-process")).toBeVisible();
+
   assertNoRuntimeErrors(collector);
 });
 
@@ -641,7 +783,7 @@ test("hero child geometry is stable when only the viewport height changes", asyn
   const tall = await measureHeroSizing(page);
 
   assertStable(short.headingWidth, tall.headingWidth, "heading width");
-  assertStable(short.pipelineWidth, tall.pipelineWidth, "pipeline width");
+  assertStable(short.visualWidth, tall.visualWidth, "visual width");
   assertStable(short.headingFontSize, tall.headingFontSize, "heading font size");
 
   expect(tall.labelFontSizes).toHaveLength(short.labelFontSizes.length);
@@ -680,9 +822,9 @@ test("wide desktop hero lead stays constrained", async ({ page }, testInfo) => {
   );
 
   const collector = await preparePage(page);
-  const heroLead = page.locator("#hero-heading + p");
+  const heroLead = page.locator(".hero__lead");
 
-  await expect(heroLead).toHaveText(/connect your systems\.$/);
+  await expect(heroLead).toHaveText(/deliver a working solution\.$/);
   await assertProseWidth(heroLead);
 
   assertNoRuntimeErrors(collector);
@@ -702,13 +844,13 @@ test("reduced motion renders completed static states", async ({ page }, testInfo
 
   const productCards = page.locator(".product-card");
   const journeySignals = page.locator(".journey__signal svg");
-  const revealTargets = page.locator("[data-reveal]");
+  const visibleRevealTargets = page.locator("[data-reveal]:visible");
 
   await expect(productCards).toHaveCount(6);
   await expect(journeySignals).toHaveCount(4);
   await expect(page.locator(".journey__moment")).toHaveCount(4);
 
-  for (const target of await revealTargets.all()) {
+  for (const target of await visibleRevealTargets.all()) {
     await target.scrollIntoViewIfNeeded();
     await assertVisibleLayout(target);
   }
@@ -758,28 +900,44 @@ test("reduced motion renders completed static states", async ({ page }, testInfo
     expect(journeyRoute.transform).toMatch(/matrix\(1, 0, 0, 1|scaleY\(1\)|scale\(1, 1\)/);
   }
 
-  const pipeline = page.locator(".hero__pipeline");
-  await expect(pipeline).toBeVisible();
-  await expect(pipeline).not.toHaveClass(/is-pipeline-visible/);
+  const process = page.locator(".hero-process");
+  await expect(process).toBeHidden();
+  await expect(process).not.toHaveClass(/is-process-visible/);
 
-  const pipelineMotion = await pipeline.evaluate((element) => {
-    const signal = element.querySelector(".hero-pipeline__signal");
-    const ring = element.querySelector(".hero-pipeline__node-ring");
+  const processMotion = await process.evaluate((element) => {
+    const display = (selector: string): string => {
+      const node = element.querySelector(selector);
+      return node ? getComputedStyle(node).display : "";
+    };
+    const animation = (selector: string): string => {
+      const node = element.querySelector(selector);
+      return node ? getComputedStyle(node).animationName : "";
+    };
 
     return {
-      signalDisplay: signal ? getComputedStyle(signal).display : "",
-      ringAnimation: ring ? getComputedStyle(ring).animationName : "",
-      signalAnimation: signal ? getComputedStyle(signal).animationName : "",
+      signalDisplay: display(".hero-process__signal"),
+      signalAnimation: animation(".hero-process__signal"),
+      liveAnimation: animation(".hero-process__live"),
+      stageAnimation: animation(".hero-process__stage"),
+      railDisplay: display(".hero-process__rail"),
+      stagesDisplay: display(".hero-process__stages"),
+      inputDisplay: display(".hero-process__input"),
+      outputDisplay: display(".hero-process__output"),
     };
   });
 
-  expect(pipelineMotion.signalDisplay).toBe("none");
-  expect(
-    pipelineMotion.ringAnimation === "none" || pipelineMotion.ringAnimation === "",
-  ).toBeTruthy();
-  expect(
-    pipelineMotion.signalAnimation === "none" || pipelineMotion.signalAnimation === "",
-  ).toBeTruthy();
+  expect(processMotion.signalDisplay).toBe("none");
+  [
+    processMotion.signalAnimation,
+    processMotion.liveAnimation,
+    processMotion.stageAnimation,
+  ].forEach((name) => {
+    expect(name === "none" || name === "").toBeTruthy();
+  });
+  expect(processMotion.railDisplay).not.toBe("none");
+  expect(processMotion.stagesDisplay).not.toBe("none");
+  expect(processMotion.inputDisplay).not.toBe("none");
+  expect(processMotion.outputDisplay).not.toBe("none");
 
   assertNoRuntimeErrors(collector);
 });
@@ -792,12 +950,58 @@ test("privacy notice page shares the header and footer", async ({ page }) => {
   expect(new URL(page.url()).pathname).toBe("/solved-tech/privacy/");
 
   await expect(page.locator("h1")).toHaveText("Privacy notice");
-  await expect(page.locator("#primary-navigation a")).toHaveCount(4);
+  await expect(page.locator("#primary-navigation a")).toHaveCount(5);
+  await expect(
+    page.locator(
+      '#primary-navigation a.site-header__vorbio[href="/solved-tech/services/vorbio/"]',
+    ),
+  ).toHaveCSS("color", "rgb(185, 239, 155)");
   await expect(
     page.locator('#primary-navigation a[href="/solved-tech/#services"]'),
   ).toHaveCount(1);
   await expect(page.locator('footer a[href="/solved-tech/privacy/"]')).toHaveCount(1);
   await assertNoDocumentOverflow(page);
+  assertNoRuntimeErrors(collector);
+});
+
+test("the Vorbio product page renders its hero, capabilities and contact rail", async ({
+  page,
+}) => {
+  const collector = setupErrorCollection(page);
+
+  await page.goto("services/vorbio/");
+  await page.waitForLoadState("domcontentloaded");
+  expect(new URL(page.url()).pathname).toBe("/solved-tech/services/vorbio/");
+
+  await expect(page.locator("h1")).toHaveText(vorbioProduct.tagline);
+  await expect(page.locator(".vorbio-card")).toHaveCount(
+    vorbioProduct.highlights.length,
+  );
+  await expect(page.locator(".vorbio-step")).toHaveCount(
+    vorbioProduct.steps.length,
+  );
+  await expect(page.locator(".vorbio-voice__bar")).toHaveCount(9);
+  await expect(page.locator(".vorbio-flow__item")).toHaveCount(
+    vorbioProduct.workflow.length,
+  );
+  await expect(page.locator(".vorbio-control__list li")).toHaveCount(
+    vorbioProduct.controls.length,
+  );
+  await expect(page.locator(".vorbio-button")).toHaveCount(2);
+  await expect(page.locator(".contact-action")).toHaveCount(3);
+  await assertNoDocumentOverflow(page);
+  assertNoRuntimeErrors(collector);
+});
+
+test("the homepage Vorbio promo links to the product page", async ({ page }) => {
+  const collector = await preparePage(page);
+  const promo = page.locator('a[data-placement="vorbio-promo"]');
+
+  await promo.scrollIntoViewIfNeeded();
+  await expect(promo).toBeVisible();
+  await promo.click();
+  await expect(page).toHaveURL(/\/solved-tech\/services\/vorbio\/$/);
+  await expect(page.locator("#vorbio-heading")).toBeVisible();
   assertNoRuntimeErrors(collector);
 });
 
@@ -842,33 +1046,38 @@ test("every service page renders its own hero, lists and navigation", async ({
   }
 });
 
-test("background motion can be paused from a visible control", async ({ page }) => {
+test("the diagram can be pressed to pause and resume its motion", async ({
+  page,
+}) => {
   const collector = setupErrorCollection(page);
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await gotoHome(page);
 
-  const toggle = page.locator(".motion-toggle");
-  const signal = page.locator(".hero-pipeline__signal");
+  test.skip(viewportSize(page).width < 1024, "Hero process is hidden below 64rem");
+
+  const control = page.locator("button.hero-process__control");
+  const signal = page.locator(".hero-process__signal");
   const playState = () =>
     signal.evaluate((element) => getComputedStyle(element).animationPlayState);
 
-  await page.locator(".hero__pipeline").scrollIntoViewIfNeeded();
-  await expect(toggle).toBeVisible();
-  await expect(toggle).toHaveText("Pause background motion");
-  await expect(toggle).not.toHaveAttribute("aria-pressed");
+  await control.scrollIntoViewIfNeeded();
+  await expect(control).toBeVisible();
+  await expect(control).toHaveAttribute("aria-label", "Pause diagram motion");
+  await expect(control).toHaveAttribute("aria-pressed", "false");
   await expect.poll(playState).toBe("running");
 
-  await toggle.click();
-  await expect(toggle).toHaveText("Resume background motion");
+  await control.click();
+  await expect(control).toHaveAttribute("aria-label", "Resume diagram motion");
+  await expect(control).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("html")).toHaveClass(/motion-paused/);
   await expect.poll(playState).toBe("paused");
 
-  await toggle.click();
-  await expect(toggle).toHaveText("Pause background motion");
+  await control.click();
+  await expect(control).toHaveAttribute("aria-label", "Pause diagram motion");
   await expect.poll(playState).toBe("running");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(toggle).toBeHidden();
+  await expect(control).toBeDisabled();
 
   assertNoRuntimeErrors(collector);
 });

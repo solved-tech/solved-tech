@@ -8,7 +8,7 @@ if (!origin) {
   throw new Error("vite preview did not report a local URL.");
 }
 
-const paths = ["", "privacy/", "services/bug-fixing/", "services/software-development/", "services/automation/"];
+const paths = ["", "privacy/", "services/bug-fixing/", "services/software-development/", "services/automation/", "services/vorbio/"];
 const browser = await chromium.launch();
 const problems: string[] = [];
 

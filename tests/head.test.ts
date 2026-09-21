@@ -10,6 +10,7 @@ import {
   renderSecurityMeta,
   renderSitemap,
   servicePageMeta,
+  vorbioPage,
 } from "../src/head";
 
 const shell = readFileSync(new URL("../index.html", import.meta.url), "utf8");
@@ -186,6 +187,14 @@ describe("service page metadata", () => {
         "</urlset>",
         "",
       ].join("\n"),
+    );
+  });
+
+  it("exposes the Vorbio product page as its own indexable route", () => {
+    expect(vorbioPage.path).toBe("/services/vorbio/");
+    expect(vorbioPage.indexable).toBe(true);
+    expect(renderHeadTags(vorbioPage, live, "/solved-tech/")).toContain(
+      '<link rel="canonical" href="https://example.test/solved-tech/services/vorbio/" />',
     );
   });
 

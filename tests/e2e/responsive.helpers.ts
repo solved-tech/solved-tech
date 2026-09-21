@@ -7,12 +7,12 @@ export type ErrorCollector = {
   pageErrors: string[];
 };
 
-export const PHONE_LANDSCAPE_PROJECT = "phone-landscape";
 export const WIDE_DESKTOP_PROJECT = "wide-desktop";
 export const REDUCED_MOTION_PROJECT = "uk-phone-standard";
-export const PIPELINE_WIDTH_SMOOTH_PROJECT = "tablet-landscape";
-export const PIPELINE_LABEL_COUNT = 7;
-export const PIPELINE_LABEL_MIN_HEIGHT = 6;
+export const HERO_PROCESS_LABEL_COUNT = 8;
+export const HERO_PROCESS_LABEL_MIN_HEIGHT = 4;
+export const HERO_PROCESS_LABELS =
+  ".hero-process__stage-copy strong, .hero-process__stage-copy small";
 
 export const setupErrorCollection = (page: Page): ErrorCollector => {
   const consoleErrors: string[] = [];
@@ -242,63 +242,104 @@ export const assertProseWidth = async (locator: Locator, maxWidth = 920) => {
   expect(width).toBeLessThanOrEqual(maxWidth);
 };
 
-export const assertPipelineLabelsRendered = async (page: Page) => {
-  const labels = page.locator(".hero-pipeline__node text");
+export const assertHeroProcessLabelsRendered = async (page: Page) => {
+  const labels = page.locator(HERO_PROCESS_LABELS);
 
-  await expect(labels).toHaveCount(PIPELINE_LABEL_COUNT);
+  await expect(labels).toHaveCount(HERO_PROCESS_LABEL_COUNT);
 
   for (const label of await labels.all()) {
     const box = await label.boundingBox();
     expect(box).not.toBeNull();
-    expect(box!.height).toBeGreaterThanOrEqual(PIPELINE_LABEL_MIN_HEIGHT - 0.5);
+    expect(box!.height).toBeGreaterThanOrEqual(
+      HERO_PROCESS_LABEL_MIN_HEIGHT - 0.5,
+    );
   }
 };
 
-export const measurePipelineLayout = async (page: Page) => {
-  const pipeline = page.locator(".hero__pipeline");
-  const labels = page.locator(".hero-pipeline__node text");
+export type HeroProcessMetrics = {
+  visual: Rect;
+  labelHeights: number[];
+};
 
-  await expect(labels).toHaveCount(PIPELINE_LABEL_COUNT);
+export const measureHeroProcess = async (
+  page: Page,
+): Promise<HeroProcessMetrics> => {
+  const process = page.locator(".hero-process");
+  const labels = page.locator(HERO_PROCESS_LABELS);
 
-  const pipelineWidth = await pipeline.evaluate(
-    (element) => element.getBoundingClientRect().width,
-  );
+  await expect(process).toBeVisible();
+  await expect(labels).toHaveCount(HERO_PROCESS_LABEL_COUNT);
+
+  const box = await process.boundingBox();
+  expect(box).not.toBeNull();
+
   const labelHeights = await labels.evaluateAll((elements) =>
     elements.map((element) => element.getBoundingClientRect().height),
   );
 
-  return { pipelineWidth, labelHeights };
+  return {
+    visual: { x: box!.x, y: box!.y, width: box!.width, height: box!.height },
+    labelHeights,
+  };
+};
+
+export const measureHeroActions = async (page: Page) => {
+  const actions = page.locator(".hero__actions .contact-action");
+  await expect(actions).toHaveCount(3);
+
+  const rects = await actions.evaluateAll((elements) =>
+    elements.map((element) => {
+      const box = element.getBoundingClientRect();
+      return { x: box.x, y: box.y, width: box.width, height: box.height };
+    }),
+  );
+
+  return { rects, rows: groupByRow(rects) };
+};
+
+export const measureHeroFold = async (page: Page, viewport: Viewport) => {
+  const heroBox = await page.locator(".hero").boundingBox();
+  const servicesBox = await page.locator("#services").boundingBox();
+
+  expect(heroBox).not.toBeNull();
+  expect(servicesBox).not.toBeNull();
+
+  return {
+    heroBottom: heroBox!.y + heroBox!.height,
+    servicesTop: servicesBox!.y,
+    viewportHeight: viewport.height,
+  };
 };
 
 export type HeroGeometry = {
   heading: { width: number; height: number };
-  pipeline: { width: number; height: number };
+  visual: { width: number; height: number };
   labelHeights: number[];
 };
 
 export const measureHeroGeometry = async (page: Page): Promise<HeroGeometry> => {
   const heading = page.locator("#hero-heading");
-  const pipeline = page.locator(".hero__pipeline");
-  const labels = page.locator(".hero-pipeline__node text");
+  const process = page.locator(".hero-process");
+  const labels = page.locator(HERO_PROCESS_LABELS);
 
   await expect(heading).toBeVisible();
-  await expect(pipeline).toBeVisible();
-  await expect(labels).toHaveCount(PIPELINE_LABEL_COUNT);
+  await expect(process).toBeVisible();
+  await expect(labels).toHaveCount(HERO_PROCESS_LABEL_COUNT);
 
-  const [headingBox, pipelineBox, labelHeights] = await Promise.all([
+  const [headingBox, processBox, labelHeights] = await Promise.all([
     heading.boundingBox(),
-    pipeline.boundingBox(),
+    process.boundingBox(),
     labels.evaluateAll((elements) =>
       elements.map((element) => element.getBoundingClientRect().height),
     ),
   ]);
 
   expect(headingBox).not.toBeNull();
-  expect(pipelineBox).not.toBeNull();
+  expect(processBox).not.toBeNull();
 
   return {
     heading: { width: headingBox!.width, height: headingBox!.height },
-    pipeline: { width: pipelineBox!.width, height: pipelineBox!.height },
+    visual: { width: processBox!.width, height: processBox!.height },
     labelHeights,
   };
 };
@@ -317,28 +358,28 @@ export type HeroSizing = {
   heroHeight: number;
   headingWidth: number;
   headingFontSize: number;
-  pipelineWidth: number;
+  visualWidth: number;
   labelFontSizes: number[];
 };
 
 export const measureHeroSizing = async (page: Page): Promise<HeroSizing> => {
   const hero = page.locator(".hero");
   const heading = page.locator("#hero-heading");
-  const pipeline = page.locator(".hero__pipeline");
-  const labels = page.locator(".hero-pipeline__node text");
+  const process = page.locator(".hero-process");
+  const labels = page.locator(HERO_PROCESS_LABELS);
 
   await expect(heading).toBeVisible();
-  await expect(pipeline).toBeVisible();
-  await expect(labels).toHaveCount(PIPELINE_LABEL_COUNT);
+  await expect(process).toBeVisible();
+  await expect(labels).toHaveCount(HERO_PROCESS_LABEL_COUNT);
 
-  const [heroHeight, headingMetrics, pipelineWidth, labelFontSizes] =
+  const [heroHeight, headingMetrics, visualWidth, labelFontSizes] =
     await Promise.all([
       hero.evaluate((element) => element.getBoundingClientRect().height),
       heading.evaluate((element) => ({
         width: element.getBoundingClientRect().width,
         fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
       })),
-      pipeline.evaluate((element) => element.getBoundingClientRect().width),
+      process.evaluate((element) => element.getBoundingClientRect().width),
       labels.evaluateAll((elements) =>
         elements.map((element) =>
           Number.parseFloat(getComputedStyle(element).fontSize),
@@ -350,7 +391,7 @@ export const measureHeroSizing = async (page: Page): Promise<HeroSizing> => {
     heroHeight,
     headingWidth: headingMetrics.width,
     headingFontSize: headingMetrics.fontSize,
-    pipelineWidth,
+    visualWidth,
     labelFontSizes,
   };
 };

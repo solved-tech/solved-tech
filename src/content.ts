@@ -224,6 +224,120 @@ export interface ServicePage {
   approved: boolean;
 }
 
+export interface VorbioHighlight {
+  title: string;
+  detail: string;
+}
+
+export interface VorbioProduct {
+  name: string;
+  eyebrow: string;
+  tagline: string;
+  summary: string;
+  highlights: VorbioHighlight[];
+  workflow: VorbioHighlight[];
+  useCases: string[];
+  controls: VorbioHighlight[];
+  steps: VorbioHighlight[];
+  note: string;
+}
+
+export const vorbioProduct: VorbioProduct = {
+  name: "Vorbio",
+  eyebrow: "AI voice + chat for WhatsApp",
+  tagline: "Your AI front desk for WhatsApp voice and chat.",
+  summary:
+    "Vorbio answers WhatsApp voice calls and chats, qualifies each enquiry and books or routes the next step. Your team takes over with context when needed.",
+  highlights: [
+    {
+      title: "Natural voice conversations",
+      detail:
+        "Answers WhatsApp voice calls in your business's name and guides the caller through a clear, focused conversation.",
+    },
+    {
+      title: "Fast, consistent chat",
+      detail:
+        "Responds to WhatsApp messages with clear, on-brand answers drawn only from the information you approve.",
+    },
+    {
+      title: "Qualified enquiries",
+      detail:
+        "Asks the questions your team needs answered and turns the conversation into a useful, structured summary.",
+    },
+    {
+      title: "Bookings and next steps",
+      detail:
+        "Connects to the agreed calendar, CRM or inbox so an enquiry can become a booking, lead or task.",
+    },
+    {
+      title: "Context-rich handover",
+      detail:
+        "Hands unclear, sensitive or high-value conversations to a person with the transcript and captured details attached.",
+    },
+    {
+      title: "Controlled knowledge",
+      detail:
+        "Works from the business information and conversation rules you approve, with clear limits on what it can do.",
+    },
+  ],
+  workflow: [
+    {
+      title: "Answer",
+      detail: "Vorbio picks up the voice call or chat and introduces itself for your business.",
+    },
+    {
+      title: "Understand",
+      detail: "It asks focused follow-up questions and captures the details that matter.",
+    },
+    {
+      title: "Act",
+      detail: "It answers, books or routes the agreed next step through your connected tools.",
+    },
+    {
+      title: "Hand over",
+      detail: "Your team takes over whenever the conversation reaches an agreed boundary.",
+    },
+  ],
+  useCases: [
+    "Service enquiries",
+    "Bookings and rescheduling",
+    "Lead qualification",
+    "Out-of-hours first response",
+  ],
+  controls: [
+    {
+      title: "Approved answers only",
+      detail: "Its responses are grounded in the information and wording your business signs off.",
+    },
+    {
+      title: "Clear escalation rules",
+      detail: "You decide which topics, values and situations always move to a person.",
+    },
+    {
+      title: "Visible conversations",
+      detail: "Your team can review what happened, refine the rules and remain responsible for the service.",
+    },
+  ],
+  steps: [
+    {
+      title: "We map the conversations",
+      detail:
+        "We review the calls and messages you already get and agree what Vorbio should handle and what must reach a person.",
+    },
+    {
+      title: "We build and test it",
+      detail:
+        "Vorbio runs on your own WhatsApp number, connected to the agreed tools and tested against real examples before it goes live.",
+    },
+    {
+      title: "You stay in control",
+      detail:
+        "You watch it answer real conversations, adjust the wording and rules with us, and decide how far it can go.",
+    },
+  ],
+  note: "A Solved Tech product, configured around your business. You keep your WhatsApp number and control its knowledge, actions and handover rules.",
+};
+
 export const servicePages: ServicePage[] = [
   {
     slug: "bug-fixing",

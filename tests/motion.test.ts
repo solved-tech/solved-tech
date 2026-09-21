@@ -4,17 +4,25 @@ import {
   mount,
   settlePrerenderedReveals,
   setupHeaderOffset,
-  setupHeroInteraction,
+  setupHeroProcessMotion,
   setupMobileMenu,
   setupMotionToggle,
-  setupPipelineMotion,
   setupRevealMotion,
   setupScrollProgress,
 } from "../src/enhance";
-import { pipelinePath } from "../src/render";
 
 const styles = readFileSync(
   new URL("../src/styles.css", import.meta.url),
+  "utf8",
+);
+
+const enhanceSource = readFileSync(
+  new URL("../src/enhance.ts", import.meta.url),
+  "utf8",
+);
+
+const mainSource = readFileSync(
+  new URL("../src/main.ts", import.meta.url),
   "utf8",
 );
 const reducedMotionBlock = styles.slice(
@@ -241,46 +249,58 @@ describe("reveal motion", () => {
   });
 });
 
-describe("pipeline motion", () => {
-  it("exports a dedicated pipeline visibility controller", () => {
-    expect(setupPipelineMotion).toBeTypeOf("function");
+describe("hero process motion", () => {
+  it("exports a dedicated hero process visibility controller", () => {
+    expect(setupHeroProcessMotion).toBeTypeOf("function");
   });
 
-  it("does nothing when reduced motion is preferred", () => {
+  it("queries .hero-process and does nothing when reduced motion is preferred", () => {
     const querySelector = vi.fn();
     const observer = vi.fn();
     vi.stubGlobal("IntersectionObserver", observer);
 
-    setupPipelineMotion(
-      { querySelector } as unknown as ParentNode,
-      true,
-    );
+    setupHeroProcessMotion({ querySelector } as unknown as ParentNode, true);
 
     expect(querySelector).not.toHaveBeenCalled();
     expect(observer).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
 
-  it("runs the pipeline as a fallback without IntersectionObserver", () => {
-    const pipeline = { classList: { add: vi.fn() } };
-    const root = {
-      querySelector: vi.fn(() => pipeline),
-    } as unknown as ParentNode;
-    vi.stubGlobal("IntersectionObserver", undefined);
+  it("observes the hero process element", () => {
+    const querySelector = vi.fn();
+    const observe = vi.fn();
 
-    setupPipelineMotion(root, false);
+    class FakeObserver {
+      observe = observe;
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+    }
 
-    expect(pipeline.classList.add).toHaveBeenCalledWith(
-      "is-pipeline-visible",
-    );
+    vi.stubGlobal("IntersectionObserver", FakeObserver);
+    setupHeroProcessMotion({ querySelector } as unknown as ParentNode, false);
+
+    expect(querySelector).toHaveBeenCalledWith(".hero-process");
     vi.unstubAllGlobals();
   });
 
-  it("toggles pipeline motion on every visibility change without unobserving", () => {
-    const toggle = vi.fn();
-    const pipeline = { classList: { toggle } };
+  it("runs the process as a fallback without IntersectionObserver", () => {
+    const process = { classList: { add: vi.fn() } };
     const root = {
-      querySelector: vi.fn(() => pipeline),
+      querySelector: vi.fn(() => process),
+    } as unknown as ParentNode;
+    vi.stubGlobal("IntersectionObserver", undefined);
+
+    setupHeroProcessMotion(root, false);
+
+    expect(process.classList.add).toHaveBeenCalledWith("is-process-visible");
+    vi.unstubAllGlobals();
+  });
+
+  it("toggles process motion on every visibility change without unobserving", () => {
+    const toggle = vi.fn();
+    const process = { classList: { toggle } };
+    const root = {
+      querySelector: vi.fn(() => process),
     } as unknown as ParentNode;
     const observe = vi.fn();
     const unobserve = vi.fn();
@@ -297,93 +317,36 @@ describe("pipeline motion", () => {
     }
 
     vi.stubGlobal("IntersectionObserver", FakeObserver);
-    setupPipelineMotion(root, false);
+    setupHeroProcessMotion(root, false);
 
-    expect(observe).toHaveBeenCalledWith(pipeline);
+    expect(observe).toHaveBeenCalledWith(process);
 
     notify?.([
-      {
-        isIntersecting: true,
-        target: pipeline,
-      } as unknown as IntersectionObserverEntry,
+      { isIntersecting: true, target: process } as unknown as IntersectionObserverEntry,
     ]);
     notify?.([
-      {
-        isIntersecting: false,
-        target: pipeline,
-      } as unknown as IntersectionObserverEntry,
+      { isIntersecting: false, target: process } as unknown as IntersectionObserverEntry,
     ]);
     notify?.([
-      {
-        isIntersecting: true,
-        target: pipeline,
-      } as unknown as IntersectionObserverEntry,
+      { isIntersecting: true, target: process } as unknown as IntersectionObserverEntry,
     ]);
 
     expect(toggle.mock.calls).toEqual([
-      ["is-pipeline-visible", true],
-      ["is-pipeline-visible", false],
-      ["is-pipeline-visible", true],
+      ["is-process-visible", true],
+      ["is-process-visible", false],
+      ["is-process-visible", true],
     ]);
     expect(unobserve).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
-});
 
-describe("hero interaction", () => {
-  it("turns pointer position into restrained visual offsets", () => {
-    const properties = new Map<string, string>();
-    const handlers = new Map<string, (event: PointerEvent) => void>();
-    const hero = {
-      style: {
-        setProperty: (name: string, value: string) =>
-          properties.set(name, value),
-      },
-      getBoundingClientRect: () => ({
-        left: 0,
-        top: 0,
-        width: 400,
-        height: 800,
-      }),
-      addEventListener: (
-        type: string,
-        handler: (event: PointerEvent) => void,
-      ) => handlers.set(type, handler),
-    };
-    const root = {
-      querySelector: vi.fn(() => hero),
-    } as unknown as ParentNode;
-
-    setupHeroInteraction(root, false);
-    handlers.get("pointermove")?.({
-      clientX: 400,
-      clientY: 800,
-    } as PointerEvent);
-
-    expect(properties.get("--hero-shift-x")).toBe("18.00px");
-    expect(properties.get("--hero-shift-y")).toBe("18.00px");
-  });
-
-  it("stays static when reduced motion is preferred", () => {
-    const addEventListener = vi.fn();
-    const root = {
-      querySelector: vi.fn(() => ({ addEventListener })),
-    } as unknown as ParentNode;
-
-    setupHeroInteraction(root, true);
-
-    expect(addEventListener).not.toHaveBeenCalled();
-  });
-
-  it("skips pointer tracking for coarse pointers", () => {
-    const addEventListener = vi.fn();
-    const root = {
-      querySelector: vi.fn(() => ({ addEventListener })),
-    } as unknown as ParentNode;
-
-    setupHeroInteraction(root, false, false);
-
-    expect(addEventListener).not.toHaveBeenCalled();
+  it("ships no pointer-driven hero listener", () => {
+    for (const source of [enhanceSource, mainSource]) {
+      expect(source).not.toContain("pointermove");
+      expect(source).not.toContain("pointerdown");
+      expect(source).not.toContain("setupHeroInteraction");
+      expect(source).not.toContain("--hero-shift");
+    }
   });
 });
 
@@ -603,9 +566,11 @@ describe("motion toggle", () => {
   const createToggle = (reduceMotion: boolean) => {
     const handlers = new Map<string, () => void>();
     const classes = new Set<string>();
+    const attributes = new Map<string, string>();
     const button = {
-      hidden: false,
-      textContent: "Pause background motion",
+      disabled: false,
+      setAttribute: (name: string, value: string) =>
+        attributes.set(name, value),
       addEventListener: (type: string, handler: () => void) =>
         handlers.set(type, handler),
     };
@@ -638,34 +603,43 @@ describe("motion toggle", () => {
 
     setupMotionToggle(root, view as unknown as Window);
 
-    return { button, classes, handlers, query, fireChange: () => onChange?.() };
+    return {
+      attributes,
+      button,
+      classes,
+      handlers,
+      query,
+      fireChange: () => onChange?.(),
+    };
   };
 
-  it("pauses and resumes continuous motion through the label and the html class", () => {
-    const { button, classes, handlers } = createToggle(false);
+  it("pauses and resumes motion through the diagram's pressed state", () => {
+    const { attributes, button, classes, handlers } = createToggle(false);
 
-    expect(button.hidden).toBe(false);
+    expect(button.disabled).toBe(false);
 
     handlers.get("click")?.();
-    expect(button.textContent).toBe("Resume background motion");
+    expect(attributes.get("aria-label")).toBe("Resume diagram motion");
+    expect(attributes.get("aria-pressed")).toBe("true");
     expect(classes.has("motion-paused")).toBe(true);
 
     handlers.get("click")?.();
-    expect(button.textContent).toBe("Pause background motion");
+    expect(attributes.get("aria-label")).toBe("Pause diagram motion");
+    expect(attributes.get("aria-pressed")).toBe("false");
     expect(classes.has("motion-paused")).toBe(false);
   });
 
-  it("hides the control while the system reduces motion and follows live changes", () => {
+  it("disables the control while reduced motion is preferred and follows live changes", () => {
     const { button, query, fireChange } = createToggle(true);
 
-    expect(button.hidden).toBe(true);
+    expect(button.disabled).toBe(true);
 
     query.matches = false;
     fireChange();
-    expect(button.hidden).toBe(false);
+    expect(button.disabled).toBe(false);
   });
 
-  it("does nothing without a toggle in the document", () => {
+  it("does nothing without a process control in the document", () => {
     const matchMedia = vi.fn();
 
     setupMotionToggle(
@@ -682,89 +656,111 @@ describe("stylesheet contracts", () => {
     expect(styles).toMatch(
       /html\.motion-paused \.code-field code[\s\S]*?animation-play-state:\s*paused/,
     );
-    expect(styles).toContain("html.motion-paused .hero__pipeline .hero-pipeline__signal");
-    expect(styles).toContain("html.motion-paused .hero__pipeline .hero-pipeline__node-ring");
-    expect(styles.match(/\binfinite\b/g)).toHaveLength(3);
-  });
-
-  it("uses the rendered pipeline path as the exact CSS motion path", () => {
-    expect(pipelinePath).toBeTypeOf("string");
-    expect(styles).toContain(`offset-path: path("${pipelinePath}");`);
-  });
-
-  it("runs pipeline animations only while the pipeline is visible", () => {
     expect(styles).toMatch(
-      /\.hero-pipeline__node-ring\s*\{[^}]*animation-play-state:\s*paused/s,
+      /html\.motion-paused \.code-field code,\s*html\.motion-paused \.hero-process \.hero-process__animated\s*\{[^}]*animation-play-state:\s*paused/s,
+    );
+  });
+
+  it("coordinates one shared process cycle across the signal and stages", () => {
+    expect(styles).toMatch(/\.hero-process\s*\{[^}]*--process-cycle:\s*16s/s);
+    expect(styles).toMatch(
+      /\.hero-process__signal\s*\{[^}]*animation:\s*hero-process-travel var\(--process-cycle\) linear infinite/s,
     );
     expect(styles).toMatch(
-      /\.hero-pipeline__signal\s*\{[^}]*animation-play-state:\s*paused/s,
+      /\.hero-process__stage\s*\{[^}]*--process-stage-animation:\s*hero-process-stage[^}]*animation:\s*var\(--process-stage-animation\) var\(--process-cycle\) linear infinite/s,
     );
     expect(styles).toMatch(
-      /\.hero__pipeline\.is-pipeline-visible[\s\S]*?animation-play-state:\s*running/,
+      /\.hero-process__live\s*\{[^}]*animation:\s*hero-process-live 2s ease-in-out infinite/s,
+    );
+
+    ["hero-process-live", "hero-process-travel", "hero-process-stage"].forEach(
+      (name) => expect(styles).toContain(`@keyframes ${name}`),
     );
   });
 
-  it("fits hero contact actions on one desktop row", () => {
-    const actionsRule = styles.match(/^\.hero__actions\s*\{([^}]*)\}/m)?.[1];
-
-    expect(actionsRule).toBeDefined();
-    expect(actionsRule).toContain("width: min(100%, 42rem)");
-  });
-
-  it("tracks the live mobile viewport while retaining a safe fallback", () => {
-    const heroRule = styles.match(/\.hero\s*\{([^}]*)\}/)?.[1];
-    const fallback = "min-height: calc(100svh - var(--header-height))";
-    const dynamic = "min-height: calc(100dvh - var(--header-height))";
-
-    expect(heroRule).toContain(fallback);
-    expect(heroRule).toContain(dynamic);
-    expect(heroRule?.indexOf(fallback)).toBeLessThan(
-      heroRule?.indexOf(dynamic) ?? -1,
+  it("starts process animations paused and runs only while visible", () => {
+    expect(styles).toMatch(
+      /\.hero-process__animated\s*\{[^}]*animation-play-state:\s*paused/s,
+    );
+    expect(styles).toMatch(
+      /\.hero-process\.is-process-visible \.hero-process__animated\s*\{[^}]*animation-play-state:\s*running/s,
     );
   });
 
-  it("fits hero contact actions on one mobile row", () => {
-    const actionsRule = styles.match(/^\.hero__actions\s*\{([^}]*)\}/m)?.[1];
-    const buttonRule = styles.match(/^\.hero \.contact-action\s*\{([^}]*)\}/m)?.[1];
+  it("highlights each stage exactly when the signal reaches its node", () => {
+    expect(styles).toMatch(
+      /@keyframes hero-process-travel[\s\S]*?0%\s*\{[^}]*inset-block-start:\s*2\.1rem/,
+    );
+    expect(styles).toMatch(
+      /@keyframes hero-process-travel[\s\S]*?25%\s*\{[^}]*inset-block-start:\s*6\.1rem/,
+    );
+    expect(styles).toMatch(
+      /@keyframes hero-process-travel[\s\S]*?50%\s*\{[^}]*inset-block-start:\s*10\.1rem/,
+    );
+    expect(styles).toMatch(
+      /@keyframes hero-process-travel[\s\S]*?75%\s*\{[^}]*inset-block-start:\s*14\.1rem/,
+    );
+    expect(styles).toMatch(/\.hero-process__stage:nth-child\(2\)[^}]*animation-delay:\s*-12s/s);
+    expect(styles).toMatch(/\.hero-process__stage:nth-child\(3\)[^}]*animation-delay:\s*-8s/s);
+    expect(styles).toMatch(/\.hero-process__stage:nth-child\(4\)[^}]*animation-delay:\s*-4s/s);
+    expect(styles).toMatch(
+      /@keyframes hero-process-stage[\s\S]*?0%,\s*14%\s*\{[^}]*color:\s*var\(--accent\)/,
+    );
+  });
+
+  it("returns the signal directly to the active top node", () => {
+    expect(styles).toMatch(
+      /@keyframes hero-process-travel[\s\S]*?75%\s*\{[^}]*14\.1rem[^}]*\}[\s\S]*?75\.01%,\s*100%\s*\{[^}]*2\.1rem/,
+    );
+    expect(styles).toMatch(
+      /\.hero-process__stage:first-child\s*\{[^}]*--process-stage-animation:\s*hero-process-stage-first/s,
+    );
+    expect(styles).toMatch(
+      /@keyframes hero-process-stage-first[\s\S]*?75\.01%,\s*100%\s*\{[^}]*color:\s*var\(--accent\)/,
+    );
+  });
+
+  it("aligns the rail and moving signal to the stage-node track", () => {
+    expect(styles).toMatch(
+      /\.hero-process\s*\{[^}]*--process-track:\s*3rem/s,
+    );
+    expect(styles).toMatch(
+      /\.hero-process__rail\s*\{[^}]*inset-inline-start:\s*var\(--process-track\)/s,
+    );
+    expect(styles).toMatch(
+      /\.hero-process__signal\s*\{[^}]*inset-inline-start:\s*calc\(var\(--process-track\) - 0\.25rem\)/s,
+    );
+  });
+
+  it("keeps the process free of gradients, filters and glow", () => {
+    expect(styles).not.toMatch(/gradient|drop-shadow|filter:|blur\(/i);
+  });
+
+  it("lays out one, two, then three weighted hero action columns", () => {
+    const actionsRule = styles.match(/^\.hero__actions\s*\{([^}]*)\}/m)?.[1] ?? "";
+    const buttonRule =
+      styles.match(/^\.hero \.contact-action\s*\{([^}]*)\}/m)?.[1] ?? "";
 
     expect(actionsRule).toContain("display: grid");
     expect(actionsRule).toContain(
-      "grid-template-columns: repeat(3, minmax(0, 1fr))",
+      "grid-template-columns: repeat(2, minmax(0, 1fr))",
     );
     expect(buttonRule).toMatch(/min-height:\s*48px/);
     expect(buttonRule).toContain("min-width: 0");
+
+    expect(styles).toMatch(
+      /\.hero__actions \.contact-action--call \{\s*grid-column: 1 \/ -1;/,
+    );
+    expect(styles).toMatch(
+      /@media\s*\(min-width:\s*64rem\)[\s\S]*?\.hero__actions\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1\.35fr\) repeat\(2, minmax\(0, 1fr\)\)/,
+    );
   });
 
-  it("pulses only the node ring after the signal crosses", () => {
-    const nodeRule = styles.match(/\.hero-pipeline__node\s*\{([^}]*)\}/)?.[1];
-    const ringRule = styles.match(
-      /\.hero-pipeline__node-ring\s*\{([^}]*)\}/,
-    )?.[1];
-    const iconRule = styles.match(/\.hero-pipeline__icon\s*\{([^}]*)\}/)?.[1];
-    const labelRule = styles.match(
-      /\.hero-pipeline__node text\s*\{([^}]*)\}/,
-    )?.[1];
-
-    expect(nodeRule).not.toContain("animation:");
-    expect(ringRule).toContain(
-      "animation: pipeline-node-ring-active 9s linear infinite",
+  it("leaves the shared contact rail WhatsApp styling untouched", () => {
+    expect(styles).toMatch(/\.contact__actions \.contact-action--whatsapp/);
+    expect(styles).not.toMatch(
+      /\.hero \.contact-action--whatsapp \{[^}]*(?:#25d366|37 211 102)/,
     );
-    expect(ringRule).toContain(
-      "animation-delay: calc(var(--pipeline-delay) + 140ms)",
-    );
-    expect(iconRule).not.toContain("animation:");
-    expect(labelRule).not.toContain("animation:");
-    expect(styles).toContain("@keyframes pipeline-node-ring-active");
-  });
-
-  it("does not apply a drop shadow to the pipeline signal", () => {
-    const signalRule = styles.match(
-      /\.hero-pipeline__signal\s*\{([^}]*)\}/,
-    )?.[1];
-
-    expect(signalRule).toBeDefined();
-    expect(signalRule).not.toContain("filter:");
-    expect(signalRule).not.toContain("drop-shadow");
   });
 
   it("defaults to immediate scrolling and restores smooth scrolling for fine pointers", () => {
@@ -805,44 +801,33 @@ html {
     expect(reducedMotionBlock).toMatch(/\.service-art[\s\S]*?transform:\s*none/);
   });
 
-  it("keeps viewport-height sizing on the hero container min-height only", () => {
+  it("uses an automatic base height and a desktop-only viewport minimum", () => {
     expect([...styles.matchAll(/[sd]vh/g)].map(([unit]) => unit)).toEqual([
       "svh",
-      "dvh",
     ]);
 
-    const heroRule = styles.match(/\.hero\s*\{([^}]*)\}/)?.[1] ?? "";
+    const baseRule = styles.match(/^\.hero\s*\{([^}]*)\}/m)?.[1] ?? "";
+    expect(baseRule).toContain("min-height: auto");
 
-    expect(heroRule).toContain("min-height: calc(100svh - var(--header-height))");
-    expect(heroRule).toContain("min-height: calc(100dvh - var(--header-height))");
-    expect(heroRule.indexOf("100svh")).toBeLessThan(heroRule.indexOf("100dvh"));
-
-    const gap = heroRule.match(/gap:\s*([^;]+);/)?.[1] ?? "";
-    const padding = heroRule.match(/padding-block:\s*([^;]+);/)?.[1] ?? "";
-
-    expect(gap).toMatch(/clamp\(/);
-    expect(gap).toMatch(/vw/);
-    expect(gap).not.toMatch(/vh/);
-    expect(padding).toMatch(/clamp\(/);
-    expect(padding).toMatch(/vw/);
-    expect(padding).not.toMatch(/vh/);
+    expect(styles).toMatch(
+      /@media\s*\(min-width:\s*64rem\)[\s\S]*?min-height:\s*calc\(100svh - var\(--header-height\)\)/,
+    );
 
     const childRules: Record<string, string> = {
       heading: styles.match(/\.hero h1\s*\{([^}]*)\}/)?.[1] ?? "",
-      pipeline: styles.match(/\.hero__pipeline\s*\{([^}]*)\}/)?.[1] ?? "",
-      signal: styles.match(/\.hero__signal\s*\{([^}]*)\}/)?.[1] ?? "",
-      labels: styles.match(/\.hero-pipeline__node text\s*\{([^}]*)\}/)?.[1] ?? "",
+      layout: styles.match(/\.hero__layout\s*\{([^}]*)\}/)?.[1] ?? "",
+      labels: styles.match(/\.hero-process__stage-copy strong\s*\{([^}]*)\}/)?.[1] ?? "",
     };
 
     Object.entries(childRules).forEach(([name, rule]) => {
       expect(rule, name).not.toBe("");
       expect(rule, name).not.toMatch(/[sd]vh/);
-      expect(rule, name).toMatch(/clamp\(/);
     });
 
-    expect(childRules.pipeline).toContain("min(100%, clamp(");
-    expect(childRules.signal).toMatch(/inset-block-start:\s*clamp\([^)]*vw/);
-    expect(childRules.labels).toMatch(/font-size:\s*clamp\([^;]*vw/);
+    expect(styles).toMatch(/--type-display:\s*clamp\([^;]*vw/);
+    expect(childRules.heading).toContain("font-size: var(--type-display)");
+    expect(childRules.layout).toMatch(/gap:\s*clamp\(/);
+    expect(childRules.labels).toMatch(/font-size:\s*clamp\(/);
   });
 
   it("defines a compact threshold strictly below 23rem", () => {
@@ -854,12 +839,15 @@ html {
     );
   });
 
+  it("hides the hero process when the viewport cannot support it", () => {
+    expect(styles).toMatch(
+      /@media\s*\(max-width:\s*63\.999rem\)[\s\S]*?\.hero__visual\s*\{[^}]*display:\s*none/s,
+    );
+  });
+
   it("simplifies decorative motion on short viewports", () => {
     expect(styles).toMatch(
       /@media[\s\S]*?max-height:[\s\S]*?\.code-field code[\s\S]*?animation-play-state:\s*paused/,
-    );
-    expect(styles).toMatch(
-      /@media[\s\S]*?max-height:[\s\S]*?\.hero__signal[\s\S]*?opacity:/,
     );
   });
 
@@ -873,7 +861,6 @@ html {
     expect(shortHeightBlock).toMatch(
       /\.code-field code\s*\{[^}]*animation-play-state:\s*paused/s,
     );
-    expect(shortHeightBlock).toMatch(/\.hero__signal\s*\{[^}]*opacity:/s);
     expect(shortHeightBlock?.slice(shortHeightBlock.indexOf("{") + 1)).not.toMatch(
       /(?:font-size|gap|padding|width|height|justify-content)\s*:/,
     );
@@ -881,9 +868,35 @@ html {
     expect(styles).not.toMatch(/max-height:\s*(?:54|68)rem/);
   });
 
-  it("never hides hero pipeline or service diagrams", () => {
+  it("strengthens process structure under increased contrast", () => {
+    const contrastBlock =
+      styles.match(
+        /@media\s*\(prefers-contrast:\s*more\)\s*\{([\s\S]*?)\n\}/,
+      )?.[1] ?? "";
+
+    expect(contrastBlock).toMatch(
+      /\.hero-process__rail\s*\{[^}]*background-color:\s*var\(--ink-muted\)/s,
+    );
+    expect(contrastBlock).toMatch(
+      /\.hero-process__stage\s*\{[^}]*border-color:\s*var\(--ink-muted\)/s,
+    );
+  });
+
+  it("hides the signal and keeps static process structure under reduced motion", () => {
+    expect(reducedMotionBlock).toMatch(
+      /\.hero-process__animated\s*\{[^}]*animation:\s*none/s,
+    );
+    expect(reducedMotionBlock).toMatch(
+      /\.hero-process__signal\s*\{[^}]*display:\s*none/s,
+    );
+    expect(reducedMotionBlock).toMatch(
+      /\.hero-process__stage\s*\{[^}]*color:\s*var\(--line-strong\)[^}]*opacity:\s*1/s,
+    );
+  });
+
+  it("never hides the process interface or service diagrams", () => {
     const protectedSelectors = [
-      ".hero__pipeline",
+      ".hero-process__interface",
       ".service-hero__visual",
       ".service-art",
     ] as const;

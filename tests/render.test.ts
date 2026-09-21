@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { contactConfig, privacyContent, servicePages, siteContent } from "../src/content";
-import { escapeHtml, renderHomepage, renderPrivacyPage, renderServicePage } from "../src/render";
+import { contactConfig, privacyContent, servicePages, siteContent, vorbioProduct } from "../src/content";
+import { escapeHtml, renderHomepage, renderPrivacyPage, renderServicePage, renderVorbioPage } from "../src/render";
 
 const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 
@@ -19,88 +19,79 @@ describe("homepage renderer", () => {
   });
 
   it("makes the hero a direct product offer", () => {
+    expect(html).toContain("We build, fix and connect business software.");
     expect(html).toContain(
-      '<div class="hero__signal" aria-hidden="true">',
+      "From a new product to a stubborn bug or a manual process, we define the next step and deliver a working solution.",
     );
     expect(html).toContain(
-      "We build, fix and connect business software.",
+      '<p class="hero__eyebrow" data-reveal>Software development · Bug fixes · Automation</p>',
     );
     expect(html).toContain(
+      '<p class="hero__trust" data-reveal>UK-based · Speak directly with the people doing the work.</p>',
+    );
+    expect(html).not.toContain("Development. Bug fixes. Automation.");
+    expect(html).not.toContain(
       "We build new applications, fix existing software and connect your systems.",
     );
   });
 
-  it("uses the approved hero eyebrow service order", () => {
-    expect(html).toContain(
-      '<p class="hero__eyebrow" data-reveal>Development. Bug fixes. Automation.</p>',
-    );
-    expect(html).not.toContain("Websites. Apps. Growth. AI.");
-  });
-
-  it("places the seven-service pipeline above the hero actions", () => {
-    const pipeline = html.indexOf('class="hero__pipeline"');
+  it("orders copy, actions and trust before the hero visual", () => {
+    const content = html.indexOf('class="hero__content"');
     const actions = html.indexOf('class="hero__actions"');
-    const pipelineLabels = [
-      ...html.matchAll(/<text y="43">([^<]+)<\/text>/g),
-    ].map(([, label]) => label);
+    const trust = html.indexOf('class="hero__trust"');
+    const visual = html.indexOf('class="hero__visual"');
+    const process = html.indexOf('class="hero-process"');
+    const control = html.indexOf('<button class="hero-process__control"');
 
-    expect(pipeline).toBeGreaterThan(html.indexOf("connect your systems."));
-    expect(pipeline).toBeLessThan(actions);
-    expect(html.match(/class="hero-pipeline__node(?:\s|")/g)).toHaveLength(7);
-    expect(html).toContain("hero-pipeline__node--ai");
-    expect(pipelineLabels).toEqual([
-      "AI",
-      "Customers",
-      "Websites",
-      "Web apps",
-      "Mobile apps",
-      "Desktop apps",
-      "Custom systems",
-    ]);
+    expect(html).toContain('<div class="hero__layout">');
+    expect(content).toBeGreaterThan(-1);
+    expect(content).toBeLessThan(actions);
+    expect(actions).toBeLessThan(trust);
+    expect(trust).toBeLessThan(visual);
+    expect(visual).toBeLessThan(process);
+    expect(process).toBeLessThan(control);
   });
 
-  it("aligns node ring delays with measured signal crossings", () => {
-    const nodes = Array.from(
-      html.matchAll(
-        /<g class="hero-pipeline__node hero-pipeline__node--([a-z-]+)" transform="[^"]*"[\s\S]*?<text y="43">([^<]+)<\/text>/g,
-      ),
-      ([, modifier, label]) => ({ modifier, label }),
+  it("renders one clear delivery process", () => {
+    expect(html).toContain(
+      '<div class="hero-process__interface" aria-hidden="true">',
     );
-    const delays = new Map<string, string>(
-      Array.from(
-        styles.matchAll(/\.hero-pipeline__node--([a-z-]+) \{\s*--pipeline-delay: ([^;]+);/g),
-        ([, modifier, delay]) => [modifier, delay] as [string, string],
+    expect(html).toContain(
+      '<button class="hero-process__control" type="button" aria-label="Pause diagram motion" aria-pressed="false"></button>',
+    );
+    expect(
+      html.match(
+        /class="hero-process__stage hero-process__stage--[a-z]+ hero-process__animated"/g,
       ),
+    ).toEqual([
+      'class="hero-process__stage hero-process__stage--understand hero-process__animated"',
+      'class="hero-process__stage hero-process__stage--shape hero-process__animated"',
+      'class="hero-process__stage hero-process__stage--build hero-process__animated"',
+      'class="hero-process__stage hero-process__stage--maintain hero-process__animated"',
+    ]);
+
+    ["Understand", "Shape", "Build", "Maintain"].forEach((stage) =>
+      expect(html).toContain(`<strong>${stage}</strong>`),
     );
 
-    expect(nodes.map(({ label }) => label)).toEqual([
-      "AI",
-      "Customers",
-      "Websites",
-      "Web apps",
-      "Mobile apps",
-      "Desktop apps",
-      "Custom systems",
-    ]);
-    expect(nodes.map(({ modifier }) => modifier)).toEqual([
-      "ai",
-      "customers",
-      "websites",
-      "web-apps",
-      "mobile-apps",
-      "desktop-apps",
-      "custom-systems",
-    ]);
-    expect(nodes.map(({ modifier }) => delays.get(modifier))).toEqual([
-      "0s",
-      "0.911s",
-      "1.952s",
-      "3.059s",
-      "4.302s",
-      "5.313s",
-      "7.045s",
-    ]);
+    expect(html).toContain("A product, a problem or a process to improve.");
+    expect(html).toContain("Working result, ready to use.");
+    expect(html).not.toContain("hero-workflow");
+    expect(html).not.toContain("hero-system");
     expect(html).not.toContain('style="');
+    expect(html).not.toContain("<linearGradient");
+    expect(html).not.toContain("<filter");
+    expect(html).not.toContain("drop-shadow");
+  });
+
+  it("orders the delivery stages from understanding to maintenance", () => {
+    const stages = ["Understand", "Shape", "Build", "Maintain"].map((stage) =>
+      html.indexOf(`<strong>${stage}</strong>`),
+    );
+
+    expect(stages.every((position) => position > -1)).toBe(true);
+    expect(stages).toEqual([...stages].sort((first, second) => first - second));
+    expect(styles).toContain("@keyframes hero-process-travel");
   });
 
   it("renders semantic navigation and contact landmarks", () => {
@@ -110,6 +101,9 @@ describe("homepage renderer", () => {
     expect(html).toContain('<section class="contact');
     expect(html).toContain('href="#team">Team</a>');
     expect(html).toContain('href="#services">Services</a>');
+    expect(html).toContain(
+      '<a class="site-header__vorbio" href="/services/vorbio/">Vorbio</a>',
+    );
     expect(html).toContain('href="#approach">How we work</a>');
     expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
     expect(html).not.toContain(">Products<");
@@ -302,11 +296,10 @@ describe("homepage renderer", () => {
     expect(pagesHtml).toContain('srcset="/solved-tech/team/razvan_cristofor-520.webp 520w, /solved-tech/team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
   });
 
-  it("renders one assistive-technology-hidden background grid", () => {
-    expect(html.match(/class="ambient-grid"/g)).toHaveLength(1);
-    expect(html).toContain('aria-hidden="true"');
-    expect(html).toContain('id="ambient-grid-pattern"');
-    expect(html).toContain('class="ambient-grid__accent"');
+  it("omits the background grid so it does not compete with the hero process", () => {
+    expect(html).not.toContain('class="ambient-grid"');
+    expect(html).not.toContain('id="ambient-grid-pattern"');
+    expect(html).not.toContain('class="ambient-grid__accent"');
   });
 
   it("renders no more than eight quiet code fragments", () => {
@@ -424,14 +417,36 @@ describe("homepage renderer", () => {
     expect(html.match(/class="product-grid"/g)).toHaveLength(1);
   });
 
-  it("offers a visible control to pause background motion after the hero actions", () => {
+  it("promotes the Vorbio product between services and how we work", () => {
+    const services = html.indexOf('id="services"');
+    const promo = html.indexOf('class="vorbio-promo"');
+    const approach = html.indexOf('id="approach"');
+
+    expect(promo).toBeGreaterThan(services);
+    expect(promo).toBeLessThan(approach);
+    expect(html).toContain('href="/services/vorbio/"');
+    expect(html).toContain(
+      'data-service-id="vorbio" data-placement="vorbio-promo"',
+    );
+    expect(html).toContain(
+      "Your AI front desk for WhatsApp voice and chat.",
+    );
+    expect(html).toContain('class="vorbio-console"');
+    expect(html.indexOf('class="vorbio-promo__visual"')).toBeLessThan(
+      html.indexOf('class="vorbio-promo__link"'),
+    );
+  });
+
+  it("makes the diagram itself the pause control after the hero actions", () => {
     const actions = html.indexOf('class="hero__actions"');
-    const toggle = html.indexOf(
-      '<button class="motion-toggle" type="button">Pause background motion</button>',
+    const control = html.indexOf(
+      '<button class="hero-process__control" type="button" aria-label="Pause diagram motion"',
     );
 
-    expect(toggle).toBeGreaterThan(actions);
-    expect(toggle).toBeLessThan(html.indexOf('id="services"'));
+    expect(control).toBeGreaterThan(actions);
+    expect(control).toBeLessThan(html.indexOf('id="services"'));
+    expect(html).not.toContain("hero-process__motion-toggle");
+    expect(html).not.toContain(">Pause diagram motion<");
   });
 
   it("annotates intent targets for measurement without loading any script", () => {
@@ -441,7 +456,7 @@ describe("homepage renderer", () => {
     expect(html.match(/data-channel="email"/g)).toHaveLength(2);
     expect(html.match(/data-placement="hero"/g)).toHaveLength(3);
     expect(html.match(/data-placement="contact"/g)).toHaveLength(3);
-    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(6);
+    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(7);
     siteContent.products.forEach(({ id }) =>
       expect(html).toContain(`data-service-id="${id}" data-placement="product-card"`),
     );
@@ -467,6 +482,9 @@ describe("privacy page renderer", () => {
   it("points the shared header at the homepage sections", () => {
     expect(html).toContain('<a class="wordmark" href="/solved-tech/#top"');
     expect(html).toContain('<a href="/solved-tech/#services">Services</a>');
+    expect(html).toContain(
+      '<a class="site-header__vorbio" href="/solved-tech/services/vorbio/">Vorbio</a>',
+    );
     expect(html).toContain('<a href="/solved-tech/#contact">Contact</a>');
     expect(html).toContain('<nav id="primary-navigation"');
     expect(html).toContain('<main id="main-content" class="page">');
@@ -677,5 +695,72 @@ describe("service detail artwork", () => {
     expect(systemsScene).toContain(
       'class="art-accent art-hub art-hub--solid"',
     );
+  });
+});
+
+describe("vorbio product page", () => {
+  const html = renderVorbioPage(vorbioProduct, contactConfig, "/solved-tech/");
+
+  it("renders one heading and the complete product story", () => {
+    expect(html.match(/<h1/g)).toHaveLength(1);
+    expect(html).toContain(
+      `<h1 id="vorbio-heading">${vorbioProduct.tagline}</h1>`,
+    );
+    expect(html).toContain(vorbioProduct.name);
+    expect(html).toContain(vorbioProduct.note);
+
+    vorbioProduct.highlights.forEach(({ title, detail }) => {
+      expect(html).toContain(`<h3>${title}</h3>`);
+      expect(html).toContain(escapeHtml(detail));
+    });
+
+    vorbioProduct.steps.forEach(({ title }, index) => {
+      expect(html).toContain(`<h3>${title}</h3>`);
+      expect(html).toContain(String(index + 1).padStart(2, "0"));
+    });
+
+    vorbioProduct.workflow.forEach(({ title, detail }) => {
+      expect(html).toContain(`<h3>${title}</h3>`);
+      expect(html).toContain(escapeHtml(detail));
+    });
+
+    vorbioProduct.controls.forEach(({ title, detail }) => {
+      expect(html).toContain(`<h3>${title}</h3>`);
+      expect(html).toContain(escapeHtml(detail));
+    });
+
+    vorbioProduct.useCases.forEach((useCase) => {
+      expect(html).toContain(`<li>${escapeHtml(useCase)}</li>`);
+    });
+
+    expect(html.match(/class="vorbio-card"/g)).toHaveLength(
+      vorbioProduct.highlights.length,
+    );
+    expect(html.match(/class="vorbio-step"/g)).toHaveLength(
+      vorbioProduct.steps.length,
+    );
+  });
+
+  it("reuses the shared shell with focused demo actions and contact rail", () => {
+    expect(html).toContain('<a class="wordmark" href="/solved-tech/#top"');
+    expect(html).toContain('<a href="/solved-tech/#services">Services</a>');
+    expect(html).toContain(
+      '<a class="site-header__vorbio" href="/solved-tech/services/vorbio/">Vorbio</a>',
+    );
+    expect(html).toContain('<main id="main-content" class="page vorbio">');
+    expect(html).toContain('<a href="/solved-tech/privacy/">Privacy notice</a>');
+    expect(html.match(/<a class="contact-action /g)).toHaveLength(3);
+    expect(html.match(/class="vorbio-button/g)).toHaveLength(2);
+    expect(html).toContain("Arrange a live demo");
+    expect(html).not.toContain("data-reveal");
+    expect(html).not.toContain("<script");
+  });
+
+  it("marks the decorative voice waveform as hidden", () => {
+    expect(html).toContain(
+      '<svg class="vorbio-voice" viewBox="0 0 240 120" aria-hidden="true" focusable="false">',
+    );
+    expect(html.match(/class="vorbio-voice__bar"/g)).toHaveLength(9);
+    expect(html).not.toContain("style=\"");
   });
 });

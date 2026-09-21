@@ -31,6 +31,12 @@ try {
       appHtml: render.renderPrivacyPage(content.privacyContent, content.contactConfig, baseUrl),
       extraHead: "",
     },
+    {
+      file: "services/vorbio/index.html",
+      page: head.vorbioPage,
+      appHtml: render.renderVorbioPage(content.vorbioProduct, content.contactConfig, baseUrl),
+      extraHead: "",
+    },
     ...content.servicePages.map((servicePage) => ({
       file: `services/${servicePage.slug}/index.html`,
       page: head.servicePageMeta(servicePage),

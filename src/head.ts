@@ -23,6 +23,14 @@ export const privacyPage: PageMeta = {
   indexable: false,
 };
 
+export const vorbioPage: PageMeta = {
+  path: "/services/vorbio/",
+  title: "Vorbio — AI voice and WhatsApp assistant — Solved Tech",
+  description:
+    "Vorbio is a Solved Tech AI assistant that answers WhatsApp voice calls and chats for your business, captures what the customer needs and hands the rest to your team.",
+  indexable: true,
+};
+
 const absoluteUrl = (origin: string, path: string, baseUrl: string): string =>
   new URL(publicAssetUrl(path, baseUrl), origin).toString();
 

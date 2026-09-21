@@ -6,10 +6,9 @@ import {
   prefersReducedMotion,
   settlePrerenderedReveals,
   setupHeaderOffset,
-  setupHeroInteraction,
+  setupHeroProcessMotion,
   setupMobileMenu,
   setupMotionToggle,
-  setupPipelineMotion,
   setupRevealMotion,
   setupScrollProgress,
   stagger,
@@ -39,9 +38,7 @@ const start = (view: Window): void => {
   stagger(app);
   setupHeaderOffset(view);
   setupRevealMotion(app, reducedMotion);
-  setupPipelineMotion(app, reducedMotion);
-  const finePointer = view.matchMedia("(pointer: fine)").matches;
-  setupHeroInteraction(app, reducedMotion, finePointer);
+  setupHeroProcessMotion(app, reducedMotion);
   setupMobileMenu(app);
   setupMotionToggle(app, view);
   setupScrollProgress(view);

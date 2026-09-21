@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { homePage } from "../src/head";
+import { homePage, vorbioPage } from "../src/head";
 import { servicePages } from "../src/content";
 
 const indexHtml = readFileSync(
@@ -37,6 +37,26 @@ describe("privacy document shell", () => {
     expect(privacyHtml).toContain('<meta name="robots" content="noindex" />');
     expect(privacyHtml).toContain('<script type="module" src="/src/privacy.ts"></script>');
     expect(privacyHtml).toContain('<a class="skip-link" href="#main-content">Skip to content</a>');
+  });
+});
+
+describe("vorbio product shell", () => {
+  const vorbioHtml = readFileSync(
+    new URL("../services/vorbio/index.html", import.meta.url),
+    "utf8",
+  );
+
+  it("mirrors the shell for /services/vorbio/", () => {
+    expect(vorbioHtml).toContain('<html lang="en-GB">');
+    expect(vorbioHtml).toContain(`<title>${vorbioPage.title}</title>`);
+    expect(vorbioHtml).toContain(
+      `<meta name="description" content="${vorbioPage.description}" />`,
+    );
+    expect(vorbioHtml).toContain('<meta name="robots" content="noindex" />');
+    expect(vorbioHtml).toContain('<body data-service="vorbio">');
+    expect(vorbioHtml).toContain('<a class="skip-link" href="#main-content">Skip to content</a>');
+    expect(vorbioHtml).toContain('<div id="app"></div>');
+    expect(vorbioHtml).toContain('<script type="module" src="/src/vorbio.ts"></script>');
   });
 });
 

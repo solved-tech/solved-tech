@@ -7,6 +7,7 @@ import type {
   ProductId,
   ServicePage,
   SiteContent,
+  VorbioProduct,
 } from "./content";
 
 export const escapeHtml = (value: string): string =>
@@ -66,68 +67,49 @@ const renderContactActions = (
   </div>`;
 };
 
-export const pipelinePath =
-  "M80 140C80 58 178 25 320 28C478 31 560 76 560 140C560 218 470 250 320 252C164 254 80 218 80 140Z";
+const heroProcessStages = [
+  { id: "understand", title: "Understand", detail: "Goal + context" },
+  { id: "shape", title: "Shape", detail: "Scope + direction" },
+  { id: "build", title: "Build", detail: "Make + integrate" },
+  { id: "maintain", title: "Maintain", detail: "Support + improve" },
+] as const;
 
-const renderHeroPipeline = (): string => `
-  <div class="hero__pipeline" data-reveal aria-hidden="true">
-    <svg viewBox="0 0 640 300" focusable="false">
-      <path class="hero-pipeline__route" d="${pipelinePath}" />
-      <circle class="hero-pipeline__signal" r="5" />
-
-      <g class="hero-pipeline__node hero-pipeline__node--ai" transform="translate(80 140)">
-        <circle class="hero-pipeline__node-ring" r="25" />
-        <path class="hero-pipeline__icon" d="M-9-7H9V8H-9ZM-5-12V-7M5-12V-7M-4-1h1M3-1h1M-4 4h8" />
-        <text y="43">AI</text>
-      </g>
-
-      <g class="hero-pipeline__node hero-pipeline__node--customers" transform="translate(150 58)">
-        <circle class="hero-pipeline__node-ring" r="25" />
-        <circle class="hero-pipeline__icon" r="10" />
-        <circle class="hero-pipeline__icon" r="5" />
-        <path class="hero-pipeline__icon" d="M0-14V-9M0 9V14M-14 0H-9M9 0H14" />
-        <text y="43">Customers</text>
-      </g>
-
-      <g class="hero-pipeline__node hero-pipeline__node--websites" transform="translate(280 36)">
-        <circle class="hero-pipeline__node-ring" r="25" />
-        <rect class="hero-pipeline__icon" x="-13" y="-10" width="26" height="20" rx="1" />
-        <path class="hero-pipeline__icon" d="M-13-4H13M-9-7h1M-5-7h1" />
-        <text y="43">Websites</text>
-      </g>
-
-      <g class="hero-pipeline__node hero-pipeline__node--web-apps" transform="translate(420 54)">
-        <circle class="hero-pipeline__node-ring" r="25" />
-        <rect class="hero-pipeline__icon" x="-13" y="-11" width="26" height="22" rx="1" />
-        <path class="hero-pipeline__icon" d="M-13-5H13M-8 0h6v6h-6M2 0h6M2 5h6" />
-        <text y="43">Web apps</text>
-      </g>
-
-      <g class="hero-pipeline__node hero-pipeline__node--mobile-apps" transform="translate(552 118)">
-        <circle class="hero-pipeline__node-ring" r="25" />
-        <rect class="hero-pipeline__icon" x="-8" y="-14" width="16" height="28" rx="2" />
-        <path class="hero-pipeline__icon" d="M-3-10H3M-2 10H2" />
-        <text y="43">Mobile apps</text>
-      </g>
-
-      <g class="hero-pipeline__node hero-pipeline__node--desktop-apps" transform="translate(500 220)">
-        <circle class="hero-pipeline__node-ring" r="25" />
-        <rect class="hero-pipeline__icon" x="-14" y="-11" width="28" height="19" rx="1" />
-        <path class="hero-pipeline__icon" d="M0 8V13M-7 13H7" />
-        <text y="43">Desktop apps</text>
-      </g>
-
-      <g class="hero-pipeline__node hero-pipeline__node--custom-systems" transform="translate(280 246)">
-        <circle class="hero-pipeline__node-ring" r="25" />
-        <path class="hero-pipeline__icon" d="M-9-6L8-10M-9-6L-2 10M8-10L10 7M-2 10L10 7" />
-        <circle class="hero-pipeline__icon hero-pipeline__icon-dot" cx="-9" cy="-6" r="3" />
-        <circle class="hero-pipeline__icon hero-pipeline__icon-dot" cx="8" cy="-10" r="3" />
-        <circle class="hero-pipeline__icon hero-pipeline__icon-dot" cx="-2" cy="10" r="3" />
-        <circle class="hero-pipeline__icon hero-pipeline__icon-dot" cx="10" cy="7" r="3" />
-        <text y="43">Custom systems</text>
-      </g>
-    </svg>
-  </div>`;
+const renderHeroProcess = (): string => `
+      <div class="hero__visual" data-reveal>
+        <div class="hero-process">
+          <div class="hero-process__interface" aria-hidden="true">
+            <div class="hero-process__topbar">
+              <span><i class="hero-process__live hero-process__animated"></i>Solved Tech / delivery system</span>
+              <span>Live workflow</span>
+            </div>
+            <div class="hero-process__input">
+              <span>Incoming / business need</span>
+              <strong>A product, a problem or a process to improve.</strong>
+            </div>
+            <div class="hero-process__pipeline">
+              <span class="hero-process__rail"></span>
+              <span class="hero-process__signal hero-process__animated"></span>
+              <ol class="hero-process__stages">
+${heroProcessStages
+  .map(
+    ({ id, title, detail }, index) => `
+                <li class="hero-process__stage hero-process__stage--${id} hero-process__animated">
+                  <span class="hero-process__number">${String(index + 1).padStart(2, "0")}</span>
+                  <span class="hero-process__node"></span>
+                  <span class="hero-process__stage-copy"><strong>${title}</strong><small>${detail}</small></span>
+                </li>`,
+  )
+  .join("")}
+              </ol>
+            </div>
+            <div class="hero-process__output">
+              <span class="hero-process__check">✓</span>
+              <span><small>Outcome / clear next step</small><strong>Working result, ready to use.</strong></span>
+            </div>
+          </div>
+          <button class="hero-process__control" type="button" aria-label="Pause diagram motion" aria-pressed="false"></button>
+        </div>
+      </div>`;
 
 const renderProductGlyph = (id: ProductId): string => {
   const open = `<svg class="product-glyph product-glyph--${id}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">`;
@@ -370,6 +352,7 @@ export const renderSiteHeader = (baseUrl: string, homeHref: string): string => `
       </button>
       <nav id="primary-navigation" aria-label="Primary navigation">
         <a href="${escapeHtml(homeHref)}#services">Services</a>
+        <a class="site-header__vorbio" href="${escapeHtml(publicAssetUrl("/services/vorbio/", baseUrl))}">Vorbio</a>
         <a href="${escapeHtml(homeHref)}#approach">How we work</a>
         <a href="${escapeHtml(homeHref)}#team">Team</a>
         <a href="${escapeHtml(homeHref)}#contact">Contact</a>
@@ -515,18 +498,6 @@ export const renderHomepage = (
     .join("");
 
   return `
-    <svg class="ambient-grid" aria-hidden="true" focusable="false" preserveAspectRatio="none" viewBox="0 0 1600 1000">
-      <defs>
-        <pattern id="ambient-grid-pattern" width="64" height="64" patternUnits="userSpaceOnUse">
-          <path d="M 0 0 H 64" />
-          <path d="M 0 0 V 64" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#ambient-grid-pattern)" />
-      <circle class="ambient-grid__accent" cx="192" cy="192" r="2.5" />
-      <circle class="ambient-grid__accent" cx="1216" cy="384" r="2.5" />
-      <circle class="ambient-grid__accent" cx="832" cy="832" r="2.5" />
-    </svg>
     <div class="code-field" aria-hidden="true">
       <code data-language="typescript">const useful = solve(problem);</code>
       <code data-language="python">build(what_people_need)</code>
@@ -540,22 +511,16 @@ export const renderHomepage = (
     ${renderSiteHeader(baseUrl, "")}
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-heading">
-        <div class="hero__signal" aria-hidden="true">
-          <svg viewBox="0 0 320 320" focusable="false">
-            <circle class="hero__signal-ring hero__signal-ring--outer" cx="160" cy="160" r="136" />
-            <circle class="hero__signal-ring" cx="160" cy="160" r="88" />
-            <path class="hero__signal-axis" d="M24 160H296M160 24V296" />
-            <path class="hero__signal-path" d="M76 224C112 148 164 106 252 84" />
-            <circle class="hero__signal-node" cx="76" cy="224" r="6" />
-            <circle class="hero__signal-point" cx="252" cy="84" r="3" />
-          </svg>
+        <div class="hero__layout">
+          <div class="hero__content">
+            <p class="hero__eyebrow" data-reveal>Software development · Bug fixes · Automation</p>
+            <h1 id="hero-heading" data-reveal>We build, fix and connect business software.</h1>
+            <p class="hero__lead" data-reveal>From a new product to a stubborn bug or a manual process, we define the next step and deliver a working solution.</p>
+            ${renderContactActions(config, "hero__actions")}
+            <p class="hero__trust" data-reveal>UK-based · Speak directly with the people doing the work.</p>
+          </div>
+          ${renderHeroProcess()}
         </div>
-        <p class="hero__eyebrow" data-reveal>Development. Bug fixes. Automation.</p>
-        <h1 id="hero-heading" data-reveal>We build, fix and connect business software.</h1>
-        <p data-reveal>We build new applications, fix existing software and connect your systems.</p>
-        ${renderHeroPipeline()}
-        ${renderContactActions(config, "hero__actions")}
-        <button class="motion-toggle" type="button">Pause background motion</button>
       </section>
       <section id="services" class="services" aria-labelledby="services-heading">
         <div class="services__header" data-reveal>
@@ -567,6 +532,7 @@ export const renderHomepage = (
         </div>
         <div class="product-grid">${cards}</div>
       </section>
+      ${renderVorbioPromo(baseUrl)}
       <section id="approach" class="journey" aria-labelledby="approach-heading">
         <div class="journey__heading" data-reveal>
           <p>How we work</p>
@@ -708,6 +674,171 @@ export const renderServicePage = (
         <section class="service-contact" aria-labelledby="service-contact-heading">
           <h2 id="service-contact-heading">Tell us what is happening</h2>
           <p>Describe the problem or the goal, which system is involved and what outcome you want. Please do not send passwords or confidential customer data in your first message.</p>
+          ${renderContactActions(config, "contact__actions")}
+        </section>
+      </article>
+    </main>
+    ${renderSiteFooter(baseUrl)}
+  `;
+};
+
+const VORBIO_BAR_HEIGHTS = [24, 48, 40, 72, 104, 72, 40, 48, 24];
+
+const renderVorbioVoice = (): string => `
+            <svg class="vorbio-voice" viewBox="0 0 240 120" aria-hidden="true" focusable="false">
+              <path class="vorbio-voice__baseline" d="M0 60H240" />
+${VORBIO_BAR_HEIGHTS.map((height, index) => {
+  const x = 12 + index * 26;
+
+  return `              <rect class="vorbio-voice__bar" x="${x}" y="${60 - height / 2}" width="8" height="${height}" rx="4" />`;
+}).join("\n")}
+            </svg>`;
+
+const renderVorbioConsole = (): string => `
+          <figure class="vorbio-console">
+            <figcaption class="vorbio-console__header">
+              <span><span class="vorbio-console__status" aria-hidden="true"></span>Illustrative conversation</span>
+              <span>Voice + chat</span>
+            </figcaption>
+            <div class="vorbio-console__call">
+              <div class="vorbio-console__call-meta"><span>Incoming voice call</span><span>00:24</span></div>
+${renderVorbioVoice()}
+            </div>
+            <ol class="vorbio-console__transcript">
+              <li class="vorbio-console__message vorbio-console__message--customer"><span>Customer</span><p>Can I book a service visit for Thursday?</p></li>
+              <li class="vorbio-console__message vorbio-console__message--vorbio"><span>Vorbio</span><p>I can help with that. Which service do you need?</p></li>
+            </ol>
+            <div class="vorbio-console__outcome">
+              <span>Next action</span>
+              <strong>Booking request captured</strong>
+              <small>Ready for calendar check or team handover</small>
+            </div>
+          </figure>`;
+
+const renderVorbioHeroActions = (
+  config: ContactConfig,
+): string => `
+            <div class="vorbio-actions">
+              <a class="vorbio-button vorbio-button--primary" href="mailto:${escapeHtml(config.email)}?subject=Vorbio%20demo" data-analytics="contact_click" data-channel="email" data-placement="vorbio-hero">Arrange a live demo <span aria-hidden="true">↗</span></a>
+              <a class="vorbio-button" href="tel:${escapeHtml(config.phone)}" data-analytics="contact_click" data-channel="call" data-placement="vorbio-hero">Call about Vorbio</a>
+            </div>`;
+
+const renderVorbioPromo = (baseUrl: string): string => {
+  const href = publicAssetUrl("/services/vorbio/", baseUrl);
+
+  return `
+      <section id="vorbio" class="vorbio-promo" aria-labelledby="vorbio-promo-heading">
+        <div class="vorbio-promo__frame">
+          <div class="vorbio-promo__copy">
+            <div class="vorbio-promo__meta" data-reveal><span>Product / 01</span><span>Built by Solved Tech</span></div>
+            <p class="vorbio-wordmark" data-reveal>Vorbio<span aria-hidden="true">.</span></p>
+            <h2 id="vorbio-promo-heading" data-reveal>Your AI front desk for WhatsApp voice and chat.</h2>
+            <p class="vorbio-promo__lead" data-reveal>Vorbio answers, qualifies and moves each conversation towards a useful next step—then brings in your team when human judgement matters.</p>
+            <ul class="vorbio-promo__signals" aria-label="Vorbio features" data-reveal>
+              <li>Voice calls</li><li>Chat</li><li>Bookings</li><li>Human handover</li>
+            </ul>
+          </div>
+          <div class="vorbio-promo__visual" data-reveal>${renderVorbioConsole()}</div>
+          <div class="vorbio-promo__footer">
+            <a class="vorbio-promo__link" href="${escapeHtml(href)}" data-analytics="service_interest" data-service-id="vorbio" data-placement="vorbio-promo">Discover Vorbio <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>`;
+};
+
+export const renderVorbioPage = (
+  product: VorbioProduct,
+  config: ContactConfig,
+  baseUrl: string = import.meta.env.BASE_URL,
+): string => {
+  const highlights = product.highlights
+    .map(
+      ({ title, detail }, index) => `
+          <li class="vorbio-card">
+            <span class="vorbio-card__number" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
+            <h3>${escapeHtml(title)}</h3>
+            <p>${escapeHtml(detail)}</p>
+          </li>`,
+    )
+    .join("");
+
+  const steps = product.steps
+    .map(
+      ({ title, detail }, index) => `
+          <li class="vorbio-step">
+            <span class="vorbio-step__number" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
+            <h3>${escapeHtml(title)}</h3>
+            <p>${escapeHtml(detail)}</p>
+          </li>`,
+    )
+    .join("");
+
+  const workflow = product.workflow
+    .map(
+      ({ title, detail }, index) => `
+          <li class="vorbio-flow__item">
+            <span class="vorbio-flow__number" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
+            <h3>${escapeHtml(title)}</h3>
+            <p>${escapeHtml(detail)}</p>
+          </li>`,
+    )
+    .join("");
+
+  const controls = product.controls
+    .map(
+      ({ title, detail }) => `
+            <li><h3>${escapeHtml(title)}</h3><p>${escapeHtml(detail)}</p></li>`,
+    )
+    .join("");
+
+  const useCases = product.useCases
+    .map((useCase) => `<li>${escapeHtml(useCase)}</li>`)
+    .join("");
+
+  return `
+    ${renderSiteHeader(baseUrl, baseUrl)}
+    <main id="main-content" class="page vorbio">
+      <article class="vorbio-page" aria-labelledby="vorbio-heading">
+        <header class="vorbio-hero">
+          <div class="vorbio-hero__copy">
+            <p class="page__eyebrow">${escapeHtml(product.eyebrow)}</p>
+            <p class="vorbio-wordmark">${escapeHtml(product.name)}<span aria-hidden="true">.</span></p>
+            <h1 id="vorbio-heading">${escapeHtml(product.tagline)}</h1>
+            <p class="prose__lead">${escapeHtml(product.summary)}</p>
+${renderVorbioHeroActions(config)}
+            <p class="vorbio-hero__note">${escapeHtml(product.note)}</p>
+          </div>
+          <div class="vorbio-hero__visual">${renderVorbioConsole()}</div>
+        </header>
+        <ul class="vorbio-proof" aria-label="Vorbio product scope">
+          <li><span>01</span><strong>Voice + chat</strong><small>One WhatsApp conversation</small></li>
+          <li><span>02</span><strong>Connected actions</strong><small>Calendar, CRM or inbox</small></li>
+          <li><span>03</span><strong>Human handover</strong><small>At the boundaries you set</small></li>
+        </ul>
+        <section class="vorbio-section vorbio-section--flow" aria-labelledby="vorbio-flow-heading">
+          <div class="vorbio-section__heading"><p class="page__eyebrow">The operating model</p><h2 id="vorbio-flow-heading">From first hello to a useful next step.</h2></div>
+          <ol class="vorbio-flow">${workflow}</ol>
+        </section>
+        <section class="vorbio-section" aria-labelledby="vorbio-capabilities-heading">
+          <div class="vorbio-section__heading"><p class="page__eyebrow">Capability</p><h2 id="vorbio-capabilities-heading">Built for the whole first conversation.</h2></div>
+          <ul class="vorbio-grid">${highlights}</ul>
+        </section>
+        <section class="vorbio-use-cases" aria-labelledby="vorbio-use-cases-heading">
+          <div><p class="page__eyebrow">Good first fits</p><h2 id="vorbio-use-cases-heading">Start where response time and consistency matter.</h2></div>
+          <ul>${useCases}</ul>
+        </section>
+        <section class="vorbio-control" aria-labelledby="vorbio-control-heading">
+          <div class="vorbio-control__intro"><p class="page__eyebrow">Human by design</p><h2 id="vorbio-control-heading">AI that knows where its job ends.</h2><p>Vorbio is not given an open brief. We define its knowledge, actions and handover points with you before it speaks to customers.</p></div>
+          <ul class="vorbio-control__list">${controls}</ul>
+        </section>
+        <section class="vorbio-section" aria-labelledby="vorbio-steps-heading">
+          <div class="vorbio-section__heading"><p class="page__eyebrow">Implementation</p><h2 id="vorbio-steps-heading">Configured around your real conversations.</h2></div>
+          <ol class="vorbio-steps">${steps}</ol>
+        </section>
+        <section class="vorbio-contact" aria-labelledby="vorbio-contact-heading">
+          <p class="page__eyebrow">See it work</p>
+          <h2 id="vorbio-contact-heading">Bring us one conversation your team handles every day.</h2>
+          <p>We will map how Vorbio should answer, what it should capture and exactly when it should hand over—then arrange a focused demonstration.</p>
           ${renderContactActions(config, "contact__actions")}
         </section>
       </article>
