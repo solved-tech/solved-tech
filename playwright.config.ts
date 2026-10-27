@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
-const BASE_URL = "http://127.0.0.1:4173/solved-tech/";
+const BASE_URL = "http://127.0.0.1:4173/";
 
 type Profile = {
   name: string;

@@ -972,19 +972,19 @@ test("privacy notice page shares the header and footer", async ({ page }) => {
 
   await page.goto("privacy/");
   await page.waitForLoadState("domcontentloaded");
-  expect(new URL(page.url()).pathname).toBe("/solved-tech/privacy/");
+  expect(new URL(page.url()).pathname).toBe("/privacy/");
 
   await expect(page.locator("h1")).toHaveText("Privacy notice");
   await expect(page.locator("#primary-navigation a")).toHaveCount(5);
   await expect(
     page.locator(
-      '#primary-navigation a.site-header__vorbio[href="/solved-tech/services/vorbio/"]',
+      '#primary-navigation a.site-header__vorbio[href="/services/vorbio/"]',
     ),
   ).toHaveCSS("color", "rgb(185, 239, 155)");
   await expect(
-    page.locator('#primary-navigation a[href="/solved-tech/#services"]'),
+    page.locator('#primary-navigation a[href="/#services"]'),
   ).toHaveCount(1);
-  await expect(page.locator('footer a[href="/solved-tech/privacy/"]')).toHaveCount(1);
+  await expect(page.locator('footer a[href="/privacy/"]')).toHaveCount(1);
   await assertNoDocumentOverflow(page);
   assertNoRuntimeErrors(collector);
 });
@@ -996,7 +996,7 @@ test("the Vorbio product page renders its hero, capabilities and contact rail", 
 
   await page.goto("services/vorbio/");
   await page.waitForLoadState("domcontentloaded");
-  expect(new URL(page.url()).pathname).toBe("/solved-tech/services/vorbio/");
+  expect(new URL(page.url()).pathname).toBe("/services/vorbio/");
 
   await expect(page.locator("h1")).toHaveText(vorbioProduct.tagline);
   await expect(page.locator(".vorbio-card")).toHaveCount(
@@ -1025,7 +1025,7 @@ test("the homepage Vorbio promo links to the product page", async ({ page }) => 
   await promo.scrollIntoViewIfNeeded();
   await expect(promo).toBeVisible();
   await promo.click();
-  await expect(page).toHaveURL(/\/solved-tech\/services\/vorbio\/$/);
+  await expect(page).toHaveURL(/\/services\/vorbio\/$/);
   await expect(page.locator("#vorbio-heading")).toBeVisible();
   assertNoRuntimeErrors(collector);
 });
@@ -1047,7 +1047,7 @@ test("every service page renders its own hero, lists and navigation", async ({
 
     await page.goto(`services/${slug}/`);
     await page.waitForLoadState("domcontentloaded");
-    expect(new URL(page.url()).pathname).toBe(`/solved-tech/services/${slug}/`);
+    expect(new URL(page.url()).pathname).toBe(`/services/${slug}/`);
 
     await expect(page.locator("h1")).toHaveText(title);
     await expect(page.locator(".service-hero__visual .service-art")).toHaveAttribute(
@@ -1057,14 +1057,14 @@ test("every service page renders its own hero, lists and navigation", async ({
     await expect(page.locator(".service-detail__body section")).toHaveCount(2);
     await expect(page.locator(".service-detail__body section").first().locator("li")).not.toHaveCount(0);
     await expect(
-      page.locator('.service-detail__navigation a[href="/solved-tech/#approach"]'),
+      page.locator('.service-detail__navigation a[href="/#approach"]'),
     ).toHaveCount(1);
     await expect(
-      page.locator('.service-detail__navigation a[href="/solved-tech/#services"]'),
+      page.locator('.service-detail__navigation a[href="/#services"]'),
     ).toHaveCount(1);
     await expect(page.locator(".contact-action")).toHaveCount(3);
     await expect(
-      page.locator('#primary-navigation a[href="/solved-tech/#services"]'),
+      page.locator('#primary-navigation a[href="/#services"]'),
     ).toHaveCount(1);
     await assertNoDocumentOverflow(page);
     assertNoRuntimeErrors(collector);

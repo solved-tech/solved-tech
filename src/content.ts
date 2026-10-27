@@ -69,7 +69,8 @@ export type SiteStatus =
   | { launched: true; productionOrigin: string };
 
 export const siteStatus: SiteStatus = {
-  launched: false,
+  launched: true,
+  productionOrigin: "https://solvedtech.co.uk",
 };
 
 

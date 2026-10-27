@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { contactConfig, servicePages, siteContent } from "../src/content";
+import { contactConfig, servicePages, siteContent, siteStatus } from "../src/content";
 import {
   homePage,
   injectPrerender,
@@ -19,32 +19,56 @@ const live = { launched: true, productionOrigin: "https://example.test" } as con
 
 describe("head metadata", () => {
   it("adds nothing to the shell before launch", () => {
-    expect(renderHeadTags(homePage, preview, "/solved-tech/")).toBe("");
-    expect(renderOrganizationJsonLd(preview, siteContent, contactConfig, "/solved-tech/")).toBe("");
+    expect(renderHeadTags(homePage, preview, "/")).toBe("");
+    expect(renderOrganizationJsonLd(preview, siteContent, contactConfig, "/")).toBe("");
   });
 
   it("emits canonical, Open Graph and Twitter tags for indexable pages after launch", () => {
-    const tags = renderHeadTags(homePage, live, "/solved-tech/");
+    const tags = renderHeadTags(homePage, live, "/");
 
-    expect(tags).toContain('<link rel="canonical" href="https://example.test/solved-tech/" />');
+    expect(tags).toContain('<link rel="canonical" href="https://example.test/" />');
     expect(tags).toContain('<meta property="og:type" content="website" />');
     expect(tags).toContain('<meta property="og:site_name" content="Solved Tech" />');
     expect(tags).toContain(`<meta property="og:title" content="${homePage.title}" />`);
     expect(tags).toContain(`<meta property="og:description" content="${homePage.description}" />`);
-    expect(tags).toContain('<meta property="og:url" content="https://example.test/solved-tech/" />');
+    expect(tags).toContain('<meta property="og:url" content="https://example.test/" />');
     expect(tags).toContain(
-      '<meta property="og:image" content="https://example.test/solved-tech/brand/solved-tech-social.png" />',
+      '<meta property="og:image" content="https://example.test/brand/solved-tech-social.png" />',
     );
     expect(tags).toContain('<meta name="twitter:card" content="summary_large_image" />');
   });
 
+  it("canonicalises the live site at the custom domain root", () => {
+    const tags = renderHeadTags(homePage, siteStatus, "/");
+    const script = renderOrganizationJsonLd(siteStatus, siteContent, contactConfig, "/");
+    const json = script.replace(/^<script type="application\/ld\+json">/, "").replace(/<\/script>$/, "");
+    const data = JSON.parse(json);
+    const pages = [homePage, privacyPage, vorbioPage, ...servicePages.map(servicePageMeta)];
+    const sitemap = renderSitemap(siteStatus, pages, "/");
+
+    expect(tags).toContain('<link rel="canonical" href="https://solvedtech.co.uk/" />');
+    expect(tags).toContain('<meta property="og:url" content="https://solvedtech.co.uk/" />');
+    expect(tags).toContain(
+      '<meta property="og:image" content="https://solvedtech.co.uk/brand/solved-tech-social.png" />',
+    );
+    expect(data.url).toBe("https://solvedtech.co.uk/");
+    expect(data.logo).toBe("https://solvedtech.co.uk/brand/solved-tech-logo-dark.svg");
+    expect(sitemap).toContain("<loc>https://solvedtech.co.uk/</loc>");
+    expect(sitemap).toContain("<loc>https://solvedtech.co.uk/services/vorbio/</loc>");
+    servicePages.forEach(({ slug }) => {
+      expect(sitemap).toContain(`<loc>https://solvedtech.co.uk/services/${slug}/</loc>`);
+    });
+    expect(sitemap).not.toContain("https://solvedtech.co.uk/privacy/");
+    expect(sitemap.match(/<loc>/g)).toHaveLength(8);
+  });
+
   it("keeps non-indexable pages out of the index after launch", () => {
     expect(privacyPage.indexable).toBe(false);
-    expect(renderHeadTags(privacyPage, live, "/solved-tech/")).toBe("");
+    expect(renderHeadTags(privacyPage, live, "/")).toBe("");
   });
 
   it("describes the organisation with visible facts only", () => {
-    const script = renderOrganizationJsonLd(live, siteContent, contactConfig, "/solved-tech/");
+    const script = renderOrganizationJsonLd(live, siteContent, contactConfig, "/");
     const json = script.replace(/^<script type="application\/ld\+json">/, "").replace(/<\/script>$/, "");
     const data = JSON.parse(json);
 
@@ -52,8 +76,8 @@ describe("head metadata", () => {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: "Solved Tech",
-      url: "https://example.test/solved-tech/",
-      logo: "https://example.test/solved-tech/brand/solved-tech-logo-dark.svg",
+      url: "https://example.test/",
+      logo: "https://example.test/brand/solved-tech-logo-dark.svg",
       email: contactConfig.email,
       telephone: contactConfig.phone,
       founder: siteContent.founders.map(({ name, linkedin }) => ({
@@ -177,13 +201,13 @@ describe("service page metadata", () => {
   it("lists indexable pages in the sitemap after launch", () => {
     const pages = [homePage, privacyPage, servicePageMeta({ ...servicePages[0], approved: true })];
 
-    expect(renderSitemap(preview, pages, "/solved-tech/")).toBe("");
-    expect(renderSitemap(live, pages, "/solved-tech/")).toBe(
+    expect(renderSitemap(preview, pages, "/")).toBe("");
+    expect(renderSitemap(live, pages, "/")).toBe(
       [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-        "  <url><loc>https://example.test/solved-tech/</loc></url>",
-        `  <url><loc>https://example.test/solved-tech/services/${servicePages[0].slug}/</loc></url>`,
+        "  <url><loc>https://example.test/</loc></url>",
+        `  <url><loc>https://example.test/services/${servicePages[0].slug}/</loc></url>`,
         "</urlset>",
         "",
       ].join("\n"),
@@ -193,8 +217,8 @@ describe("service page metadata", () => {
   it("exposes the Vorbio product page as its own indexable route", () => {
     expect(vorbioPage.path).toBe("/services/vorbio/");
     expect(vorbioPage.indexable).toBe(true);
-    expect(renderHeadTags(vorbioPage, live, "/solved-tech/")).toContain(
-      '<link rel="canonical" href="https://example.test/solved-tech/services/vorbio/" />',
+    expect(renderHeadTags(vorbioPage, live, "/")).toContain(
+      '<link rel="canonical" href="https://example.test/services/vorbio/" />',
     );
   });
 
@@ -213,12 +237,12 @@ describe("service page metadata", () => {
 
   it("lists the homepage and all six service pages but not privacy in the sitemap", () => {
     const pages = [homePage, privacyPage, ...servicePages.map(servicePageMeta)];
-    const sitemap = renderSitemap(live, pages, "/solved-tech/");
+    const sitemap = renderSitemap(live, pages, "/");
 
-    expect(sitemap).toContain("<loc>https://example.test/solved-tech/</loc>");
+    expect(sitemap).toContain("<loc>https://example.test/</loc>");
     servicePages.forEach(({ slug }) =>
       expect(sitemap).toContain(
-        `<loc>https://example.test/solved-tech/services/${slug}/</loc>`,
+        `<loc>https://example.test/services/${slug}/</loc>`,
       ),
     );
     expect(sitemap).not.toContain("/privacy/");
