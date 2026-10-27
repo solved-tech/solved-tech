@@ -689,6 +689,12 @@ test("hero actions reach the first fold without the process on portrait phones",
   const process = page.locator(".hero-process");
   await expect(process).toBeHidden();
 
+  const heading = page.locator("#hero-heading");
+  const headingBox = await heading.boundingBox();
+  expect(headingBox).not.toBeNull();
+  expect(Math.abs(headingBox!.x + headingBox!.width / 2 - viewport.width / 2)).toBeLessThanOrEqual(8);
+  await expect(heading).toHaveCSS("text-align", "center");
+
   assertNoRuntimeErrors(collector);
 });
 

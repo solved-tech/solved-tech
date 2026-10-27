@@ -881,6 +881,16 @@ main > section.hero {
   .hero__visual {
     display: none;
   }
+
+  .hero__content {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .hero__actions {
+    justify-self: stretch;
+    width: 100%;
+  }
 }
 
 @media (max-width: 39.999rem) {
