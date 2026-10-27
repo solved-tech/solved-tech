@@ -53,13 +53,16 @@ describe("head metadata", () => {
     );
     expect(data.url).toBe("https://solvedtech.co.uk/");
     expect(data.logo).toBe("https://solvedtech.co.uk/brand/solved-tech-logo-dark.svg");
+    expect(data.email).toBe("contact@solvedtech.co.uk");
+    expect(data.areaServed).toEqual({ "@type": "City", name: "London" });
+    expect(data).not.toHaveProperty("telephone");
     expect(sitemap).toContain("<loc>https://solvedtech.co.uk/</loc>");
-    expect(sitemap).toContain("<loc>https://solvedtech.co.uk/services/vorbio/</loc>");
+    expect(sitemap).not.toContain("https://solvedtech.co.uk/services/vorbio/");
     servicePages.forEach(({ slug }) => {
       expect(sitemap).toContain(`<loc>https://solvedtech.co.uk/services/${slug}/</loc>`);
     });
     expect(sitemap).not.toContain("https://solvedtech.co.uk/privacy/");
-    expect(sitemap.match(/<loc>/g)).toHaveLength(8);
+    expect(sitemap.match(/<loc>/g)).toHaveLength(7);
   });
 
   it("keeps non-indexable pages out of the index after launch", () => {
@@ -74,19 +77,24 @@ describe("head metadata", () => {
 
     expect(data).toEqual({
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "ProfessionalService",
       name: "Solved Tech",
       url: "https://example.test/",
       logo: "https://example.test/brand/solved-tech-logo-dark.svg",
       email: contactConfig.email,
-      telephone: contactConfig.phone,
       founder: siteContent.founders.map(({ name, linkedin }) => ({
         "@type": "Person",
         name,
         sameAs: linkedin,
       })),
+      areaServed: { "@type": "City", name: "London" },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "London",
+        addressCountry: "GB",
+      },
     });
-    expect(script).not.toMatch(/aggregateRating|review|award|address/);
+    expect(script).not.toMatch(/aggregateRating|review|award|telephone|streetAddress/);
   });
 
   it("escapes closing tags inside JSON-LD", () => {
@@ -214,12 +222,11 @@ describe("service page metadata", () => {
     );
   });
 
-  it("exposes the Vorbio product page as its own indexable route", () => {
+  it("keeps the Vorbio page reachable and out of the index", () => {
     expect(vorbioPage.path).toBe("/services/vorbio/");
-    expect(vorbioPage.indexable).toBe(true);
-    expect(renderHeadTags(vorbioPage, live, "/")).toContain(
-      '<link rel="canonical" href="https://example.test/services/vorbio/" />',
-    );
+    expect(vorbioPage.indexable).toBe(false);
+    expect(renderHeadTags(vorbioPage, live, "/")).toBe("");
+    expect(renderSitemap(live, [homePage, vorbioPage], "/")).not.toContain("/services/vorbio/");
   });
 
   it("maps six unique service pages that are indexable once approved", () => {

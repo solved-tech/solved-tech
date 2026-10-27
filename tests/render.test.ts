@@ -19,16 +19,18 @@ describe("homepage renderer", () => {
   });
 
   it("makes the hero a direct product offer", () => {
-    expect(html).toContain("We build, fix and connect business software.");
+    expect(html).toContain("Websites for London small businesses.");
     expect(html).toContain(
-      "From a new product to a stubborn bug or a manual process, we define the next step and deliver a working solution.",
+      "Fixed price, no jargon. A clear site that tells people what you do and how to get in touch.",
     );
     expect(html).toContain(
-      '<p class="hero__eyebrow" data-reveal>Software development · Bug fixes · Automation</p>',
+      '<p class="hero__eyebrow" data-reveal>London small businesses</p>',
     );
     expect(html).toContain(
-      '<p class="hero__trust" data-reveal>UK-based · Speak directly with the people doing the work.</p>',
+      '<p class="hero__trust" data-reveal>You speak with the people who build the site.</p>',
     );
+    expect(html).toContain('href="mailto:contact@solvedtech.co.uk?subject=Free%2015-minute%20website%20call"');
+    expect(html).toContain("Book a free 15-min call");
     expect(html).not.toContain("Development. Bug fixes. Automation.");
     expect(html).not.toContain(
       "We build new applications, fix existing software and connect your systems.",
@@ -70,12 +72,12 @@ describe("homepage renderer", () => {
       'class="hero-process__stage hero-process__stage--maintain hero-process__animated"',
     ]);
 
-    ["Understand", "Shape", "Build", "Maintain"].forEach((stage) =>
+    ["Listen", "Agree", "Build", "Hand over"].forEach((stage) =>
       expect(html).toContain(`<strong>${stage}</strong>`),
     );
 
-    expect(html).toContain("A product, a problem or a process to improve.");
-    expect(html).toContain("Working result, ready to use.");
+    expect(html).toContain("What your business does, and how customers should reach you.");
+    expect(html).toContain("A site you can send people to.");
     expect(html).not.toContain("hero-workflow");
     expect(html).not.toContain("hero-system");
     expect(html).not.toContain('style="');
@@ -85,7 +87,7 @@ describe("homepage renderer", () => {
   });
 
   it("orders the delivery stages from understanding to maintenance", () => {
-    const stages = ["Understand", "Shape", "Build", "Maintain"].map((stage) =>
+    const stages = ["Listen", "Agree", "Build", "Hand over"].map((stage) =>
       html.indexOf(`<strong>${stage}</strong>`),
     );
 
@@ -99,12 +101,12 @@ describe("homepage renderer", () => {
     expect(html).toContain('<nav id="primary-navigation"');
     expect(html).toContain('<main id="main-content">');
     expect(html).toContain('<section class="contact');
+    expect(html).toContain('href="#packages">Websites</a>');
     expect(html).toContain('href="#team">Team</a>');
     expect(html).toContain('href="#services">Services</a>');
-    expect(html).toContain(
-      '<a class="site-header__vorbio" href="/services/vorbio/">Vorbio</a>',
-    );
+    expect(html).not.toContain("/services/vorbio/");
     expect(html).toContain('href="#approach">How we work</a>');
+    expect(html).toContain('href="#contact">Get a quote</a>');
     expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
     expect(html).not.toContain(">Products<");
   });
@@ -116,10 +118,10 @@ describe("homepage renderer", () => {
     );
 
     expect(cards).toEqual([
-      "ai",
-      "app",
-      "customers",
       "website",
+      "customers",
+      "app",
+      "ai",
       "fix",
       "other",
     ]);
@@ -134,14 +136,17 @@ describe("homepage renderer", () => {
   it("renders the structured services header above the grid", () => {
     expect(html).toContain('<div class="services__header" data-reveal>');
     expect(html).toContain(
-      '<p class="services__eyebrow">Services / 01—06</p>',
+      '<p class="services__eyebrow">Also available</p>',
     );
     expect(html).toContain(
-      '<h2 id="services-heading">What does your business need?</h2>',
+      '<h2 id="services-heading">Other ways we can help.</h2>',
     );
     expect(html).toContain(
-      '<p class="services__intro">Choose the closest fit. You do not need a finished brief—we will help define the next step.</p>',
+      '<p class="services__intro">Websites come first. Apps, AI, bug fixing and automation are here when a London business needs them later.</p>',
     );
+    expect(html).toContain('<h2 id="packages-heading">Simple website packages.</h2>');
+    expect(html.match(/class="package-card"/g)).toHaveLength(4);
+    expect(html.match(/Get a quote/g)?.length).toBeGreaterThanOrEqual(4);
     expect(html.indexOf('class="services__header"')).toBeLessThan(
       html.indexOf('class="product-grid"'),
     );
@@ -207,7 +212,7 @@ describe("homepage renderer", () => {
 
   it("keeps the two section labels on a single semantic line", () => {
     expect(html).toContain(
-      '<h2 id="services-heading">What does your business need?</h2>',
+      '<h2 id="services-heading">Other ways we can help.</h2>',
     );
     expect(html).toContain("<p>How we work</p>");
   });
@@ -260,7 +265,7 @@ describe("homepage renderer", () => {
     const contact = html.match(/<section class="contact"[\s\S]*?<\/section>/)?.[0];
 
     expect(contact).toContain(
-      "Tell us what your business needs, which system is involved and what outcome you want. For a bug, include the steps that trigger it and any deadline that matters.",
+      "Email what your business does, who the site is for, and whether you want a simple site, a fuller site or a shop. We reply with a quote. There is no form on this page.",
     );
     expect(contact).toContain(
       '<p class="contact-caution" data-reveal>Please do not send passwords or confidential customer data in your first message.</p>',
@@ -302,23 +307,9 @@ describe("homepage renderer", () => {
     expect(html).not.toContain('class="ambient-grid__accent"');
   });
 
-  it("renders no more than eight quiet code fragments", () => {
-    expect(html.match(/class="code-field"/g)).toHaveLength(1);
-    expect(html).toContain('class="code-field" aria-hidden="true"');
-    const languages = [
-      "typescript",
-      "python",
-      "swift",
-      "sql",
-      "html",
-      "css",
-      "terraform",
-      "shell",
-    ];
-    languages.forEach((language) =>
-      expect(html).toContain(`data-language="${language}"`),
-    );
-    expect(html.match(/data-language=/g)).toHaveLength(languages.length);
+  it("does not decorate the page with code fragments", () => {
+    expect(html).not.toContain('class="code-field"');
+    expect(html).not.toContain("data-language=");
   });
 
   it("marks every element the enhancement layer reveals", () => {
@@ -328,7 +319,7 @@ describe("homepage renderer", () => {
     expect(html).toContain('<section id="team" class="team"');
   });
 
-  it("renders Call, WhatsApp, and Email in both contact groups", () => {
+  it("renders a quote email, Call, and WhatsApp in both contact groups", () => {
     expect(
       html.match(new RegExp(`href="tel:${escapeRegExp(contactConfig.phone)}"`, "g")),
     ).toHaveLength(2);
@@ -337,13 +328,9 @@ describe("homepage renderer", () => {
         new RegExp(`href="https://wa\\.me/${escapeRegExp(contactConfig.whatsapp)}"`, "g"),
       ),
     ).toHaveLength(2);
-    expect(
-      html.match(new RegExp(`href="mailto:${escapeRegExp(contactConfig.email)}"`, "g")),
-    ).toHaveLength(2);
-    expect(
-      html.match(/contact-action__icon--whatsapp/g),
-    ).toHaveLength(2);
-    expect(html.match(/contact-action__icon--email/g)).toHaveLength(2);
+    expect(html.match(/href="mailto:contact@solvedtech\.co\.uk\?subject=/g)).toHaveLength(6);
+    expect(html.match(/contact-action__icon--whatsapp/g)).toHaveLength(2);
+    expect(html).not.toContain("contact-action__icon--email");
 
     const heroGroup = html.match(
       /<div class="hero__actions">([\s\S]*?)<\/div>/,
@@ -354,25 +341,13 @@ describe("homepage renderer", () => {
 
     expect(heroGroup).toBeDefined();
     expect(contactGroup).toBeDefined();
-
-    const heroLabels = Array.from(
-      heroGroup!.matchAll(
-        /<a class="contact-action[^"]*"(?:[^>]*aria-label="([^"]*)")?[^>]*>/g,
-      ),
-      ([, ariaLabel]) => ariaLabel,
-    );
-    expect(heroLabels).toEqual(["Call us", "WhatsApp us", "Email us"]);
-    expect(heroGroup!.match(/contact-action__suffix/g)).toHaveLength(3);
-
-    const contactLabels = Array.from(
-      contactGroup!.matchAll(/<a class="contact-action[^"]*"[^>]*>([\s\S]*?)<\/a>/g),
-      ([, inner]) => {
-        const spanLabel = inner.match(/<span>([^<]+)<\/span>/)?.[1];
-        return spanLabel ?? inner.replace(/<[^>]+>/g, "").trim();
-      },
-    );
-    expect(contactLabels).toEqual(["Call us", "WhatsApp us", "Email us"]);
-    expect(contactGroup).not.toContain("contact-action__suffix");
+    expect(heroGroup).toContain("Book a free 15-min call");
+    expect(heroGroup).toContain("Call us");
+    expect(heroGroup).toContain("WhatsApp us");
+    expect(contactGroup).toContain("Get a free quote");
+    expect(contactGroup).toContain("Call us");
+    expect(contactGroup).toContain("WhatsApp us");
+    expect(html).not.toContain("contact-action__suffix");
   });
 
   it("renders two founder cards with portraits and LinkedIn links", () => {
@@ -417,24 +392,17 @@ describe("homepage renderer", () => {
     expect(html.match(/class="product-grid"/g)).toHaveLength(1);
   });
 
-  it("promotes the Vorbio product between services and how we work", () => {
+  it("does not link the homepage to Vorbio", () => {
+    const packages = html.indexOf('id="packages"');
     const services = html.indexOf('id="services"');
-    const promo = html.indexOf('class="vorbio-promo"');
     const approach = html.indexOf('id="approach"');
 
-    expect(promo).toBeGreaterThan(services);
-    expect(promo).toBeLessThan(approach);
-    expect(html).toContain('href="/services/vorbio/"');
-    expect(html).toContain(
-      'data-service-id="vorbio" data-placement="vorbio-promo"',
-    );
-    expect(html).toContain(
-      "Your AI front desk for WhatsApp voice and chat.",
-    );
-    expect(html).toContain('class="vorbio-console"');
-    expect(html.indexOf('class="vorbio-promo__visual"')).toBeLessThan(
-      html.indexOf('class="vorbio-promo__link"'),
-    );
+    expect(packages).toBeGreaterThan(-1);
+    expect(packages).toBeLessThan(services);
+    expect(services).toBeLessThan(approach);
+    expect(html).not.toContain("/services/vorbio/");
+    expect(html).not.toContain("vorbio-promo");
+    expect(html).not.toContain("site-header__vorbio");
   });
 
   it("makes the diagram itself the pause control after the hero actions", () => {
@@ -450,13 +418,14 @@ describe("homepage renderer", () => {
   });
 
   it("annotates intent targets for measurement without loading any script", () => {
-    expect(html.match(/data-analytics="contact_click"/g)).toHaveLength(6);
+    expect(html.match(/data-analytics="contact_click"/g)).toHaveLength(10);
     expect(html.match(/data-channel="call"/g)).toHaveLength(2);
     expect(html.match(/data-channel="whatsapp"/g)).toHaveLength(2);
-    expect(html.match(/data-channel="email"/g)).toHaveLength(2);
+    expect(html.match(/data-channel="email"/g)).toHaveLength(6);
     expect(html.match(/data-placement="hero"/g)).toHaveLength(3);
     expect(html.match(/data-placement="contact"/g)).toHaveLength(3);
-    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(7);
+    expect(html.match(/data-placement="package"/g)).toHaveLength(4);
+    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(6);
     siteContent.products.forEach(({ id }) =>
       expect(html).toContain(`data-service-id="${id}" data-placement="product-card"`),
     );
@@ -481,11 +450,10 @@ describe("privacy page renderer", () => {
 
   it("points the shared header at the homepage sections", () => {
     expect(html).toContain('<a class="wordmark" href="/#top"');
+    expect(html).toContain('<a href="/#packages">Websites</a>');
     expect(html).toContain('<a href="/#services">Services</a>');
-    expect(html).toContain(
-      '<a class="site-header__vorbio" href="/services/vorbio/">Vorbio</a>',
-    );
-    expect(html).toContain('<a href="/#contact">Contact</a>');
+    expect(html).not.toContain("/services/vorbio/");
+    expect(html).toContain('<a href="/#contact">Get a quote</a>');
     expect(html).toContain('<nav id="primary-navigation"');
     expect(html).toContain('<main id="main-content" class="page">');
   });
@@ -743,10 +711,9 @@ describe("vorbio product page", () => {
 
   it("reuses the shared shell with focused demo actions and contact rail", () => {
     expect(html).toContain('<a class="wordmark" href="/#top"');
+    expect(html).toContain('<a href="/#packages">Websites</a>');
     expect(html).toContain('<a href="/#services">Services</a>');
-    expect(html).toContain(
-      '<a class="site-header__vorbio" href="/services/vorbio/">Vorbio</a>',
-    );
+    expect(html).not.toContain('class="site-header__vorbio"');
     expect(html).toContain('<main id="main-content" class="page vorbio">');
     expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
     expect(html.match(/<a class="contact-action /g)).toHaveLength(3);

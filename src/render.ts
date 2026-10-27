@@ -40,8 +40,11 @@ const emailIcon = `
     <path d="m4 7 8 6 8-6" />
   </svg>`;
 
-const renderHeroLabel = (verb: string): string =>
-  `${verb}<span class="contact-action__suffix"> us</span>`;
+const HERO_QUOTE_SUBJECT = "Free 15-minute website call";
+const QUOTE_SUBJECT = "Website quote";
+
+const mailtoWithSubject = (email: string, subject: string): string =>
+  `mailto:${email}?subject=${encodeURIComponent(subject)}`;
 
 const renderContactActions = (
   config: ContactConfig,
@@ -49,29 +52,22 @@ const renderContactActions = (
 ): string => {
   const isHero = className === "hero__actions";
   const placement = isHero ? "hero" : "contact";
-
-  if (isHero) {
-    return `
-  <div class="${className}">
-    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}" aria-label="Call us" data-analytics="contact_click" data-channel="call" data-placement="${placement}">${renderHeroLabel("Call")}</a>
-    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer" aria-label="WhatsApp us" data-analytics="contact_click" data-channel="whatsapp" data-placement="${placement}">${whatsappIcon}<span>${renderHeroLabel("WhatsApp")}</span></a>
-    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}" aria-label="Email us" data-analytics="contact_click" data-channel="email" data-placement="${placement}">${emailIcon}<span>${renderHeroLabel("Email")}</span></a>
-  </div>`;
-  }
+  const quoteSubject = isHero ? HERO_QUOTE_SUBJECT : QUOTE_SUBJECT;
+  const quoteLabel = isHero ? "Book a free 15-min call" : "Get a free quote";
 
   return `
   <div class="${className}">
+    <a class="contact-action contact-action--quote" href="${escapeHtml(mailtoWithSubject(config.email, quoteSubject))}" data-analytics="contact_click" data-channel="email" data-placement="${placement}">${quoteLabel}</a>
     <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}" data-analytics="contact_click" data-channel="call" data-placement="${placement}">Call us</a>
     <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer" data-analytics="contact_click" data-channel="whatsapp" data-placement="${placement}">${whatsappIcon}<span>WhatsApp us</span></a>
-    <a class="contact-action contact-action--email" href="mailto:${escapeHtml(config.email)}" data-analytics="contact_click" data-channel="email" data-placement="${placement}">${emailIcon}<span>Email us</span></a>
   </div>`;
 };
 
 const heroProcessStages = [
-  { id: "understand", title: "Understand", detail: "Goal + context" },
-  { id: "shape", title: "Shape", detail: "Scope + direction" },
-  { id: "build", title: "Build", detail: "Make + integrate" },
-  { id: "maintain", title: "Maintain", detail: "Support + improve" },
+  { id: "understand", title: "Listen", detail: "What you need" },
+  { id: "shape", title: "Agree", detail: "Pages and a quote" },
+  { id: "build", title: "Build", detail: "The website" },
+  { id: "maintain", title: "Hand over", detail: "Ready to use" },
 ] as const;
 
 const renderHeroProcess = (): string => `
@@ -79,12 +75,12 @@ const renderHeroProcess = (): string => `
         <div class="hero-process">
           <div class="hero-process__interface" aria-hidden="true">
             <div class="hero-process__topbar">
-              <span><i class="hero-process__live hero-process__animated"></i>Solved Tech / delivery system</span>
-              <span>Live workflow</span>
+              <span><i class="hero-process__live hero-process__animated"></i>A simple website</span>
+              <span>How it happens</span>
             </div>
             <div class="hero-process__input">
-              <span>Incoming / business need</span>
-              <strong>A product, a problem or a process to improve.</strong>
+              <span>What you tell us</span>
+              <strong>What your business does, and how customers should reach you.</strong>
             </div>
             <div class="hero-process__pipeline">
               <span class="hero-process__rail"></span>
@@ -104,7 +100,7 @@ ${heroProcessStages
             </div>
             <div class="hero-process__output">
               <span class="hero-process__check">✓</span>
-              <span><small>Outcome / clear next step</small><strong>Working result, ready to use.</strong></span>
+              <span><small>What you get</small><strong>A site you can send people to.</strong></span>
             </div>
           </div>
           <button class="hero-process__control" type="button" aria-label="Pause diagram motion" aria-pressed="false"></button>
@@ -351,11 +347,11 @@ export const renderSiteHeader = (baseUrl: string, homeHref: string): string => `
         <span></span><span></span><span></span>
       </button>
       <nav id="primary-navigation" aria-label="Primary navigation">
+        <a href="${escapeHtml(homeHref)}#packages">Websites</a>
         <a href="${escapeHtml(homeHref)}#services">Services</a>
-        <a class="site-header__vorbio" href="${escapeHtml(publicAssetUrl("/services/vorbio/", baseUrl))}">Vorbio</a>
         <a href="${escapeHtml(homeHref)}#approach">How we work</a>
         <a href="${escapeHtml(homeHref)}#team">Team</a>
-        <a href="${escapeHtml(homeHref)}#contact">Contact</a>
+        <a href="${escapeHtml(homeHref)}#contact">Get a quote</a>
       </nav>
     </header>`;
 
@@ -497,42 +493,53 @@ export const renderHomepage = (
     )
     .join("");
 
+  const packages = content.packages
+    .map(({ id, name, summary, includes }) => {
+      const href = mailtoWithSubject(config.email, `${QUOTE_SUBJECT}: ${name}`);
+      const items = includes.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+
+      return `
+        <article class="package-card" id="package-${escapeHtml(id)}">
+          <h3>${escapeHtml(name)}</h3>
+          <p>${escapeHtml(summary)}</p>
+          <ul>${items}</ul>
+          <a href="${escapeHtml(href)}" data-analytics="contact_click" data-channel="email" data-placement="package" data-package-id="${escapeHtml(id)}">Get a quote</a>
+        </article>`;
+    })
+    .join("");
+
   return `
-    <div class="code-field" aria-hidden="true">
-      <code data-language="typescript">const useful = solve(problem);</code>
-      <code data-language="python">build(what_people_need)</code>
-      <code data-language="swift">await idea.makeUseful()</code>
-      <code data-language="sql">SELECT next_step FROM business;</code>
-      <code data-language="html">&lt;product&gt;ready&lt;/product&gt;</code>
-      <code data-language="css">.friction { display: none; }</code>
-      <code data-language="terraform">resource "progress" "next" {}</code>
-      <code data-language="shell">$ ship --when-ready</code>
-    </div>
     ${renderSiteHeader(baseUrl, "")}
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero__layout">
           <div class="hero__content">
-            <p class="hero__eyebrow" data-reveal>Software development · Bug fixes · Automation</p>
-            <h1 id="hero-heading" data-reveal>We build, fix and connect business software.</h1>
-            <p class="hero__lead" data-reveal>From a new product to a stubborn bug or a manual process, we define the next step and deliver a working solution.</p>
+            <p class="hero__eyebrow" data-reveal>London small businesses</p>
+            <h1 id="hero-heading" data-reveal>Websites for London small businesses.</h1>
+            <p class="hero__lead" data-reveal>Fixed price, no jargon. A clear site that tells people what you do and how to get in touch.</p>
             ${renderContactActions(config, "hero__actions")}
-            <p class="hero__trust" data-reveal>UK-based · Speak directly with the people doing the work.</p>
+            <p class="hero__trust" data-reveal>You speak with the people who build the site.</p>
           </div>
           ${renderHeroProcess()}
         </div>
       </section>
+      <section id="packages" class="packages" aria-labelledby="packages-heading">
+        <div class="packages__header" data-reveal>
+          <h2 id="packages-heading">Simple website packages.</h2>
+          <p>Starter, Business, Shop, and a monthly care plan. Each one is quoted before we build. We do not list a price until we know what you need.</p>
+        </div>
+        <div class="package-grid">${packages}</div>
+      </section>
       <section id="services" class="services" aria-labelledby="services-heading">
         <div class="services__header" data-reveal>
           <div class="services__heading">
-            <p class="services__eyebrow">Services / 01—06</p>
-            <h2 id="services-heading">What does your business need?</h2>
+            <p class="services__eyebrow">Also available</p>
+            <h2 id="services-heading">Other ways we can help.</h2>
           </div>
-          <p class="services__intro">Choose the closest fit. You do not need a finished brief—we will help define the next step.</p>
+          <p class="services__intro">Websites come first. Apps, AI, bug fixing and automation are here when a London business needs them later.</p>
         </div>
         <div class="product-grid">${cards}</div>
       </section>
-      ${renderVorbioPromo(baseUrl)}
       <section id="approach" class="journey" aria-labelledby="approach-heading">
         <div class="journey__heading" data-reveal>
           <p>How we work</p>
@@ -580,8 +587,8 @@ export const renderHomepage = (
       </section>
       ${renderCaseStudies(content.caseStudies)}
       <section class="contact" id="contact" aria-labelledby="contact-heading">
-        <h2 id="contact-heading" data-reveal>Whatever you need to move forward, call us.</h2>
-        <p data-reveal>Tell us what your business needs, which system is involved and what outcome you want. For a bug, include the steps that trigger it and any deadline that matters.</p>
+        <h2 id="contact-heading" data-reveal>Tell us about the website you need.</h2>
+        <p data-reveal>Email what your business does, who the site is for, and whether you want a simple site, a fuller site or a shop. We reply with a quote. There is no form on this page.</p>
         <p class="contact-caution" data-reveal>Please do not send passwords or confidential customer data in your first message.</p>
         <div data-reveal>${renderContactActions(config, "contact__actions")}</div>
         <dl class="contact-details" data-reveal>
@@ -722,29 +729,6 @@ const renderVorbioHeroActions = (
               <a class="vorbio-button vorbio-button--primary" href="mailto:${escapeHtml(config.email)}?subject=Vorbio%20demo" data-analytics="contact_click" data-channel="email" data-placement="vorbio-hero">Arrange a live demo <span aria-hidden="true">↗</span></a>
               <a class="vorbio-button" href="tel:${escapeHtml(config.phone)}" data-analytics="contact_click" data-channel="call" data-placement="vorbio-hero">Call about Vorbio</a>
             </div>`;
-
-const renderVorbioPromo = (baseUrl: string): string => {
-  const href = publicAssetUrl("/services/vorbio/", baseUrl);
-
-  return `
-      <section id="vorbio" class="vorbio-promo" aria-labelledby="vorbio-promo-heading">
-        <div class="vorbio-promo__frame">
-          <div class="vorbio-promo__copy">
-            <div class="vorbio-promo__meta" data-reveal><span>Product / 01</span><span>Built by Solved Tech</span></div>
-            <p class="vorbio-wordmark" data-reveal>Vorbio<span aria-hidden="true">.</span></p>
-            <h2 id="vorbio-promo-heading" data-reveal>Your AI front desk for WhatsApp voice and chat.</h2>
-            <p class="vorbio-promo__lead" data-reveal>Vorbio answers, qualifies and moves each conversation towards a useful next step—then brings in your team when human judgement matters.</p>
-            <ul class="vorbio-promo__signals" aria-label="Vorbio features" data-reveal>
-              <li>Voice calls</li><li>Chat</li><li>Bookings</li><li>Human handover</li>
-            </ul>
-          </div>
-          <div class="vorbio-promo__visual" data-reveal>${renderVorbioConsole()}</div>
-          <div class="vorbio-promo__footer">
-            <a class="vorbio-promo__link" href="${escapeHtml(href)}" data-analytics="service_interest" data-service-id="vorbio" data-placement="vorbio-promo">Discover Vorbio <span aria-hidden="true">↗</span></a>
-          </div>
-        </div>
-      </section>`;
-};
 
 export const renderVorbioPage = (
   product: VorbioProduct,
