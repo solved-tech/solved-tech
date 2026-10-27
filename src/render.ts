@@ -514,8 +514,8 @@ export const renderHomepage = (
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero__layout">
           <div class="hero__content">
-            <p class="hero__eyebrow" data-reveal>London small businesses</p>
-            <h1 id="hero-heading" data-reveal>Websites for London small businesses.</h1>
+            <p class="hero__eyebrow" data-reveal>Small businesses</p>
+            <h1 id="hero-heading" data-reveal>Websites for small businesses.</h1>
             <p class="hero__lead" data-reveal>Fixed price, no jargon. A clear site that tells people what you do and how to get in touch.</p>
             ${renderContactActions(config, "hero__actions")}
             <p class="hero__trust" data-reveal>You speak with the people who build the site.</p>

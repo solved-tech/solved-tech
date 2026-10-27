@@ -841,18 +841,26 @@ test("wide desktop hero fills the width without wasting vertical space", async (
   const collector = await preparePage(page);
   const viewport = viewportSize(page);
   const heroBox = await page.locator(".hero").boundingBox();
+  const layoutBox = await page.locator(".hero__layout").boundingBox();
   const processBox = await page.locator(".hero-process").boundingBox();
   const packagesBox = await page.locator("#packages").boundingBox();
   const headingBox = await page.locator("#hero-heading").boundingBox();
 
   expect(heroBox).not.toBeNull();
+  expect(layoutBox).not.toBeNull();
   expect(processBox).not.toBeNull();
   expect(packagesBox).not.toBeNull();
   expect(headingBox).not.toBeNull();
   expect(heroBox!.width / viewport.width).toBeGreaterThanOrEqual(0.68);
   expect(heroBox!.height).toBeLessThanOrEqual(58 * 16 + 1);
   expect(processBox!.width).toBeGreaterThanOrEqual(34 * 16 - 1);
-  expect(headingBox!.y).toBeLessThan(220);
+  const heroMid = heroBox!.y + heroBox!.height / 2;
+  const layoutMid = layoutBox!.y + layoutBox!.height / 2;
+  const layoutCenter = layoutBox!.x + layoutBox!.width / 2;
+  expect(Math.abs(layoutMid - heroMid)).toBeLessThanOrEqual(48);
+  expect(Math.abs(layoutCenter - viewport.width / 2)).toBeLessThanOrEqual(8);
+  expect(headingBox!.y).toBeGreaterThan(heroBox!.y);
+  expect(headingBox!.y).toBeLessThan(heroMid);
   expect(packagesBox!.y).toBeLessThan(viewport.height);
 
   assertNoRuntimeErrors(collector);

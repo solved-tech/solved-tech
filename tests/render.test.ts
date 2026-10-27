@@ -19,12 +19,12 @@ describe("homepage renderer", () => {
   });
 
   it("makes the hero a direct product offer", () => {
-    expect(html).toContain("Websites for London small businesses.");
+    expect(html).toContain("Websites for small businesses.");
     expect(html).toContain(
       "Fixed price, no jargon. A clear site that tells people what you do and how to get in touch.",
     );
     expect(html).toContain(
-      '<p class="hero__eyebrow" data-reveal>London small businesses</p>',
+      '<p class="hero__eyebrow" data-reveal>Small businesses</p>',
     );
     expect(html).toContain(
       '<p class="hero__trust" data-reveal>You speak with the people who build the site.</p>',
