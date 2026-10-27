@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { aboutRemus, contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
+import { contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
   it("leads with websites and keeps the other services secondary", () => {
@@ -85,20 +85,30 @@ describe("site content", () => {
     expect(siteContent.founders).toEqual([
       {
         name: "Razvan Cristofor",
-        role: "Co-founder — Apps & SEO Expert",
+        role: "Co-founder",
         image: "/team/razvan_cristofor-520.webp",
         imageSources: [
           { path: "/team/razvan_cristofor-520.webp", width: 520 },
           { path: "/team/razvan_cristofor-1040.webp", width: 1040 },
         ],
         linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
+        website: "https://razvancristofor.ro/",
+        bio: [
+          "He builds websites, online shops, and web, mobile, Windows and desktop apps.",
+          "He also builds automations, AI and API integrations, and works on SEO and performance.",
+        ],
       },
       {
         name: "Remus Baciu",
-        role: "Co-founder — Senior Software Engineer",
+        role: "Co-founder",
         image: "/team/remus_baciu-340.webp",
         imageSources: [],
-        linkedin: "https://www.linkedin.com/in/remus-baciu-4a11a7105/",
+        linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
+        bio: [
+          "Senior Software Engineer at Sky, with more than 11 years there.",
+          "He works in Java, Python and Go, and looks after infrastructure and CI/CD.",
+          "His focus is staying up to date with technology, building AI harnesses, and helping businesses reach their technical goals.",
+        ],
       },
     ]);
   });
@@ -111,25 +121,29 @@ describe("site content", () => {
     expect(productCopy).not.toMatch(/\b(?:SaaS|APIs?|agentic|MCP|SEO)\b/i);
   });
 
-  it("describes Remus from the published LinkedIn facts only", () => {
-    const copy = [aboutRemus.heading, ...aboutRemus.paragraphs].join(" ");
+  it("keeps the founder bios to the stated facts", () => {
+    const remus = siteContent.founders.find(({ name }) => name === "Remus Baciu");
+    const razvan = siteContent.founders.find(({ name }) => name === "Razvan Cristofor");
+    const remusCopy = remus?.bio.join(" ") ?? "";
+    const razvanCopy = razvan?.bio.join(" ") ?? "";
 
-    expect(aboutRemus).toMatchObject({
-      name: "Remus Baciu",
-      linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
-    });
-    expect(copy).toContain("founder of Solved Tech");
-    expect(copy).toContain("based in London");
-    expect(copy).toContain("Senior Software Engineer at Sky");
-    expect(copy).toContain("more than 11 years");
-    expect(copy).toContain("Sky apprentice in 2015");
-    expect(copy).toContain("November 2023");
-    expect(copy).toContain("Java, Python and Go");
-    expect(copy).toContain("infrastructure and CI/CD");
-    expect(copy).toContain("Academy Leader at Sky");
-    expect(copy).toContain("set up a new delivery team");
-    expect(copy).toContain("not an agency");
-    expect(copy).not.toMatch(/\+44|wa\.me|tel:/);
+    expect(remus?.role).toBe("Co-founder");
+    expect(razvan?.role).toBe("Co-founder");
+    expect(remus?.linkedin).toBe("https://linkedin.com/in/remus-baciu-4a11a7105");
+    expect(remusCopy).toContain("Senior Software Engineer at Sky");
+    expect(remusCopy).toContain("more than 11 years");
+    expect(remusCopy).toContain("Java, Python and Go");
+    expect(remusCopy).toContain("infrastructure and CI/CD");
+    expect(remusCopy).toContain("AI harnesses");
+    expect(remusCopy).toContain("technical goals");
+    expect(remusCopy).not.toMatch(/founder of Solved Tech|Academy Leader|delivery team|apprentice/);
+
+    expect(razvan?.website).toBe("https://razvancristofor.ro/");
+    expect(razvanCopy).toContain("websites, online shops");
+    expect(razvanCopy).toContain("API integrations");
+    expect(razvanCopy).toContain("SEO and performance");
+    expect(razvanCopy).not.toMatch(/\+40|799 242 421|years|studio/);
+    expect(`${remusCopy} ${razvanCopy}`).not.toMatch(/founder of Solved Tech|\+44|wa\.me|tel:/);
   });
 
   it("covers the privacy topics the audit requires", () => {

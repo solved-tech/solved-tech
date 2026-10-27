@@ -1,4 +1,4 @@
-import { aboutRemus, servicePages } from "./content";
+import { servicePages } from "./content";
 import type {
   CaseStudy,
   ContactConfig,
@@ -424,25 +424,6 @@ const resolveServicePage = (
   return matches[0];
 };
 
-const renderAbout = (baseUrl: string): string => {
-  const paragraphs = aboutRemus.paragraphs
-    .map((paragraph) => `<p data-reveal>${escapeHtml(paragraph)}</p>`)
-    .join("");
-
-  return `
-      <section id="about" class="about" aria-labelledby="about-heading">
-        <div class="about__copy">
-          <p class="about__eyebrow" data-reveal>About me</p>
-          <h2 id="about-heading" data-reveal>${escapeHtml(aboutRemus.heading)}</h2>
-          ${paragraphs}
-          <a class="about__link" data-reveal href="${escapeHtml(aboutRemus.linkedin)}" target="_blank" rel="noopener noreferrer">Remus Baciu on LinkedIn</a>
-        </div>
-        <figure class="about__portrait" data-reveal>
-          <img src="${escapeHtml(publicAssetUrl(aboutRemus.portrait, baseUrl))}" alt="Portrait of ${escapeHtml(aboutRemus.name)}" width="340" height="420" loading="lazy" />
-        </figure>
-      </section>`;
-};
-
 export const renderHomepage = (
   content: SiteContent,
   config: ContactConfig,
@@ -472,11 +453,15 @@ export const renderHomepage = (
     .join("");
   const founders = content.founders
     .map(
-      ({ name, role, image, imageSources, linkedin }) => {
+      ({ name, role, image, imageSources, linkedin, bio, website }) => {
         const srcset = imageSources.length
           ? ` srcset="${imageSources
               .map(({ path, width }) => `${escapeHtml(publicAssetUrl(path, baseUrl))} ${width}w`)
               .join(", ")}" sizes="(min-width: 48rem) 26rem, 80vw"`
+          : "";
+        const paragraphs = bio.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
+        const siteLink = website
+          ? `<a class="founder__site" href="${escapeHtml(website)}" target="_blank" rel="noopener noreferrer">${escapeHtml(name)}'s site</a>`
           : "";
 
         return `
@@ -487,11 +472,14 @@ export const renderHomepage = (
             </div>
           </div>
           <div class="founder__details">
-            <h3>${escapeHtml(name)}</h3>
-            <p>${escapeHtml(role)}</p>
-            <a href="${escapeHtml(linkedin)}" target="_blank" rel="noreferrer" aria-label="LinkedIn profile for ${escapeHtml(name)}">
+            <h3>${escapeHtml(name)} · ${escapeHtml(role)}</h3>
+            <a href="${escapeHtml(linkedin)}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile for ${escapeHtml(name)}">
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6.5 8.25H3.25V20H6.5V8.25ZM4.88 3A1.88 1.88 0 1 0 4.88 6.75 1.88 1.88 0 0 0 4.88 3ZM20.75 13.25c0-3.54-1.89-5.19-4.42-5.19-2.04 0-2.95 1.12-3.46 1.91V8.25H9.62V20h3.25v-5.82c0-1.53.29-3.01 2.19-3.01 1.87 0 1.89 1.75 1.89 3.11V20h3.25l.55-6.75Z"/></svg>
             </a>
+          </div>
+          <div class="founder__bio">
+            ${paragraphs}
+            ${siteLink}
           </div>
         </article>`;
       },
@@ -583,7 +571,6 @@ export const renderHomepage = (
         <p class="journey__note" data-reveal>For a bug, the first step is a diagnosis. We confirm the cause before we promise a fix.</p>
       </section>
       ${renderFaq(content.faq)}
-      ${renderAbout(baseUrl)}
       <section id="team" class="team" aria-labelledby="team-heading">
         <div class="team__heading">
           <p data-reveal>Who you will work with</p>

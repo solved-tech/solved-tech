@@ -29,6 +29,8 @@ export interface FounderProfile {
   image: string;
   imageSources: FounderImageSource[];
   linkedin: string;
+  bio: string[];
+  website?: string;
 }
 
 export interface CaseStudy {
@@ -67,18 +69,6 @@ export const contactConfig: ContactConfig = {
   placeholder: false,
 };
 
-export const aboutRemus = {
-  name: "Remus Baciu",
-  linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
-  portrait: "/team/remus_baciu-340.webp",
-  heading: "You deal directly with a senior engineer.",
-  paragraphs: [
-    "I am Remus Baciu, founder of Solved Tech, based in London. You deal directly with me, not an agency.",
-    "I am a Senior Software Engineer at Sky, and I have worked in software engineering for more than 11 years. I started as a Sky apprentice in 2015, and I have been a Senior Software Engineer since November 2023.",
-    "I was an Academy Leader at Sky, and I set up a new delivery team there.",
-    "I work in Java, Python and Go, and I also look after infrastructure and CI/CD, the systems that build and release software.",
-  ],
-} as const;
 export type SiteStatus =
   | { launched: false }
   | { launched: true; productionOrigin: string };
@@ -180,20 +170,30 @@ export const siteContent: SiteContent = {
   founders: [
     {
       name: "Razvan Cristofor",
-      role: "Co-founder — Apps & SEO Expert",
+      role: "Co-founder",
       image: "/team/razvan_cristofor-520.webp",
       imageSources: [
         { path: "/team/razvan_cristofor-520.webp", width: 520 },
         { path: "/team/razvan_cristofor-1040.webp", width: 1040 },
       ],
       linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
+      website: "https://razvancristofor.ro/",
+      bio: [
+        "He builds websites, online shops, and web, mobile, Windows and desktop apps.",
+        "He also builds automations, AI and API integrations, and works on SEO and performance.",
+      ],
     },
     {
       name: "Remus Baciu",
-      role: "Co-founder — Senior Software Engineer",
+      role: "Co-founder",
       image: "/team/remus_baciu-340.webp",
       imageSources: [],
-      linkedin: "https://www.linkedin.com/in/remus-baciu-4a11a7105/",
+      linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
+      bio: [
+        "Senior Software Engineer at Sky, with more than 11 years there.",
+        "He works in Java, Python and Go, and looks after infrastructure and CI/CD.",
+        "His focus is staying up to date with technology, building AI harnesses, and helping businesses reach their technical goals.",
+      ],
     },
   ],
   caseStudies: [],

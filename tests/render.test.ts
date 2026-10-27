@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { aboutRemus, contactConfig, privacyContent, servicePages, siteContent, vorbioProduct } from "../src/content";
+import { contactConfig, privacyContent, servicePages, siteContent, vorbioProduct } from "../src/content";
 import { escapeHtml, renderHomepage, renderPrivacyPage, renderServicePage, renderVorbioPage } from "../src/render";
 
 const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
@@ -336,19 +336,30 @@ describe("homepage renderer", () => {
     expect(html).not.toContain("contact-action__suffix");
   });
 
-  it("introduces Remus in an About section", () => {
-    const about = html.match(/<section id="about"[\s\S]*?<\/section>/)?.[0];
+  it("puts each founder's bio under their photo and drops the standalone about section", () => {
+    const team = html.match(/<section id="team"[\s\S]*?<\/section>/)?.[0];
 
-    expect(about).toBeDefined();
-    expect(about).toContain("About me");
-    expect(about).toContain(aboutRemus.heading);
-    aboutRemus.paragraphs.forEach((paragraph) => expect(about).toContain(paragraph));
-    expect(about).toContain(
-      `href="${aboutRemus.linkedin}" target="_blank" rel="noopener noreferrer"`,
-    );
-    expect(about).toContain('alt="Portrait of Remus Baciu"');
-    expect(html.indexOf('id="about"')).toBeLessThan(html.indexOf('id="team"'));
-    expect(html.indexOf('id="team"')).toBeLessThan(html.indexOf('id="contact"'));
+    expect(team).toBeDefined();
+    expect(html).not.toContain('id="about"');
+    expect(html).not.toContain("About me");
+    siteContent.founders.forEach(({ name, bio, website }) => {
+      const card = team?.match(
+        new RegExp(`<article class="founder"[\\s\\S]*?Portrait of ${name}[\\s\\S]*?</article>`),
+      )?.[0];
+
+      expect(card).toBeDefined();
+      const portraitAt = card!.indexOf("founder__portrait");
+      const bioAt = card!.indexOf("founder__bio");
+      expect(portraitAt).toBeGreaterThan(-1);
+      expect(bioAt).toBeGreaterThan(portraitAt);
+      bio.forEach((paragraph) => expect(card).toContain(paragraph));
+      if (website) {
+        expect(card).toContain(`href="${website}"`);
+      }
+    });
+    expect(team).toContain("Razvan Cristofor · Co-founder");
+    expect(team).toContain("Remus Baciu · Co-founder");
+    expect(team).not.toMatch(/founder of Solved Tech|Academy Leader|delivery team|\+40|799 242 421/);
   });
 
   it("renders two founder cards with portraits and LinkedIn links", () => {
