@@ -16,7 +16,7 @@
   --vorbio-green: #b9ef9b;
 
   --font-display: "Iowan Old Style", "Palatino Linotype", Palatino,
-    "Book Antiqua", Georgia, serif;
+    "Book Antiqua", Georgia, "Liberation Serif", "Nimbus Roman", serif;
   --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
@@ -874,6 +874,14 @@ main > section + section {
   .hero .contact-action .contact-action__icon {
     width: 0.95rem;
     height: 0.95rem;
+  }
+}
+
+/* At 64rem the process panel takes most of the row, so the action
+   labels drop the trailing "us" until the conversion column is wider. */
+@media (min-width: 64rem) and (max-width: 71.999rem) {
+  .hero .contact-action__suffix {
+    display: none;
   }
 }
 
