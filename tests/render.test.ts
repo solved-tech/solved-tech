@@ -1,12 +1,9 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { contactConfig, privacyContent, servicePages, siteContent, vorbioProduct } from "../src/content";
+import { aboutRemus, contactConfig, privacyContent, servicePages, siteContent, vorbioProduct } from "../src/content";
 import { escapeHtml, renderHomepage, renderPrivacyPage, renderServicePage, renderVorbioPage } from "../src/render";
 
 const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
-
-const escapeRegExp = (value: string): string =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 describe("homepage renderer", () => {
   const html = renderHomepage(siteContent, contactConfig);
@@ -29,8 +26,8 @@ describe("homepage renderer", () => {
     expect(html).toContain(
       '<p class="hero__trust" data-reveal>You speak with the people who do the work.</p>',
     );
-    expect(html).toContain('href="mailto:contact@solvedtech.co.uk?subject=Free%2015-minute%20call"');
-    expect(html).toContain("Book a free 15-min call");
+    expect(html).toContain('href="mailto:contact@solvedtech.co.uk?subject=Free%20quote"');
+    expect(html).toContain("Get a free quote");
     expect(html).not.toContain("Development. Bug fixes. Automation.");
     expect(html).not.toContain(
       "We build new applications, fix existing software and connect your systems.",
@@ -319,17 +316,10 @@ describe("homepage renderer", () => {
     expect(html).toContain('<section id="team" class="team"');
   });
 
-  it("renders a quote email, Call, and WhatsApp in both contact groups", () => {
-    expect(
-      html.match(new RegExp(`href="tel:${escapeRegExp(contactConfig.phone)}"`, "g")),
-    ).toHaveLength(2);
-    expect(
-      html.match(
-        new RegExp(`href="https://wa\\.me/${escapeRegExp(contactConfig.whatsapp)}"`, "g"),
-      ),
-    ).toHaveLength(2);
+  it("renders one quote email in each contact group and no phone channel", () => {
+    expect(html).not.toMatch(/tel:|wa\.me|WhatsApp us|Call us/);
     expect(html.match(/href="mailto:contact@solvedtech\.co\.uk\?subject=/g)).toHaveLength(6);
-    expect(html.match(/contact-action__icon--whatsapp/g)).toHaveLength(2);
+    expect(html).not.toContain("contact-action__icon--whatsapp");
     expect(html).not.toContain("contact-action__icon--email");
 
     const heroGroup = html.match(
@@ -341,13 +331,24 @@ describe("homepage renderer", () => {
 
     expect(heroGroup).toBeDefined();
     expect(contactGroup).toBeDefined();
-    expect(heroGroup).toContain("Book a free 15-min call");
-    expect(heroGroup).toContain("Call us");
-    expect(heroGroup).toContain("WhatsApp us");
+    expect(heroGroup).toContain("Get a free quote");
     expect(contactGroup).toContain("Get a free quote");
-    expect(contactGroup).toContain("Call us");
-    expect(contactGroup).toContain("WhatsApp us");
     expect(html).not.toContain("contact-action__suffix");
+  });
+
+  it("introduces Remus in an About section", () => {
+    const about = html.match(/<section id="about"[\s\S]*?<\/section>/)?.[0];
+
+    expect(about).toBeDefined();
+    expect(about).toContain("About me");
+    expect(about).toContain(aboutRemus.heading);
+    aboutRemus.paragraphs.forEach((paragraph) => expect(about).toContain(paragraph));
+    expect(about).toContain(
+      `href="${aboutRemus.linkedin}" target="_blank" rel="noopener noreferrer"`,
+    );
+    expect(about).toContain('alt="Portrait of Remus Baciu"');
+    expect(html.indexOf('id="about"')).toBeLessThan(html.indexOf('id="team"'));
+    expect(html.indexOf('id="team"')).toBeLessThan(html.indexOf('id="contact"'));
   });
 
   it("renders two founder cards with portraits and LinkedIn links", () => {
@@ -373,13 +374,13 @@ describe("homepage renderer", () => {
     expect(html.match(/href="#top"/g)).toHaveLength(2);
   });
 
-  it("shows the phone number and email as copyable text in the contact section", () => {
+  it("shows the email as copyable text in the contact section", () => {
     const contact = html.match(/<section class="contact"[\s\S]*?<\/section>/)?.[0];
 
     expect(contact).toBeDefined();
     expect(contact).toContain('<dl class="contact-details" data-reveal>');
-    expect(contact).toContain(`<dt>Phone</dt><dd>${contactConfig.displayPhone}</dd>`);
-    expect(contact).toContain(`<dt>Email</dt><dd>${contactConfig.email}</dd>`);
+    expect(contact).not.toContain("<dt>Phone</dt>");
+    expect(contact).toContain(`<dt>Email</dt><dd><a href="mailto:${contactConfig.email}">${contactConfig.email}</a></dd>`);
     expect(contact!.indexOf('class="contact__actions"')).toBeLessThan(
       contact!.indexOf('class="contact-details"'),
     );
@@ -418,12 +419,11 @@ describe("homepage renderer", () => {
   });
 
   it("annotates intent targets for measurement without loading any script", () => {
-    expect(html.match(/data-analytics="contact_click"/g)).toHaveLength(10);
-    expect(html.match(/data-channel="call"/g)).toHaveLength(2);
-    expect(html.match(/data-channel="whatsapp"/g)).toHaveLength(2);
+    expect(html.match(/data-analytics="contact_click"/g)).toHaveLength(6);
+    expect(html).not.toMatch(/data-channel="call"|data-channel="whatsapp"/);
     expect(html.match(/data-channel="email"/g)).toHaveLength(6);
-    expect(html.match(/data-placement="hero"/g)).toHaveLength(3);
-    expect(html.match(/data-placement="contact"/g)).toHaveLength(3);
+    expect(html.match(/data-placement="hero"/g)).toHaveLength(1);
+    expect(html.match(/data-placement="contact"/g)).toHaveLength(1);
     expect(html.match(/data-placement="package"/g)).toHaveLength(4);
     expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(6);
     siteContent.products.forEach(({ id }) =>
@@ -443,7 +443,7 @@ describe("privacy page renderer", () => {
     expect(html.match(/<h2>/g)).toHaveLength(privacyContent.sections.length + 1);
     expect(html).toContain("<h2>Contact</h2>");
     expect(html).toContain(contactConfig.email);
-    expect(html).toContain(contactConfig.displayPhone);
+    expect(html).not.toMatch(/tel:|wa\.me/);
     expect(html).not.toContain("ambient-grid");
     expect(html).not.toContain("data-reveal");
   });
@@ -462,13 +462,11 @@ describe("privacy page renderer", () => {
     expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
     expect(html).toContain('<a href="#top">Back to top</a>');
   });
-  it("links the email and phone for questions about the notice", () => {
+  it("links the email for questions about the notice", () => {
     expect(html).toContain(
       `<a href="mailto:${contactConfig.email}">${contactConfig.email}</a>`,
     );
-    expect(html).toContain(
-      `<a href="tel:${contactConfig.phone}">${contactConfig.displayPhone}</a>`,
-    );
+    expect(html).not.toMatch(/tel:|wa\.me/);
   });
 });
 
@@ -565,7 +563,7 @@ describe("service page renderer", () => {
       '<a href="/#services">Back to all services</a>',
     );
     expect(html).toContain('<h2 id="service-contact-heading">Tell us what is happening</h2>');
-    expect(html.match(/<a class="contact-action /g)).toHaveLength(3);
+    expect(html.match(/<a class="contact-action /g)).toHaveLength(1);
     expect(html).toContain('<a class="wordmark" href="/#top"');
     expect(html).not.toContain("data-reveal");
   });
@@ -716,9 +714,10 @@ describe("vorbio product page", () => {
     expect(html).not.toContain('class="site-header__vorbio"');
     expect(html).toContain('<main id="main-content" class="page vorbio">');
     expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
-    expect(html.match(/<a class="contact-action /g)).toHaveLength(3);
-    expect(html.match(/class="vorbio-button/g)).toHaveLength(2);
+    expect(html.match(/<a class="contact-action /g)).toHaveLength(1);
+    expect(html.match(/class="vorbio-button/g)).toHaveLength(1);
     expect(html).toContain("Arrange a live demo");
+    expect(html).not.toContain("Call about Vorbio");
     expect(html).not.toContain("data-reveal");
     expect(html).not.toContain("<script");
   });

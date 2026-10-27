@@ -285,7 +285,7 @@ export const measureHeroProcess = async (
 
 export const measureHeroActions = async (page: Page) => {
   const actions = page.locator(".hero__actions .contact-action");
-  await expect(actions).toHaveCount(3);
+  await expect(actions).toHaveCount(1);
 
   const rects = await actions.evaluateAll((elements) =>
     elements.map((element) => {

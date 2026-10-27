@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
+import { aboutRemus, contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
   it("leads with websites and keeps the other services secondary", () => {
@@ -63,17 +63,17 @@ describe("site content", () => {
     expect(JSON.stringify(siteContent.products)).not.toContain("Custom MCPs");
   });
 
-  it("keeps every contact channel derived from one phone number", () => {
-    expect(contactConfig.phone).toBe(contactConfig.displayPhone.replace(/\s+/g, ""));
-    expect(contactConfig.phone).toMatch(/^\+44\d{10}$/);
-    expect(contactConfig.whatsapp).toBe(contactConfig.phone.slice(1));
+  it("keeps email as the only public contact channel", () => {
+    expect(contactConfig).toEqual({
+      email: "contact@solvedtech.co.uk",
+      placeholder: false,
+    });
     expect(contactConfig.email).toMatch(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i);
   });
 
   it("refuses to launch with trial contact details", () => {
-    const trial = ["+442000000000"];
-    const isTrial =
-      trial.includes(contactConfig.phone) || trial.includes(contactConfig.email);
+    const trial = ["contact@example.com"];
+    const isTrial = trial.includes(contactConfig.email);
 
     expect(contactConfig.placeholder).toBe(isTrial);
     if (siteStatus.launched) {
@@ -109,6 +109,27 @@ describe("site content", () => {
       .join(" ");
 
     expect(productCopy).not.toMatch(/\b(?:SaaS|APIs?|agentic|MCP|SEO)\b/i);
+  });
+
+  it("describes Remus from the published LinkedIn facts only", () => {
+    const copy = [aboutRemus.heading, ...aboutRemus.paragraphs].join(" ");
+
+    expect(aboutRemus).toMatchObject({
+      name: "Remus Baciu",
+      linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
+    });
+    expect(copy).toContain("founder of Solved Tech");
+    expect(copy).toContain("based in London");
+    expect(copy).toContain("Senior Software Engineer at Sky");
+    expect(copy).toContain("more than 11 years");
+    expect(copy).toContain("Sky apprentice in 2015");
+    expect(copy).toContain("November 2023");
+    expect(copy).toContain("Java, Python and Go");
+    expect(copy).toContain("infrastructure and CI/CD");
+    expect(copy).toContain("Academy Leader at Sky");
+    expect(copy).toContain("set up a new delivery team");
+    expect(copy).toContain("not an agency");
+    expect(copy).not.toMatch(/\+44|wa\.me|tel:/);
   });
 
   it("covers the privacy topics the audit requires", () => {

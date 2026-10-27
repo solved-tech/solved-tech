@@ -780,9 +780,9 @@ main > section.hero {
 
 .hero__actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, max-content);
   gap: clamp(0.4rem, 0.3rem + 0.3vw, 0.6rem);
-  width: min(100%, 30rem);
+  width: min(100%, 20rem);
   margin-block-start: clamp(0.25rem, 1vw, 0.75rem);
 }
 
@@ -834,11 +834,6 @@ main > section.hero {
   stroke-width: 1.6;
 }
 
-.contact-action__icon--whatsapp path:last-child {
-  fill: currentColor;
-  stroke: none;
-}
-
 .hero .contact-action:hover {
   background-color: transparent;
   border-color: var(--accent);
@@ -852,8 +847,6 @@ main > section.hero {
   color: var(--accent);
 }
 
-.hero .contact-action--call,
-.hero .contact-action--whatsapp,
 .hero .contact-action--email {
   border-color: var(--line-strong);
   background-color: transparent;
@@ -866,10 +859,6 @@ main > section.hero {
   text-align: center;
 }
 
-.hero .contact-action--call:hover,
-.hero .contact-action--call:focus-visible,
-.hero .contact-action--whatsapp:hover,
-.hero .contact-action--whatsapp:focus-visible,
 .hero .contact-action--email:hover,
 .hero .contact-action--email:focus-visible {
   border-color: var(--accent);
@@ -890,6 +879,7 @@ main > section.hero {
   .hero__actions {
     justify-self: stretch;
     width: 100%;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -930,12 +920,7 @@ main > section.hero {
   }
 
   .hero__actions {
-    grid-template-columns: minmax(0, 1.35fr) repeat(2, minmax(0, 1fr));
-    width: min(100%, 42rem);
-  }
-
-  .hero__actions .contact-action--quote {
-    grid-column: auto;
+    width: min(100%, 20rem);
   }
 }
 
@@ -2010,6 +1995,69 @@ main > section.hero {
   .team__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .about {
+    grid-template-columns: minmax(0, 1.4fr) minmax(12rem, 0.6fr);
+    align-items: center;
+  }
+}
+
+.about {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.about__copy {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  max-width: 40rem;
+}
+
+.about__eyebrow {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--type-small);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.about h2 {
+  max-width: 16em;
+  font-size: var(--type-title);
+  line-height: 1.08;
+}
+
+.about__copy p {
+  color: var(--ink-muted);
+}
+
+.about__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 0.25em;
+}
+
+.about__link:hover,
+.about__link:focus-visible {
+  text-decoration: underline;
+}
+
+.about__portrait {
+  margin: 0;
+  justify-self: start;
+  width: min(100%, 18rem);
+}
+
+.about__portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
 }
 
 /* Contact rail --------------------------------------------------------- */
@@ -2023,9 +2071,9 @@ main > section.hero {
 
 .contact__actions {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, max-content);
   gap: 0.55rem;
-  max-width: 52rem;
+  max-width: 20rem;
 }
 
 .contact__actions .contact-action {
@@ -2049,19 +2097,6 @@ main > section.hero {
   border-color: var(--accent);
   background-color: transparent;
   color: var(--accent);
-}
-
-.contact__actions .contact-action--whatsapp {
-  border-color: rgb(37 211 102 / 0.62);
-  background-color: rgb(37 211 102 / 0.06);
-  color: #78dfa0;
-}
-
-.contact__actions .contact-action--whatsapp:hover,
-.contact__actions .contact-action--whatsapp:focus-visible {
-  border-color: #25d366;
-  background-color: rgb(37 211 102 / 0.1);
-  color: #25d366;
 }
 
 .contact__actions .contact-action--email {
@@ -2100,6 +2135,12 @@ main > section.hero {
   color: var(--ink);
   user-select: all;
   -webkit-user-select: all;
+}
+
+.contact-details a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 @media (min-width: 40rem) {

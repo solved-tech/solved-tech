@@ -1,4 +1,4 @@
-import { servicePages } from "./content";
+import { aboutRemus, servicePages } from "./content";
 import type {
   CaseStudy,
   ContactConfig,
@@ -28,19 +28,7 @@ export const publicAssetUrl = (path: string, baseUrl: string): string => {
   return `${base}${path.replace(/^\/+/, "")}`;
 };
 
-const whatsappIcon = `
-  <svg class="contact-action__icon contact-action__icon--whatsapp" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-    <path d="M20 11.6a8 8 0 0 1-11.8 7.1L4 20l1.3-4A8 8 0 1 1 20 11.6Z" />
-    <path d="M8.2 7.8c.3-.7.6-.7 1-.7h.3l1 2.3c.1.3.1.5-.1.8l-.8 1c.8 1.6 1.9 2.7 3.5 3.5l1-.8c.2-.2.5-.2.8-.1l2.2 1c.3.1.4.3.4.6 0 1.1-.6 2-1.6 2.4-1 .4-2.6.2-4.7-.9-1.7-.9-3.1-2.2-4.1-3.8-1.3-2-1.5-3.7-1.1-4.7.4-.7 1-1.3 2.2-.6Z" />
-  </svg>`;
-
-const emailIcon = `
-  <svg class="contact-action__icon contact-action__icon--email" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-    <rect x="3" y="5" width="18" height="14" rx="1.5" />
-    <path d="m4 7 8 6 8-6" />
-  </svg>`;
-
-const HERO_QUOTE_SUBJECT = "Free 15-minute call";
+const HERO_QUOTE_SUBJECT = "Free quote";
 const QUOTE_SUBJECT = "Website quote";
 
 const mailtoWithSubject = (email: string, subject: string): string =>
@@ -53,13 +41,11 @@ const renderContactActions = (
   const isHero = className === "hero__actions";
   const placement = isHero ? "hero" : "contact";
   const quoteSubject = isHero ? HERO_QUOTE_SUBJECT : QUOTE_SUBJECT;
-  const quoteLabel = isHero ? "Book a free 15-min call" : "Get a free quote";
+  const quoteLabel = "Get a free quote";
 
   return `
   <div class="${className}">
     <a class="contact-action contact-action--quote" href="${escapeHtml(mailtoWithSubject(config.email, quoteSubject))}" data-analytics="contact_click" data-channel="email" data-placement="${placement}">${quoteLabel}</a>
-    <a class="contact-action contact-action--call" href="tel:${escapeHtml(config.phone)}" data-analytics="contact_click" data-channel="call" data-placement="${placement}">Call us</a>
-    <a class="contact-action contact-action--whatsapp" href="https://wa.me/${escapeHtml(config.whatsapp)}" target="_blank" rel="noreferrer" data-analytics="contact_click" data-channel="whatsapp" data-placement="${placement}">${whatsappIcon}<span>WhatsApp us</span></a>
   </div>`;
 };
 
@@ -438,6 +424,25 @@ const resolveServicePage = (
   return matches[0];
 };
 
+const renderAbout = (baseUrl: string): string => {
+  const paragraphs = aboutRemus.paragraphs
+    .map((paragraph) => `<p data-reveal>${escapeHtml(paragraph)}</p>`)
+    .join("");
+
+  return `
+      <section id="about" class="about" aria-labelledby="about-heading">
+        <div class="about__copy">
+          <p class="about__eyebrow" data-reveal>About me</p>
+          <h2 id="about-heading" data-reveal>${escapeHtml(aboutRemus.heading)}</h2>
+          ${paragraphs}
+          <a class="about__link" data-reveal href="${escapeHtml(aboutRemus.linkedin)}" target="_blank" rel="noopener noreferrer">Remus Baciu on LinkedIn</a>
+        </div>
+        <figure class="about__portrait" data-reveal>
+          <img src="${escapeHtml(publicAssetUrl(aboutRemus.portrait, baseUrl))}" alt="Portrait of ${escapeHtml(aboutRemus.name)}" width="340" height="420" loading="lazy" />
+        </figure>
+      </section>`;
+};
+
 export const renderHomepage = (
   content: SiteContent,
   config: ContactConfig,
@@ -578,6 +583,7 @@ export const renderHomepage = (
         <p class="journey__note" data-reveal>For a bug, the first step is a diagnosis. We confirm the cause before we promise a fix.</p>
       </section>
       ${renderFaq(content.faq)}
+      ${renderAbout(baseUrl)}
       <section id="team" class="team" aria-labelledby="team-heading">
         <div class="team__heading">
           <p data-reveal>Who you will work with</p>
@@ -592,11 +598,10 @@ export const renderHomepage = (
         <p class="contact-caution" data-reveal>Please do not send passwords or confidential customer data in your first message.</p>
         <div data-reveal>${renderContactActions(config, "contact__actions")}</div>
         <dl class="contact-details" data-reveal>
-          <div><dt>Phone</dt><dd>${escapeHtml(config.displayPhone)}</dd></div>
-          <div><dt>Email</dt><dd>${escapeHtml(config.email)}</dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a></dd></div>
         </dl>
         <p class="contact-privacy" data-reveal><a href="${escapeHtml(publicAssetUrl("/privacy/", baseUrl))}">How we handle the details you send us</a></p>
-        ${config.placeholder ? `<p class="contact-note"><strong>Trial contact details:</strong> ${escapeHtml(config.displayPhone)} and ${escapeHtml(config.email)} are non-production placeholders and must be replaced before launch.</p>` : ""}
+        ${config.placeholder ? `<p class="contact-note"><strong>Trial contact details:</strong> ${escapeHtml(config.email)} is a non-production placeholder and must be replaced before launch.</p>` : ""}
       </section>
     </main>
     ${renderSiteFooter(baseUrl)}
@@ -627,7 +632,7 @@ export const renderPrivacyPage = (
         ${sections}
         <section>
           <h2>Contact</h2>
-          <p>Email <a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a> or call <a href="tel:${escapeHtml(config.phone)}">${escapeHtml(config.displayPhone)}</a> with any question about this notice or to exercise your rights.</p>
+          <p>Email <a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a> with any question about this notice or to exercise your rights.</p>
         </section>
       </article>
     </main>
@@ -727,7 +732,6 @@ const renderVorbioHeroActions = (
 ): string => `
             <div class="vorbio-actions">
               <a class="vorbio-button vorbio-button--primary" href="mailto:${escapeHtml(config.email)}?subject=Vorbio%20demo" data-analytics="contact_click" data-channel="email" data-placement="vorbio-hero">Arrange a live demo <span aria-hidden="true">↗</span></a>
-              <a class="vorbio-button" href="tel:${escapeHtml(config.phone)}" data-analytics="contact_click" data-channel="call" data-placement="vorbio-hero">Call about Vorbio</a>
             </div>`;
 
 export const renderVorbioPage = (
