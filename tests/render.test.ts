@@ -19,17 +19,17 @@ describe("homepage renderer", () => {
   });
 
   it("makes the hero a direct product offer", () => {
-    expect(html).toContain("Websites for small businesses.");
+    expect(html).toContain("Tech solutions for any business.");
     expect(html).toContain(
-      "Fixed price, no jargon. A clear site that tells people what you do and how to get in touch.",
+      "Fixed price, no jargon. Tell us what you need, and we quote it before we start.",
     );
     expect(html).toContain(
-      '<p class="hero__eyebrow" data-reveal>Small businesses</p>',
+      '<p class="hero__eyebrow" data-reveal>Small or large</p>',
     );
     expect(html).toContain(
-      '<p class="hero__trust" data-reveal>You speak with the people who build the site.</p>',
+      '<p class="hero__trust" data-reveal>You speak with the people who do the work.</p>',
     );
-    expect(html).toContain('href="mailto:contact@solvedtech.co.uk?subject=Free%2015-minute%20website%20call"');
+    expect(html).toContain('href="mailto:contact@solvedtech.co.uk?subject=Free%2015-minute%20call"');
     expect(html).toContain("Book a free 15-min call");
     expect(html).not.toContain("Development. Bug fixes. Automation.");
     expect(html).not.toContain(
@@ -76,8 +76,8 @@ describe("homepage renderer", () => {
       expect(html).toContain(`<strong>${stage}</strong>`),
     );
 
-    expect(html).toContain("What your business does, and how customers should reach you.");
-    expect(html).toContain("A site you can send people to.");
+    expect(html).toContain("What you need done, and what done looks like.");
+    expect(html).toContain("Work your business can use.");
     expect(html).not.toContain("hero-workflow");
     expect(html).not.toContain("hero-system");
     expect(html).not.toContain('style="');

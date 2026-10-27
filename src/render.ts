@@ -40,7 +40,7 @@ const emailIcon = `
     <path d="m4 7 8 6 8-6" />
   </svg>`;
 
-const HERO_QUOTE_SUBJECT = "Free 15-minute website call";
+const HERO_QUOTE_SUBJECT = "Free 15-minute call";
 const QUOTE_SUBJECT = "Website quote";
 
 const mailtoWithSubject = (email: string, subject: string): string =>
@@ -65,8 +65,8 @@ const renderContactActions = (
 
 const heroProcessStages = [
   { id: "understand", title: "Listen", detail: "What you need" },
-  { id: "shape", title: "Agree", detail: "Pages and a quote" },
-  { id: "build", title: "Build", detail: "The website" },
+  { id: "shape", title: "Agree", detail: "The work and a quote" },
+  { id: "build", title: "Build", detail: "The solution" },
   { id: "maintain", title: "Hand over", detail: "Ready to use" },
 ] as const;
 
@@ -75,12 +75,12 @@ const renderHeroProcess = (): string => `
         <div class="hero-process">
           <div class="hero-process__interface" aria-hidden="true">
             <div class="hero-process__topbar">
-              <span><i class="hero-process__live hero-process__animated"></i>A simple website</span>
+              <span><i class="hero-process__live hero-process__animated"></i>Your project</span>
               <span>How it happens</span>
             </div>
             <div class="hero-process__input">
               <span>What you tell us</span>
-              <strong>What your business does, and how customers should reach you.</strong>
+              <strong>What you need done, and what done looks like.</strong>
             </div>
             <div class="hero-process__pipeline">
               <span class="hero-process__rail"></span>
@@ -100,7 +100,7 @@ ${heroProcessStages
             </div>
             <div class="hero-process__output">
               <span class="hero-process__check">✓</span>
-              <span><small>What you get</small><strong>A site you can send people to.</strong></span>
+              <span><small>What you get</small><strong>Work your business can use.</strong></span>
             </div>
           </div>
           <button class="hero-process__control" type="button" aria-label="Pause diagram motion" aria-pressed="false"></button>
@@ -514,11 +514,11 @@ export const renderHomepage = (
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero__layout">
           <div class="hero__content">
-            <p class="hero__eyebrow" data-reveal>Small businesses</p>
-            <h1 id="hero-heading" data-reveal>Websites for small businesses.</h1>
-            <p class="hero__lead" data-reveal>Fixed price, no jargon. A clear site that tells people what you do and how to get in touch.</p>
+            <p class="hero__eyebrow" data-reveal>Small or large</p>
+            <h1 id="hero-heading" data-reveal>Tech solutions for any business.</h1>
+            <p class="hero__lead" data-reveal>Fixed price, no jargon. Tell us what you need, and we quote it before we start.</p>
             ${renderContactActions(config, "hero__actions")}
-            <p class="hero__trust" data-reveal>You speak with the people who build the site.</p>
+            <p class="hero__trust" data-reveal>You speak with the people who do the work.</p>
           </div>
           ${renderHeroProcess()}
         </div>

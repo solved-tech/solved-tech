@@ -824,7 +824,7 @@ test("wide desktop hero lead stays constrained", async ({ page }, testInfo) => {
   const collector = await preparePage(page);
   const heroLead = page.locator(".hero__lead");
 
-  await expect(heroLead).toHaveText(/how to get in touch\.$/);
+  await expect(heroLead).toHaveText(/before we start\.$/);
   await assertProseWidth(heroLead);
 
   assertNoRuntimeErrors(collector);
