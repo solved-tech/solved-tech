@@ -50,8 +50,16 @@ export interface FaqEntry {
   answer: string;
 }
 
+export interface WebsitePackage {
+  id: "starter" | "business" | "shop" | "care";
+  name: string;
+  summary: string;
+  includes: string[];
+}
+
 export interface SiteContent {
   products: ProductOffer[];
+  packages: WebsitePackage[];
   founders: FounderProfile[];
   caseStudies: CaseStudy[];
   faq: FaqEntry[];
@@ -77,16 +85,10 @@ export const siteStatus: SiteStatus = {
 export const siteContent: SiteContent = {
   products: [
     {
-      id: "ai",
-      question: "Want to use AI?",
-      title: "AI Assistants and Integrations",
-      outcome: "Take routine work, calls and messages off your team.",
-    },
-    {
-      id: "app",
-      question: "Need an app?",
-      title: "Web, mobile & desktop apps",
-      outcome: "A useful product built around the job it needs to do.",
+      id: "website",
+      question: "Need a simple website?",
+      title: "Websites for small businesses",
+      outcome: "A clear site for a London business, quoted before we start.",
     },
     {
       id: "customers",
@@ -95,10 +97,16 @@ export const siteContent: SiteContent = {
       outcome: "Help the right people find you when they are ready to act.",
     },
     {
-      id: "website",
-      question: "Need a website?",
-      title: "Websites & online shops",
-      outcome: "A clear, fast place built to turn attention into action.",
+      id: "app",
+      question: "Need an app?",
+      title: "Web, mobile & desktop apps",
+      outcome: "A useful product built around the job it needs to do.",
+    },
+    {
+      id: "ai",
+      question: "Want to use AI?",
+      title: "AI Assistants and Integrations",
+      outcome: "Take routine work, calls and messages off your team.",
     },
     {
       id: "fix",
@@ -113,6 +121,53 @@ export const siteContent: SiteContent = {
       title: "Automation & integrations",
       outcome:
         "Reduce repetitive work and connect the tools your team relies on.",
+    },
+  ],
+  packages: [
+    {
+      id: "starter",
+      name: "Starter",
+      summary:
+        "A simple website for a London business that needs one clear place to explain what it does.",
+      includes: [
+        "The pages we agree in the quote",
+        "What you do, how to get in touch, and where you are",
+        "Plain-English wording, written with you",
+        "A fixed quote before any build starts",
+      ],
+    },
+    {
+      id: "business",
+      name: "Business",
+      summary: "A fuller website when you have several services to explain.",
+      includes: [
+        "Separate pages for the services you want to show",
+        "A clear way for customers to enquire",
+        "Room for the photos and words you already have",
+        "A handover so you can see what you have received",
+      ],
+    },
+    {
+      id: "shop",
+      name: "Shop",
+      summary: "An online shop for a small range of products.",
+      includes: [
+        "Product pages for the range we agree",
+        "A way for customers to buy or enquire",
+        "The pages and buying journey named in the quote",
+        "A handover once the shop is ready to use",
+      ],
+    },
+    {
+      id: "care",
+      name: "Monthly care",
+      summary: "Ongoing help after the site is live, agreed as a monthly plan.",
+      includes: [
+        "Small text and picture updates you ask for",
+        "Someone to email when the site needs attention",
+        "Hosting and the domain arranged as the quote describes",
+        "Anything larger quoted separately",
+      ],
     },
   ],
   founders: [
@@ -137,24 +192,29 @@ export const siteContent: SiteContent = {
   caseStudies: [],
   faq: [
     {
-      question: "Can you work on software built by another team?",
+      question: "How long does a website take?",
       answer:
-        "Yes. We take on existing software, including code another team wrote or maintained. We start with a diagnosis: we look at the code and the problem with you, tell you what we find, and only then agree what we will change and how it will be tested.",
+        "It depends on the site and on what you already have. We agree a timescale in the quote, after we know whether you want a simple site, a fuller site or a shop. We do not promise a date before that.",
     },
     {
-      question: "What do you need to investigate an issue?",
+      question: "Can I edit the site myself?",
       answer:
-        "A description of what you see and what you expected, the steps that trigger it if you can reproduce it, when it started, and how it affects your business. Logs, screenshots or error messages help if you have them. We will tell you if we need access or anything else.",
+        "You are not locked out of the site. For day-to-day wording and picture changes, the monthly care plan is the straightforward option. If you want to edit pages yourself, we say in the quote whether that is practical for the site we build.",
     },
     {
-      question: "How do you estimate the work and agree the scope?",
+      question: "What do I need to provide?",
       answer:
-        "We assess the problem first, then give you a short written assessment, a proposed scope and an estimate before work starts. We agree the scope together. On larger work we review progress in short stages, so you can see what is working and adjust before the next stage.",
+        "What your business does, who it is for, how customers should get in touch, and any logo, photos or words you already have. If you do not have those yet, say so. We will work with what you do have.",
     },
     {
-      question: "What happens after delivery?",
+      question: "What about hosting and the domain?",
       answer:
-        "We hand over with documentation and agree what happens next. If you want us to keep working on the system, we will scope and estimate that separately.",
+        "A website needs a domain name and somewhere to be hosted. We can arrange both with you, or use a domain and host you already have. The quote says which, and what the monthly care plan includes.",
+    },
+    {
+      question: "What happens after the site is live?",
+      answer:
+        "We hand the site over and agree what happens next. The monthly care plan covers ongoing help such as small updates. Work outside that plan is quoted separately.",
     },
   ],
 };
@@ -341,46 +401,24 @@ export const vorbioProduct: VorbioProduct = {
 
 export const servicePages: ServicePage[] = [
   {
-    slug: "bug-fixing",
-    productId: "fix",
-    title: "Bug fixing for business software",
+    slug: "websites-online-shops",
+    productId: "website",
+    title: "Simple websites for London small businesses",
     description:
-      "Help with bugs, failed integrations and problems in existing applications, with a diagnosis before any fix is promised.",
+      "Clear websites and small online shops for London businesses, with a fixed quote and plain-English handover.",
     intro:
-      "Get help with bugs, failed integrations and problems in existing applications. We start by understanding the issue and reproducing it where possible, then agree the scope of the fix and how it will be tested.",
+      "We build straightforward websites for London small businesses. You tell us what you do and how customers should reach you. We agree the pages and a fixed quote before we build.",
     requests: [
-      "An error your customers or staff keep running into",
-      "An integration that stopped working after a change",
-      "Software built by a team that is no longer available",
-      "Slow or unreliable behaviour nobody has pinned down",
+      "You need a simple site that explains the business",
+      "The current site no longer matches what you do",
+      "Customers should be able to enquire without hunting for a number",
+      "You want a small online shop for a limited range",
     ],
     deliverables: [
-      "A written diagnosis with the confirmed cause",
-      "An agreed scope and estimate before the fix starts",
-      "The fix, tested against the steps that triggered the problem",
-      "A short handover note describing what changed",
-    ],
-    approved: true,
-  },
-  {
-    slug: "ai-assistants",
-    productId: "ai",
-    title: "AI assistants for everyday business work",
-    description:
-      "Practical AI assistants that handle routine messages, calls and admin while working with the tools your team already uses.",
-    intro:
-      "We design AI assistants around a clear business task, such as answering common questions, handling enquiries or updating a system. Your team stays in control, and we test the assistant against real examples before it goes live.",
-    requests: [
-      "Customer questions are taking too much of your team's time",
-      "Calls or messages need a consistent first response",
-      "Staff repeatedly copy information into a CRM, calendar or back-office tool",
-      "You want to test where AI could save time without replacing a whole system",
-    ],
-    deliverables: [
-      "A mapped task, boundaries and hand-off points for people",
-      "A working assistant connected only to the agreed tools and information",
-      "Tests using representative requests, including unclear and unsafe cases",
-      "Documentation, team guidance and a monitored handover",
+      "The pages and wording we agreed in the quote",
+      "A site people can use on a phone or a computer",
+      "A clear way for customers to get in touch or buy",
+      "A handover that says what you have and how to reach us afterwards",
     ],
     approved: true,
   },
@@ -407,28 +445,6 @@ export const servicePages: ServicePage[] = [
     approved: true,
   },
   {
-    slug: "websites-online-shops",
-    productId: "website",
-    title: "Websites and online shops built to convert",
-    description:
-      "Fast, clear business websites and online shops designed around the actions customers need to take.",
-    intro:
-      "We design and build clear, fast websites around the decision your customer needs to make. That may be a business website, a focused landing page or an online shop, with content and journeys shaped around useful action.",
-    requests: [
-      "An outdated site no longer reflects the business",
-      "A service needs a clearer route from visit to enquiry",
-      "Products need a straightforward online shop",
-      "A campaign needs a focused landing page that can be measured",
-    ],
-    deliverables: [
-      "A clear page and content structure agreed before build",
-      "Responsive, accessible pages using the approved design",
-      "The agreed enquiry, checkout or campaign journey",
-      "Launch checks, measurement setup and handover notes",
-    ],
-    approved: true,
-  },
-  {
     slug: "software-development",
     productId: "app",
     title: "Software development for your business",
@@ -447,6 +463,50 @@ export const servicePages: ServicePage[] = [
       "Working software you can review early and often",
       "Testing against the agreed scope",
       "Documentation and a handover you can rely on",
+    ],
+    approved: true,
+  },
+  {
+    slug: "ai-assistants",
+    productId: "ai",
+    title: "AI assistants for everyday business work",
+    description:
+      "Practical AI assistants that handle routine messages, calls and admin while working with the tools your team already uses.",
+    intro:
+      "We design AI assistants around a clear business task, such as answering common questions, handling enquiries or updating a system. Your team stays in control, and we test the assistant against real examples before it goes live.",
+    requests: [
+      "Customer questions are taking too much of your team's time",
+      "Calls or messages need a consistent first response",
+      "Staff repeatedly copy information into a CRM, calendar or back-office tool",
+      "You want to test where AI could save time without replacing a whole system",
+    ],
+    deliverables: [
+      "A mapped task, boundaries and hand-off points for people",
+      "A working assistant connected only to the agreed tools and information",
+      "Tests using representative requests, including unclear and unsafe cases",
+      "Documentation, team guidance and a monitored handover",
+    ],
+    approved: true,
+  },
+  {
+    slug: "bug-fixing",
+    productId: "fix",
+    title: "Bug fixing for business software",
+    description:
+      "Help with bugs, failed integrations and problems in existing applications, with a diagnosis before any fix is promised.",
+    intro:
+      "Get help with bugs, failed integrations and problems in existing applications. We start by understanding the issue and reproducing it where possible, then agree the scope of the fix and how it will be tested.",
+    requests: [
+      "An error your customers or staff keep running into",
+      "An integration that stopped working after a change",
+      "Software built by a team that is no longer available",
+      "Slow or unreliable behaviour nobody has pinned down",
+    ],
+    deliverables: [
+      "A written diagnosis with the confirmed cause",
+      "An agreed scope and estimate before the fix starts",
+      "The fix, tested against the steps that triggered the problem",
+      "A short handover note describing what changed",
     ],
     approved: true,
   },

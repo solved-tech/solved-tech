@@ -749,7 +749,7 @@ describe("stylesheet contracts", () => {
     expect(buttonRule).toContain("min-width: 0");
 
     expect(styles).toMatch(
-      /\.hero__actions \.contact-action--call \{\s*grid-column: 1 \/ -1;/,
+      /\.hero__actions \.contact-action--quote \{\s*grid-column: 1 \/ -1;/,
     );
     expect(styles).toMatch(
       /@media\s*\(min-width:\s*64rem\)[\s\S]*?\.hero__actions\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1\.35fr\) repeat\(2, minmax\(0, 1fr\)\)/,

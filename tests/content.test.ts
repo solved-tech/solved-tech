@@ -2,20 +2,20 @@ import { describe, expect, it } from "vitest";
 import { contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
-  it("uses the approved commercial service order with AI assistants first", () => {
+  it("leads with websites and keeps the other services secondary", () => {
     expect(siteContent.products.map(({ id }) => id)).toEqual([
-      "ai",
-      "app",
-      "customers",
       "website",
+      "customers",
+      "app",
+      "ai",
       "fix",
       "other",
     ]);
     expect(siteContent.products.map(({ question }) => question)).toEqual([
-      "Want to use AI?",
-      "Need an app?",
+      "Need a simple website?",
       "Need more customers?",
-      "Need a website?",
+      "Need an app?",
+      "Want to use AI?",
       "Something broken?",
       "Need to automate a process?",
     ]);
@@ -31,10 +31,10 @@ describe("site content", () => {
 
   it("uses the approved short homepage titles in order", () => {
     expect(siteContent.products.map(({ title }) => title)).toEqual([
-      "AI Assistants and Integrations",
-      "Web, mobile & desktop apps",
+      "Websites for small businesses",
       "SEO & paid campaigns",
-      "Websites & online shops",
+      "Web, mobile & desktop apps",
+      "AI Assistants and Integrations",
       "Bug fixes & improvements",
       "Automation & integrations",
     ]);
@@ -144,11 +144,15 @@ describe("site content", () => {
 
   it("asks the four audit questions and refuses to launch with unfilled answers", () => {
     expect(siteContent.faq.map(({ question }) => question)).toEqual([
-      "Can you work on software built by another team?",
-      "What do you need to investigate an issue?",
-      "How do you estimate the work and agree the scope?",
-      "What happens after delivery?",
+      "How long does a website take?",
+      "Can I edit the site myself?",
+      "What do I need to provide?",
+      "What about hosting and the domain?",
+      "What happens after the site is live?",
     ]);
+    siteContent.faq.forEach(({ answer }) => {
+      expect(answer).not.toMatch(/\b\d+\b/);
+    });
 
     const unfilled = siteContent.faq.filter(({ answer }) => /\[\[[A-Z_]+\]\]/.test(answer));
 
@@ -164,11 +168,11 @@ describe("site content", () => {
 
   it("defines one distinct service page per product in card order", () => {
     expect(servicePages.map(({ slug, productId }) => [slug, productId])).toEqual([
-      ["bug-fixing", "fix"],
-      ["ai-assistants", "ai"],
-      ["seo-paid-campaigns", "customers"],
       ["websites-online-shops", "website"],
+      ["seo-paid-campaigns", "customers"],
       ["software-development", "app"],
+      ["ai-assistants", "ai"],
+      ["bug-fixing", "fix"],
       ["automation", "other"],
     ]);
     expect(new Set(servicePages.map(({ title }) => title)).size).toBe(6);
@@ -208,9 +212,9 @@ describe("site content", () => {
         "Technical SEO and paid search campaigns focused on qualified visits, measurable actions and useful reporting.",
     });
     expect(pageFor("websites-online-shops")).toMatchObject({
-      title: "Websites and online shops built to convert",
+      title: "Simple websites for London small businesses",
       description:
-        "Fast, clear business websites and online shops designed around the actions customers need to take.",
+        "Clear websites and small online shops for London businesses, with a fixed quote and plain-English handover.",
     });
   });
 

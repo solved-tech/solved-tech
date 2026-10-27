@@ -689,6 +689,12 @@ test("hero actions reach the first fold without the process on portrait phones",
   const process = page.locator(".hero-process");
   await expect(process).toBeHidden();
 
+  const heading = page.locator("#hero-heading");
+  const headingBox = await heading.boundingBox();
+  expect(headingBox).not.toBeNull();
+  expect(Math.abs(headingBox!.x + headingBox!.width / 2 - viewport.width / 2)).toBeLessThanOrEqual(8);
+  await expect(heading).toHaveCSS("text-align", "center");
+
   assertNoRuntimeErrors(collector);
 });
 
@@ -824,7 +830,7 @@ test("wide desktop hero lead stays constrained", async ({ page }, testInfo) => {
   const collector = await preparePage(page);
   const heroLead = page.locator(".hero__lead");
 
-  await expect(heroLead).toHaveText(/deliver a working solution\.$/);
+  await expect(heroLead).toHaveText(/before we start\.$/);
   await assertProseWidth(heroLead);
 
   assertNoRuntimeErrors(collector);
@@ -841,16 +847,27 @@ test("wide desktop hero fills the width without wasting vertical space", async (
   const collector = await preparePage(page);
   const viewport = viewportSize(page);
   const heroBox = await page.locator(".hero").boundingBox();
+  const layoutBox = await page.locator(".hero__layout").boundingBox();
   const processBox = await page.locator(".hero-process").boundingBox();
-  const servicesBox = await page.locator("#services").boundingBox();
+  const packagesBox = await page.locator("#packages").boundingBox();
+  const headingBox = await page.locator("#hero-heading").boundingBox();
 
   expect(heroBox).not.toBeNull();
+  expect(layoutBox).not.toBeNull();
   expect(processBox).not.toBeNull();
-  expect(servicesBox).not.toBeNull();
+  expect(packagesBox).not.toBeNull();
+  expect(headingBox).not.toBeNull();
   expect(heroBox!.width / viewport.width).toBeGreaterThanOrEqual(0.68);
   expect(heroBox!.height).toBeLessThanOrEqual(58 * 16 + 1);
   expect(processBox!.width).toBeGreaterThanOrEqual(34 * 16 - 1);
-  expect(servicesBox!.y).toBeLessThan(viewport.height);
+  const heroMid = heroBox!.y + heroBox!.height / 2;
+  const layoutMid = layoutBox!.y + layoutBox!.height / 2;
+  const layoutCenter = layoutBox!.x + layoutBox!.width / 2;
+  expect(Math.abs(layoutMid - heroMid)).toBeLessThanOrEqual(48);
+  expect(Math.abs(layoutCenter - viewport.width / 2)).toBeLessThanOrEqual(8);
+  expect(headingBox!.y).toBeGreaterThan(heroBox!.y);
+  expect(headingBox!.y).toBeLessThan(heroMid);
+  expect(packagesBox!.y).toBeLessThan(viewport.height);
 
   assertNoRuntimeErrors(collector);
 });
@@ -976,11 +993,7 @@ test("privacy notice page shares the header and footer", async ({ page }) => {
 
   await expect(page.locator("h1")).toHaveText("Privacy notice");
   await expect(page.locator("#primary-navigation a")).toHaveCount(5);
-  await expect(
-    page.locator(
-      '#primary-navigation a.site-header__vorbio[href="/services/vorbio/"]',
-    ),
-  ).toHaveCSS("color", "rgb(185, 239, 155)");
+  await expect(page.locator('a[href="/services/vorbio/"]')).toHaveCount(0);
   await expect(
     page.locator('#primary-navigation a[href="/#services"]'),
   ).toHaveCount(1);
@@ -1018,15 +1031,12 @@ test("the Vorbio product page renders its hero, capabilities and contact rail", 
   assertNoRuntimeErrors(collector);
 });
 
-test("the homepage Vorbio promo links to the product page", async ({ page }) => {
+test("the homepage does not link to the Vorbio page", async ({ page }) => {
   const collector = await preparePage(page);
-  const promo = page.locator('a[data-placement="vorbio-promo"]');
 
-  await promo.scrollIntoViewIfNeeded();
-  await expect(promo).toBeVisible();
-  await promo.click();
-  await expect(page).toHaveURL(/\/services\/vorbio\/$/);
-  await expect(page.locator("#vorbio-heading")).toBeVisible();
+  await expect(page.locator('a[href="/services/vorbio/"]')).toHaveCount(0);
+  await expect(page.locator('a[data-placement="vorbio-promo"]')).toHaveCount(0);
+  await expect(page.locator("#packages")).toBeVisible();
   assertNoRuntimeErrors(collector);
 });
 
@@ -1037,7 +1047,7 @@ test("every service page renders its own hero, lists and navigation", async ({
     { slug: "bug-fixing", productId: "fix", title: "Bug fixing for business software" },
     { slug: "ai-assistants", productId: "ai", title: "AI assistants for everyday business work" },
     { slug: "seo-paid-campaigns", productId: "customers", title: "SEO and paid campaigns that drive enquiries" },
-    { slug: "websites-online-shops", productId: "website", title: "Websites and online shops built to convert" },
+    { slug: "websites-online-shops", productId: "website", title: "Simple websites for London small businesses" },
     { slug: "software-development", productId: "app", title: "Software development for your business" },
     { slug: "automation", productId: "other", title: "Business automation and integrations" },
   ];

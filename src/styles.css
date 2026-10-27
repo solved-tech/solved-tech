@@ -394,9 +394,12 @@ main > section + section {
   overflow: clip;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: auto;
-  padding-block: clamp(3rem, 8vw, 5rem);
+}
+
+main > section.hero {
+  padding-block: clamp(1.25rem, 2.5vw, 1.75rem) clamp(2.5rem, 6vw, 4rem);
 }
 
 .hero__layout {
@@ -414,19 +417,20 @@ main > section + section {
   min-width: 0;
 }
 
-.hero::before {
+.hero__content::before {
   content: "";
   width: 4.5rem;
   height: 2px;
-  margin-block-end: clamp(1rem, 3vw, 1.75rem);
+  margin-block-end: clamp(0.25rem, 1vw, 0.5rem);
   background-color: var(--accent);
 }
 
 .hero h1 {
-  max-width: 12ch;
+  max-width: 16em;
   font-size: var(--type-display);
   line-height: 0.98;
   letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .hero p {
@@ -782,7 +786,7 @@ main > section + section {
   margin-block-start: clamp(0.25rem, 1vw, 0.75rem);
 }
 
-.hero__actions .contact-action--call {
+.hero__actions .contact-action--quote {
   grid-column: 1 / -1;
 }
 
@@ -803,7 +807,7 @@ main > section + section {
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
   cursor: pointer;
   transition:
     background-color 240ms var(--ease),
@@ -841,13 +845,14 @@ main > section + section {
   color: var(--accent);
 }
 
-.hero .contact-action--call:hover,
-.hero .contact-action--call:focus-visible {
+.hero .contact-action--quote:hover,
+.hero .contact-action--quote:focus-visible {
   background-color: transparent;
   border-color: var(--accent);
   color: var(--accent);
 }
 
+.hero .contact-action--call,
 .hero .contact-action--whatsapp,
 .hero .contact-action--email {
   border-color: var(--line-strong);
@@ -855,6 +860,14 @@ main > section + section {
   color: var(--ink);
 }
 
+.hero .contact-action--quote {
+  white-space: normal;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.hero .contact-action--call:hover,
+.hero .contact-action--call:focus-visible,
 .hero .contact-action--whatsapp:hover,
 .hero .contact-action--whatsapp:focus-visible,
 .hero .contact-action--email:hover,
@@ -868,6 +881,16 @@ main > section + section {
   .hero__visual {
     display: none;
   }
+
+  .hero__content {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .hero__actions {
+    justify-self: stretch;
+    width: 100%;
+  }
 }
 
 @media (max-width: 39.999rem) {
@@ -877,23 +900,22 @@ main > section + section {
   }
 }
 
-/* At 64rem the process panel takes most of the row, so the action
-   labels drop the trailing "us" until the conversion column is wider. */
-@media (min-width: 64rem) and (max-width: 71.999rem) {
-  .hero .contact-action__suffix {
-    display: none;
-  }
-}
-
 @media (min-width: 64rem) {
   /* The desktop hero must fold inside 768px-tall viewports, so the
      conversion column is compacted and the panel track is capped. */
   .hero {
+    justify-content: center;
+    align-items: center;
     min-height: calc(100svh - var(--header-height));
-    padding-block: clamp(2.75rem, 4.5vw, 3.5rem);
+  }
+
+  main > section.hero {
+    padding-block: clamp(1.5rem, 3vw, 2.5rem);
   }
 
   .hero__layout {
+    width: min(100%, 72rem);
+    margin-inline: auto;
     grid-template-columns: minmax(0, 1fr) minmax(26rem, 29rem);
     align-items: center;
     gap: clamp(2.5rem, 4vw, 4.5rem);
@@ -912,7 +934,7 @@ main > section + section {
     width: min(100%, 42rem);
   }
 
-  .hero__actions .contact-action--call {
+  .hero__actions .contact-action--quote {
     grid-column: auto;
   }
 }
@@ -1196,6 +1218,98 @@ main > section + section {
 @media (min-width: 72rem) {
   .product-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.packages__header {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 42rem;
+  margin-block-end: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.packages__header h2 {
+  font-family: var(--font-display);
+  font-size: var(--type-title);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.packages__header p {
+  color: var(--ink-muted);
+}
+
+.package-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+}
+
+.package-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background-color: var(--surface-deep);
+}
+
+.package-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--type-heading);
+  line-height: 1.15;
+}
+
+.package-card p,
+.package-card li {
+  color: var(--ink-muted);
+  font-size: var(--type-small);
+  line-height: 1.45;
+}
+
+.package-card ul {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding-inline-start: 1.1rem;
+}
+
+.package-card a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-block-start: auto;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.package-card a:hover,
+.package-card a:focus-visible {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.package-card a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+@media (min-width: 48rem) {
+  .package-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 72rem) {
+  .package-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

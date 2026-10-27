@@ -10,9 +10,9 @@ export interface PageMeta {
 
 export const homePage: PageMeta = {
   path: "/",
-  title: "Solved Tech — Software development, bug fixes and automation",
+  title: "Solved Tech — Websites for London small businesses",
   description:
-    "Solved Tech builds new applications, fixes problems in existing software and connects the systems UK businesses rely on.",
+    "Solved Tech builds simple websites for London small businesses. Fixed price, no jargon, and a quote before we start.",
   indexable: true,
 };
 
@@ -28,7 +28,7 @@ export const vorbioPage: PageMeta = {
   title: "Vorbio — AI voice and WhatsApp assistant — Solved Tech",
   description:
     "Vorbio is a Solved Tech AI assistant that answers WhatsApp voice calls and chats for your business, captures what the customer needs and hands the rest to your team.",
-  indexable: true,
+  indexable: false,
 };
 
 const absoluteUrl = (origin: string, path: string, baseUrl: string): string =>
@@ -70,17 +70,25 @@ export const renderOrganizationJsonLd = (
 
   const data = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "ProfessionalService",
     name: "Solved Tech",
     url: absoluteUrl(status.productionOrigin, "/", baseUrl),
     logo: absoluteUrl(status.productionOrigin, "/brand/solved-tech-logo-dark.svg", baseUrl),
     email: config.email,
-    telephone: config.phone,
     founder: content.founders.map(({ name, linkedin }) => ({
       "@type": "Person",
       name,
       sameAs: linkedin,
     })),
+    areaServed: {
+      "@type": "City",
+      name: "London",
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "London",
+      addressCountry: "GB",
+    },
   };
 
   return `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, "\\u003c")}</script>`;
