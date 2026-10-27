@@ -41,7 +41,7 @@ export const viewportSize = (page: Page): Viewport => page.viewportSize()!;
 export const gotoHome = async (page: Page) => {
   await page.goto(".");
   await page.waitForLoadState("domcontentloaded");
-  expect(new URL(page.url()).pathname).toBe("/solved-tech/");
+  expect(new URL(page.url()).pathname).toBe("/");
 };
 
 export const assertCompleteBounds = async (

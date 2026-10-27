@@ -1,4 +1,4 @@
-import { statSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { siteContent } from "../src/content";
 
@@ -14,6 +14,14 @@ describe("portrait assets", () => {  it("ships every portrait as WebP under the 
         expect(size, path).toBeLessThan(PORTRAIT_BUDGET_BYTES);
       });
     });
+  });
+});
+
+describe("custom domain", () => {
+  it("publishes solvedtech.co.uk for GitHub Pages", () => {
+    const cname = readFileSync(new URL("../public/CNAME", import.meta.url), "utf8").trim();
+
+    expect(cname).toBe("solvedtech.co.uk");
   });
 });
 

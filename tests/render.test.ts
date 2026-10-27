@@ -277,23 +277,23 @@ describe("homepage renderer", () => {
     );
   });
 
-  it("prefixes public assets for a GitHub Pages project site", () => {
+  it("serves public assets from the domain root", () => {
     const pagesHtml = renderHomepage(
       siteContent,
       contactConfig,
-      "/solved-tech/",
+      "/",
     );
 
     expect(pagesHtml).toContain(
-      'src="/solved-tech/brand/solved-tech-logo-dark.svg"',
+      'src="/brand/solved-tech-logo-dark.svg"',
     );
     expect(pagesHtml).toContain(
-      'src="/solved-tech/team/razvan_cristofor-520.webp"',
+      'src="/team/razvan_cristofor-520.webp"',
     );
     expect(pagesHtml).toContain(
-      'src="/solved-tech/team/remus_baciu-340.webp"',
+      'src="/team/remus_baciu-340.webp"',
     );
-    expect(pagesHtml).toContain('srcset="/solved-tech/team/razvan_cristofor-520.webp 520w, /solved-tech/team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
+    expect(pagesHtml).toContain('srcset="/team/razvan_cristofor-520.webp 520w, /team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
   });
 
   it("omits the background grid so it does not compete with the hero process", () => {
@@ -466,7 +466,7 @@ describe("homepage renderer", () => {
 });
 
 describe("privacy page renderer", () => {
-  const html = renderPrivacyPage(privacyContent, contactConfig, "/solved-tech/");
+  const html = renderPrivacyPage(privacyContent, contactConfig, "/");
 
   it("renders the notice with every section and a contact section from config", () => {
     expect(html.match(/<h1/g)).toHaveLength(1);
@@ -480,18 +480,18 @@ describe("privacy page renderer", () => {
   });
 
   it("points the shared header at the homepage sections", () => {
-    expect(html).toContain('<a class="wordmark" href="/solved-tech/#top"');
-    expect(html).toContain('<a href="/solved-tech/#services">Services</a>');
+    expect(html).toContain('<a class="wordmark" href="/#top"');
+    expect(html).toContain('<a href="/#services">Services</a>');
     expect(html).toContain(
-      '<a class="site-header__vorbio" href="/solved-tech/services/vorbio/">Vorbio</a>',
+      '<a class="site-header__vorbio" href="/services/vorbio/">Vorbio</a>',
     );
-    expect(html).toContain('<a href="/solved-tech/#contact">Contact</a>');
+    expect(html).toContain('<a href="/#contact">Contact</a>');
     expect(html).toContain('<nav id="primary-navigation"');
     expect(html).toContain('<main id="main-content" class="page">');
   });
 
   it("links back to the notice and to the top from the footer", () => {
-    expect(html).toContain('<a href="/solved-tech/privacy/">Privacy notice</a>');
+    expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
     expect(html).toContain('<a href="#top">Back to top</a>');
   });
   it("links the email and phone for questions about the notice", () => {
@@ -572,7 +572,7 @@ describe("proof and FAQ sections", () => {
 
 describe("service page renderer", () => {
   const [bugFixing] = servicePages;
-  const html = renderServicePage(bugFixing, siteContent, contactConfig, "/solved-tech/");
+  const html = renderServicePage(bugFixing, siteContent, contactConfig, "/");
 
   it("renders the detail hero, body, navigation and contact block", () => {
     expect(html.match(/<h1/g)).toHaveLength(1);
@@ -592,18 +592,18 @@ describe("service page renderer", () => {
     expect(html).toContain(
       '<nav class="service-detail__navigation" aria-label="Service navigation">',
     );
-    expect(html).toContain('<a href="/solved-tech/#approach">See how we work</a>');
+    expect(html).toContain('<a href="/#approach">See how we work</a>');
     expect(html).toContain(
-      '<a href="/solved-tech/#services">Back to all services</a>',
+      '<a href="/#services">Back to all services</a>',
     );
     expect(html).toContain('<h2 id="service-contact-heading">Tell us what is happening</h2>');
     expect(html.match(/<a class="contact-action /g)).toHaveLength(3);
-    expect(html).toContain('<a class="wordmark" href="/solved-tech/#top"');
+    expect(html).toContain('<a class="wordmark" href="/#top"');
     expect(html).not.toContain("data-reveal");
   });
 
   it("links every product card to its service page", () => {
-    const home = renderHomepage(siteContent, contactConfig, "/solved-tech/");
+    const home = renderHomepage(siteContent, contactConfig, "/");
 
     servicePages.forEach(({ slug, productId }) => {
       const card = home.match(
@@ -613,7 +613,7 @@ describe("service page renderer", () => {
       )?.[0];
 
       expect(card).toBeDefined();
-      expect(card).toContain(`href="/solved-tech/services/${slug}/"`);
+      expect(card).toContain(`href="/services/${slug}/"`);
       expect(card).toContain("View service");
     });
   });
@@ -699,7 +699,7 @@ describe("service detail artwork", () => {
 });
 
 describe("vorbio product page", () => {
-  const html = renderVorbioPage(vorbioProduct, contactConfig, "/solved-tech/");
+  const html = renderVorbioPage(vorbioProduct, contactConfig, "/");
 
   it("renders one heading and the complete product story", () => {
     expect(html.match(/<h1/g)).toHaveLength(1);
@@ -742,13 +742,13 @@ describe("vorbio product page", () => {
   });
 
   it("reuses the shared shell with focused demo actions and contact rail", () => {
-    expect(html).toContain('<a class="wordmark" href="/solved-tech/#top"');
-    expect(html).toContain('<a href="/solved-tech/#services">Services</a>');
+    expect(html).toContain('<a class="wordmark" href="/#top"');
+    expect(html).toContain('<a href="/#services">Services</a>');
     expect(html).toContain(
-      '<a class="site-header__vorbio" href="/solved-tech/services/vorbio/">Vorbio</a>',
+      '<a class="site-header__vorbio" href="/services/vorbio/">Vorbio</a>',
     );
     expect(html).toContain('<main id="main-content" class="page vorbio">');
-    expect(html).toContain('<a href="/solved-tech/privacy/">Privacy notice</a>');
+    expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
     expect(html.match(/<a class="contact-action /g)).toHaveLength(3);
     expect(html.match(/class="vorbio-button/g)).toHaveLength(2);
     expect(html).toContain("Arrange a live demo");
