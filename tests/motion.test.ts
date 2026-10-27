@@ -743,7 +743,7 @@ describe("stylesheet contracts", () => {
 
     expect(actionsRule).toContain("display: grid");
     expect(actionsRule).toContain(
-      "grid-template-columns: repeat(2, minmax(0, 1fr))",
+      "grid-template-columns: minmax(0, max-content)",
     );
     expect(buttonRule).toMatch(/min-height:\s*48px/);
     expect(buttonRule).toContain("min-width: 0");
@@ -751,16 +751,14 @@ describe("stylesheet contracts", () => {
     expect(styles).toMatch(
       /\.hero__actions \.contact-action--quote \{\s*grid-column: 1 \/ -1;/,
     );
-    expect(styles).toMatch(
-      /@media\s*\(min-width:\s*64rem\)[\s\S]*?\.hero__actions\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1\.35fr\) repeat\(2, minmax\(0, 1fr\)\)/,
+    expect(styles).not.toMatch(
+      /grid-template-columns:\s*minmax\(0, 1\.35fr\) repeat\(2, minmax\(0, 1fr\)\)/,
     );
   });
 
-  it("leaves the shared contact rail WhatsApp styling untouched", () => {
-    expect(styles).toMatch(/\.contact__actions \.contact-action--whatsapp/);
-    expect(styles).not.toMatch(
-      /\.hero \.contact-action--whatsapp \{[^}]*(?:#25d366|37 211 102)/,
-    );
+  it("does not style a WhatsApp contact action", () => {
+    expect(styles).not.toMatch(/\.contact-action--whatsapp/);
+    expect(styles).not.toMatch(/#25d366|37 211 102/);
   });
 
   it("defaults to immediate scrolling and restores smooth scrolling for fine pointers", () => {

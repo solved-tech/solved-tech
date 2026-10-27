@@ -97,7 +97,7 @@ test("interactive targets have complete bounds and minimum touch heights", async
   await assertCompleteBounds(page, wordmark, viewport);
 
   const contactActions = page.locator(".contact-action");
-  await expect(contactActions).toHaveCount(6);
+  await expect(contactActions).toHaveCount(2);
   for (const action of await contactActions.all()) {
     await action.scrollIntoViewIfNeeded();
     await assertMinHeight(action, 48);
@@ -215,9 +215,8 @@ test("hero contact actions stay in complete bounds without clipped labels", asyn
   assertNoRuntimeErrors(collector);
 });
 
-test("contact actions stack below 40rem", async ({ page }) => {
+test("contact actions stay in one column", async ({ page }) => {
   const collector = await preparePage(page);
-  const viewport = viewportSize(page);
   const contactActions = page.locator(".contact__actions");
 
   await contactActions.scrollIntoViewIfNeeded();
@@ -225,11 +224,7 @@ test("contact actions stack below 40rem", async ({ page }) => {
     (element) => getComputedStyle(element).gridTemplateColumns,
   );
 
-  if (viewport.width < 640) {
-    expect(gridColumnCount(contactColumns)).toBe(1);
-  } else {
-    expect(gridColumnCount(contactColumns)).toBe(3);
-  }
+  expect(gridColumnCount(contactColumns)).toBe(1);
 
   assertNoRuntimeErrors(collector);
 });
@@ -520,27 +515,15 @@ test("hero process labels stay legible when rendered", async ({ page }) => {
   assertNoRuntimeErrors(collector);
 });
 
-test("hero actions stack one then two on mobile and one row on desktop", async ({
+test("the hero has one quote action", async ({
   page,
 }) => {
   const collector = await preparePage(page);
-  const viewport = viewportSize(page);
   const { rects, rows } = await measureHeroActions(page);
 
-  expect(rects).toHaveLength(3);
-
-  if (viewport.width >= 1024) {
-    expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveLength(3);
-    expect(rects[0].width).toBeGreaterThan(rects[1].width);
-    expect(rects[0].y).toBeCloseTo(rects[1].y, 0);
-    expect(rects[1].width).toBeCloseTo(rects[2].width, 0);
-  } else {
-    expect(rows).toHaveLength(2);
-    expect(rows[0]).toHaveLength(1);
-    expect(rows[1]).toHaveLength(2);
-    expect(rects[0].width).toBeGreaterThan(rects[1].width);
-  }
+  expect(rects).toHaveLength(1);
+  expect(rows).toHaveLength(1);
+  expect(rows[0]).toHaveLength(1);
 
   assertNoRuntimeErrors(collector);
 });
@@ -1025,8 +1008,9 @@ test("the Vorbio product page renders its hero, capabilities and contact rail", 
   await expect(page.locator(".vorbio-control__list li")).toHaveCount(
     vorbioProduct.controls.length,
   );
-  await expect(page.locator(".vorbio-button")).toHaveCount(2);
-  await expect(page.locator(".contact-action")).toHaveCount(3);
+  await expect(page.locator(".vorbio-button")).toHaveCount(1);
+  await expect(page.locator(".contact-action")).toHaveCount(1);
+  await expect(page.locator('a[href^="tel:"], a[href*="wa.me"]')).toHaveCount(0);
   await assertNoDocumentOverflow(page);
   assertNoRuntimeErrors(collector);
 });
@@ -1072,7 +1056,7 @@ test("every service page renders its own hero, lists and navigation", async ({
     await expect(
       page.locator('.service-detail__navigation a[href="/#services"]'),
     ).toHaveCount(1);
-    await expect(page.locator(".contact-action")).toHaveCount(3);
+    await expect(page.locator(".contact-action")).toHaveCount(1);
     await expect(
       page.locator('#primary-navigation a[href="/#services"]'),
     ).toHaveCount(1);

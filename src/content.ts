@@ -1,7 +1,4 @@
 export interface ContactConfig {
-  displayPhone: string;
-  phone: string;
-  whatsapp: string;
   email: string;
   placeholder: boolean;
 }
@@ -66,12 +63,22 @@ export interface SiteContent {
 }
 
 export const contactConfig: ContactConfig = {
-  displayPhone: "+44 7903 833061",
-  phone: "+447903833061",
-  whatsapp: "447903833061",
   email: "contact@solvedtech.co.uk",
   placeholder: false,
 };
+
+export const aboutRemus = {
+  name: "Remus Baciu",
+  linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
+  portrait: "/team/remus_baciu-340.webp",
+  heading: "You deal directly with a senior engineer.",
+  paragraphs: [
+    "I am Remus Baciu, founder of Solved Tech, based in London. You deal directly with me, not an agency.",
+    "I am a Senior Software Engineer at Sky, and I have worked in software engineering for more than 11 years. I started as a Sky apprentice in 2015, and I have been a Senior Software Engineer since November 2023.",
+    "I was an Academy Leader at Sky, and I set up a new delivery team there.",
+    "I work in Java, Python and Go, and I also look after infrastructure and CI/CD, the systems that build and release software.",
+  ],
+} as const;
 export type SiteStatus =
   | { launched: false }
   | { launched: true; productionOrigin: string };
@@ -243,7 +250,7 @@ export const privacyContent: PrivacyContent = {
     {
       heading: "What we collect and why",
       paragraphs: [
-        "When you call us, message us on WhatsApp or email us, we receive the contact details you use and the content of your message. We use this information to answer your enquiry, to assess the work you ask about and to prepare a proposal.",
+        "When you email us, we receive the contact details you use and the content of your message. We use this information to answer your enquiry, to assess the work you ask about and to prepare a proposal.",
         "This website does not use cookies, analytics scripts or contact forms.",
       ],
     },
@@ -256,7 +263,7 @@ export const privacyContent: PrivacyContent = {
     {
       heading: "Who receives your data",
       paragraphs: [
-        "Calls and WhatsApp messages are carried by EE. Email is processed by our email hosting provider. We do not sell or share your details for marketing.",
+        "Email is processed by our email hosting provider. We do not sell or share your details for marketing.",
       ],
     },
     {
