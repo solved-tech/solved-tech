@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { aboutRemus, contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
+import { contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
   it("leads with websites and keeps the other services secondary", () => {
@@ -92,13 +92,25 @@ describe("site content", () => {
           { path: "/team/razvan_cristofor-1040.webp", width: 1040 },
         ],
         linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
+        website: "https://razvancristofor.ro/",
+        bio: [
+          "Razvan Cristofor builds custom software. He turns complicated ideas and processes into software that is easy to use, and you work directly with him.",
+          "He builds websites, online shops, and web, mobile, Windows and desktop apps. He also builds automations, AI and API integrations, and he works on SEO and performance.",
+          "One piece of work connected orders, deliveries, negotiated prices, documents and team activity, with a screen for each role, from client and agent to manager, driver and administrator. He also built a custom studio website, with artist portfolios, a gallery, editorial pages and booking, kept fast and usable on a phone.",
+        ],
       },
       {
         name: "Remus Baciu",
         role: "Co-founder — Senior Software Engineer",
         image: "/team/remus_baciu-340.webp",
         imageSources: [],
-        linkedin: "https://www.linkedin.com/in/remus-baciu-4a11a7105/",
+        linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
+        bio: [
+          "Remus Baciu is a founder of Solved Tech, based in London. You deal directly with him, a senior engineer, not an agency.",
+          "He is a Senior Software Engineer at Sky and has worked in software engineering for more than 11 years. He started as a Sky apprentice in 2015 and has been a Senior Software Engineer since November 2023.",
+          "He works in Java, Python and Go, and he looks after infrastructure and CI/CD, the systems that build and release software.",
+          "His focus has been staying up to date with technology, building AI harnesses, and helping businesses achieve their technical goals.",
+        ],
       },
     ]);
   });
@@ -111,25 +123,33 @@ describe("site content", () => {
     expect(productCopy).not.toMatch(/\b(?:SaaS|APIs?|agentic|MCP|SEO)\b/i);
   });
 
-  it("describes Remus from the published LinkedIn facts only", () => {
-    const copy = [aboutRemus.heading, ...aboutRemus.paragraphs].join(" ");
+  it("keeps the founder bios to the stated facts", () => {
+    const remus = siteContent.founders.find(({ name }) => name === "Remus Baciu");
+    const razvan = siteContent.founders.find(({ name }) => name === "Razvan Cristofor");
+    const remusCopy = remus?.bio.join(" ") ?? "";
+    const razvanCopy = razvan?.bio.join(" ") ?? "";
 
-    expect(aboutRemus).toMatchObject({
-      name: "Remus Baciu",
-      linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
-    });
-    expect(copy).toContain("founder of Solved Tech");
-    expect(copy).toContain("based in London");
-    expect(copy).toContain("Senior Software Engineer at Sky");
-    expect(copy).toContain("more than 11 years");
-    expect(copy).toContain("Sky apprentice in 2015");
-    expect(copy).toContain("November 2023");
-    expect(copy).toContain("Java, Python and Go");
-    expect(copy).toContain("infrastructure and CI/CD");
-    expect(copy).toContain("Academy Leader at Sky");
-    expect(copy).toContain("set up a new delivery team");
-    expect(copy).toContain("not an agency");
-    expect(copy).not.toMatch(/\+44|wa\.me|tel:/);
+    expect(remus?.linkedin).toBe("https://linkedin.com/in/remus-baciu-4a11a7105");
+    expect(remusCopy).toContain("founder of Solved Tech");
+    expect(remusCopy).toContain("based in London");
+    expect(remusCopy).toContain("Senior Software Engineer at Sky");
+    expect(remusCopy).toContain("more than 11 years");
+    expect(remusCopy).toContain("Sky apprentice in 2015");
+    expect(remusCopy).toContain("November 2023");
+    expect(remusCopy).toContain("Java, Python and Go");
+    expect(remusCopy).toContain("infrastructure and CI/CD");
+    expect(remusCopy).toContain("staying up to date with technology");
+    expect(remusCopy).toContain("AI harnesses");
+    expect(remusCopy).toContain("technical goals");
+    expect(remusCopy).toContain("not an agency");
+    expect(remusCopy).not.toMatch(/Academy Leader|delivery team/);
+
+    expect(razvan?.website).toBe("https://razvancristofor.ro/");
+    expect(razvanCopy).toContain("custom software");
+    expect(razvanCopy).toContain("online shops");
+    expect(razvanCopy).toContain("API integrations");
+    expect(razvanCopy).not.toMatch(/\+40|799 242 421|years/);
+    expect(`${remusCopy} ${razvanCopy}`).not.toMatch(/\+44|wa\.me|tel:/);
   });
 
   it("covers the privacy topics the audit requires", () => {
