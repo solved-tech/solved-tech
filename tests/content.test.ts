@@ -85,7 +85,7 @@ describe("site content", () => {
     expect(siteContent.founders).toEqual([
       {
         name: "Razvan Cristofor",
-        role: "Co-founder — Apps & SEO Expert",
+        role: "Co-founder",
         image: "/team/razvan_cristofor-520.webp",
         imageSources: [
           { path: "/team/razvan_cristofor-520.webp", width: 520 },
@@ -94,22 +94,20 @@ describe("site content", () => {
         linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
         website: "https://razvancristofor.ro/",
         bio: [
-          "Razvan Cristofor builds custom software. He turns complicated ideas and processes into software that is easy to use, and you work directly with him.",
-          "He builds websites, online shops, and web, mobile, Windows and desktop apps. He also builds automations, AI and API integrations, and he works on SEO and performance.",
-          "One piece of work connected orders, deliveries, negotiated prices, documents and team activity, with a screen for each role, from client and agent to manager, driver and administrator. He also built a custom studio website, with artist portfolios, a gallery, editorial pages and booking, kept fast and usable on a phone.",
+          "He builds websites, online shops, and web, mobile, Windows and desktop apps.",
+          "He also builds automations, AI and API integrations, and works on SEO and performance.",
         ],
       },
       {
         name: "Remus Baciu",
-        role: "Co-founder — Senior Software Engineer",
+        role: "Co-founder",
         image: "/team/remus_baciu-340.webp",
         imageSources: [],
         linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
         bio: [
-          "Remus Baciu is a founder of Solved Tech, based in London. You deal directly with him, a senior engineer, not an agency.",
-          "He is a Senior Software Engineer at Sky and has worked in software engineering for more than 11 years. He started as a Sky apprentice in 2015 and has been a Senior Software Engineer since November 2023.",
-          "He works in Java, Python and Go, and he looks after infrastructure and CI/CD, the systems that build and release software.",
-          "His focus has been staying up to date with technology, building AI harnesses, and helping businesses achieve their technical goals.",
+          "Senior Software Engineer at Sky, with more than 11 years there.",
+          "He works in Java, Python and Go, and looks after infrastructure and CI/CD.",
+          "His focus is staying up to date with technology, building AI harnesses, and helping businesses reach their technical goals.",
         ],
       },
     ]);
@@ -129,27 +127,23 @@ describe("site content", () => {
     const remusCopy = remus?.bio.join(" ") ?? "";
     const razvanCopy = razvan?.bio.join(" ") ?? "";
 
+    expect(remus?.role).toBe("Co-founder");
+    expect(razvan?.role).toBe("Co-founder");
     expect(remus?.linkedin).toBe("https://linkedin.com/in/remus-baciu-4a11a7105");
-    expect(remusCopy).toContain("founder of Solved Tech");
-    expect(remusCopy).toContain("based in London");
     expect(remusCopy).toContain("Senior Software Engineer at Sky");
     expect(remusCopy).toContain("more than 11 years");
-    expect(remusCopy).toContain("Sky apprentice in 2015");
-    expect(remusCopy).toContain("November 2023");
     expect(remusCopy).toContain("Java, Python and Go");
     expect(remusCopy).toContain("infrastructure and CI/CD");
-    expect(remusCopy).toContain("staying up to date with technology");
     expect(remusCopy).toContain("AI harnesses");
     expect(remusCopy).toContain("technical goals");
-    expect(remusCopy).toContain("not an agency");
-    expect(remusCopy).not.toMatch(/Academy Leader|delivery team/);
+    expect(remusCopy).not.toMatch(/founder of Solved Tech|Academy Leader|delivery team|apprentice/);
 
     expect(razvan?.website).toBe("https://razvancristofor.ro/");
-    expect(razvanCopy).toContain("custom software");
-    expect(razvanCopy).toContain("online shops");
+    expect(razvanCopy).toContain("websites, online shops");
     expect(razvanCopy).toContain("API integrations");
-    expect(razvanCopy).not.toMatch(/\+40|799 242 421|years/);
-    expect(`${remusCopy} ${razvanCopy}`).not.toMatch(/\+44|wa\.me|tel:/);
+    expect(razvanCopy).toContain("SEO and performance");
+    expect(razvanCopy).not.toMatch(/\+40|799 242 421|years|studio/);
+    expect(`${remusCopy} ${razvanCopy}`).not.toMatch(/founder of Solved Tech|\+44|wa\.me|tel:/);
   });
 
   it("covers the privacy topics the audit requires", () => {

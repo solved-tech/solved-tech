@@ -94,7 +94,11 @@ describe("head metadata", () => {
         addressCountry: "GB",
       },
     });
-    expect(script).not.toMatch(/aggregateRating|review|award|telephone|streetAddress/);
+    expect(data.founder.map((person: { name: string }) => person.name)).toEqual([
+      "Razvan Cristofor",
+      "Remus Baciu",
+    ]);
+    expect(script).not.toMatch(/aggregateRating|review|award|telephone|streetAddress|founder of Solved Tech/);
   });
 
   it("escapes closing tags inside JSON-LD", () => {

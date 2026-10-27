@@ -357,7 +357,9 @@ describe("homepage renderer", () => {
         expect(card).toContain(`href="${website}"`);
       }
     });
-    expect(team).not.toMatch(/Academy Leader|delivery team|\+40|799 242 421/);
+    expect(team).toContain("Razvan Cristofor · Co-founder");
+    expect(team).toContain("Remus Baciu · Co-founder");
+    expect(team).not.toMatch(/founder of Solved Tech|Academy Leader|delivery team|\+40|799 242 421/);
   });
 
   it("renders two founder cards with portraits and LinkedIn links", () => {
