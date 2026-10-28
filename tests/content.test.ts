@@ -31,11 +31,11 @@ describe("site content", () => {
 
   it("uses the approved short homepage titles in order", () => {
     expect(siteContent.products.map(({ title }) => title)).toEqual([
-      "SEO & paid campaigns",
-      "Web, mobile & desktop apps",
+      "SEO & Paid Campaigns",
+      "Web, Mobile & Desktop Apps",
       "AI Assistants and Integrations",
-      "Bug fixes & improvements",
-      "Automation & integrations",
+      "Bug Fixes & Improvements",
+      "Automation & Integrations",
     ]);
   });
 
@@ -47,7 +47,7 @@ describe("site content", () => {
     expect(fix).toEqual({
       id: "fix",
       question: "Something broken?",
-      title: "Bug fixes & improvements",
+      title: "Bug Fixes & Improvements",
       outcome:
         "We investigate the problem, reproduce it where possible, agree the fix and test it.",
     });
@@ -55,7 +55,7 @@ describe("site content", () => {
       "Take routine work, calls and messages off your team.",
     );
     expect(other).toMatchObject({
-      title: "Automation & integrations",
+      title: "Automation & Integrations",
       outcome:
         "Reduce repetitive work and connect the tools your team relies on.",
     });
@@ -99,8 +99,11 @@ describe("site content", () => {
       {
         name: "Remus Baciu",
         role: "Co-founder",
-        image: "/team/remus_baciu-340.webp",
-        imageSources: [],
+        image: "/team/remus_baciu-520.webp",
+        imageSources: [
+          { path: "/team/remus_baciu-520.webp", width: 520 },
+          { path: "/team/remus_baciu-1040.webp", width: 1040 },
+        ],
         linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
         bio: [
           "With more than 11 years at Sky, I am a Senior Software Engineer.",

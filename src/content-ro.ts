@@ -115,8 +115,11 @@ export const siteContentRo: SiteContent = {
     {
       name: "Remus Baciu",
       role: "Cofondator",
-      image: "/team/remus_baciu-340.webp",
-      imageSources: [],
+      image: "/team/remus_baciu-520.webp",
+      imageSources: [
+        { path: "/team/remus_baciu-520.webp", width: 520 },
+        { path: "/team/remus_baciu-1040.webp", width: 1040 },
+      ],
       linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
       bio: [
         "Cu peste 11 ani la Sky, sunt Senior Software Engineer.",
