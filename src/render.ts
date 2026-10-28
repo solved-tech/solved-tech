@@ -151,14 +151,6 @@ const renderProductGlyph = (id: ProductId): string => {
           <path class="product-glyph__line" d="M37 37l11 11" />
           <circle class="product-glyph__accent" cx="27" cy="27" r="3" />
         </svg>`;
-    case "website":
-      return `${open}
-          <rect class="product-glyph__line" x="8" y="12" width="48" height="40" rx="3" />
-          <path class="product-glyph__muted" d="M8 22h48M14 17h1M19 17h1M24 17h1" />
-          <path class="product-glyph__line" d="M16 30h16M16 37h10" />
-          <rect class="product-glyph__muted" x="38" y="30" width="12" height="12" rx="2" />
-          <circle class="product-glyph__accent" cx="44" cy="36" r="2.5" />
-        </svg>`;
     case "app":
       return `${open}
           <rect class="product-glyph__line" x="6" y="14" width="34" height="24" rx="2" />
@@ -209,31 +201,6 @@ const renderServiceArt = (id: ProductId): string => {
             <path class="art-check-small" d="m417 226 5 5 10-11" />
           </g>
           <path class="art-data-route" d="M322 90H362M322 214H362" />
-        </svg>`;
-    case "website":
-      return `
-        <svg class="service-art service-art--website" data-service-art="website" aria-hidden="true" viewBox="0 0 520 300">
-          <rect class="art-stroke art-browser" x="38" y="28" width="444" height="244" rx="4" />
-          <path class="art-stroke art-browser-bar" d="M38 62H482M58 45H66M74 45H82M90 45H98" />
-          <g class="art-detail art-detail--one">
-            <text class="art-label art-label--strong" x="62" y="88">Home</text>
-            <text class="art-label" x="108" y="88">Shop</text>
-            <text class="art-label" x="150" y="88">Contact</text>
-            <path class="art-icon" d="M441 76h13l-2 11h-9l-3-15h-5M444 92h1M451 92h1" />
-          </g>
-          <g class="art-detail art-detail--two">
-            <rect class="art-panel" x="62" y="106" width="396" height="70" rx="2" />
-            <path class="art-ui-line" d="M82 126h132M82 140h96M82 151h70" />
-            <rect class="art-accent" x="82" y="158" width="66" height="10" rx="1" />
-            <path class="art-icon art-icon--soft" d="M345 122h92v38h-92zM357 150l20-17 14 11 15-14 20 20" />
-          </g>
-          <g class="art-detail art-detail--three">
-            <rect class="art-panel" x="62" y="192" width="188" height="60" rx="2" />
-            <rect class="art-panel" x="270" y="192" width="188" height="60" rx="2" />
-            <rect class="art-ui-fill" x="74" y="204" width="48" height="36" rx="1" />
-            <rect class="art-ui-fill" x="282" y="204" width="48" height="36" rx="1" />
-            <path class="art-ui-line" d="M134 210h92M134 222h68M134 236h42M342 210h92M342 222h68M342 236h42" />
-          </g>
         </svg>`;
     case "app":
       return `

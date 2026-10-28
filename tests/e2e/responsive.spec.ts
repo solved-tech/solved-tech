@@ -105,7 +105,7 @@ test("interactive targets have complete bounds and minimum touch heights", async
   }
 
   const cardLinks = page.locator(".product-card__link");
-  await expect(cardLinks).toHaveCount(6);
+  await expect(cardLinks).toHaveCount(5);
   for (const link of await cardLinks.all()) {
     await link.scrollIntoViewIfNeeded();
     await assertMinHeight(link, 44);
@@ -278,8 +278,8 @@ test("services catalogue fits the 390px height budget", async ({ page }) => {
   expect(gridBox).not.toBeNull();
   expect(gridBox!.height).toBeLessThanOrEqual(1500);
 
-  await expect(page.locator(".product-card")).toHaveCount(6);
-  await expect(page.locator(".product-card .product-glyph")).toHaveCount(6);
+  await expect(page.locator(".product-card")).toHaveCount(5);
+  await expect(page.locator(".product-card .product-glyph")).toHaveCount(5);
 
   for (const glyph of await page.locator(".product-card .product-glyph").all()) {
     await glyph.scrollIntoViewIfNeeded();
@@ -299,9 +299,9 @@ test("multi-column cards share equal heights and aligned CTA rails", async ({
 
   const metrics = await measureCardGrid(page);
 
-  expect(metrics.cards).toHaveLength(6);
-  expect(metrics.links).toHaveLength(6);
-  expect(metrics.ctas).toHaveLength(6);
+  expect(metrics.cards).toHaveLength(5);
+  expect(metrics.links).toHaveLength(5);
+  expect(metrics.ctas).toHaveLength(5);
 
   expect(rectSpread(metrics.links, "height")).toBeLessThanOrEqual(1);
   expect(rectSpread(metrics.cards, "height")).toBeLessThanOrEqual(1);
@@ -431,7 +431,7 @@ test("product card text stays visible before any reveal", async ({ page }) => {
   const collector = await preparePage(page);
   const cards = page.locator(".product-card");
 
-  await expect(cards).toHaveCount(6);
+  await expect(cards).toHaveCount(5);
   await page.evaluate(() => window.scrollTo(0, 0));
 
   for (const card of await cards.all()) {
@@ -452,7 +452,7 @@ test("product card titles stay on a single line inside the card", async ({
   const collector = await preparePage(page);
   const titles = page.locator(".product-card__title");
 
-  await expect(titles).toHaveCount(6);
+  await expect(titles).toHaveCount(5);
 
   for (const title of await titles.all()) {
     await title.scrollIntoViewIfNeeded();
@@ -871,7 +871,7 @@ test("reduced motion renders completed static states", async ({ page }, testInfo
   const journeySignals = page.locator(".journey__signal svg");
   const visibleRevealTargets = page.locator("[data-reveal]:visible");
 
-  await expect(productCards).toHaveCount(6);
+  await expect(productCards).toHaveCount(5);
   await expect(journeySignals).toHaveCount(4);
   await expect(page.locator(".journey__moment")).toHaveCount(4);
 
@@ -1031,7 +1031,6 @@ test("every service page renders its own hero, lists and navigation", async ({
     { slug: "bug-fixing", productId: "fix", title: "Bug fixing for business software" },
     { slug: "ai-assistants", productId: "ai", title: "AI assistants for everyday business work" },
     { slug: "seo-paid-campaigns", productId: "customers", title: "SEO and paid campaigns that drive enquiries" },
-    { slug: "websites-online-shops", productId: "website", title: "Simple websites for small businesses" },
     { slug: "software-development", productId: "app", title: "Software development for your business" },
     { slug: "automation", productId: "other", title: "Business automation and integrations" },
   ];

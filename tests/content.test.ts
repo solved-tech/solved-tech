@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { contactConfig, privacyContent, servicePages, siteContent, siteStatus } from "../src/content";
 
 describe("site content", () => {
-  it("leads with websites and keeps the other services secondary", () => {
+  it("keeps websites in the package section and lists the other services separately", () => {
+    expect(siteContent.packages.map(({ id }) => id)).toEqual(["starter", "business", "shop", "care"]);
     expect(siteContent.products.map(({ id }) => id)).toEqual([
-      "website",
       "customers",
       "app",
       "ai",
@@ -12,13 +12,13 @@ describe("site content", () => {
       "other",
     ]);
     expect(siteContent.products.map(({ question }) => question)).toEqual([
-      "Need a simple website?",
       "Need more customers?",
       "Need an app?",
       "Want to use AI?",
       "Something broken?",
       "Need to automate a process?",
     ]);
+    expect(servicePages.map(({ slug }) => slug)).not.toContain("websites-online-shops");
   });
 
   it("gives every product one outcome sentence and no tags", () => {
@@ -31,7 +31,6 @@ describe("site content", () => {
 
   it("uses the approved short homepage titles in order", () => {
     expect(siteContent.products.map(({ title }) => title)).toEqual([
-      "Websites for small businesses",
       "SEO & paid campaigns",
       "Web, mobile & desktop apps",
       "AI Assistants and Integrations",
@@ -201,16 +200,15 @@ describe("site content", () => {
 
   it("defines one distinct service page per product in card order", () => {
     expect(servicePages.map(({ slug, productId }) => [slug, productId])).toEqual([
-      ["websites-online-shops", "website"],
       ["seo-paid-campaigns", "customers"],
       ["software-development", "app"],
       ["ai-assistants", "ai"],
       ["bug-fixing", "fix"],
       ["automation", "other"],
     ]);
-    expect(new Set(servicePages.map(({ title }) => title)).size).toBe(6);
-    expect(new Set(servicePages.map(({ intro }) => intro)).size).toBe(6);
-    expect(new Set(servicePages.map(({ description }) => description)).size).toBe(6);
+    expect(new Set(servicePages.map(({ title }) => title)).size).toBe(5);
+    expect(new Set(servicePages.map(({ intro }) => intro)).size).toBe(5);
+    expect(new Set(servicePages.map(({ description }) => description)).size).toBe(5);
     servicePages.forEach((page) => {
       expect(page.requests.length).toBeGreaterThanOrEqual(3);
       expect(page.deliverables.length).toBeGreaterThanOrEqual(3);
@@ -221,7 +219,7 @@ describe("site content", () => {
     });
   });
 
-  it("ships the approved AI, campaign and website copy", () => {
+  it("ships the approved AI and campaign copy", () => {
     const pageFor = (slug: string) => {
       const page = servicePages.find((candidate) => candidate.slug === slug);
       expect(page).toBeDefined();
@@ -243,11 +241,6 @@ describe("site content", () => {
       title: "SEO and paid campaigns that drive enquiries",
       description:
         "Technical SEO and paid search campaigns focused on qualified visits, measurable actions and useful reporting.",
-    });
-    expect(pageFor("websites-online-shops")).toMatchObject({
-      title: "Simple websites for small businesses",
-      description:
-        "Clear websites and small online shops, with a fixed quote and plain-English handover.",
     });
   });
 

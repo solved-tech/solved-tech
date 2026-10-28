@@ -63,7 +63,7 @@ describe("head metadata", () => {
       expect(sitemap).toContain(`<loc>https://solvedtech.co.uk/services/${slug}/</loc>`);
     });
     expect(sitemap).not.toContain("https://solvedtech.co.uk/privacy/");
-    expect(sitemap.match(/<loc>/g)).toHaveLength(7);
+    expect(sitemap.match(/<loc>/g)).toHaveLength(6);
   });
 
   it("keeps non-indexable pages out of the index after launch", () => {
@@ -229,11 +229,11 @@ describe("service page metadata", () => {
     expect(renderSitemap(live, [homePage, vorbioPage], "/")).not.toContain("/services/vorbio/");
   });
 
-  it("maps six unique service pages that are indexable once approved", () => {
+  it("maps five unique service pages that are indexable once approved", () => {
     const metas = servicePages.map(servicePageMeta);
 
-    expect(metas).toHaveLength(6);
-    expect(new Set(metas.map(({ path }) => path)).size).toBe(6);
+    expect(metas).toHaveLength(5);
+    expect(new Set(metas.map(({ path }) => path)).size).toBe(5);
     metas.forEach((meta, index) => {
       expect(meta.path).toBe(`/services/${servicePages[index].slug}/`);
       expect(meta.title).toBe(`${servicePages[index].title} — Solved Tech`);
@@ -242,7 +242,7 @@ describe("service page metadata", () => {
     });
   });
 
-  it("lists the homepage and all six service pages but not privacy in the sitemap", () => {
+  it("lists the homepage and the other service pages but not privacy or the website redirect", () => {
     const pages = [homePage, privacyPage, ...servicePages.map(servicePageMeta)];
     const sitemap = renderSitemap(live, pages, "/");
 
@@ -253,7 +253,7 @@ describe("service page metadata", () => {
       ),
     );
     expect(sitemap).not.toContain("/privacy/");
-    expect(sitemap.match(/<loc>/g)).toHaveLength(7);
+    expect(sitemap.match(/<loc>/g)).toHaveLength(6);
   });
 });
 

@@ -20,12 +20,6 @@ export const romanianMeta = {
 export const siteContentRo: SiteContent = {
   products: [
     {
-      id: "website",
-      question: "Vă trebuie un site simplu?",
-      title: "Site-uri pentru afaceri mici",
-      outcome: "Un site clar pentru afacerea dumneavoastră, cu ofertă înainte să începem.",
-    },
-    {
       id: "customers",
       question: "Vă trebuie mai mulți clienți?",
       title: "SEO și campanii plătite",
@@ -302,28 +296,6 @@ export const vorbioProductRo: VorbioProduct = {
 };
 
 export const servicePagesRo: ServicePage[] = [
-  {
-    slug: "websites-online-shops",
-    productId: "website",
-    title: "Site-uri simple pentru afaceri mici",
-    description:
-      "Site-uri clare și magazine online mici, cu o ofertă fermă și o predare pe înțelesul tuturor.",
-    intro:
-      "Construim site-uri simple pentru afaceri mici. Ne spuneți ce faceți și cum ar trebui să vă găsească clienții. Stabilim paginile și o ofertă fermă înainte să construim.",
-    requests: [
-      "Vă trebuie un site simplu, care explică afacerea",
-      "Site-ul actual nu mai corespunde cu ceea ce faceți",
-      "Clienții ar trebui să poată întreba fără să caute un număr de telefon",
-      "Vreți un magazin online mic, pentru o gamă limitată",
-    ],
-    deliverables: [
-      "Paginile și textele stabilite în ofertă",
-      "Un site care poate fi folosit pe telefon sau pe calculator",
-      "O cale clară prin care clienții vă contactează sau cumpără",
-      "O predare care spune ce ați primit și cum ne găsiți după aceea",
-    ],
-    approved: true,
-  },
   {
     slug: "seo-paid-campaigns",
     productId: "customers",
