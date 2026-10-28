@@ -104,6 +104,10 @@ describe("homepage renderer", () => {
     expect(html).not.toContain("/services/vorbio/");
     expect(html).toContain('href="#approach">How we work</a>');
     expect(html).toContain('href="#contact">Get a quote</a>');
+    expect(html).toContain('class="lang-switch"');
+    expect(html).toContain('aria-label="Language, English"');
+    expect(html).toContain('href="/" lang="en-GB" hreflang="en-GB" data-locale-choice="en" role="option" aria-selected="true" aria-current="page">EN</a>');
+    expect(html).toContain('href="/ro/" lang="ro" hreflang="ro" data-locale-choice="ro" role="option" aria-selected="false">RO</a>');
     expect(html).toContain('<a href="/privacy/">Privacy notice</a>');
     expect(html).not.toContain(">Products<");
   });

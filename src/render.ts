@@ -347,10 +347,39 @@ const renderServiceArt = (id: ProductId): string => {
   }
 };
 
+const renderLanguageSwitcher = (locale: Locale, pagePath: string, baseUrl: string): string => {
+  const copy = uiCopy(locale);
+  const currentName = locale === "en" ? copy.languageEnglish : copy.languageRomanian;
+  const options = (["en", "ro"] as const)
+    .map((code) => {
+      const href = publicAssetUrl(localizePath(pagePath, code), baseUrl);
+      const current = code === locale;
+      const label = code === "en" ? "EN" : "RO";
+      const lang = code === "en" ? "en-GB" : "ro";
+      const selected = current ? "true" : "false";
+      const currentPage = current ? ' aria-current="page"' : "";
+
+      return `<a href="${escapeHtml(href)}" lang="${lang}" hreflang="${lang}" data-locale-choice="${code}" role="option" aria-selected="${selected}"${currentPage}>${label}</a>`;
+    })
+    .join("");
+
+  return `
+        <div class="lang-switch">
+          <button type="button" class="lang-switch__button" aria-haspopup="listbox" aria-expanded="false" aria-controls="language-menu" aria-label="${escapeHtml(copy.languageCurrent(currentName))}">
+            <span aria-hidden="true">${locale === "en" ? "EN" : "RO"}</span>
+            <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg>
+          </button>
+          <div id="language-menu" class="lang-switch__menu" role="listbox" aria-label="${escapeHtml(copy.languageLabel)}" hidden>
+            ${options}
+          </div>
+        </div>`;
+};
+
 export const renderSiteHeader = (
   baseUrl: string,
   homeHref: string,
   locale: Locale = "en",
+  pagePath = "/",
 ): string => {
   const copy = uiCopy(locale);
 
@@ -361,6 +390,7 @@ export const renderSiteHeader = (
         <img src="${escapeHtml(publicAssetUrl("/brand/solved-tech-logo-dark.svg", baseUrl))}" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
       </a>
       <div class="site-header__end">
+        ${renderLanguageSwitcher(locale, pagePath, baseUrl)}
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="${escapeHtml(copy.openMenu)}" data-label-open="${escapeHtml(copy.openMenu)}" data-label-close="${escapeHtml(copy.closeMenu)}">
           <span></span><span></span><span></span>
         </button>
@@ -640,7 +670,7 @@ export const renderPrivacyPage = (
     .join("");
 
   return `
-    ${renderSiteHeader(baseUrl, homeHrefFor(locale, baseUrl), locale)}
+    ${renderSiteHeader(baseUrl, homeHrefFor(locale, baseUrl), locale, "/privacy/")}
     <main id="main-content" class="page">
       <article class="prose" aria-labelledby="privacy-heading">
         <p class="page__eyebrow">${escapeHtml(copy.privacyUpdated(content.updated))}</p>
@@ -677,7 +707,7 @@ export const renderServicePage = (
     items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
 
   return `
-    ${renderSiteHeader(baseUrl, homeHref, locale)}
+    ${renderSiteHeader(baseUrl, homeHref, locale, `/services/${page.slug}/`)}
     <main id="main-content" class="page">
       <article class="service-detail" aria-labelledby="service-heading">
         <div class="service-hero">
@@ -822,7 +852,7 @@ export const renderVorbioPage = (
     .join("\n          ");
 
   return `
-    ${renderSiteHeader(baseUrl, homeHref, locale)}
+    ${renderSiteHeader(baseUrl, homeHref, locale, "/services/vorbio/")}
     <main id="main-content" class="page vorbio">
       <article class="vorbio-page" aria-labelledby="vorbio-heading">
         <header class="vorbio-hero">

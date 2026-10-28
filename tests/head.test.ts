@@ -273,12 +273,13 @@ describe("security metadata", () => {
     expect(directives["script-src"]).toEqual(["'self'"]);
     expect(directives["style-src"]).toEqual(["'self'"]);
     expect(directives["img-src"]).toEqual(["'self'"]);
-    expect(directives["connect-src"]).toEqual(["'self'"]);
+    expect(directives["connect-src"]).toEqual(["'self'", "https://www.cloudflare.com"]);
     expect(directives["font-src"]).toEqual(["'self'"]);
     expect(directives["base-uri"]).toEqual(["'self'"]);
     expect(directives["form-action"]).toEqual(["'none'"]);
     expect(directives["object-src"]).toEqual(["'none'"]);
-    expect(policy).not.toMatch(/unsafe-eval|https?:/);
+    expect(policy).not.toMatch(/unsafe-eval/);
+    expect(policy.replace("https://www.cloudflare.com", "")).not.toMatch(/https?:/);
   });
 
   it("sets a referrer policy and is injected on every page regardless of launch", () => {

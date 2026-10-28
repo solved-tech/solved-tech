@@ -2,7 +2,7 @@
 
 import { contactConfig, servicePages, siteContent } from "./content";
 import { servicePagesRo, siteContentRo } from "./content-ro";
-import { mount, setupHeaderOffset, setupMobileMenu, setupScrollProgress } from "./enhance";
+import { mount, setupHeaderOffset, setupLanguageSwitcher, setupMobileMenu, setupScrollProgress } from "./enhance";
 import { localizedServiceMeta } from "./head";
 import { applyDocumentLocale, currentLocale, redirectForLocale } from "./locale-client";
 import { renderServicePage } from "./render";
@@ -15,7 +15,11 @@ if (!app) {
   throw new Error("Cannot render the service page: #app mount element is missing.");
 }
 
-if (!redirectForLocale(window)) {
+const start = async (): Promise<void> => {
+  if (await redirectForLocale(window)) {
+    return;
+  }
+
   const locale = currentLocale(window);
   const pages = locale === "ro" ? servicePagesRo : servicePages;
   const content = locale === "ro" ? siteContentRo : siteContent;
@@ -31,5 +35,8 @@ if (!redirectForLocale(window)) {
   mount(app, () => renderServicePage(page, content, contactConfig, import.meta.env.BASE_URL, locale));
   setupHeaderOffset(window);
   setupMobileMenu(app);
+  setupLanguageSwitcher(app, window);
   setupScrollProgress(window);
-}
+};
+
+void start();

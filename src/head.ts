@@ -231,7 +231,7 @@ const CONTENT_SECURITY_POLICY = [
   "style-src 'self'",
   "img-src 'self'",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://www.cloudflare.com",
   "base-uri 'self'",
   "form-action 'none'",
   "object-src 'none'",

@@ -1,3 +1,6 @@
+import { rememberLocale } from "./locale";
+import type { Locale } from "./locale";
+
 export const mount = (app: HTMLElement, render: () => string): boolean => {
   if (app.firstElementChild) {
     return true;
@@ -129,6 +132,129 @@ export const setupMobileMenu = (root: ParentNode): void => {
 
   nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
     link.addEventListener("click", () => setOpen(false));
+  });
+};
+
+const isLocale = (value: string | null): value is Locale => value === "en" || value === "ro";
+
+export const setupLanguageSwitcher = (root: ParentNode, view: Window): void => {
+  const widget = root.querySelector<HTMLElement>(".lang-switch");
+  const button = widget?.querySelector<HTMLButtonElement>(".lang-switch__button");
+  const menu = widget?.querySelector<HTMLElement>(".lang-switch__menu");
+
+  if (!widget || !button || !menu) {
+    return;
+  }
+
+  const options = [...menu.querySelectorAll<HTMLAnchorElement>("[data-locale-choice]")];
+
+  const setOpen = (open: boolean): void => {
+    button.setAttribute("aria-expanded", String(open));
+    menu.hidden = !open;
+  };
+
+  const focusOption = (index: number): void => {
+    options[(index + options.length) % options.length]?.focus();
+  };
+
+  button.addEventListener("click", () => {
+    const open = button.getAttribute("aria-expanded") !== "true";
+
+    if (open) {
+      const navToggle = root.querySelector<HTMLButtonElement>(".menu-toggle");
+
+      if (navToggle?.getAttribute("aria-expanded") === "true") {
+        navToggle.click();
+      }
+    }
+
+    setOpen(open);
+
+    if (open) {
+      const selected = options.findIndex((option) => option.getAttribute("aria-selected") === "true");
+
+      focusOption(selected >= 0 ? selected : 0);
+    }
+  });
+
+  root.querySelector<HTMLButtonElement>(".menu-toggle")?.addEventListener("click", () => {
+    const navToggle = root.querySelector<HTMLButtonElement>(".menu-toggle");
+
+    if (navToggle?.getAttribute("aria-expanded") === "true") {
+      setOpen(false);
+    }
+  });
+
+  options.forEach((option) => {
+    option.addEventListener("click", (event) => {
+      const value = option.getAttribute("data-locale-choice");
+
+      if (isLocale(value)) {
+        try {
+          rememberLocale(view.localStorage, value);
+        } catch {
+          // The link still navigates. The next visit can ask for the country again.
+        }
+      }
+
+      if (option.getAttribute("aria-current") === "page") {
+        event.preventDefault();
+        setOpen(false);
+        button.focus();
+      }
+    });
+  });
+
+  view.document.addEventListener("keydown", (event) => {
+    const open = button.getAttribute("aria-expanded") === "true";
+
+    if (!open) {
+      if (event.key === "ArrowDown" && view.document.activeElement === button) {
+        event.preventDefault();
+        setOpen(true);
+        focusOption(0);
+      }
+
+      return;
+    }
+
+    const index = options.indexOf(view.document.activeElement as HTMLAnchorElement);
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setOpen(false);
+      button.focus();
+      return;
+    }
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      focusOption(index < 0 ? 0 : index + 1);
+      return;
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      focusOption(index < 0 ? options.length - 1 : index - 1);
+      return;
+    }
+
+    if (event.key === "Home") {
+      event.preventDefault();
+      focusOption(0);
+      return;
+    }
+
+    if (event.key === "End") {
+      event.preventDefault();
+      focusOption(options.length - 1);
+    }
+  });
+
+  view.document.addEventListener("click", (event) => {
+    if (event.target instanceof Node && !widget.contains(event.target)) {
+      setOpen(false);
+    }
   });
 };
 
