@@ -2,9 +2,9 @@ import type { PrivacyContent, ServicePage, SiteContent, VorbioProduct } from "./
 
 export const romanianMeta = {
   home: {
-    title: "Solved Tech — Site-uri pentru micile afaceri din Londra",
+    title: "Solved Tech — Site-uri simple pentru afaceri mici",
     description:
-      "Solved Tech construiește site-uri simple pentru micile afaceri din Londra. Preț fix, fără jargon, și o ofertă înainte să începem.",
+      "Solved Tech construiește site-uri simple pentru afaceri mici. Preț fix, fără jargon, și o ofertă înainte să începem.",
   },
   privacy: {
     title: "Notă de confidențialitate — Solved Tech",
@@ -23,7 +23,7 @@ export const siteContentRo: SiteContent = {
       id: "website",
       question: "Vă trebuie un site simplu?",
       title: "Site-uri pentru afaceri mici",
-      outcome: "Un site clar pentru o afacere din Londra, cu ofertă înainte să începem.",
+      outcome: "Un site clar pentru afacerea dumneavoastră, cu ofertă înainte să începem.",
     },
     {
       id: "customers",
@@ -61,7 +61,7 @@ export const siteContentRo: SiteContent = {
       id: "starter",
       name: "Start",
       summary:
-        "Un site simplu pentru o afacere din Londra care are nevoie de un loc clar în care să explice ce face.",
+        "Un site simplu pentru o afacere care are nevoie de un loc clar în care să explice ce face.",
       includes: [
         "Paginile stabilite în ofertă",
         "Ce faceți, cum vă pot contacta clienții și unde vă aflați",
@@ -168,7 +168,7 @@ export const privacyContentRo: PrivacyContent = {
     {
       heading: "Cine suntem",
       paragraphs: [
-        "Solved Tech este operat de Solved Tech Limited, 31 Glendale Gardens, Wembley, England, HA9 8PR. Suntem operatorul de date pentru datele cu caracter personal descrise în această notă.",
+        "Solved Tech este operat de Solved Tech Limited. Suntem operatorul de date pentru datele cu caracter personal descrise în această notă.",
       ],
     },
     {
@@ -305,11 +305,11 @@ export const servicePagesRo: ServicePage[] = [
   {
     slug: "websites-online-shops",
     productId: "website",
-    title: "Site-uri simple pentru micile afaceri din Londra",
+    title: "Site-uri simple pentru afaceri mici",
     description:
-      "Site-uri clare și magazine online mici pentru afaceri din Londra, cu o ofertă fermă și o predare pe înțelesul tuturor.",
+      "Site-uri clare și magazine online mici, cu o ofertă fermă și o predare pe înțelesul tuturor.",
     intro:
-      "Construim site-uri simple pentru micile afaceri din Londra. Ne spuneți ce faceți și cum ar trebui să vă găsească clienții. Stabilim paginile și o ofertă fermă înainte să construim.",
+      "Construim site-uri simple pentru afaceri mici. Ne spuneți ce faceți și cum ar trebui să vă găsească clienții. Stabilim paginile și o ofertă fermă înainte să construim.",
     requests: [
       "Vă trebuie un site simplu, care explică afacerea",
       "Site-ul actual nu mai corespunde cu ceea ce faceți",

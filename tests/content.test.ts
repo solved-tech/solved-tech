@@ -245,9 +245,9 @@ describe("site content", () => {
         "Technical SEO and paid search campaigns focused on qualified visits, measurable actions and useful reporting.",
     });
     expect(pageFor("websites-online-shops")).toMatchObject({
-      title: "Simple websites for London small businesses",
+      title: "Simple websites for small businesses",
       description:
-        "Clear websites and small online shops for London businesses, with a fixed quote and plain-English handover.",
+        "Clear websites and small online shops, with a fixed quote and plain-English handover.",
     });
   });
 

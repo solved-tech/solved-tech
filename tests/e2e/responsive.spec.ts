@@ -1031,7 +1031,7 @@ test("every service page renders its own hero, lists and navigation", async ({
     { slug: "bug-fixing", productId: "fix", title: "Bug fixing for business software" },
     { slug: "ai-assistants", productId: "ai", title: "AI assistants for everyday business work" },
     { slug: "seo-paid-campaigns", productId: "customers", title: "SEO and paid campaigns that drive enquiries" },
-    { slug: "websites-online-shops", productId: "website", title: "Simple websites for London small businesses" },
+    { slug: "websites-online-shops", productId: "website", title: "Simple websites for small businesses" },
     { slug: "software-development", productId: "app", title: "Software development for your business" },
     { slug: "automation", productId: "other", title: "Business automation and integrations" },
   ];

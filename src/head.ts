@@ -14,9 +14,9 @@ export interface PageMeta {
 
 export const homePage: PageMeta = {
   path: "/",
-  title: "Solved Tech — Websites for London small businesses",
+  title: "Solved Tech — Simple websites for small businesses",
   description:
-    "Solved Tech builds simple websites for London small businesses. Fixed price, no jargon, and a quote before we start.",
+    "Solved Tech builds simple websites for small businesses. Fixed price, no jargon, and a quote before we start.",
   indexable: true,
   locale: "en",
 };
@@ -135,15 +135,6 @@ export const renderOrganizationJsonLd = (
       name,
       sameAs: linkedin,
     })),
-    areaServed: {
-      "@type": "City",
-      name: "London",
-    },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "London",
-      addressCountry: "GB",
-    },
   };
 
   return `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, "\\u003c")}</script>`;
