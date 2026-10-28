@@ -342,7 +342,7 @@ describe("homepage renderer", () => {
     expect(team).toBeDefined();
     expect(html).not.toContain('id="about"');
     expect(html).not.toContain("About me");
-    siteContent.founders.forEach(({ name, bio, website }) => {
+    siteContent.founders.forEach(({ name, bio }) => {
       const card = team?.match(
         new RegExp(`<article class="founder"[\\s\\S]*?Portrait of ${name}[\\s\\S]*?</article>`),
       )?.[0];
@@ -353,10 +353,10 @@ describe("homepage renderer", () => {
       expect(portraitAt).toBeGreaterThan(-1);
       expect(bioAt).toBeGreaterThan(portraitAt);
       bio.forEach((paragraph) => expect(card).toContain(paragraph));
-      if (website) {
-        expect(card).toContain(`href="${website}"`);
-      }
+      expect(card).toContain("founder__linkedin");
+      expect(card).toContain("LinkedIn");
     });
+    expect(team).not.toContain("razvancristofor.ro");
     expect(team).toContain("Razvan Cristofor · Co-founder");
     expect(team).toContain("Remus Baciu · Co-founder");
     expect(team).not.toMatch(/founder of Solved Tech|Academy Leader|delivery team|\+40|799 242 421/);
@@ -367,8 +367,8 @@ describe("homepage renderer", () => {
       expect(html).toContain(`src="${image}"`);
       expect(html).toContain(name);
       expect(html).toContain(`alt="Portrait of ${name}"`);
-      expect(html).toContain(`href="${linkedin}"`);
-      expect(html).toContain(`aria-label="LinkedIn profile for ${name}"`);
+      expect(html).toContain(`class="founder__linkedin" href="${linkedin}"`);
+      expect(html.match(/founder__linkedin/g)).toHaveLength(2);
     });
     expect(html.match(/class="founder__portrait-frame"/g)).toHaveLength(2);
     expect(html.match(/ srcset="/g)).toHaveLength(1);

@@ -92,10 +92,9 @@ describe("site content", () => {
           { path: "/team/razvan_cristofor-1040.webp", width: 1040 },
         ],
         linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
-        website: "https://razvancristofor.ro/",
         bio: [
-          "He builds websites, online shops, and web, mobile, Windows and desktop apps.",
-          "He also builds automations, AI and API integrations, and works on SEO and performance.",
+          "With 5+ years of experience in SEO and web apps, I build websites, online shops, and web, mobile, Windows and desktop apps.",
+          "I also build automations, AI and API integrations, and I work on SEO and performance.",
         ],
       },
       {
@@ -105,9 +104,9 @@ describe("site content", () => {
         imageSources: [],
         linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
         bio: [
-          "Senior Software Engineer at Sky, with more than 11 years there.",
-          "He works in Java, Python and Go, and looks after infrastructure and CI/CD.",
-          "His focus is staying up to date with technology, building AI harnesses, and helping businesses reach their technical goals.",
+          "With more than 11 years at Sky, I am a Senior Software Engineer.",
+          "I work in Java, Python and Go, and I look after infrastructure and CI/CD.",
+          "I focus on staying up to date with technology, building AI harnesses, and helping businesses reach their technical goals.",
         ],
       },
     ]);
@@ -130,19 +129,18 @@ describe("site content", () => {
     expect(remus?.role).toBe("Co-founder");
     expect(razvan?.role).toBe("Co-founder");
     expect(remus?.linkedin).toBe("https://linkedin.com/in/remus-baciu-4a11a7105");
-    expect(remusCopy).toContain("Senior Software Engineer at Sky");
-    expect(remusCopy).toContain("more than 11 years");
-    expect(remusCopy).toContain("Java, Python and Go");
+    expect(remusCopy).toContain("I am a Senior Software Engineer");
+    expect(remusCopy).toContain("more than 11 years at Sky");
+    expect(remusCopy).toContain("I work in Java, Python and Go");
     expect(remusCopy).toContain("infrastructure and CI/CD");
     expect(remusCopy).toContain("AI harnesses");
     expect(remusCopy).toContain("technical goals");
-    expect(remusCopy).not.toMatch(/founder of Solved Tech|Academy Leader|delivery team|apprentice/);
+    expect(remusCopy).not.toMatch(/\b[Hh]e\b|founder of Solved Tech|Academy Leader|delivery team|apprentice/);
 
-    expect(razvan?.website).toBe("https://razvancristofor.ro/");
-    expect(razvanCopy).toContain("websites, online shops");
-    expect(razvanCopy).toContain("API integrations");
-    expect(razvanCopy).toContain("SEO and performance");
-    expect(razvanCopy).not.toMatch(/\+40|799 242 421|years|studio/);
+    expect(razvan).not.toHaveProperty("website");
+    expect(razvanCopy).toContain("With 5+ years of experience in SEO and web apps, I build");
+    expect(razvanCopy).toContain("I also build automations");
+    expect(razvanCopy).not.toMatch(/\b[Hh]e\b|razvancristofor\.ro|\+40|799 242 421/);
     expect(`${remusCopy} ${razvanCopy}`).not.toMatch(/founder of Solved Tech|\+44|wa\.me|tel:/);
   });
 
