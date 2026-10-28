@@ -1,23 +1,36 @@
 /// <reference types="vite/client" />
 
 import { contactConfig, servicePages, siteContent } from "./content";
-import { mount, setupHeaderOffset, setupMobileMenu, setupScrollProgress } from "./enhance";
+import { servicePagesRo, siteContentRo } from "./content-ro";
+import { mount, setupHeaderOffset, setupLanguageSwitcher, setupMobileMenu, setupScrollProgress } from "./enhance";
+import { localizedServiceMeta } from "./head";
+import { applyDocumentLocale, currentLocale, redirectForLocale } from "./locale-client";
 import { renderServicePage } from "./render";
 import "./styles.css";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 const slug = document.body.dataset.service;
-const page = servicePages.find((candidate) => candidate.slug === slug);
 
 if (!app) {
   throw new Error("Cannot render the service page: #app mount element is missing.");
 }
 
-if (!page) {
-  throw new Error(`Cannot render the service page: unknown service "${slug ?? ""}".`);
-}
+if (!redirectForLocale(window)) {
+  const locale = currentLocale(window);
+  const pages = locale === "ro" ? servicePagesRo : servicePages;
+  const content = locale === "ro" ? siteContentRo : siteContent;
+  const page = pages.find((candidate) => candidate.slug === slug);
 
-mount(app, () => renderServicePage(page, siteContent, contactConfig));
-setupHeaderOffset(window);
-setupMobileMenu(app);
-setupScrollProgress(window);
+  if (!page) {
+    throw new Error(`Cannot render the service page: unknown service "${slug ?? ""}".`);
+  }
+
+  const meta = localizedServiceMeta(page, locale);
+
+  applyDocumentLocale(window, locale, meta.title, meta.description);
+  mount(app, () => renderServicePage(page, content, contactConfig, import.meta.env.BASE_URL, locale));
+  setupHeaderOffset(window);
+  setupMobileMenu(app);
+  setupLanguageSwitcher(app, window);
+  setupScrollProgress(window);
+}

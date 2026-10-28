@@ -1,3 +1,22 @@
+import { rememberLocale } from "./locale-client";
+
+export const setupLanguageSwitcher = (root: ParentNode, view: Window): void => {
+  root.querySelectorAll<HTMLAnchorElement>("[data-locale-switch]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const value = link.getAttribute("data-locale-switch");
+
+      if (value === "en" || value === "ro") {
+        rememberLocale(view, value);
+      }
+
+      if (view.location.hash && !link.hash) {
+        event.preventDefault();
+        view.location.assign(`${link.getAttribute("href") ?? link.href}${view.location.hash}`);
+      }
+    });
+  });
+};
+
 export const mount = (app: HTMLElement, render: () => string): boolean => {
   if (app.firstElementChild) {
     return true;
@@ -90,6 +109,9 @@ export const setupHeroProcessMotion = (
   observer.observe(process);
 };
 
+const labelled = (element: Element, name: string, fallback: string): string =>
+  element.getAttribute(name) ?? fallback;
+
 export const setupMobileMenu = (root: ParentNode): void => {
   const button = root.querySelector<HTMLButtonElement>(".menu-toggle");
   const nav = root.querySelector<HTMLElement>("#primary-navigation");
@@ -100,7 +122,10 @@ export const setupMobileMenu = (root: ParentNode): void => {
 
   const setOpen = (open: boolean): void => {
     button.setAttribute("aria-expanded", String(open));
-    button.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    button.setAttribute(
+      "aria-label",
+      open ? labelled(button, "data-label-close", "Close menu") : labelled(button, "data-label-open", "Open menu"),
+    );
     nav.classList.toggle("is-open", open);
   };
 
@@ -143,7 +168,9 @@ export const setupMotionToggle = (root: ParentNode, view: Window): void => {
     button.setAttribute("aria-pressed", String(paused));
     button.setAttribute(
       "aria-label",
-      paused ? "Resume diagram motion" : "Pause diagram motion",
+      paused
+        ? labelled(button, "data-label-resume", "Resume diagram motion")
+        : labelled(button, "data-label-pause", "Pause diagram motion"),
     );
   };
 

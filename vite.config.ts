@@ -1,7 +1,27 @@
 import { resolve } from "node:path";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
+import { rewriteRomanianDevPath } from "./src/locale.ts";
+
+const romanianDevPages = (): Plugin => ({
+  name: "romanian-dev-pages",
+  configureServer(server) {
+    server.middlewares.use((req, _res, next) => {
+      const raw = req.url ?? "";
+      const pathname = raw.split("?")[0] ?? "";
+      const rewritten = rewriteRomanianDevPath(pathname);
+
+      if (rewritten) {
+        const search = raw.includes("?") ? `?${raw.slice(raw.indexOf("?") + 1)}` : "";
+        req.url = `${rewritten}${search}`;
+      }
+
+      next();
+    });
+  },
+});
 
 export default defineConfig({
+  plugins: [romanianDevPages()],
   base: "/",
   build: {
     rollupOptions: {

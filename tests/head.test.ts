@@ -207,6 +207,7 @@ describe("service page metadata", () => {
       title: `${draft.title} — Solved Tech`,
       description: draft.description,
       indexable: true,
+      locale: "en",
     });
   });
 

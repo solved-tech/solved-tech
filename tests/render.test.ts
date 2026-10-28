@@ -56,7 +56,7 @@ describe("homepage renderer", () => {
       '<div class="hero-process__interface" aria-hidden="true">',
     );
     expect(html).toContain(
-      '<button class="hero-process__control" type="button" aria-label="Pause diagram motion" aria-pressed="false"></button>',
+      '<button class="hero-process__control" type="button" aria-label="Pause diagram motion" aria-pressed="false" data-label-pause="Pause diagram motion" data-label-resume="Resume diagram motion"></button>',
     );
     expect(
       html.match(
