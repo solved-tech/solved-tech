@@ -84,7 +84,7 @@ export const siteContent: SiteContent = {
       id: "website",
       question: "Need a simple website?",
       title: "Websites for small businesses",
-      outcome: "A clear site for a London business, quoted before we start.",
+      outcome: "A clear site for your business, quoted before we start.",
     },
     {
       id: "customers",
@@ -124,7 +124,7 @@ export const siteContent: SiteContent = {
       id: "starter",
       name: "Starter",
       summary:
-        "A simple website for a London business that needs one clear place to explain what it does.",
+        "A simple website for a business that needs one clear place to explain what it does.",
       includes: [
         "The pages we agree in the quote",
         "What you do, how to get in touch, and where you are",
@@ -242,7 +242,7 @@ export const privacyContent: PrivacyContent = {
     {
       heading: "Who we are",
       paragraphs: [
-        "Solved Tech is operated by Solved Tech Limited, 31 Glendale Gardens, Wembley, England, HA9 8PR. We are the data controller for the personal data described in this notice.",
+        "Solved Tech is operated by Solved Tech Limited. We are the data controller for the personal data described in this notice.",
       ],
     },
     {
@@ -408,11 +408,11 @@ export const servicePages: ServicePage[] = [
   {
     slug: "websites-online-shops",
     productId: "website",
-    title: "Simple websites for London small businesses",
+    title: "Simple websites for small businesses",
     description:
-      "Clear websites and small online shops for London businesses, with a fixed quote and plain-English handover.",
+      "Clear websites and small online shops, with a fixed quote and plain-English handover.",
     intro:
-      "We build straightforward websites for London small businesses. You tell us what you do and how customers should reach you. We agree the pages and a fixed quote before we build.",
+      "We build straightforward websites for small businesses. You tell us what you do and how customers should reach you. We agree the pages and a fixed quote before we build.",
     requests: [
       "You need a simple site that explains the business",
       "The current site no longer matches what you do",

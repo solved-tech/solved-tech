@@ -168,7 +168,7 @@ const en: UiCopy = {
   servicesEyebrow: "Also available",
   servicesHeading: "Other ways we can help.",
   servicesIntro:
-    "Websites come first. Apps, AI, bug fixing and automation are here when a London business needs them later.",
+    "Websites come first. Apps, AI, bug fixing and automation are here when you need them later.",
   approachEyebrow: "How we work",
   approachHeading: "Assess, agree, build, hand over.",
   journey: [
@@ -299,7 +299,7 @@ const ro: UiCopy = {
   servicesEyebrow: "În plus",
   servicesHeading: "Alte moduri în care vă putem ajuta.",
   servicesIntro:
-    "Site-urile sunt pe primul loc. Aplicațiile, AI-ul, repararea erorilor și automatizările sunt aici atunci când o afacere din Londra are nevoie de ele mai târziu.",
+    "Site-urile sunt pe primul loc. Aplicațiile, AI-ul, repararea erorilor și automatizările sunt aici atunci când aveți nevoie de ele mai târziu.",
   approachEyebrow: "Cum lucrăm",
   approachHeading: "Evaluăm, stabilim, construim, predăm.",
   journey: [

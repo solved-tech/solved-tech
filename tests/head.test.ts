@@ -54,7 +54,8 @@ describe("head metadata", () => {
     expect(data.url).toBe("https://solvedtech.co.uk/");
     expect(data.logo).toBe("https://solvedtech.co.uk/brand/solved-tech-logo-dark.svg");
     expect(data.email).toBe("contact@solvedtech.co.uk");
-    expect(data.areaServed).toEqual({ "@type": "City", name: "London" });
+    expect(data).not.toHaveProperty("areaServed");
+    expect(data).not.toHaveProperty("address");
     expect(data).not.toHaveProperty("telephone");
     expect(sitemap).toContain("<loc>https://solvedtech.co.uk/</loc>");
     expect(sitemap).not.toContain("https://solvedtech.co.uk/services/vorbio/");
@@ -87,12 +88,6 @@ describe("head metadata", () => {
         name,
         sameAs: linkedin,
       })),
-      areaServed: { "@type": "City", name: "London" },
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "London",
-        addressCountry: "GB",
-      },
     });
     expect(data.founder.map((person: { name: string }) => person.name)).toEqual([
       "Razvan Cristofor",

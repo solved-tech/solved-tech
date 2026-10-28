@@ -139,7 +139,7 @@ describe("homepage renderer", () => {
       '<h2 id="services-heading">Other ways we can help.</h2>',
     );
     expect(html).toContain(
-      '<p class="services__intro">Websites come first. Apps, AI, bug fixing and automation are here when a London business needs them later.</p>',
+      '<p class="services__intro">Websites come first. Apps, AI, bug fixing and automation are here when you need them later.</p>',
     );
     expect(html).toContain('<h2 id="packages-heading">Simple website packages.</h2>');
     expect(html.match(/class="package-card"/g)).toHaveLength(4);

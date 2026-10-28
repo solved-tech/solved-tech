@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { contactConfig, servicePages, siteContent } from "../src/content";
+import { contactConfig, privacyContent, servicePages, siteContent, vorbioProduct } from "../src/content";
 import { privacyContentRo, servicePagesRo, siteContentRo, vorbioProductRo } from "../src/content-ro";
 import {
   homePage,
@@ -9,11 +9,13 @@ import {
   privacyPageRo,
   renderHeadTags,
   renderLanguageLinks,
+  renderOrganizationJsonLd,
   localizedServiceMeta,
   renderSitemap,
   servicePageMeta,
 } from "../src/head";
 import { renderHomepage, renderPrivacyPage, renderServicePage, renderVorbioPage } from "../src/render";
+import { uiCopy } from "../src/ui-copy";
 
 const shell = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const live = { launched: true, productionOrigin: "https://solvedtech.co.uk" } as const;
@@ -62,7 +64,8 @@ describe("Romanian interior pages", () => {
     const vorbio = renderVorbioPage(vorbioProductRo, contactConfig, "/", "ro");
 
     expect(privacy).toContain("Notă de confidențialitate");
-    expect(privacy).toContain("31 Glendale Gardens, Wembley, England, HA9 8PR");
+    expect(privacy).toContain("Solved Tech Limited");
+    expect(privacy).not.toMatch(/Wembley|England|Londra|London/);
     expect(privacy).toContain("ico.org.uk");
     expect(privacy).toContain('href="/privacy/" lang="en-GB"');
     expect(privacy).toContain('href="/ro/privacy/" lang="ro" hreflang="ro" data-locale-switch="ro" aria-current="page"');
@@ -142,5 +145,33 @@ describe("language metadata", () => {
     });
     expect(sitemap).not.toContain("/privacy/");
     expect(sitemap.match(/<loc>/g)).toHaveLength(14);
+  });
+});
+
+const PLACE_NAME =
+  /\b(?:London|Londra|Wembley|Glendale|England|Britain|British|Bucharest|București|Romania|România|United Kingdom)\b|\bUK\b|\bHA9\b/i;
+
+describe("location-neutral copy", () => {
+  it("names no city, region or country in either language", () => {
+    const published = [
+      renderHomepage(siteContent, contactConfig, "/", "en"),
+      renderHomepage(siteContentRo, contactConfig, "/", "ro"),
+      renderPrivacyPage(privacyContent, contactConfig, "/", "en"),
+      renderPrivacyPage(privacyContentRo, contactConfig, "/", "ro"),
+      ...servicePages.map((page) => renderServicePage(page, siteContent, contactConfig, "/", "en")),
+      ...servicePagesRo.map((page) => renderServicePage(page, siteContentRo, contactConfig, "/", "ro")),
+      renderVorbioPage(vorbioProduct, contactConfig, "/", "en"),
+      renderVorbioPage(vorbioProductRo, contactConfig, "/", "ro"),
+      renderOrganizationJsonLd(live, siteContent, contactConfig, "/"),
+      renderHeadTags(homePage, live, "/"),
+      renderHeadTags(homePageRo, live, "/"),
+      JSON.stringify(uiCopy("en")),
+      JSON.stringify(uiCopy("ro")),
+    ]
+      .join("\n")
+      .replaceAll("solvedtech.co.uk", "")
+      .replaceAll("ico.org.uk", "");
+
+    expect(published).not.toMatch(PLACE_NAME);
   });
 });
