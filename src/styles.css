@@ -59,7 +59,8 @@
 
 html {
   scroll-behavior: auto;
-  scroll-padding-top: calc(var(--header-height) + 1.5rem);
+  overflow-x: clip;
+  scroll-padding-top: calc(var(--header-height) + 1.25rem);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -71,7 +72,6 @@ html {
 
 body {
   margin: 0;
-  overflow-x: clip;
   background-color: var(--surface);
   color: var(--ink);
   font-family: var(--font-body);
@@ -389,6 +389,7 @@ main > section {
   max-width: var(--shell);
   margin-inline: auto;
   padding: var(--section-space) var(--gutter);
+  scroll-margin-top: calc(-1 * var(--section-space));
 }
 
 main > section + section {
@@ -1568,18 +1569,28 @@ main > section.hero {
   white-space: nowrap;
 }
 
+.journey__heading,
+.journey__note {
+  justify-self: center;
+  max-width: 40rem;
+  text-align: center;
+}
+
 .journey__heading h2 {
-  max-width: 16ch;
+  max-width: 18ch;
+  margin-inline: auto;
   margin-block-start: 0.65rem;
   font-size: var(--type-title);
   line-height: 1.05;
+  text-wrap: balance;
 }
 
 .journey__moments {
   position: relative;
   display: grid;
-  gap: 2.25rem;
-  margin: 0;
+  gap: 2.5rem;
+  width: min(100%, 36rem);
+  margin: 0 auto;
   padding: 0;
   list-style: none;
 }
@@ -1708,13 +1719,13 @@ main > section.hero {
   .journey__moments {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0;
+    width: 100%;
   }
 
   .journey__moments::before,
   .journey__moments::after {
-    inset-block: 2.7rem auto;
-    inset-inline-start: 1.5rem;
-    inset-inline-end: calc(25% - 1.5rem);
+    inset-block: 3rem auto;
+    inset-inline: 12.5%;
     width: auto;
     height: 1px;
     transform-origin: left;
@@ -1729,9 +1740,11 @@ main > section.hero {
   }
 
   .journey__moment {
+    justify-items: center;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 3rem auto;
-    padding-inline-end: clamp(1rem, 3vw, 2.5rem);
+    grid-template-rows: 1.5rem 3rem auto;
+    padding-inline: clamp(0.75rem, 2vw, 1.5rem);
+    text-align: center;
   }
 
   .journey__number,
@@ -1742,6 +1755,7 @@ main > section.hero {
 
   .journey__number {
     grid-row: 1;
+    line-height: 1.5rem;
   }
 
   .journey__signal {
@@ -2027,6 +2041,10 @@ main > section.hero {
 @media (min-width: 48rem) {
   .team {
     grid-template-columns: minmax(12rem, 0.55fr) minmax(0, 1.45fr);
+  }
+
+  .team__heading {
+    align-self: start;
   }
 
   .team__grid {
