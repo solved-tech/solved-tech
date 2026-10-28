@@ -5,8 +5,9 @@ export const LOCALE_STORAGE_KEY = "solved-tech-locale";
 const SEARCH_BOT =
   /googlebot|adsbot-google|mediapartners-google|storebot-google|google-inspectiontool|googleother|bingbot|duckduckbot|baiduspider|yandexbot|slurp|facebookexternalhit|linkedinbot|twitterbot|applebot|petalbot|semrushbot|ahrefsbot|dotbot|sogou|exabot|ia_archiver|wget|curl\/|phantomjs|lighthouse|chrome-lighthouse|embedly|slackbot|telegrambot|whatsapp|discordbot|redditbot|gptbot|claudebot|amazonbot|bytespider/i;
 
-export const parseStoredLocale = (value: string | null): Locale | null =>
-  value === "en" || value === "ro" ? value : null;
+export const clearStoredLocale = (storage: Pick<Storage, "removeItem">): void => {
+  storage.removeItem(LOCALE_STORAGE_KEY);
+};
 
 export const localeFromPath = (path: string): Locale => {
   const pathname = path.split(/[?#]/)[0] ?? "/";
@@ -56,7 +57,6 @@ export interface LocaleRedirectInput {
   pathname: string;
   search: string;
   hash: string;
-  stored: Locale | null;
   detected: Locale;
   isBot: boolean;
 }
@@ -64,17 +64,15 @@ export interface LocaleRedirectInput {
 /**
  * Client-side locale choice for static hosting.
  *
- * Browser language (`ro`) and the Europe/Bucharest timezone are both treated
- * as Romania. A saved EN/RO choice overrides that. Search bots are never
- * redirected. Automatic detection only moves an English URL to its Romanian
- * counterpart, so /ro/ never bounces back and the two versions cannot loop.
- * An explicit saved choice may move either way, because the visitor asked for it.
+ * Browser language (`ro`) and the Europe/Bucharest timezone select Romanian.
+ * Every other visitor gets English. Search bots are never redirected, so both
+ * URL sets stay crawlable. A redirect happens only when the current URL's
+ * language differs from the detected one, so the two versions cannot loop.
  */
 export const localeRedirectPath = ({
   pathname,
   search,
   hash,
-  stored,
   detected,
   isBot,
 }: LocaleRedirectInput): string | null => {
@@ -83,17 +81,12 @@ export const localeRedirectPath = ({
   }
 
   const current = localeFromPath(pathname);
-  const desired = stored ?? detected;
 
-  if (desired === current) {
+  if (detected === current) {
     return null;
   }
 
-  if (!stored && !(current === "en" && desired === "ro")) {
-    return null;
-  }
-
-  const target = localizePath(pathname, desired);
+  const target = localizePath(pathname, detected);
 
   if (target === localizePath(pathname, current)) {
     return null;

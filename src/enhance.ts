@@ -1,22 +1,3 @@
-import { rememberLocale } from "./locale-client";
-
-export const setupLanguageSwitcher = (root: ParentNode, view: Window): void => {
-  root.querySelectorAll<HTMLAnchorElement>("[data-locale-switch]").forEach((link) => {
-    link.addEventListener("click", (event) => {
-      const value = link.getAttribute("data-locale-switch");
-
-      if (value === "en" || value === "ro") {
-        rememberLocale(view, value);
-      }
-
-      if (view.location.hash && !link.hash) {
-        event.preventDefault();
-        view.location.assign(`${link.getAttribute("href") ?? link.href}${view.location.hash}`);
-      }
-    });
-  });
-};
-
 export const mount = (app: HTMLElement, render: () => string): boolean => {
   if (app.firstElementChild) {
     return true;
