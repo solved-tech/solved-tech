@@ -6,55 +6,105 @@
     <title>N&amp;Z cleaning services, London</title>
     <meta name="description" content="A sample homepage for N&amp;Z cleaning services in Edgware, prepared by Solved Tech. Not the business’s live website." />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#0a0d14" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
+    <meta name="theme-color" content="#f4f6f8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="fonts/albert-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <main id="main" class="board">
-      <section class="tile span-6 name move"><h1>N&amp;Z</h1></section>
-      <section class="tile photo span-6 shutter"><img src="media/blue-white-kitchen-interior-unsplash.jpg" width="1400" height="933" alt="A blue and white kitchen. A picture of a clean room, not one of their jobs." /></section>
-      <section class="tile span-8">
-        <p class="say move">Natalia Majewska runs a small team from Edgware, cleaning homes and offices in London.</p>
+    <header class="top">
+      <a class="mark" href="#top" translate="no">N&amp;Z cleaning services</a>
+      <a class="btn" href="tel:+447856121550">07856 121550</a>
+    </header>
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-heading">
+        <figure>
+          <img src="media/blue-white-kitchen-interior-unsplash.jpg" width="1400" height="934" alt="A blue and white kitchen. A picture of a clean room, not one of their jobs." fetchpriority="high" />
+          <figcaption>A kitchen. Not one of their cleans.</figcaption>
+        </figure>
+        <div class="intro">
+          <h1 id="hero-heading" translate="no">N&amp;Z cleaning services</h1>
+          <p class="lead">Homes and offices cleaned from Edgware, across London.</p>
+          <a class="btn" href="tel:+447856121550">Call 07856 121550</a>
+        </div>
       </section>
-      <a class="tile span-4 accent" href="tel:+447856121550"><strong>Call 07856 121550</strong></a>
-      <section class="tile photo span-4"><img src="media/open-shelved-compact-black-and-white-kitchen.jpg" width="1191" height="893" alt="A compact black and white kitchen with open shelves." /></section>
-      <section class="tile span-8" id="prices" aria-labelledby="prices-heading">
-        <h2 id="prices-heading">Published slots</h2>
-        <p>Times and prices on their Setmore page. Ask them to price your place. These are not a quote.</p>
-        <table>
-          <thead><tr><th scope="col">Work</th><th scope="col">Time</th><th scope="col">Price</th></tr></thead>
-          <tbody>
-            <tr><th scope="row">Standard cleaning</th><td>2 hours</td><td>£40</td></tr>
-            <tr><th scope="row">Deep cleaning</th><td>2 hours</td><td>£55</td></tr>
-            <tr><th scope="row">End of tenancy</th><td>3 hours</td><td>£180</td></tr>
-            <tr><th scope="row">End of tenancy</th><td>4 hours</td><td>£230</td></tr>
-          </tbody>
-        </table>
-        <p><a class="btn" id="book" href="mailto:polishshine1@gmail.com?subject=Cleaning%20slot">Email about a slot</a> <a href="https://nzcleaningservices.setmore.com/" rel="noopener noreferrer">Open their booking page</a></p>
-        <p>
-          <button class="slot" type="button" data-slot="Standard cleaning, 2 hours, £40">Standard</button>
-          <button class="slot" type="button" data-slot="Deep cleaning, 2 hours, £55">Deep</button>
-          <button class="slot" type="button" data-slot="End of tenancy, 3 hours, £180">Tenancy 3h</button>
-          <button class="slot" type="button" data-slot="End of tenancy, 4 hours, £230">Tenancy 4h</button>
-        </p>
+      <section class="prices" id="services" aria-labelledby="services-heading">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="services-heading">Published slots</h2>
+            <p>Natalia Majewska’s team, from Edgware. Listed on the booking page, not a quote.</p>
+          </div>
+          <table>
+            <caption>Listed on the booking page. Not a quote.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Work</th>
+                <th scope="col">Time</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Standard cleaning</th>
+                <td>2 hours</td>
+                <td>£40</td>
+              </tr>
+              <tr>
+                <th scope="row">Deep cleaning</th>
+                <td>2 hours</td>
+                <td>£55</td>
+              </tr>
+              <tr>
+                <th scope="row">End of tenancy</th>
+                <td>3 hours</td>
+                <td>£180</td>
+              </tr>
+              <tr>
+                <th scope="row">End of tenancy</th>
+                <td>4 hours</td>
+                <td>£230</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="also">Checkatrade also lists holiday lets, steam cleaning, laundry and driveways, with no separate prices.</p>
+          <p class="links">
+            <a href="https://nzcleaningservices.setmore.com/" rel="noopener noreferrer">Open their booking page</a>
+            <a href="mailto:polishshine1@gmail.com">polishshine1@gmail.com</a>
+          </p>
+        </div>
       </section>
-      <section class="tile photo span-6"><img src="media/interior-of-a-kitchen.jpg" width="1400" height="1170" alt="Interior of a Kitchen, painted by Willem Kalf around 1642. Not their work." /></section>
-      <section class="tile photo span-6"><img src="media/kitchen-interior.jpg" width="1400" height="1040" alt="Kitchen Interior by David Vinckboons, 1600–1624. A painting of a kitchen, not a job photo." /></section>
-      <section class="tile span-12" id="also" aria-labelledby="also-heading">
-        <h2 id="also-heading">Also on Checkatrade</h2>
-        <p>Domestic and commercial cleaning, deep cleaning, end of tenancy, holiday lets, offices, emergency cleaning, steam cleaning, soft washing, tile and grout, kitchen extraction, laundry, ironing, antiviral cleaning, driveways and patios. No separate prices are published for that list.</p>
-        <p>Free estimates. Cards accepted. Based in Edgware, HA8. Hours on the booking page: Monday to Friday 9am–5pm, Saturday 9am–3pm, Sunday 10am–3pm.</p>
-        <p><a href="https://www.checkatrade.com/trades/nzcleaningservices" rel="noopener noreferrer">9.78/10 from 43 Checkatrade reviews in the past 12 months</a>. Member since November 2025.</p>
-      </section>
-      <section class="tile span-12">
-        <div class="blocks" aria-hidden="true"><b>N</b><b>&amp;</b><b>Z</b></div>
-        <p class="credits">Pictures of kitchens and kitchen paintings, not of their cleans. Blue kitchen by NeONBRAND, CC0. Open shelves by Kotivalo, CC BY-SA 4.0. <a href="https://www.metmuseum.org/art/collection/search/436806">Interior of a Kitchen</a> by Willem Kalf and <a href="https://www.metmuseum.org/art/collection/search/377601">Kitchen Interior</a> by David Vinckboons, public domain, The Met.</p>
-        <p class="sample">Sample by <a href="https://solvedtech.co.uk">Solved Tech</a>. A design sample, not the live website. Details come from public listings and can change.</p>
+      <section class="visit" id="visit" aria-labelledby="visit-heading">
+        <div class="wrap visit-grid">
+          <div>
+            <h2 id="visit-heading">Hours and area</h2>
+            <p class="statement"><a href="https://www.checkatrade.com/trades/nzcleaningservices" rel="noopener noreferrer">9.78 out of 10</a> from 43 Checkatrade reviews in the past 12 months. Member since November 2025.</p>
+            <p>Free estimates. Cards accepted. Based in Edgware, HA8.</p>
+          </div>
+          <table>
+            <caption>Hours on the booking page</caption>
+            <tbody>
+              <tr>
+                <th scope="row">Monday to Friday</th>
+                <td>9am to 5pm</td>
+              </tr>
+              <tr>
+                <th scope="row">Saturday</th>
+                <td>9am to 3pm</td>
+              </tr>
+              <tr>
+                <th scope="row">Sunday</th>
+                <td>10am to 3pm</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
-    <script src="page.js"></script>
+    <footer class="foot">
+      <p class="credits" data-credits>Kitchen photograph, not one of their jobs. Blue kitchen by NeONBRAND, CC0, via Wikimedia Commons.</p>
+      <p class="sample">Sample by <a href="https://solvedtech.co.uk">Solved Tech</a>. A design sample, not the live website. Details come from public listings and can change.</p>
+    </footer>
   </body>
 </html>

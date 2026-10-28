@@ -6,74 +6,77 @@
     <title>Vyas Gardening Service, Harrow</title>
     <meta name="description" content="A sample homepage for Vyas Gardening Service in Harrow, prepared by Solved Tech. Not the business’s live website." />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#f6e016" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
+    <meta name="theme-color" content="#f3f6f1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="fonts/libre-franklin-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="fonts/source-serif-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <header class="bar">
-      <a class="mark" href="#top">Vyas</a>
-      <a href="tel:+447519589339">07519 589339</a>
+    <header class="top">
+      <a class="mark" href="#top" translate="no">Vyas Gardening Service</a>
+      <a class="btn" href="tel:+447519589339">07519 589339</a>
     </header>
     <main id="main">
-      <section class="hero" id="top">
-        <div>
-          <h1>Vyas</h1>
-          <p class="lead">Gardening in Harrow since September 2014. Bhavik comes to look, then quotes. No price list is published.</p>
-          <nav class="tabs" aria-label="On this page">
-            <a href="#since">Since 2014</a>
-            <a href="#work">The work</a>
-            <a href="#visit">Ask him to visit</a>
-          </nav>
+      <section class="hero" id="top" aria-labelledby="hero-heading">
+        <div class="intro">
+          <h1 id="hero-heading" translate="no">Vyas Gardening Service</h1>
+          <p class="lead">Garden work in Harrow, with a visit before the quote.</p>
+          <a class="btn" href="tel:+447519589339">Call 07519 589339</a>
         </div>
-        <img class="hero-photo drift" src="media/r-p-postcard-post-office-franklin-estate.jpg" width="1200" height="760" alt="A historic postcard of South Harrow. The neighbourhood, not a garden he has worked on." />
-        <div class="hedge" aria-hidden="true"></div>
+        <figure>
+          <img src="media/privet-hedge-outside-st-matthew-s-church.jpg" width="1024" height="768" alt="A long trimmed hedge beside a brick church. Not a garden maintained by Vyas." fetchpriority="high" />
+          <figcaption>A trimmed town hedge. Not one of his gardens.</figcaption>
+        </figure>
       </section>
-      <section class="panel" id="since" aria-labelledby="since-heading">
-        <div>
-          <h2 id="since-heading" class="move">One van, then a full kit</h2>
-          <p>He started on his own with a small three-door Nissan Micra, doing tidy-ups nearby. The kit is bigger now, and he works with specialists when a job needs them.</p>
-          <p>4.9 from 28 reviews on <a href="https://trustedtraders.which.co.uk/businesses/vyas-gardening-service/" rel="noopener noreferrer">Which? Trusted Traders</a>.</p>
+      <section class="work" id="services" aria-labelledby="services-heading">
+        <div class="wrap">
+          <h2 id="services-heading">The work</h2>
+          <dl>
+            <div>
+              <dt>Looking after a garden</dt>
+              <dd>Maintenance, mowing, lawn treatment, hedge trimming, leaves, planting and weeds.</dd>
+            </div>
+            <div>
+              <dt>Clearing it</dt>
+              <dd>Garden clearance, and snow clearance when it is needed.</dd>
+            </div>
+            <div>
+              <dt>Shaping it</dt>
+              <dd>Landscaping, features, sheds, drainage, fences, decking, patios, driveways, turf and ponds.</dd>
+            </div>
+            <div>
+              <dt>Trees, surfaces, waste</dt>
+              <dd>Crown pruning through to taking out roots. Pressure washing. Household and commercial waste taken away.</dd>
+            </div>
+          </dl>
         </div>
-        <img class="mask drift" src="media/privet-hedge-corner-in-dolypandy-geograph-org.jpg" width="1200" height="800" alt="A privet hedge corner. A picture of the plant he is often asked to cut, not of a Vyas garden." />
       </section>
-      <section class="work" id="work" aria-labelledby="work-heading">
-        <h2 id="work-heading">The work</h2>
-        <ul class="jobs">
-          <li><img src="media/privet-hedge-outside-st-matthew-s-church.jpg" width="400" height="300" alt="A trimmed privet hedge outside a church." /><div><h3>Looking after a garden</h3><p>Maintenance, mowing, lawn treatment, hedge trimming, leaves, planting and weeds.</p></div></li>
-          <li><img src="media/privet-hedge-along-riverview-road-geograph-org.jpg" width="400" height="300" alt="A long privet hedge along a road." /><div><h3>Clearing it</h3><p>Garden clearance, and snow clearance when it is needed.</p></div></li>
-          <li><img src="media/real-photo-postcard-post-office-men-woman.jpg" width="600" height="380" alt="A historic postcard of College Road, Harrow." /><div><h3>Shaping it</h3><p>Landscaping, features, sheds, drainage, fences, decking, patios, driveways, turf and ponds.</p></div></li>
-          <li><img src="media/my-trusty-gardening-gloves-secateurs-which-need.jpg" width="600" height="450" alt="Gardening gloves and secateurs. Not Bhavik’s tools." /><div><h3>Trees, surfaces, waste</h3><p>Crown pruning through to taking out roots. Pressure washing. Household and commercial waste taken away.</p></div></li>
-        </ul>
-      </section>
-      <section class="coupon" id="visit" aria-labelledby="visit-heading">
-        <div>
-          <h2 id="visit-heading">Ask him to visit</h2>
-          <p>26 Borrowdale Avenue, Harrow HA3 7PZ. He has not published opening hours.</p>
-          <p><a href="https://www.facebook.com/VYAS-Gardening-Service-812289128816715" rel="noopener noreferrer">Facebook</a></p>
+      <section class="visit" id="visit" aria-labelledby="visit-heading">
+        <div class="wrap visit-grid">
+          <div>
+            <h2 id="visit-heading">Ask him to visit</h2>
+            <p class="statement"><a href="https://trustedtraders.which.co.uk/businesses/vyas-gardening-service/" rel="noopener noreferrer">4.9 from 28 reviews</a> on Which? Trusted Traders.</p>
+            <p>He started in September 2014, on his own, and works with specialists when a job needs them. Opening hours are not published.</p>
+            <p>26 Borrowdale Avenue, Harrow HA3 7PZ.</p>
+            <p class="links">
+              <a href="mailto:vyasgardeningservice@hotmail.com">Email Vyas</a>
+              <span>vyasgardeningservice@hotmail.com</span>
+              <a href="https://www.facebook.com/VYAS-Gardening-Service-812289128816715" rel="noopener noreferrer">Facebook</a>
+            </p>
+          </div>
+          <figure>
+            <img src="media/my-trusty-gardening-gloves-secateurs-which-need.jpg" width="1400" height="1050" alt="Gardening gloves and secateurs. Not Bhavik’s tools." loading="lazy" />
+            <figcaption>Gloves and secateurs. Not his kit.</figcaption>
+          </figure>
         </div>
-        <form>
-          <label for="job">Which job should the email mention?</label>
-          <select id="job" name="job">
-            <option>Garden maintenance</option>
-            <option>Clearance</option>
-            <option>Hedges</option>
-            <option>Landscaping</option>
-            <option>Trees</option>
-            <option>Pressure washing</option>
-          </select>
-          <p><a class="btn" id="ask" href="mailto:vyasgardeningservice@hotmail.com?subject=Garden%20visit">Email about a visit</a></p>
-          <p><a class="btn" href="tel:+447519589339">Call 07519 589339</a></p>
-        </form>
       </section>
-      <div class="blocks" aria-hidden="true"><span>V</span><span>Y</span><span>A</span><span>S</span></div>
     </main>
-    <footer class="colophon">
-      <p class="credits">Pictures of hedges, Harrow postcards and garden tools, not of his jobs. Privet photographs by Bill Boaden, Stephen Craven and Kenneth Allen, CC BY-SA 2.0. Harrow postcards by Mark Crombie, public domain. Gloves and secateurs by shrinkin'violet, CC BY 2.0. Via Wikimedia Commons.</p>
+    <footer class="foot">
+      <p class="credits" data-credits>Pictures of a hedge and of garden tools, not of his jobs. <a href="https://commons.wikimedia.org/wiki/File:Privet_hedge_outside_St_Matthew%27s_church_-_geograph.org.uk_-_4122757.jpg">Privet hedge</a> by Stephen Craven, CC BY-SA 2.0. Gloves and secateurs by shrinkin’violet, CC BY 2.0. Via Wikimedia Commons.</p>
       <p class="sample">Sample by <a href="https://solvedtech.co.uk">Solved Tech</a>. A design sample, not the live website. Details come from public listings and can change.</p>
     </footer>
-    <script src="page.js"></script>
   </body>
 </html>
