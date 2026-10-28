@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && node scripts/prerender.mts",
+    "build": "tsc && vite build && node scripts/prerender.mts && node scripts/copy-samples.mts",
     "preview": "vite preview",
     "test": "vitest run",
     "test:responsive": "playwright test",

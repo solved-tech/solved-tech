@@ -1,0 +1,385 @@
+@font-face {
+  font-family: "Anybody";
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/anybody-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Anybody";
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/anybody-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Anybody";
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/anybody-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Anybody";
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/anybody-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Schibsted Grotesk";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("fonts/schibsted-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Schibsted Grotesk";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("fonts/schibsted-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --lacquer: #2b0e1c;
+  --lacquer-deep: #1a0812;
+  --paper: #f8e9ed;
+  --blush: #f0c6d1;
+  --chartreuse: #e4ff57;
+  --ink: #1c1406;
+  --focus: #e4ff57;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-color: #e4ff57 #1a0812;
+}
+
+body {
+  margin: 0;
+  background: var(--lacquer);
+  color: var(--paper);
+  font-family: "Schibsted Grotesk", "Segoe UI", sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--chartreuse);
+  color: var(--ink);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  transform: translateY(-160%);
+  background: var(--chartreuse);
+  color: var(--ink);
+  padding: 0.6rem 0.9rem;
+  z-index: 5;
+}
+
+.skip:focus {
+  transform: none;
+}
+
+.wrap {
+  width: min(68rem, calc(100% - 2.5rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
+  margin-inline: auto;
+}
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.5rem max(1.25rem, env(safe-area-inset-right)) 0.5rem max(1.25rem, env(safe-area-inset-left));
+  background: color-mix(in srgb, var(--lacquer-deep) 92%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--blush) 35%, transparent);
+}
+
+.brand,
+.top-call,
+.jumps a,
+.contacts a,
+.colophon a {
+  color: var(--paper);
+}
+
+.brand {
+  font-family: "Anybody", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
+.top-call {
+  white-space: nowrap;
+  text-underline-offset: 0.18em;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Anybody", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+h1 {
+  margin: 1.4rem 0 0;
+  font-size: clamp(4.4rem, 22vw, 6rem);
+}
+
+.line {
+  display: block;
+}
+
+.line-2 {
+  color: var(--chartreuse);
+}
+
+.lead,
+.source,
+.visit p,
+.colophon p {
+  max-width: 38rem;
+}
+
+.lead {
+  margin: 1.25rem 0 0;
+  font-size: 1.2rem;
+  color: var(--blush);
+}
+
+.jumps {
+  display: flex;
+  gap: 1.25rem;
+  margin: 1.25rem 0 0;
+}
+
+.jumps a {
+  text-underline-offset: 0.2em;
+}
+
+.call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  margin: 1.5rem 0 0;
+  padding: 0.85rem 1.2rem;
+  background-color: var(--chartreuse);
+  background-image: linear-gradient(110deg, #e4ff57 0 42%, #f7ffb8 50%, #e4ff57 58% 100%);
+  background-size: 220% 100%;
+  color: var(--ink);
+  font-family: "Anybody", sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  animation: sheen 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s 1 both;
+}
+
+.call:hover {
+  background-color: #f4ff9a;
+}
+
+.services {
+  margin-top: 2.75rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3rem);
+}
+
+.source {
+  margin: 0.8rem 0 1.1rem;
+  color: var(--blush);
+}
+
+.enamels {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0 0 0.2rem;
+}
+
+.chip {
+  display: flex;
+  align-items: flex-end;
+  min-height: 5.4rem;
+  padding: 0.9rem;
+  font-family: "Anybody", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.25rem, 4vw, 1.7rem);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.tall {
+  grid-column: 1 / -1;
+  min-height: 7.5rem;
+}
+
+.chip-manicure { background: #f6c9d1; color: #3c1220; }
+.chip-pedicure { background: #e07f93; color: #2c0c16; }
+.chip-both { background: #b7eadc; color: #0e2420; }
+.chip-gel { background: #f3e27a; color: #2a2206; }
+.chip-acrylic { background: #6e1d38; color: #ffe8ef; }
+.chip-dip { background: #f6e4d4; color: #3a2418; }
+.chip-gelext { background: #d7ff4d; color: #1a2206; }
+.chip-ext { background: #1e2c40; color: #f3f6fb; }
+.chip-art { background: #6a4de0; color: #f7f4ff; }
+.chip-polish { background: #ff5a36; color: #2a0904; }
+.chip-men { background: #d5dbe6; color: #1a2030; }
+.chip-menfeet { background: #2d4a3c; color: #eef6f1; }
+
+.visit {
+  padding: 3rem 0 1rem;
+}
+
+.visit-grid {
+  display: grid;
+  gap: 2.2rem;
+  margin-top: 1.4rem;
+}
+
+h3 {
+  margin: 0 0 0.8rem;
+  font-size: 1.6rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1rem;
+}
+
+caption {
+  text-align: left;
+  margin-bottom: 0.55rem;
+  color: var(--blush);
+}
+
+th,
+td {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--blush) 40%, transparent);
+  text-align: left;
+  vertical-align: baseline;
+}
+
+th {
+  font-weight: 600;
+  padding-right: 1rem;
+}
+
+address {
+  font-style: normal;
+  margin-bottom: 1rem;
+}
+
+.contacts {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.contacts a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  text-underline-offset: 0.18em;
+  overflow-wrap: anywhere;
+}
+
+.colophon {
+  padding: 2rem 0 2.5rem;
+  color: var(--blush);
+  border-top: 1px solid color-mix(in srgb, var(--blush) 35%, transparent);
+}
+
+.colophon p {
+  margin: 0.35rem 0;
+  font-size: 0.95rem;
+}
+
+.colophon a {
+  font-weight: 600;
+}
+
+@media (min-width: 800px) {
+  .enamels {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.55rem;
+  }
+
+  .tall {
+    grid-column: auto;
+    min-height: 5.4rem;
+  }
+
+  .visit-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .call {
+    max-width: 22rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .call {
+    animation: none;
+    background-image: none;
+  }
+}
+
+@keyframes sheen {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}

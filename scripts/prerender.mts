@@ -110,6 +110,10 @@ try {
   const sitemap = head.renderSitemap(siteStatus, pages.map(({ page }) => page), baseUrl);
 
   if (sitemap && siteStatus.launched) {
+    if (sitemap.includes("/samples/")) {
+      throw new Error("Sample homepages must stay out of the sitemap.");
+    }
+
     const sitemapUrl = new URL(`${baseUrl}sitemap.xml`, siteStatus.productionOrigin).toString();
 
     writeFileSync(resolve(distDir, "sitemap.xml"), sitemap);
