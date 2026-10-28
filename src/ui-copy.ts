@@ -35,6 +35,10 @@ export interface UiCopy {
   openMenu: string;
   closeMenu: string;
   primaryNavigation: string;
+  languageLabel: string;
+  languageCurrent: (name: string) => string;
+  languageEnglish: string;
+  languageRomanian: string;
   navWebsites: string;
   navServices: string;
   navApproach: string;
@@ -138,6 +142,10 @@ const en: UiCopy = {
   openMenu: "Open menu",
   closeMenu: "Close menu",
   primaryNavigation: "Primary navigation",
+  languageLabel: "Language",
+  languageCurrent: (name) => `Language, ${name}`,
+  languageEnglish: "English",
+  languageRomanian: "Romanian",
   navWebsites: "Websites",
   navServices: "Services",
   navApproach: "How we work",
@@ -268,6 +276,10 @@ const ro: UiCopy = {
   openMenu: "Deschideți meniul",
   closeMenu: "Închideți meniul",
   primaryNavigation: "Navigare principală",
+  languageLabel: "Limbă",
+  languageCurrent: (name) => `Limbă, ${name}`,
+  languageEnglish: "engleză",
+  languageRomanian: "română",
   navWebsites: "Site-uri",
   navServices: "Servicii",
   navApproach: "Cum lucrăm",

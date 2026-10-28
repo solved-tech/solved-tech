@@ -37,11 +37,13 @@ describe("Romanian homepage", () => {
     expect(html).not.toContain("Tech solutions for any business.");
   });
 
-  it("does not offer a language switcher in the header", () => {
-    expect(html).not.toContain("language-switcher");
-    expect(html).not.toContain("data-locale-switch");
-    expect(html).not.toContain(">EN</a>");
-    expect(html).not.toContain(">RO</a>");
+  it("offers a language menu for the current page", () => {
+    expect(html).toContain('class="lang-switch"');
+    expect(html).toContain('aria-haspopup="listbox"');
+    expect(html).toContain('role="listbox"');
+    expect(html).toContain('href="/" lang="en-GB" hreflang="en-GB" data-locale-choice="en"');
+    expect(html).toContain('href="/ro/" lang="ro" hreflang="ro" data-locale-choice="ro" role="option" aria-selected="true" aria-current="page">RO</a>');
+    expect(html).toContain('aria-label="Limbă, română"');
     expect(html).toContain('href="#packages">Site-uri</a>');
   });
 
@@ -58,7 +60,7 @@ describe("Romanian homepage", () => {
 });
 
 describe("Romanian interior pages", () => {
-  it("translates privacy, a service page and Vorbio without a language switcher", () => {
+  it("translates privacy, a service page and Vorbio and keeps the language menu on that page", () => {
     const privacy = renderPrivacyPage(privacyContentRo, contactConfig, "/", "ro");
     const service = renderServicePage(servicePagesRo[0], siteContentRo, contactConfig, "/", "ro");
     const vorbio = renderVorbioPage(vorbioProductRo, contactConfig, "/", "ro");
@@ -67,13 +69,16 @@ describe("Romanian interior pages", () => {
     expect(privacy).toContain("Solved Tech Limited");
     expect(privacy).not.toMatch(/Wembley|England|Londra|London/);
     expect(privacy).toContain("ico.org.uk");
-    expect(privacy).not.toContain("language-switcher");
+    expect(privacy).toContain('class="lang-switch"');
+    expect(privacy).toContain('href="/privacy/" lang="en-GB" hreflang="en-GB" data-locale-choice="en"');
+    expect(privacy).toContain('href="/ro/privacy/" lang="ro" hreflang="ro" data-locale-choice="ro"');
     expect(privacy).toContain('href="/ro/privacy/"');
 
     expect(service).toContain(servicePagesRo[0].title);
     expect(service).toContain("Cereri tipice");
     expect(service).toContain('href="/ro/#services"');
-    expect(service).not.toContain("language-switcher");
+    expect(service).toContain(`href="/services/${servicePagesRo[0].slug}/" lang="en-GB"`);
+    expect(service).toContain(`href="/ro/services/${servicePagesRo[0].slug}/" lang="ro"`);
 
     expect(vorbio).toContain("Recepția dumneavoastră AI pentru voce și chat pe WhatsApp.");
     expect(vorbio).toContain("Pot programa o vizită joi?");

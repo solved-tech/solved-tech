@@ -5,8 +5,14 @@ export const LOCALE_STORAGE_KEY = "solved-tech-locale";
 const SEARCH_BOT =
   /googlebot|adsbot-google|mediapartners-google|storebot-google|google-inspectiontool|googleother|bingbot|duckduckbot|baiduspider|yandexbot|slurp|facebookexternalhit|linkedinbot|twitterbot|applebot|petalbot|semrushbot|ahrefsbot|dotbot|sogou|exabot|ia_archiver|wget|curl\/|phantomjs|lighthouse|chrome-lighthouse|embedly|slackbot|telegrambot|whatsapp|discordbot|redditbot|gptbot|claudebot|amazonbot|bytespider/i;
 
-export const clearStoredLocale = (storage: Pick<Storage, "removeItem">): void => {
-  storage.removeItem(LOCALE_STORAGE_KEY);
+export const parseStoredLocale = (value: string | null): Locale | null =>
+  value === "en" || value === "ro" ? value : null;
+
+export const readStoredLocale = (storage: Pick<Storage, "getItem">): Locale | null =>
+  parseStoredLocale(storage.getItem(LOCALE_STORAGE_KEY));
+
+export const rememberLocale = (storage: Pick<Storage, "setItem">, locale: Locale): void => {
+  storage.setItem(LOCALE_STORAGE_KEY, locale);
 };
 
 export const localeFromPath = (path: string): Locale => {
@@ -40,9 +46,59 @@ export const localizePath = (path: string, locale: Locale): string => {
   return normalized === "/" ? "/ro/" : `/ro${normalized}`;
 };
 
-/** Romanian only for a device set to Europe/Bucharest. Browser language is not a signal. */
-export const detectLocale = (timeZone: string): Locale =>
-  timeZone === "Europe/Bucharest" ? "ro" : "en";
+export const COUNTRY_LOOKUP_URL = "https://www.cloudflare.com/cdn-cgi/trace";
+export const COUNTRY_LOOKUP_TIMEOUT_MS = 1200;
+export const COUNTRY_CACHE_KEY = "solved-tech-country";
+
+export type CachedCountry = "RO" | "OTHER";
+
+/** Romanian only when the visitor's IP country is Romania. Anything else, including a failed lookup, is English. */
+export const detectLocale = (country: string | null): Locale => (country === "RO" ? "ro" : "en");
+
+/** Read `loc=` from a Cloudflare trace body and ignore every other field, including the IP address. */
+export const countryFromTrace = (body: string): string | null => {
+  const match = /^loc=([A-Za-z]{2})$/m.exec(body);
+
+  return match ? match[1].toUpperCase() : null;
+};
+
+export const parseCachedCountry = (value: string | null): CachedCountry | null =>
+  value === "RO" || value === "OTHER" ? value : null;
+
+export const cachedCountryValue = (country: string | null): CachedCountry =>
+  country === "RO" ? "RO" : "OTHER";
+
+/**
+ * Ask Cloudflare which country the connection comes from.
+ * Credentials are omitted so the browser does not store Cloudflare's cookie,
+ * and a slow or failed response becomes "unknown" rather than waiting.
+ */
+export const lookupCountry = async (
+  fetchImpl: typeof fetch,
+  timeoutMs = COUNTRY_LOOKUP_TIMEOUT_MS,
+): Promise<string | null> => {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetchImpl(COUNTRY_LOOKUP_URL, {
+      signal: controller.signal,
+      credentials: "omit",
+      cache: "no-store",
+      referrerPolicy: "no-referrer",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return countryFromTrace(await response.text());
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+};
 
 export const isSearchBot = (userAgent: string, webdriver: boolean): boolean =>
   webdriver || SEARCH_BOT.test(userAgent);
@@ -53,16 +109,20 @@ export interface LocaleRedirectInput {
   hash: string;
   detected: Locale;
   isBot: boolean;
+  /** A language chosen from the menu. It suppresses IP redirects. */
+  manual?: boolean;
 }
 
 /**
  * Client-side locale choice for static hosting.
  *
- * Europe/Bucharest selects Romanian. Every other timezone gets English.
- * Browser language is not used. A choice saved by the removed switcher is
- * cleared and ignored. Search bots are never redirected, so both URL sets
- * stay crawlable. A redirect happens only when the current URL's language
- * differs from the detected one, so the two versions cannot loop.
+ * Romania (IP country RO) selects Romanian. Every other country, and a lookup
+ * that times out or fails, gets English. Browser language and timezone are
+ * not used. A language chosen from the menu is remembered and is not
+ * overridden by a later IP lookup. The country result is remembered for the
+ * browser tab so a later page cannot bounce. Search bots are never redirected,
+ * so both URL sets stay crawlable. A redirect happens only when the current
+ * URL's language differs from the detected one, so the two versions cannot loop.
  */
 export const localeRedirectPath = ({
   pathname,
@@ -70,8 +130,9 @@ export const localeRedirectPath = ({
   hash,
   detected,
   isBot,
+  manual = false,
 }: LocaleRedirectInput): string | null => {
-  if (isBot) {
+  if (isBot || manual) {
     return null;
   }
 

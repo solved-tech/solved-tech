@@ -2,7 +2,7 @@
 
 import { contactConfig, privacyContent } from "./content";
 import { privacyContentRo } from "./content-ro";
-import { mount, setupHeaderOffset, setupMobileMenu, setupScrollProgress } from "./enhance";
+import { mount, setupHeaderOffset, setupLanguageSwitcher, setupMobileMenu, setupScrollProgress } from "./enhance";
 import { privacyPage, privacyPageRo } from "./head";
 import { applyDocumentLocale, currentLocale, redirectForLocale } from "./locale-client";
 import { renderPrivacyPage } from "./render";
@@ -14,7 +14,11 @@ if (!app) {
   throw new Error("Cannot render the privacy page: #app mount element is missing.");
 }
 
-if (!redirectForLocale(window)) {
+const start = async (): Promise<void> => {
+  if (await redirectForLocale(window)) {
+    return;
+  }
+
   const locale = currentLocale(window);
   const meta = locale === "ro" ? privacyPageRo : privacyPage;
   const content = locale === "ro" ? privacyContentRo : privacyContent;
@@ -23,5 +27,8 @@ if (!redirectForLocale(window)) {
   mount(app, () => renderPrivacyPage(content, contactConfig, import.meta.env.BASE_URL, locale));
   setupHeaderOffset(window);
   setupMobileMenu(app);
+  setupLanguageSwitcher(app, window);
   setupScrollProgress(window);
-}
+};
+
+void start();

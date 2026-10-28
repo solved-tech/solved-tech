@@ -235,7 +235,7 @@ export interface PrivacyContent {
 
 export const privacyContent: PrivacyContent = {
   title: "Privacy notice",
-  updated: "18 September 2026",
+  updated: "28 October 2026",
   sections: [
     {
       heading: "Who we are",
@@ -247,6 +247,7 @@ export const privacyContent: PrivacyContent = {
       heading: "What we collect and why",
       paragraphs: [
         "When you email us, we receive the contact details you use and the content of your message. We use this information to answer your enquiry, to assess the work you ask about and to prepare a proposal.",
+        "To choose the Romanian or English version of this site, your browser asks Cloudflare which country the connection comes from. We use only that country code. We do not receive or store your IP address, and the request is made without cookies. Until you choose a language, that country code stays in this browser until you close the tab. If you choose a language from the menu, we remember that choice in this browser and do not switch it for you again. If the lookup does not answer quickly, we show the English version.",
         "This website does not use cookies, analytics scripts or contact forms.",
       ],
     },
@@ -259,7 +260,7 @@ export const privacyContent: PrivacyContent = {
     {
       heading: "Who receives your data",
       paragraphs: [
-        "Email is processed by our email hosting provider. We do not sell or share your details for marketing.",
+        "The country lookup is handled by Cloudflare in your browser. Email is processed by our email hosting provider. We do not sell or share your details for marketing.",
       ],
     },
     {

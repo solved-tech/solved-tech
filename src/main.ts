@@ -8,6 +8,7 @@ import {
   settlePrerenderedReveals,
   setupHeaderOffset,
   setupHeroProcessMotion,
+  setupLanguageSwitcher,
   setupMobileMenu,
   setupMotionToggle,
   setupRevealMotion,
@@ -19,8 +20,8 @@ import { applyDocumentLocale, currentLocale, redirectForLocale } from "./locale-
 import { renderHomepage } from "./render";
 import "./styles.css";
 
-const start = (view: Window): void => {
-  if (redirectForLocale(view)) {
+const start = async (view: Window): Promise<void> => {
+  if (await redirectForLocale(view)) {
     return;
   }
 
@@ -53,10 +54,11 @@ const start = (view: Window): void => {
   setupRevealMotion(app, reducedMotion);
   setupHeroProcessMotion(app, reducedMotion);
   setupMobileMenu(app);
+  setupLanguageSwitcher(app, view);
   setupMotionToggle(app, view);
   setupScrollProgress(view);
 };
 
 if (typeof window !== "undefined") {
-  start(window);
+  void start(window);
 }

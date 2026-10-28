@@ -163,7 +163,7 @@ export const siteContentRo: SiteContent = {
 
 export const privacyContentRo: PrivacyContent = {
   title: "Notă de confidențialitate",
-  updated: "18 septembrie 2026",
+  updated: "28 octombrie 2026",
   sections: [
     {
       heading: "Cine suntem",
@@ -175,6 +175,7 @@ export const privacyContentRo: PrivacyContent = {
       heading: "Ce colectăm și de ce",
       paragraphs: [
         "Când ne scrieți, primim datele de contact pe care le folosiți și conținutul mesajului. Folosim aceste informații ca să răspundem la cerere, să evaluăm lucrarea despre care întrebați și să pregătim o propunere.",
+        "Ca să alegem versiunea în română sau în engleză a acestui site, browserul întreabă Cloudflare din ce țară vine conexiunea. Folosim doar codul țării. Nu primim și nu stocăm adresa IP, iar cererea se face fără cookie-uri. Până alegeți o limbă, codul țării rămâne în acest browser până închideți fila. Dacă alegeți o limbă din meniu, ținem minte alegerea în acest browser și nu o mai schimbăm noi. Dacă răspunsul nu vine repede, afișăm versiunea în engleză.",
         "Acest site nu folosește cookie-uri, scripturi de analiză sau formulare de contact.",
       ],
     },
@@ -187,7 +188,7 @@ export const privacyContentRo: PrivacyContent = {
     {
       heading: "Cine primește datele",
       paragraphs: [
-        "E-mailul este prelucrat de furnizorul nostru de găzduire a e-mailului. Nu vindem și nu transmitem datele dumneavoastră pentru marketing.",
+        "Verificarea țării este făcută de Cloudflare în browserul dumneavoastră. E-mailul este prelucrat de furnizorul nostru de găzduire a e-mailului. Nu vindem și nu transmitem datele dumneavoastră pentru marketing.",
       ],
     },
     {

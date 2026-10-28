@@ -8,7 +8,7 @@ browser enforces both; a request must satisfy every policy.
 
 | Header | Value | Why |
 | --- | --- | --- |
-| `Content-Security-Policy` | same value as the `<meta>` in `src/head.ts`, plus `; frame-ancestors 'none'` | `frame-ancestors`, `report-to`/`report-uri` and `sandbox` are ignored in `<meta>`; the header adds them |
+| `Content-Security-Policy` | same value as the `<meta>` in `src/head.ts`, plus `; frame-ancestors 'none'` | `frame-ancestors`, `report-to`/`report-uri` and `sandbox` are ignored in `<meta>`; the header adds them. `connect-src` includes `https://www.cloudflare.com` so the browser can ask which country the connection comes from |
 | `X-Frame-Options` | `DENY` | Fallback for clients without CSP 2 support |
 | `X-Content-Type-Options` | `nosniff` | Prevents MIME sniffing of assets |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | Mirrors the `<meta>` value |

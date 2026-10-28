@@ -1,32 +1,67 @@
-import { clearStoredLocale, detectLocale, isSearchBot, localeFromPath, localeRedirectPath } from "./locale";
-import type { Locale } from "./locale";
+import {
+  cachedCountryValue,
+  COUNTRY_CACHE_KEY,
+  detectLocale,
+  isSearchBot,
+  localeFromPath,
+  localeRedirectPath,
+  lookupCountry,
+  parseCachedCountry,
+  readStoredLocale,
+} from "./locale";
+import type { CachedCountry, Locale } from "./locale";
 import { uiCopy } from "./ui-copy";
 
-const forgetStoredLocale = (view: Window): void => {
+const readManualLocale = (view: Window): Locale | null => {
   try {
-    clearStoredLocale(view.localStorage);
+    return readStoredLocale(view.localStorage);
   } catch {
-    // Private mode can refuse storage. Detection still runs without a saved choice.
+    return null;
   }
 };
 
-const readTimeZone = (): string => {
+const readCachedCountry = (view: Window): CachedCountry | null => {
   try {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return parseCachedCountry(view.sessionStorage.getItem(COUNTRY_CACHE_KEY));
   } catch {
-    return "";
+    return null;
   }
 };
 
-export const redirectForLocale = (view: Window): boolean => {
-  forgetStoredLocale(view);
+const rememberCountry = (view: Window, country: CachedCountry): void => {
+  try {
+    view.sessionStorage.setItem(COUNTRY_CACHE_KEY, country);
+  } catch {
+    // The decision still applies to this page. The next page asks again.
+  }
+};
+
+export const redirectForLocale = async (
+  view: Window,
+  lookup: () => Promise<string | null> = () => lookupCountry(fetch),
+): Promise<boolean> => {
+  if (isSearchBot(view.navigator.userAgent, view.navigator.webdriver)) {
+    return false;
+  }
+
+  if (readManualLocale(view)) {
+    return false;
+  }
+
+  const cached = readCachedCountry(view);
+  const country = cached ?? cachedCountryValue(await lookup());
+
+  if (!cached) {
+    rememberCountry(view, country);
+  }
 
   const target = localeRedirectPath({
     pathname: view.location.pathname,
     search: view.location.search,
     hash: view.location.hash,
-    detected: detectLocale(readTimeZone()),
-    isBot: isSearchBot(view.navigator.userAgent, view.navigator.webdriver),
+    detected: detectLocale(country === "RO" ? "RO" : null),
+    isBot: false,
+    manual: false,
   });
 
   if (!target || target === `${view.location.pathname}${view.location.search}${view.location.hash}`) {
