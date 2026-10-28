@@ -77,13 +77,13 @@ export const siteContent: SiteContent = {
     {
       id: "customers",
       question: "Need more customers?",
-      title: "SEO & paid campaigns",
+      title: "SEO & Paid Campaigns",
       outcome: "Help the right people find you when they are ready to act.",
     },
     {
       id: "app",
       question: "Need an app?",
-      title: "Web, mobile & desktop apps",
+      title: "Web, Mobile & Desktop Apps",
       outcome: "A useful product built around the job it needs to do.",
     },
     {
@@ -95,14 +95,14 @@ export const siteContent: SiteContent = {
     {
       id: "fix",
       question: "Something broken?",
-      title: "Bug fixes & improvements",
+      title: "Bug Fixes & Improvements",
       outcome:
         "We investigate the problem, reproduce it where possible, agree the fix and test it.",
     },
     {
       id: "other",
       question: "Need to automate a process?",
-      title: "Automation & integrations",
+      title: "Automation & Integrations",
       outcome:
         "Reduce repetitive work and connect the tools your team relies on.",
     },
@@ -172,8 +172,11 @@ export const siteContent: SiteContent = {
     {
       name: "Remus Baciu",
       role: "Co-founder",
-      image: "/team/remus_baciu-340.webp",
-      imageSources: [],
+      image: "/team/remus_baciu-520.webp",
+      imageSources: [
+        { path: "/team/remus_baciu-520.webp", width: 520 },
+        { path: "/team/remus_baciu-1040.webp", width: 1040 },
+      ],
       linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
       bio: [
         "With more than 11 years at Sky, I am a Senior Software Engineer.",

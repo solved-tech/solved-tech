@@ -287,9 +287,10 @@ describe("homepage renderer", () => {
       'src="/team/razvan_cristofor-520.webp"',
     );
     expect(pagesHtml).toContain(
-      'src="/team/remus_baciu-340.webp"',
+      'src="/team/remus_baciu-520.webp"',
     );
     expect(pagesHtml).toContain('srcset="/team/razvan_cristofor-520.webp 520w, /team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
+    expect(pagesHtml).toContain('srcset="/team/remus_baciu-520.webp 520w, /team/remus_baciu-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
   });
 
   it("omits the background grid so it does not compete with the hero process", () => {
@@ -365,7 +366,7 @@ describe("homepage renderer", () => {
       expect(html.match(/founder__linkedin/g)).toHaveLength(2);
     });
     expect(html.match(/class="founder__portrait-frame"/g)).toHaveLength(2);
-    expect(html.match(/ srcset="/g)).toHaveLength(1);
+    expect(html.match(/ srcset="/g)).toHaveLength(2);
     expect(html).not.toContain("Placeholder portrait");
     expect(html).not.toContain("Photo placeholder");
   });
