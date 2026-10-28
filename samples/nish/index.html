@@ -4,76 +4,81 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Nish, Cluj-Napoca</title>
-    <meta name="description" content="O mostră de pagină pentru Nish, cafenea pe Strada Horea 1 din Cluj-Napoca, pregătită de Solved Tech. Nu este site-ul live." />
+    <meta name="description" content="Cafea de specialitate la Nish, Strada Horea 1, Cluj-Napoca. Pagină mostră pregătită de Solved Tech, nu site-ul live." />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#f3f7f6" />
+    <meta name="theme-color" content="#f1efed" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="fonts/erode-600.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="fonts/erode-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="fonts/erode-500.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <a class="skip" href="#main">Sari la conținut</a>
     <header class="top">
       <a class="mark" href="#top" translate="no">Nish</a>
+      <nav class="nav" aria-label="Pe pagină">
+        <a href="#ore">Program</a>
+        <a href="#bar">La bar</a>
+      </nav>
       <a class="btn" href="mailto:nishcafea@gmail.com">Scrieți la cafenea</a>
     </header>
     <main id="main">
       <section class="hero" id="top" aria-labelledby="hero-heading">
-        <div class="intro">
-          <h1 id="hero-heading" translate="no">Nish</h1>
-          <p class="lead">Cafea de specialitate pe Strada Horea 1, Cluj-Napoca.</p>
-          <a class="btn" href="mailto:nishcafea@gmail.com">Scrieți la cafenea</a>
-        </div>
         <figure>
-          <img src="media/cup-of-coffee-on-cafe-table.jpg" width="1400" height="1050" alt="O ceașcă de cafea pe o masă de cafenea. Nu este tejgheaua Nish." fetchpriority="high" />
-          <figcaption>O ceașcă, nu tejgheaua lor.</figcaption>
+          <img src="media/cup-of-coffee-on-cafe-table.jpg" width="1400" height="1050" alt="O ceașcă de cafea neagră pe o masă de marmură." fetchpriority="high" />
         </figure>
-      </section>
-      <section class="menu" id="bar" aria-labelledby="bar-heading">
-        <div class="wrap">
-          <h2 id="bar-heading">La bar</h2>
-          <ul>
-            <li>Espresso</li>
-            <li>Cafea la filtru</li>
-            <li>Cold brew</li>
-            <li>Lapte vegetal</li>
-          </ul>
-          <p>Nu există o listă publică de prețuri. Întrebați la tejghea.</p>
-        </div>
-      </section>
-      <section class="place" id="loc" aria-labelledby="loc-heading">
-        <div class="wrap place-grid">
-          <figure>
-            <img src="media/banks-somes-cluj-2.jpg" width="1400" height="1050" alt="Pescăruși pe balustrada Someșului în Cluj-Napoca." loading="lazy" />
-            <figcaption>Malul Someșului. Nu interiorul cafenelei.</figcaption>
-          </figure>
-          <div>
-            <h2 id="loc-heading">Înăuntru</h2>
-            <p>Cameră de circa 15 m², la parterul Palatului Berde, lângă Someș. Wi-Fi, loc pentru laptop, opțiuni vegane. Copiii și câinii sunt bineveniți. Se acceptă cardul. Intrarea este accesibilă cu scaunul rulant.</p>
-            <p>Telefonul nu este publicat.</p>
-          </div>
+        <div class="intro">
+          <h1 id="hero-heading">Cafea de specialitate</h1>
+          <p class="lead">La Palatul Berde, pe Strada Horea 1, lângă Someș.</p>
+          <a class="btn" href="mailto:nishcafea@gmail.com">Scrieți la cafenea</a>
         </div>
       </section>
       <section class="hours" id="ore" aria-labelledby="ore-heading">
         <div class="wrap">
           <h2 id="ore-heading">Program</h2>
           <ul>
-            <li><span>Luni până vineri</span><span>07:30-16:00</span></li>
-            <li><span>Sâmbătă și duminică</span><span>09:00-16:00</span></li>
+            <li><span>Luni până vineri</span><span>07:30–16:00</span></li>
+            <li><span>Sâmbătă și duminică</span><span>09:00–16:00</span></li>
           </ul>
           <p>Programul este cel publicat de European Coffee Trip. Alte listări dau ore ușor diferite. Confirmați înainte să treceți.</p>
-          <p class="links">
-            <a href="mailto:nishcafea@gmail.com">nishcafea@gmail.com</a>
-            <a href="https://www.google.com/maps/search/?api=1&amp;query=Nish+Strada+Horea+1+Cluj-Napoca">Strada Horea 1</a>
-            <a href="https://www.facebook.com/496862433511819" rel="noopener noreferrer">Facebook</a>
-          </p>
+        </div>
+      </section>
+      <section class="bar" id="bar" aria-labelledby="bar-heading">
+        <div class="wrap bar-grid">
+          <h2 id="bar-heading">La bar</h2>
+          <div>
+            <ul>
+              <li>Espresso</li>
+              <li>Cafea la filtru</li>
+              <li>Cold brew</li>
+              <li>Lapte vegetal</li>
+            </ul>
+            <p>Nu există o listă publică de prețuri. Întrebați la tejghea.</p>
+          </div>
+        </div>
+      </section>
+      <section class="place" id="loc" aria-labelledby="loc-heading">
+        <div class="wrap place-grid">
+          <div>
+            <h2 id="loc-heading">La Palatul Berde</h2>
+            <p>Cameră de circa 15 m², la parter, lângă Someș. Wi-Fi, loc pentru laptop, opțiuni vegane. Copiii și câinii sunt bineveniți. Se acceptă cardul. Intrarea este accesibilă cu scaunul rulant.</p>
+            <p>Telefonul nu este publicat.</p>
+            <p class="links">
+              <a href="mailto:nishcafea@gmail.com">nishcafea@gmail.com</a>
+              <a href="https://www.google.com/maps/search/?api=1&amp;query=Nish+Strada+Horea+1+Cluj-Napoca">Strada Horea 1</a>
+              <a href="https://www.facebook.com/496862433511819" rel="noopener noreferrer">Facebook</a>
+            </p>
+          </div>
+          <figure>
+            <img src="media/cluj-napoca-as-seen-from-cetatuia-park.jpg" width="1400" height="934" alt="Cluj-Napoca, văzut de pe dealul Cetățuia." loading="lazy" />
+            <figcaption>Cluj-Napoca, de pe Cetățuia.</figcaption>
+          </figure>
         </div>
       </section>
     </main>
     <footer class="foot">
-      <p class="credits" data-credits>Fotografiile arată o ceașcă și Someșul, nu interiorul Nish. Ceașcă de Ssu, CC BY-SA 4.0. Malul Someșului de Cristian Bortes, CC BY 2.0. Prin Wikimedia Commons.</p>
+      <p class="credits" data-credits>Fotografiile arată o ceașcă și orașul, nu interiorul Nish. Ceașcă de Ssu, CC BY-SA 4.0. Cluj-Napoca de pe Cetățuia de Choinowski, CC BY-SA 4.0. Prin Wikimedia Commons.</p>
       <p class="sample" lang="en">Sample by <a href="https://solvedtech.co.uk">Solved Tech</a>. Pagină mostră, nu site-ul live. Detaliile vin din listări publice.</p>
     </footer>
   </body>
