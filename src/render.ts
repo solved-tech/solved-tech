@@ -453,16 +453,13 @@ export const renderHomepage = (
     .join("");
   const founders = content.founders
     .map(
-      ({ name, role, image, imageSources, linkedin, bio, website }) => {
+      ({ name, role, image, imageSources, linkedin, bio }) => {
         const srcset = imageSources.length
           ? ` srcset="${imageSources
               .map(({ path, width }) => `${escapeHtml(publicAssetUrl(path, baseUrl))} ${width}w`)
               .join(", ")}" sizes="(min-width: 48rem) 26rem, 80vw"`
           : "";
         const paragraphs = bio.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
-        const siteLink = website
-          ? `<a class="founder__site" href="${escapeHtml(website)}" target="_blank" rel="noopener noreferrer">${escapeHtml(name)}'s site</a>`
-          : "";
 
         return `
         <article class="founder" data-reveal>
@@ -473,13 +470,13 @@ export const renderHomepage = (
           </div>
           <div class="founder__details">
             <h3>${escapeHtml(name)} · ${escapeHtml(role)}</h3>
-            <a href="${escapeHtml(linkedin)}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile for ${escapeHtml(name)}">
+            <a class="founder__linkedin" href="${escapeHtml(linkedin)}" target="_blank" rel="noopener noreferrer">
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6.5 8.25H3.25V20H6.5V8.25ZM4.88 3A1.88 1.88 0 1 0 4.88 6.75 1.88 1.88 0 0 0 4.88 3ZM20.75 13.25c0-3.54-1.89-5.19-4.42-5.19-2.04 0-2.95 1.12-3.46 1.91V8.25H9.62V20h3.25v-5.82c0-1.53.29-3.01 2.19-3.01 1.87 0 1.89 1.75 1.89 3.11V20h3.25l.55-6.75Z"/></svg>
+              LinkedIn
             </a>
           </div>
           <div class="founder__bio">
             ${paragraphs}
-            ${siteLink}
           </div>
         </article>`;
       },

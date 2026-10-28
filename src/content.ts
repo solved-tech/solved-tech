@@ -30,7 +30,6 @@ export interface FounderProfile {
   imageSources: FounderImageSource[];
   linkedin: string;
   bio: string[];
-  website?: string;
 }
 
 export interface CaseStudy {
@@ -177,10 +176,9 @@ export const siteContent: SiteContent = {
         { path: "/team/razvan_cristofor-1040.webp", width: 1040 },
       ],
       linkedin: "https://www.linkedin.com/in/razvan-cristofor-7ba16b105/",
-      website: "https://razvancristofor.ro/",
       bio: [
-        "He builds websites, online shops, and web, mobile, Windows and desktop apps.",
-        "He also builds automations, AI and API integrations, and works on SEO and performance.",
+        "With 5+ years of experience in SEO and web apps, I build websites, online shops, and web, mobile, Windows and desktop apps.",
+        "I also build automations, AI and API integrations, and I work on SEO and performance.",
       ],
     },
     {
@@ -190,9 +188,9 @@ export const siteContent: SiteContent = {
       imageSources: [],
       linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
       bio: [
-        "Senior Software Engineer at Sky, with more than 11 years there.",
-        "He works in Java, Python and Go, and looks after infrastructure and CI/CD.",
-        "His focus is staying up to date with technology, building AI harnesses, and helping businesses reach their technical goals.",
+        "With more than 11 years at Sky, I am a Senior Software Engineer.",
+        "I work in Java, Python and Go, and I look after infrastructure and CI/CD.",
+        "I focus on staying up to date with technology, building AI harnesses, and helping businesses reach their technical goals.",
       ],
     },
   ],

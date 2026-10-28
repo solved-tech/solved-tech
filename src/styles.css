@@ -1832,14 +1832,15 @@ main > section.hero {
 }
 
 .founder__details {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.25rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 0.75rem 1rem;
   padding-block-start: 1rem;
 }
 
 .founder__details h3 {
+  flex: 1 1 100%;
   font-size: var(--type-heading);
 }
 
@@ -1848,23 +1849,31 @@ main > section.hero {
   font-size: var(--type-small);
 }
 
-.founder__details a {
-  grid-column: 2;
-  grid-row: 1;
-  display: grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  border: 1px solid var(--line-strong);
-  color: var(--ink);
+.founder__linkedin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--type-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
   transition:
-    border-color 240ms var(--ease),
+    background-color 240ms var(--ease),
     color 240ms var(--ease);
 }
 
-.founder__details a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+.founder__linkedin:hover,
+.founder__linkedin:focus-visible {
+  background-color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .founder__details svg {
@@ -1884,20 +1893,6 @@ main > section.hero {
   line-height: 1.5;
 }
 
-.founder__site {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--accent);
-  font-weight: 600;
-  text-decoration: none;
-  text-underline-offset: 0.25em;
-}
-
-.founder__site:hover,
-.founder__site:focus-visible {
-  text-decoration: underline;
-}
 
 /* Proof and FAQ ------------------------------------------------------- */
 
