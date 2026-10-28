@@ -34,12 +34,12 @@ describe("locale paths", () => {
 });
 
 describe("locale detection", () => {
-  it("treats Romanian browser language or the Bucharest timezone as Romania", () => {
-    expect(detectLocale(["ro-RO", "en-GB"], "Europe/London")).toBe("ro");
-    expect(detectLocale(["en-GB"], "Europe/Bucharest")).toBe("ro");
-    expect(detectLocale(["ro"], "America/New_York")).toBe("ro");
-    expect(detectLocale(["en-GB", "en"], "Europe/London")).toBe("en");
-    expect(detectLocale(["en-GB"], "Europe/Chisinau")).toBe("en");
+  it("selects Romanian only for the Bucharest timezone", () => {
+    expect(detectLocale("Europe/Bucharest")).toBe("ro");
+    expect(detectLocale("Europe/London")).toBe("en");
+    expect(detectLocale("America/New_York")).toBe("en");
+    expect(detectLocale("Europe/Chisinau")).toBe("en");
+    expect(detectLocale("")).toBe("en");
   });
 
   it("clears a previously saved language choice", () => {

@@ -13,9 +13,6 @@ const forgetStoredLocale = (view: Window): void => {
 export const redirectForLocale = (view: Window): boolean => {
   forgetStoredLocale(view);
 
-  const languages = view.navigator.languages?.length
-    ? view.navigator.languages
-    : [view.navigator.language].filter((language) => language);
   let timeZone = "";
 
   try {
@@ -28,7 +25,7 @@ export const redirectForLocale = (view: Window): boolean => {
     pathname: view.location.pathname,
     search: view.location.search,
     hash: view.location.hash,
-    detected: detectLocale(languages, timeZone),
+    detected: detectLocale(timeZone),
     isBot: isSearchBot(view.navigator.userAgent, view.navigator.webdriver),
   });
 
