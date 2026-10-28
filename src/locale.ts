@@ -40,15 +40,9 @@ export const localizePath = (path: string, locale: Locale): string => {
   return normalized === "/" ? "/ro/" : `/ro${normalized}`;
 };
 
-export const detectLocale = (languages: readonly string[], timeZone: string): Locale => {
-  const romanianLanguage = languages.some((language) => language.toLowerCase().split("-")[0] === "ro");
-
-  if (romanianLanguage || timeZone === "Europe/Bucharest") {
-    return "ro";
-  }
-
-  return "en";
-};
+/** Romanian only for a device set to Europe/Bucharest. Browser language is not a signal. */
+export const detectLocale = (timeZone: string): Locale =>
+  timeZone === "Europe/Bucharest" ? "ro" : "en";
 
 export const isSearchBot = (userAgent: string, webdriver: boolean): boolean =>
   webdriver || SEARCH_BOT.test(userAgent);
@@ -64,10 +58,11 @@ export interface LocaleRedirectInput {
 /**
  * Client-side locale choice for static hosting.
  *
- * Browser language (`ro`) and the Europe/Bucharest timezone select Romanian.
- * Every other visitor gets English. Search bots are never redirected, so both
- * URL sets stay crawlable. A redirect happens only when the current URL's
- * language differs from the detected one, so the two versions cannot loop.
+ * Europe/Bucharest selects Romanian. Every other timezone gets English.
+ * Browser language is not used. A choice saved by the removed switcher is
+ * cleared and ignored. Search bots are never redirected, so both URL sets
+ * stay crawlable. A redirect happens only when the current URL's language
+ * differs from the detected one, so the two versions cannot loop.
  */
 export const localeRedirectPath = ({
   pathname,

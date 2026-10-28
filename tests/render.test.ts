@@ -292,7 +292,7 @@ describe("homepage renderer", () => {
     expect(pagesHtml).toContain('srcset="/team/razvan_cristofor-520.webp 520w, /team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
     expect(pagesHtml).toContain('<source type="image/avif" srcset="/team/remus_baciu-520.avif 520w, /team/remus_baciu-1040.avif 1040w" sizes="(min-width: 48rem) 26rem, 80vw" />');
     expect(pagesHtml).toContain('<source type="image/webp" srcset="/team/remus_baciu-520.webp 520w, /team/remus_baciu-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw" />');
-    expect(pagesHtml).toContain('alt="Remus Baciu" width="520" height="620" loading="lazy"');
+    expect(pagesHtml).toContain('alt="Remus Baciu" width="520" height="611" loading="lazy"');
   });
 
   it("omits the background grid so it does not compete with the hero process", () => {
