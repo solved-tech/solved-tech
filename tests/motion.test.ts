@@ -569,6 +569,7 @@ describe("motion toggle", () => {
     const attributes = new Map<string, string>();
     const button = {
       disabled: false,
+      getAttribute: (name: string) => attributes.get(name) ?? null,
       setAttribute: (name: string, value: string) =>
         attributes.set(name, value),
       addEventListener: (type: string, handler: () => void) =>

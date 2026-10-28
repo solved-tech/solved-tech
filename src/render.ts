@@ -9,6 +9,10 @@ import type {
   SiteContent,
   VorbioProduct,
 } from "./content";
+import { servicePagesRo } from "./content-ro";
+import type { Locale } from "./locale";
+import { localizePath } from "./locale";
+import { uiCopy } from "./ui-copy";
 
 export const escapeHtml = (value: string): string =>
   value.replace(
@@ -28,57 +32,83 @@ export const publicAssetUrl = (path: string, baseUrl: string): string => {
   return `${base}${path.replace(/^\/+/, "")}`;
 };
 
-const HERO_QUOTE_SUBJECT = "Free quote";
-const QUOTE_SUBJECT = "Website quote";
-
 const mailtoWithSubject = (email: string, subject: string): string =>
   `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+
+const pagesFor = (locale: Locale): ServicePage[] => {
+  switch (locale) {
+    case "en":
+      return servicePages;
+    case "ro":
+      return servicePagesRo;
+    default: {
+      const exhaustive: never = locale;
+      return exhaustive;
+    }
+  }
+};
+
+const homeHrefFor = (locale: Locale, baseUrl: string): string =>
+  locale === "ro" ? publicAssetUrl("/ro/", baseUrl) : baseUrl;
+
+const renderLanguageSwitcher = (locale: Locale, pagePath: string, baseUrl: string): string => {
+  const copy = uiCopy(locale);
+  const links = (["en", "ro"] as const)
+    .map((code) => {
+      const href = publicAssetUrl(localizePath(pagePath, code), baseUrl);
+      const current = code === locale ? ' aria-current="page"' : "";
+      const lang = code === "en" ? "en-GB" : "ro";
+      const label = code === "en" ? "EN" : "RO";
+
+      return `<a href="${escapeHtml(href)}" lang="${lang}" hreflang="${lang}" data-locale-switch="${code}"${current}>${label}</a>`;
+    })
+    .join("");
+
+  return `<div class="language-switcher" role="group" aria-label="${escapeHtml(copy.languageLabel)}">${links}</div>`;
+};
 
 const renderContactActions = (
   config: ContactConfig,
   className: string,
+  locale: Locale,
 ): string => {
+  const copy = uiCopy(locale);
   const isHero = className === "hero__actions";
   const placement = isHero ? "hero" : "contact";
-  const quoteSubject = isHero ? HERO_QUOTE_SUBJECT : QUOTE_SUBJECT;
-  const quoteLabel = "Get a free quote";
+  const quoteSubject = isHero ? copy.heroQuoteSubject : copy.quoteSubject;
 
   return `
   <div class="${className}">
-    <a class="contact-action contact-action--quote" href="${escapeHtml(mailtoWithSubject(config.email, quoteSubject))}" data-analytics="contact_click" data-channel="email" data-placement="${placement}">${quoteLabel}</a>
+    <a class="contact-action contact-action--quote" href="${escapeHtml(mailtoWithSubject(config.email, quoteSubject))}" data-analytics="contact_click" data-channel="email" data-placement="${placement}">${escapeHtml(copy.quoteLabel)}</a>
   </div>`;
 };
 
-const heroProcessStages = [
-  { id: "understand", title: "Listen", detail: "What you need" },
-  { id: "shape", title: "Agree", detail: "The work and a quote" },
-  { id: "build", title: "Build", detail: "The solution" },
-  { id: "maintain", title: "Hand over", detail: "Ready to use" },
-] as const;
+const renderHeroProcess = (locale: Locale): string => {
+  const copy = uiCopy(locale);
 
-const renderHeroProcess = (): string => `
+  return `
       <div class="hero__visual" data-reveal>
         <div class="hero-process">
           <div class="hero-process__interface" aria-hidden="true">
             <div class="hero-process__topbar">
-              <span><i class="hero-process__live hero-process__animated"></i>Your project</span>
-              <span>How it happens</span>
+              <span><i class="hero-process__live hero-process__animated"></i>${escapeHtml(copy.yourProject)}</span>
+              <span>${escapeHtml(copy.howItHappens)}</span>
             </div>
             <div class="hero-process__input">
-              <span>What you tell us</span>
-              <strong>What you need done, and what done looks like.</strong>
+              <span>${escapeHtml(copy.whatYouTellUs)}</span>
+              <strong>${escapeHtml(copy.whatYouNeedDone)}</strong>
             </div>
             <div class="hero-process__pipeline">
               <span class="hero-process__rail"></span>
               <span class="hero-process__signal hero-process__animated"></span>
               <ol class="hero-process__stages">
-${heroProcessStages
+${copy.stages
   .map(
     ({ id, title, detail }, index) => `
                 <li class="hero-process__stage hero-process__stage--${id} hero-process__animated">
                   <span class="hero-process__number">${String(index + 1).padStart(2, "0")}</span>
                   <span class="hero-process__node"></span>
-                  <span class="hero-process__stage-copy"><strong>${title}</strong><small>${detail}</small></span>
+                  <span class="hero-process__stage-copy"><strong>${escapeHtml(title)}</strong><small>${escapeHtml(detail)}</small></span>
                 </li>`,
   )
   .join("")}
@@ -86,12 +116,13 @@ ${heroProcessStages
             </div>
             <div class="hero-process__output">
               <span class="hero-process__check">✓</span>
-              <span><small>What you get</small><strong>Work your business can use.</strong></span>
+              <span><small>${escapeHtml(copy.whatYouGet)}</small><strong>${escapeHtml(copy.workYouCanUse)}</strong></span>
             </div>
           </div>
-          <button class="hero-process__control" type="button" aria-label="Pause diagram motion" aria-pressed="false"></button>
+          <button class="hero-process__control" type="button" aria-label="${escapeHtml(copy.pauseMotion)}" aria-pressed="false" data-label-pause="${escapeHtml(copy.pauseMotion)}" data-label-resume="${escapeHtml(copy.resumeMotion)}"></button>
         </div>
       </div>`;
+};
 
 const renderProductGlyph = (id: ProductId): string => {
   const open = `<svg class="product-glyph product-glyph--${id}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">`;
@@ -323,38 +354,55 @@ const renderServiceArt = (id: ProductId): string => {
   }
 };
 
-export const renderSiteHeader = (baseUrl: string, homeHref: string): string => `
+export const renderSiteHeader = (
+  baseUrl: string,
+  homeHref: string,
+  locale: Locale = "en",
+  pagePath = "/",
+): string => {
+  const copy = uiCopy(locale);
+
+  return `
     <div id="top" class="page-top" tabindex="-1"></div>
     <header class="site-header">
-      <a class="wordmark" href="${escapeHtml(homeHref)}#top" aria-label="Solved Tech home">
+      <a class="wordmark" href="${escapeHtml(homeHref)}#top" aria-label="${escapeHtml(copy.homeLabel)}">
         <img src="${escapeHtml(publicAssetUrl("/brand/solved-tech-logo-dark.svg", baseUrl))}" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
       </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-      <nav id="primary-navigation" aria-label="Primary navigation">
-        <a href="${escapeHtml(homeHref)}#packages">Websites</a>
-        <a href="${escapeHtml(homeHref)}#services">Services</a>
-        <a href="${escapeHtml(homeHref)}#approach">How we work</a>
-        <a href="${escapeHtml(homeHref)}#team">Team</a>
-        <a href="${escapeHtml(homeHref)}#contact">Get a quote</a>
-      </nav>
+      <div class="site-header__end">
+        ${renderLanguageSwitcher(locale, pagePath, baseUrl)}
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="${escapeHtml(copy.openMenu)}" data-label-open="${escapeHtml(copy.openMenu)}" data-label-close="${escapeHtml(copy.closeMenu)}">
+          <span></span><span></span><span></span>
+        </button>
+        <nav id="primary-navigation" aria-label="${escapeHtml(copy.primaryNavigation)}">
+          <a href="${escapeHtml(homeHref)}#packages">${escapeHtml(copy.navWebsites)}</a>
+          <a href="${escapeHtml(homeHref)}#services">${escapeHtml(copy.navServices)}</a>
+          <a href="${escapeHtml(homeHref)}#approach">${escapeHtml(copy.navApproach)}</a>
+          <a href="${escapeHtml(homeHref)}#team">${escapeHtml(copy.navTeam)}</a>
+          <a href="${escapeHtml(homeHref)}#contact">${escapeHtml(copy.navQuote)}</a>
+        </nav>
+      </div>
     </header>`;
+};
 
-export const renderSiteFooter = (baseUrl: string): string => `
+export const renderSiteFooter = (baseUrl: string, locale: Locale = "en"): string => {
+  const copy = uiCopy(locale);
+
+  return `
     <footer>
       <p>&copy; ${new Date().getFullYear()} Solved Tech</p>
-      <a href="${escapeHtml(publicAssetUrl("/privacy/", baseUrl))}">Privacy notice</a>
-      <a href="#top">Back to top</a>
+      <a href="${escapeHtml(publicAssetUrl(localizePath("/privacy/", locale), baseUrl))}">${escapeHtml(copy.privacyNotice)}</a>
+      <a href="#top">${escapeHtml(copy.backToTop)}</a>
     </footer>`;
+};
 
 const hasPlaceholder = (value: string): boolean => /\[\[[A-Z_]+\]\]/.test(value);
 
-const renderCaseStudies = (studies: CaseStudy[]): string => {
+const renderCaseStudies = (studies: CaseStudy[], locale: Locale): string => {
   if (studies.length === 0) {
     return "";
   }
 
+  const copy = uiCopy(locale);
   const cards = studies
     .map(
       ({ id, title, client, situation, contribution, deliverable, technologies, result }) => `
@@ -362,12 +410,12 @@ const renderCaseStudies = (studies: CaseStudy[]): string => {
             <p class="case-study__client">${escapeHtml(client)}</p>
             <h3>${escapeHtml(title)}</h3>
             <dl class="case-study__facts">
-              <div><dt>Situation</dt><dd>${escapeHtml(situation)}</dd></div>
-              <div><dt>What we did</dt><dd>${escapeHtml(contribution)}</dd></div>
-              <div><dt>Delivered</dt><dd>${escapeHtml(deliverable)}</dd></div>
-              <div><dt>Result</dt><dd>${escapeHtml(result)}</dd></div>
+              <div><dt>${escapeHtml(copy.caseSituation)}</dt><dd>${escapeHtml(situation)}</dd></div>
+              <div><dt>${escapeHtml(copy.caseWhatWeDid)}</dt><dd>${escapeHtml(contribution)}</dd></div>
+              <div><dt>${escapeHtml(copy.caseDelivered)}</dt><dd>${escapeHtml(deliverable)}</dd></div>
+              <div><dt>${escapeHtml(copy.caseResult)}</dt><dd>${escapeHtml(result)}</dd></div>
             </dl>
-            <ul class="case-study__stack" aria-label="Technologies">${technologies.map((technology) => `<li>${escapeHtml(technology)}</li>`).join("")}</ul>
+            <ul class="case-study__stack" aria-label="${escapeHtml(copy.caseTechnologies)}">${technologies.map((technology) => `<li>${escapeHtml(technology)}</li>`).join("")}</ul>
           </article>`,
     )
     .join("");
@@ -375,20 +423,21 @@ const renderCaseStudies = (studies: CaseStudy[]): string => {
   return `
       <section id="work" class="work" aria-labelledby="work-heading">
         <div class="work__heading">
-          <p data-reveal>Recent work</p>
-          <h2 id="work-heading" data-reveal>Problems we have solved</h2>
+          <p data-reveal>${escapeHtml(copy.caseRecentWork)}</p>
+          <h2 id="work-heading" data-reveal>${escapeHtml(copy.caseHeading)}</h2>
         </div>
         <div class="work__grid">${cards}</div>
       </section>`;
 };
 
-const renderFaq = (entries: FaqEntry[]): string => {
+const renderFaq = (entries: FaqEntry[], locale: Locale): string => {
   const answered = entries.filter(({ answer }) => !hasPlaceholder(answer));
 
   if (answered.length === 0) {
     return "";
   }
 
+  const copy = uiCopy(locale);
   const items = answered
     .map(
       ({ question, answer }) => `
@@ -402,8 +451,8 @@ const renderFaq = (entries: FaqEntry[]): string => {
   return `
       <section id="faq" class="faq" aria-labelledby="faq-heading">
         <div class="faq__heading">
-          <p data-reveal>Before you get in touch</p>
-          <h2 id="faq-heading" data-reveal>Questions we are often asked</h2>
+          <p data-reveal>${escapeHtml(copy.faqEyebrow)}</p>
+          <h2 id="faq-heading" data-reveal>${escapeHtml(copy.faqHeading)}</h2>
         </div>
         <dl class="faq__list">${items}</dl>
       </section>`;
@@ -424,15 +473,24 @@ const resolveServicePage = (
   return matches[0];
 };
 
+const JOURNEY_ICONS = [
+  '<svg viewBox="0 0 48 48"><path d="M12 29c6-10 14-16 24-18M12 29h9M12 29v-9" /><circle cx="36" cy="11" r="3" /></svg>',
+  '<svg viewBox="0 0 48 48"><path d="M9 24h27M29 16l8 8-8 8" /></svg>',
+  '<svg viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="24" rx="2" /><path d="M17 40h14M24 34v6M13 16h22" /></svg>',
+  '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" /><path d="m16 24 6 6 11-13" /></svg>',
+] as const;
+
 export const renderHomepage = (
   content: SiteContent,
   config: ContactConfig,
   baseUrl: string = import.meta.env.BASE_URL,
+  locale: Locale = "en",
 ): string => {
+  const copy = uiCopy(locale);
   const cards = content.products
     .map(({ id, question, title, outcome }, index) => {
-      const page = resolveServicePage(servicePages, id);
-      const href = publicAssetUrl(`/services/${page.slug}/`, baseUrl);
+      const page = resolveServicePage(pagesFor(locale), id);
+      const href = publicAssetUrl(localizePath(`/services/${page.slug}/`, locale), baseUrl);
 
       return `
         <article class="product-card product-card--${escapeHtml(id)}">
@@ -446,7 +504,7 @@ export const renderHomepage = (
             </span>
             <h3 class="product-card__title">${escapeHtml(title)}</h3>
             <p class="product-card__outcome">${escapeHtml(outcome)}</p>
-            <span class="product-card__action">View service <span aria-hidden="true">→</span></span>
+            <span class="product-card__action">${escapeHtml(copy.viewService)} <span aria-hidden="true">→</span></span>
           </a>
         </article>`;
     })
@@ -465,7 +523,7 @@ export const renderHomepage = (
         <article class="founder" data-reveal>
           <div class="founder__portrait">
             <div class="founder__portrait-frame">
-              <img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="Portrait of ${escapeHtml(name)}" width="520" height="620" loading="lazy" />
+              <img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="${escapeHtml(copy.portraitAlt(name))}" width="520" height="620" loading="lazy" />
             </div>
           </div>
           <div class="founder__details">
@@ -485,7 +543,7 @@ export const renderHomepage = (
 
   const packages = content.packages
     .map(({ id, name, summary, includes }) => {
-      const href = mailtoWithSubject(config.email, `${QUOTE_SUBJECT}: ${name}`);
+      const href = mailtoWithSubject(config.email, `${copy.quoteSubject}: ${name}`);
       const items = includes.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
 
       return `
@@ -493,102 +551,87 @@ export const renderHomepage = (
           <h3>${escapeHtml(name)}</h3>
           <p>${escapeHtml(summary)}</p>
           <ul>${items}</ul>
-          <a href="${escapeHtml(href)}" data-analytics="contact_click" data-channel="email" data-placement="package" data-package-id="${escapeHtml(id)}">Get a quote</a>
+          <a href="${escapeHtml(href)}" data-analytics="contact_click" data-channel="email" data-placement="package" data-package-id="${escapeHtml(id)}">${escapeHtml(copy.navQuote)}</a>
         </article>`;
     })
     .join("");
 
+  const journey = copy.journey
+    .map(
+      ({ title, body }, index) => `
+          <li class="journey__moment">
+            <span class="journey__number">${String(index + 1).padStart(2, "0")}</span>
+            <span class="journey__signal" aria-hidden="true">
+              ${JOURNEY_ICONS[index] ?? ""}
+            </span>
+            <div><h3>${escapeHtml(title)}</h3><p>${escapeHtml(body)}</p></div>
+          </li>`,
+    )
+    .join("");
+
   return `
-    ${renderSiteHeader(baseUrl, "")}
+    ${renderSiteHeader(baseUrl, "", locale, "/")}
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero__layout">
           <div class="hero__content">
-            <p class="hero__eyebrow" data-reveal>Small or large</p>
-            <h1 id="hero-heading" data-reveal>Tech solutions for any business.</h1>
-            <p class="hero__lead" data-reveal>Fixed price, no jargon. Tell us what you need, and we quote it before we start.</p>
-            ${renderContactActions(config, "hero__actions")}
-            <p class="hero__trust" data-reveal>You speak with the people who do the work.</p>
+            <p class="hero__eyebrow" data-reveal>${escapeHtml(copy.heroEyebrow)}</p>
+            <h1 id="hero-heading" data-reveal>${escapeHtml(copy.heroHeading)}</h1>
+            <p class="hero__lead" data-reveal>${escapeHtml(copy.heroLead)}</p>
+            ${renderContactActions(config, "hero__actions", locale)}
+            <p class="hero__trust" data-reveal>${escapeHtml(copy.heroTrust)}</p>
           </div>
-          ${renderHeroProcess()}
+          ${renderHeroProcess(locale)}
         </div>
       </section>
       <section id="packages" class="packages" aria-labelledby="packages-heading">
         <div class="packages__header" data-reveal>
-          <h2 id="packages-heading">Simple website packages.</h2>
-          <p>Starter, Business, Shop, and a monthly care plan. Each one is quoted before we build. We do not list a price until we know what you need.</p>
+          <h2 id="packages-heading">${escapeHtml(copy.packagesHeading)}</h2>
+          <p>${escapeHtml(copy.packagesIntro)}</p>
         </div>
         <div class="package-grid">${packages}</div>
       </section>
       <section id="services" class="services" aria-labelledby="services-heading">
         <div class="services__header" data-reveal>
           <div class="services__heading">
-            <p class="services__eyebrow">Also available</p>
-            <h2 id="services-heading">Other ways we can help.</h2>
+            <p class="services__eyebrow">${escapeHtml(copy.servicesEyebrow)}</p>
+            <h2 id="services-heading">${escapeHtml(copy.servicesHeading)}</h2>
           </div>
-          <p class="services__intro">Websites come first. Apps, AI, bug fixing and automation are here when a London business needs them later.</p>
+          <p class="services__intro">${escapeHtml(copy.servicesIntro)}</p>
         </div>
         <div class="product-grid">${cards}</div>
       </section>
       <section id="approach" class="journey" aria-labelledby="approach-heading">
         <div class="journey__heading" data-reveal>
-          <p>How we work</p>
-          <h2 id="approach-heading">Assess, agree, build, hand over.</h2>
+          <p>${escapeHtml(copy.approachEyebrow)}</p>
+          <h2 id="approach-heading">${escapeHtml(copy.approachHeading)}</h2>
         </div>
-        <ol class="journey__moments" data-reveal>
-          <li class="journey__moment">
-            <span class="journey__number">01</span>
-            <span class="journey__signal" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><path d="M12 29c6-10 14-16 24-18M12 29h9M12 29v-9" /><circle cx="36" cy="11" r="3" /></svg>
-            </span>
-            <div><h3>Tell us what is happening.</h3><p>Describe the problem or the goal. No polished brief needed.</p></div>
-          </li>
-          <li class="journey__moment">
-            <span class="journey__number">02</span>
-            <span class="journey__signal" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><path d="M9 24h27M29 16l8 8-8 8" /></svg>
-            </span>
-            <div><h3>We assess and agree the scope.</h3><p>You get a short written assessment, a proposed scope and an estimate before work starts.</p></div>
-          </li>
-          <li class="journey__moment">
-            <span class="journey__number">03</span>
-            <span class="journey__signal" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="24" rx="2" /><path d="M17 40h14M24 34v6M13 16h22" /></svg>
-            </span>
-            <div><h3>We build and test.</h3><p>You see progress early and we test against the agreed scope.</p></div>
-          </li>
-          <li class="journey__moment">
-            <span class="journey__number">04</span>
-            <span class="journey__signal" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" /><path d="m16 24 6 6 11-13" /></svg>
-            </span>
-            <div><h3>Handover you can rely on.</h3><p>We hand over with documentation and agree what happens after delivery.</p></div>
-          </li>
+        <ol class="journey__moments" data-reveal>${journey}
         </ol>
-        <p class="journey__note" data-reveal>For a bug, the first step is a diagnosis. We confirm the cause before we promise a fix.</p>
+        <p class="journey__note" data-reveal>${escapeHtml(copy.journeyNote)}</p>
       </section>
-      ${renderFaq(content.faq)}
+      ${renderFaq(content.faq, locale)}
       <section id="team" class="team" aria-labelledby="team-heading">
         <div class="team__heading">
-          <p data-reveal>Who you will work with</p>
-          <h2 id="team-heading" data-reveal>Meet the founders</h2>
+          <p data-reveal>${escapeHtml(copy.teamEyebrow)}</p>
+          <h2 id="team-heading" data-reveal>${escapeHtml(copy.teamHeading)}</h2>
         </div>
         <div class="team__grid">${founders}</div>
       </section>
-      ${renderCaseStudies(content.caseStudies)}
+      ${renderCaseStudies(content.caseStudies, locale)}
       <section class="contact" id="contact" aria-labelledby="contact-heading">
-        <h2 id="contact-heading" data-reveal>Tell us about the website you need.</h2>
-        <p data-reveal>Email what your business does, who the site is for, and whether you want a simple site, a fuller site or a shop. We reply with a quote. There is no form on this page.</p>
-        <p class="contact-caution" data-reveal>Please do not send passwords or confidential customer data in your first message.</p>
-        <div data-reveal>${renderContactActions(config, "contact__actions")}</div>
+        <h2 id="contact-heading" data-reveal>${escapeHtml(copy.contactHeading)}</h2>
+        <p data-reveal>${escapeHtml(copy.contactLead)}</p>
+        <p class="contact-caution" data-reveal>${escapeHtml(copy.contactCaution)}</p>
+        <div data-reveal>${renderContactActions(config, "contact__actions", locale)}</div>
         <dl class="contact-details" data-reveal>
-          <div><dt>Email</dt><dd><a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a></dd></div>
+          <div><dt>${escapeHtml(copy.emailLabel)}</dt><dd><a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a></dd></div>
         </dl>
-        <p class="contact-privacy" data-reveal><a href="${escapeHtml(publicAssetUrl("/privacy/", baseUrl))}">How we handle the details you send us</a></p>
-        ${config.placeholder ? `<p class="contact-note"><strong>Trial contact details:</strong> ${escapeHtml(config.email)} is a non-production placeholder and must be replaced before launch.</p>` : ""}
+        <p class="contact-privacy" data-reveal><a href="${escapeHtml(publicAssetUrl(localizePath("/privacy/", locale), baseUrl))}">${escapeHtml(copy.contactPrivacy)}</a></p>
+        ${config.placeholder ? `<p class="contact-note"><strong>${escapeHtml(copy.trialContact)}</strong> ${escapeHtml(config.email)} is a non-production placeholder and must be replaced before launch.</p>` : ""}
       </section>
     </main>
-    ${renderSiteFooter(baseUrl)}
+    ${renderSiteFooter(baseUrl, locale)}
   `;
 };
 
@@ -596,7 +639,9 @@ export const renderPrivacyPage = (
   content: PrivacyContent,
   config: ContactConfig,
   baseUrl: string = import.meta.env.BASE_URL,
+  locale: Locale = "en",
 ): string => {
+  const copy = uiCopy(locale);
   const sections = content.sections
     .map(
       ({ heading, paragraphs }) => `
@@ -608,19 +653,19 @@ export const renderPrivacyPage = (
     .join("");
 
   return `
-    ${renderSiteHeader(baseUrl, baseUrl)}
+    ${renderSiteHeader(baseUrl, homeHrefFor(locale, baseUrl), locale, "/privacy/")}
     <main id="main-content" class="page">
       <article class="prose" aria-labelledby="privacy-heading">
-        <p class="page__eyebrow">Last updated ${escapeHtml(content.updated)}</p>
+        <p class="page__eyebrow">${escapeHtml(copy.privacyUpdated(content.updated))}</p>
         <h1 id="privacy-heading">${escapeHtml(content.title)}</h1>
         ${sections}
         <section>
-          <h2>Contact</h2>
-          <p>Email <a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a> with any question about this notice or to exercise your rights.</p>
+          <h2>${escapeHtml(copy.privacyContactHeading)}</h2>
+          <p>${escapeHtml(copy.privacyContactBefore)}<a href="mailto:${escapeHtml(config.email)}">${escapeHtml(config.email)}</a>${escapeHtml(copy.privacyContactAfter)}</p>
         </section>
       </article>
     </main>
-    ${renderSiteFooter(baseUrl)}
+    ${renderSiteFooter(baseUrl, locale)}
   `;
 };
 
@@ -629,8 +674,11 @@ export const renderServicePage = (
   content: SiteContent,
   config: ContactConfig,
   baseUrl: string = import.meta.env.BASE_URL,
+  locale: Locale = "en",
 ): string => {
+  const copy = uiCopy(locale);
   const product = content.products.find(({ id }) => id === page.productId);
+  const homeHref = homeHrefFor(locale, baseUrl);
 
   if (!product) {
     throw new Error(
@@ -642,7 +690,7 @@ export const renderServicePage = (
     items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
 
   return `
-    ${renderSiteHeader(baseUrl, baseUrl)}
+    ${renderSiteHeader(baseUrl, homeHref, locale, `/services/${page.slug}/`)}
     <main id="main-content" class="page">
       <article class="service-detail" aria-labelledby="service-heading">
         <div class="service-hero">
@@ -655,26 +703,26 @@ export const renderServicePage = (
         </div>
         <div class="service-detail__body">
           <section>
-            <h2>Typical requests</h2>
+            <h2>${escapeHtml(copy.typicalRequests)}</h2>
             <ul>${list(page.requests)}</ul>
           </section>
           <section>
-            <h2>What you receive</h2>
+            <h2>${escapeHtml(copy.whatYouReceive)}</h2>
             <ul>${list(page.deliverables)}</ul>
           </section>
         </div>
-        <nav class="service-detail__navigation" aria-label="Service navigation">
-          <a href="${escapeHtml(baseUrl)}#approach">See how we work</a>
-          <a href="${escapeHtml(baseUrl)}#services">Back to all services</a>
+        <nav class="service-detail__navigation" aria-label="${escapeHtml(copy.serviceNavigation)}">
+          <a href="${escapeHtml(homeHref)}#approach">${escapeHtml(copy.seeHowWeWork)}</a>
+          <a href="${escapeHtml(homeHref)}#services">${escapeHtml(copy.backToServices)}</a>
         </nav>
         <section class="service-contact" aria-labelledby="service-contact-heading">
-          <h2 id="service-contact-heading">Tell us what is happening</h2>
-          <p>Describe the problem or the goal, which system is involved and what outcome you want. Please do not send passwords or confidential customer data in your first message.</p>
-          ${renderContactActions(config, "contact__actions")}
+          <h2 id="service-contact-heading">${escapeHtml(copy.serviceContactHeading)}</h2>
+          <p>${escapeHtml(copy.serviceContactBody)}</p>
+          ${renderContactActions(config, "contact__actions", locale)}
         </section>
       </article>
     </main>
-    ${renderSiteFooter(baseUrl)}
+    ${renderSiteFooter(baseUrl, locale)}
   `;
 };
 
@@ -690,39 +738,51 @@ ${VORBIO_BAR_HEIGHTS.map((height, index) => {
 }).join("\n")}
             </svg>`;
 
-const renderVorbioConsole = (): string => `
+const renderVorbioConsole = (locale: Locale): string => {
+  const copy = uiCopy(locale);
+
+  return `
           <figure class="vorbio-console">
             <figcaption class="vorbio-console__header">
-              <span><span class="vorbio-console__status" aria-hidden="true"></span>Illustrative conversation</span>
-              <span>Voice + chat</span>
+              <span><span class="vorbio-console__status" aria-hidden="true"></span>${escapeHtml(copy.illustrativeConversation)}</span>
+              <span>${escapeHtml(copy.voiceAndChat)}</span>
             </figcaption>
             <div class="vorbio-console__call">
-              <div class="vorbio-console__call-meta"><span>Incoming voice call</span><span>00:24</span></div>
+              <div class="vorbio-console__call-meta"><span>${escapeHtml(copy.incomingVoiceCall)}</span><span>00:24</span></div>
 ${renderVorbioVoice()}
             </div>
             <ol class="vorbio-console__transcript">
-              <li class="vorbio-console__message vorbio-console__message--customer"><span>Customer</span><p>Can I book a service visit for Thursday?</p></li>
-              <li class="vorbio-console__message vorbio-console__message--vorbio"><span>Vorbio</span><p>I can help with that. Which service do you need?</p></li>
+              <li class="vorbio-console__message vorbio-console__message--customer"><span>${escapeHtml(copy.customer)}</span><p>${escapeHtml(copy.sampleQuestion)}</p></li>
+              <li class="vorbio-console__message vorbio-console__message--vorbio"><span>Vorbio</span><p>${escapeHtml(copy.sampleAnswer)}</p></li>
             </ol>
             <div class="vorbio-console__outcome">
-              <span>Next action</span>
-              <strong>Booking request captured</strong>
-              <small>Ready for calendar check or team handover</small>
+              <span>${escapeHtml(copy.nextAction)}</span>
+              <strong>${escapeHtml(copy.bookingCaptured)}</strong>
+              <small>${escapeHtml(copy.bookingReady)}</small>
             </div>
           </figure>`;
+};
 
 const renderVorbioHeroActions = (
   config: ContactConfig,
-): string => `
+  locale: Locale,
+): string => {
+  const copy = uiCopy(locale);
+
+  return `
             <div class="vorbio-actions">
-              <a class="vorbio-button vorbio-button--primary" href="mailto:${escapeHtml(config.email)}?subject=Vorbio%20demo" data-analytics="contact_click" data-channel="email" data-placement="vorbio-hero">Arrange a live demo <span aria-hidden="true">↗</span></a>
+              <a class="vorbio-button vorbio-button--primary" href="${escapeHtml(mailtoWithSubject(config.email, copy.vorbioDemoSubject))}" data-analytics="contact_click" data-channel="email" data-placement="vorbio-hero">${escapeHtml(copy.vorbioDemoLabel)} <span aria-hidden="true">↗</span></a>
             </div>`;
+};
 
 export const renderVorbioPage = (
   product: VorbioProduct,
   config: ContactConfig,
   baseUrl: string = import.meta.env.BASE_URL,
+  locale: Locale = "en",
 ): string => {
+  const copy = uiCopy(locale);
+  const homeHref = homeHrefFor(locale, baseUrl);
   const highlights = product.highlights
     .map(
       ({ title, detail }, index) => `
@@ -767,8 +827,15 @@ export const renderVorbioPage = (
     .map((useCase) => `<li>${escapeHtml(useCase)}</li>`)
     .join("");
 
+  const proof = copy.vorbioProof
+    .map(
+      ({ title, detail }, index) =>
+        `<li><span>${String(index + 1).padStart(2, "0")}</span><strong>${escapeHtml(title)}</strong><small>${escapeHtml(detail)}</small></li>`,
+    )
+    .join("\n          ");
+
   return `
-    ${renderSiteHeader(baseUrl, baseUrl)}
+    ${renderSiteHeader(baseUrl, homeHref, locale, "/services/vorbio/")}
     <main id="main-content" class="page vorbio">
       <article class="vorbio-page" aria-labelledby="vorbio-heading">
         <header class="vorbio-hero">
@@ -777,44 +844,42 @@ export const renderVorbioPage = (
             <p class="vorbio-wordmark">${escapeHtml(product.name)}<span aria-hidden="true">.</span></p>
             <h1 id="vorbio-heading">${escapeHtml(product.tagline)}</h1>
             <p class="prose__lead">${escapeHtml(product.summary)}</p>
-${renderVorbioHeroActions(config)}
+${renderVorbioHeroActions(config, locale)}
             <p class="vorbio-hero__note">${escapeHtml(product.note)}</p>
           </div>
-          <div class="vorbio-hero__visual">${renderVorbioConsole()}</div>
+          <div class="vorbio-hero__visual">${renderVorbioConsole(locale)}</div>
         </header>
-        <ul class="vorbio-proof" aria-label="Vorbio product scope">
-          <li><span>01</span><strong>Voice + chat</strong><small>One WhatsApp conversation</small></li>
-          <li><span>02</span><strong>Connected actions</strong><small>Calendar, CRM or inbox</small></li>
-          <li><span>03</span><strong>Human handover</strong><small>At the boundaries you set</small></li>
+        <ul class="vorbio-proof" aria-label="${escapeHtml(copy.vorbioProofLabel)}">
+          ${proof}
         </ul>
         <section class="vorbio-section vorbio-section--flow" aria-labelledby="vorbio-flow-heading">
-          <div class="vorbio-section__heading"><p class="page__eyebrow">The operating model</p><h2 id="vorbio-flow-heading">From first hello to a useful next step.</h2></div>
+          <div class="vorbio-section__heading"><p class="page__eyebrow">${escapeHtml(copy.vorbioFlowEyebrow)}</p><h2 id="vorbio-flow-heading">${escapeHtml(copy.vorbioFlowHeading)}</h2></div>
           <ol class="vorbio-flow">${workflow}</ol>
         </section>
         <section class="vorbio-section" aria-labelledby="vorbio-capabilities-heading">
-          <div class="vorbio-section__heading"><p class="page__eyebrow">Capability</p><h2 id="vorbio-capabilities-heading">Built for the whole first conversation.</h2></div>
+          <div class="vorbio-section__heading"><p class="page__eyebrow">${escapeHtml(copy.vorbioCapabilityEyebrow)}</p><h2 id="vorbio-capabilities-heading">${escapeHtml(copy.vorbioCapabilityHeading)}</h2></div>
           <ul class="vorbio-grid">${highlights}</ul>
         </section>
         <section class="vorbio-use-cases" aria-labelledby="vorbio-use-cases-heading">
-          <div><p class="page__eyebrow">Good first fits</p><h2 id="vorbio-use-cases-heading">Start where response time and consistency matter.</h2></div>
+          <div><p class="page__eyebrow">${escapeHtml(copy.vorbioFitsEyebrow)}</p><h2 id="vorbio-use-cases-heading">${escapeHtml(copy.vorbioFitsHeading)}</h2></div>
           <ul>${useCases}</ul>
         </section>
         <section class="vorbio-control" aria-labelledby="vorbio-control-heading">
-          <div class="vorbio-control__intro"><p class="page__eyebrow">Human by design</p><h2 id="vorbio-control-heading">AI that knows where its job ends.</h2><p>Vorbio is not given an open brief. We define its knowledge, actions and handover points with you before it speaks to customers.</p></div>
+          <div class="vorbio-control__intro"><p class="page__eyebrow">${escapeHtml(copy.vorbioControlEyebrow)}</p><h2 id="vorbio-control-heading">${escapeHtml(copy.vorbioControlHeading)}</h2><p>${escapeHtml(copy.vorbioControlBody)}</p></div>
           <ul class="vorbio-control__list">${controls}</ul>
         </section>
         <section class="vorbio-section" aria-labelledby="vorbio-steps-heading">
-          <div class="vorbio-section__heading"><p class="page__eyebrow">Implementation</p><h2 id="vorbio-steps-heading">Configured around your real conversations.</h2></div>
+          <div class="vorbio-section__heading"><p class="page__eyebrow">${escapeHtml(copy.vorbioStepsEyebrow)}</p><h2 id="vorbio-steps-heading">${escapeHtml(copy.vorbioStepsHeading)}</h2></div>
           <ol class="vorbio-steps">${steps}</ol>
         </section>
         <section class="vorbio-contact" aria-labelledby="vorbio-contact-heading">
-          <p class="page__eyebrow">See it work</p>
-          <h2 id="vorbio-contact-heading">Bring us one conversation your team handles every day.</h2>
-          <p>We will map how Vorbio should answer, what it should capture and exactly when it should hand over—then arrange a focused demonstration.</p>
-          ${renderContactActions(config, "contact__actions")}
+          <p class="page__eyebrow">${escapeHtml(copy.vorbioContactEyebrow)}</p>
+          <h2 id="vorbio-contact-heading">${escapeHtml(copy.vorbioContactHeading)}</h2>
+          <p>${escapeHtml(copy.vorbioContactBody)}</p>
+          ${renderContactActions(config, "contact__actions", locale)}
         </section>
       </article>
     </main>
-    ${renderSiteFooter(baseUrl)}
+    ${renderSiteFooter(baseUrl, locale)}
   `;
 };
