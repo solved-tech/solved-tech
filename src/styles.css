@@ -1827,6 +1827,12 @@ main > section.hero {
   border: 1px solid var(--line);
 }
 
+.founder__portrait-frame picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .founder__portrait-frame img {
   display: block;
   width: 100%;

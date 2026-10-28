@@ -290,7 +290,9 @@ describe("homepage renderer", () => {
       'src="/team/remus_baciu-520.webp"',
     );
     expect(pagesHtml).toContain('srcset="/team/razvan_cristofor-520.webp 520w, /team/razvan_cristofor-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
-    expect(pagesHtml).toContain('srcset="/team/remus_baciu-520.webp 520w, /team/remus_baciu-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw"');
+    expect(pagesHtml).toContain('<source type="image/avif" srcset="/team/remus_baciu-520.avif 520w, /team/remus_baciu-1040.avif 1040w" sizes="(min-width: 48rem) 26rem, 80vw" />');
+    expect(pagesHtml).toContain('<source type="image/webp" srcset="/team/remus_baciu-520.webp 520w, /team/remus_baciu-1040.webp 1040w" sizes="(min-width: 48rem) 26rem, 80vw" />');
+    expect(pagesHtml).toContain('alt="Remus Baciu" width="520" height="620" loading="lazy"');
   });
 
   it("omits the background grid so it does not compete with the hero process", () => {
@@ -337,9 +339,10 @@ describe("homepage renderer", () => {
     expect(team).toBeDefined();
     expect(html).not.toContain('id="about"');
     expect(html).not.toContain("About me");
-    siteContent.founders.forEach(({ name, bio }) => {
+    siteContent.founders.forEach(({ name, bio, imageAlt }) => {
+      const marker = imageAlt ?? `Portrait of ${name}`;
       const card = team?.match(
-        new RegExp(`<article class="founder"[\\s\\S]*?Portrait of ${name}[\\s\\S]*?</article>`),
+        new RegExp(`<article class="founder"[\\s\\S]*?${marker}[\\s\\S]*?</article>`),
       )?.[0];
 
       expect(card).toBeDefined();
@@ -358,15 +361,16 @@ describe("homepage renderer", () => {
   });
 
   it("renders two founder cards with portraits and LinkedIn links", () => {
-    siteContent.founders.forEach(({ image, linkedin, name }) => {
+    siteContent.founders.forEach(({ image, imageAlt, linkedin, name }) => {
       expect(html).toContain(`src="${image}"`);
       expect(html).toContain(name);
-      expect(html).toContain(`alt="Portrait of ${name}"`);
+      expect(html).toContain(`alt="${imageAlt ?? `Portrait of ${name}`}"`);
+      expect(html).toContain(`loading="lazy"`);
       expect(html).toContain(`class="founder__linkedin" href="${linkedin}"`);
       expect(html.match(/founder__linkedin/g)).toHaveLength(2);
     });
     expect(html.match(/class="founder__portrait-frame"/g)).toHaveLength(2);
-    expect(html.match(/ srcset="/g)).toHaveLength(2);
+    expect(html.match(/ srcset="/g)).toHaveLength(3);
     expect(html).not.toContain("Placeholder portrait");
     expect(html).not.toContain("Photo placeholder");
   });
