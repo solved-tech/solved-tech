@@ -4,105 +4,88 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Gossip Nails, Chingford</title>
-    <meta
-      name="description"
-      content="A sample homepage for Gossip Nails in Chingford Mount, prepared by Solved Tech. Not the salon’s live website."
-    />
+    <meta name="description" content="A sample homepage for Gossip Nails in Chingford Mount, prepared by Solved Tech. Not the salon’s live website." />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="theme-color" content="#2b0e1c" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'"
-    />
+    <meta name="theme-color" content="#1c1c1c" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="top"></div>
     <a class="skip" href="#main">Skip to content</a>
-    <header class="top">
-      <a class="brand" href="#top">Gossip Nails</a>
-      <a class="top-call" href="tel:+442085246888">020 8524 6888</a>
+    <header class="bar">
+      <a class="mark" href="#top">Gossip Nails</a>
+      <nav aria-label="On this page">
+        <a href="#services">Services</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <a class="btn" href="tel:+442085246888">Call the salon</a>
     </header>
     <main id="main">
-      <section class="fascia wrap">
-        <h1><span class="line">Gossip</span> <span class="line line-2">Nails</span></h1>
-        <p class="lead">
-          Nail salon at 49 Old Church Road, Chingford Mount, London E4 6SJ. Open Monday to Saturday, 10am to 7pm. Closed Sunday.
-        </p>
-        <p class="jumps">
-          <a href="#services">Services</a>
-          <a href="#visit">Visit</a>
-        </p>
-        <a class="call" href="tel:+442085246888">Call 020 8524 6888</a>
-      </section>
-      <section id="services" class="services" aria-labelledby="services-heading">
-        <div class="wrap">
-          <h2 id="services-heading">What the salon lists</h2>
-          <p class="source">Taken from the public Fresha listing. Prices are not published there, so call to ask.</p>
+      <div class="pin">
+        <h1 class="pin-title">Gossip<br />Nails</h1>
+        <p class="lead-under">A nail salon on Old Church Road, Chingford Mount. Monday to Saturday, 10am to 7pm.</p>
+        <section class="panel">
+          <img class="drift" src="media/oak-trail-epping-forest.jpg" width="1400" height="1866" alt="Oak trees in Epping Forest, the woodland beside Chingford. Not a photograph of the salon." />
+          <p class="move">A nail salon at 49 Old Church Road, Chingford Mount. Open Monday to Saturday, 10am to 7pm. Closed Sunday.</p>
+        </section>
+        <section class="panel">
+          <img src="media/colourful-nail-polishes.jpg" width="1400" height="930" alt="A tray of colourful nail polish bottles. Not the salon’s own colours." />
+          <p>The public listing names manicures, pedicures, gel, acrylic, dip powder, extensions and nail art.</p>
+        </section>
+        <section class="panel">
+          <img src="media/epping-forest-high-beach-essex-england-spring.jpg" width="1400" height="933" alt="A spring pond at High Beach in Epping Forest." />
+          <p>Chingford sits against Epping Forest. The salon is on Old Church Road, not in the woods.</p>
+        </section>
+      </div>
+      <section id="services" class="flow" aria-labelledby="services-heading">
+        <h2 id="services-heading" class="move">What they list</h2>
+        <div class="split">
+          <div class="sticky-photo">
+            <img id="service-photo" src="media/nail-polish.jpg" width="900" height="1200" alt="Bottles of nail polish in a shop display. Not Gossip Nails’ stock." />
+          </div>
+          <ul class="services">
+            <li><button type="button" class="is-on" data-photo="media/nail-polish.jpg" data-alt="Bottles of nail polish in a shop display. Not Gossip Nails’ stock.">Manicure <span>Hands. Price not published. Call to ask.</span></button></li>
+            <li><button type="button" data-photo="media/colourful-nail-polishes.jpg" data-alt="A tray of colourful nail polish bottles.">Pedicure <span>Feet, listed beside manicures.</span></button></li>
+            <li><button type="button" data-photo="media/manicure-implements.jpg" data-alt="A historical manicure tool from a museum collection, not the salon’s kit.">Gel nails <span>Named on the Fresha listing.</span></button></li>
+            <li><button type="button" data-photo="media/manicure-implements-2.jpg" data-alt="Another historical manicure tool from a museum collection.">Acrylic nails <span>Named on the Fresha listing.</span></button></li>
+            <li><button type="button" data-photo="media/nail-polish.jpg" data-alt="Bottles of nail polish.">Dip powder <span>Named on the Fresha listing.</span></button></li>
+            <li><button type="button" data-photo="media/colourful-nail-polishes.jpg" data-alt="Colourful nail polish bottles.">Nail extensions <span>Gel extensions and nail extensions are both listed.</span></button></li>
+            <li><button type="button" data-photo="media/oak-trail-epping-forest.jpg" data-alt="Oak trees in Epping Forest.">Nail art <span>Named on the Fresha listing.</span></button></li>
+            <li><button type="button" data-photo="media/manicure-implements.jpg" data-alt="A historical manicure tool.">Men’s manicure and pedicure <span>Both are on the public listing.</span></button></li>
+          </ul>
         </div>
-        <ul class="enamels">
-          <li class="chip chip-manicure">Manicure</li>
-          <li class="chip chip-pedicure">Pedicure</li>
-          <li class="chip chip-both tall">Manicure and pedicure</li>
-          <li class="chip chip-gel">Gel nails</li>
-          <li class="chip chip-acrylic">Acrylic nails</li>
-          <li class="chip chip-dip tall">Dip powder nails</li>
-          <li class="chip chip-gelext">Gel nail extensions</li>
-          <li class="chip chip-ext">Nail extensions</li>
-          <li class="chip chip-art tall">Nail art</li>
-          <li class="chip chip-polish">Nail polish</li>
-          <li class="chip chip-men">Men’s manicure</li>
-          <li class="chip chip-menfeet">Men’s pedicure</li>
-        </ul>
       </section>
-      <section id="visit" class="visit wrap" aria-labelledby="visit-heading">
-        <h2 id="visit-heading">Visit</h2>
-        <div class="visit-grid">
-          <div>
-            <h3>Hours</h3>
-            <table>
-              <caption>Opening hours from public listings</caption>
-              <tbody>
-                <tr>
-                  <th scope="row">Monday to Saturday</th>
-                  <td>10am–7pm</td>
-                </tr>
-                <tr>
-                  <th scope="row">Sunday</th>
-                  <td>Closed</td>
-                </tr>
-              </tbody>
-            </table>
-            <p>The salon has not published a price list. Phone them for a time and a price.</p>
-          </div>
-          <div>
-            <h3>Find the salon</h3>
-            <address>
-              Gossip Nails<br />
-              49 Old Church Road<br />
-              Chingford Mount<br />
-              London E4 6SJ
-            </address>
-            <ul class="contacts">
-              <li><a href="tel:+442085246888">020 8524 6888</a></li>
-              <li><a href="mailto:gossipnails@hotmail.co.uk">gossipnails@hotmail.co.uk</a></li>
-              <li>
-                <a href="https://www.google.com/maps/search/?api=1&amp;query=Gossip+Nails+49+Old+Church+Road+Chingford+E4+6SJ" rel="noopener noreferrer">Map</a>
-              </li>
-              <li>
-                <a href="https://www.facebook.com/181635038617081" rel="noopener noreferrer">Facebook</a>
-              </li>
-            </ul>
-            <p>Listed at 4.7 on Google, from about 240 public reviews.</p>
-          </div>
+      <section id="visit" class="visit" aria-labelledby="visit-heading">
+        <img src="media/epping-forest-high-beach-essex-england-spring.jpg" width="1600" height="1066" alt="High Beach in Epping Forest, near Chingford." />
+        <div class="card">
+          <h2 id="visit-heading">Visit</h2>
+          <p>49 Old Church Road<br />Chingford Mount<br />London E4 6SJ</p>
+          <table class="hours">
+            <caption class="move">Hours from public listings</caption>
+            <tbody>
+              <tr><th scope="row">Monday to Saturday</th><td>10am–7pm</td></tr>
+              <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+            </tbody>
+          </table>
+          <p>Listed at 4.7 on Google, from about 240 public reviews.</p>
+          <a class="btn" href="tel:+442085246888">Call 020 8524 6888</a>
+          <p><a href="mailto:gossipnails@hotmail.co.uk">gossipnails@hotmail.co.uk</a></p>
+          <p><a href="https://www.google.com/maps/search/?api=1&amp;query=Gossip+Nails+49+Old+Church+Road+Chingford" rel="noopener noreferrer">Map</a></p>
         </div>
       </section>
     </main>
-    <footer class="colophon wrap">
-      <p>Details are taken from public listings and can change. This page is a design sample, not the salon’s live website.</p>
-      <p>Sample by <a href="https://solvedtech.co.uk">Solved Tech</a></p>
+    <footer class="foot">
+      <img src="media/colourful-nail-polishes.jpg" width="1400" height="930" alt="Colourful nail polish bottles, shown as the trade, not as this salon’s work." />
+      <div class="menu">
+        <a href="#services">Services</a>
+        <a href="#visit">Visit</a>
+        <a href="https://www.facebook.com/181635038617081" rel="noopener noreferrer">Facebook</a>
+        <p class="credits">Pictures of the trade and of Epping Forest, not of the salon. <a href="https://commons.wikimedia.org/wiki/File:Oak_Trail,_Epping_Forest.jpg">Oak Trail</a> by Mx. Granger, CC0. <a href="https://commons.wikimedia.org/wiki/File:Nail_Polish.jpg">Nail Polish</a> by Gaurav Dhwaj Khadka, CC BY-SA 4.0. <a href="https://commons.wikimedia.org/wiki/File:Colourful_nail_polishes.jpg">Colourful nail polishes</a> by Etsy Ketsy, CC BY-SA 2.0. <a href="https://commons.wikimedia.org/wiki/File:Manicure_implements_(AM_4645-3).jpg">Manicure implements</a>, CC BY 4.0. <a href="https://commons.wikimedia.org/wiki/File:Epping_Forest_High_Beach_Essex_England_-_spring_pond_08.jpg">High Beach</a> by Acabashi, CC BY-SA 4.0. Via Wikimedia Commons.</p>
+        <p class="sample">Sample by <a href="https://solvedtech.co.uk">Solved Tech</a>. This page is a design sample, not the salon’s live website. Details come from public listings and can change.</p>
+      </div>
     </footer>
+    <script src="page.js"></script>
   </body>
 </html>
