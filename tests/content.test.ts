@@ -100,9 +100,12 @@ describe("site content", () => {
         name: "Remus Baciu",
         role: "Co-founder",
         image: "/team/remus_baciu-520.webp",
+        imageAlt: "Remus Baciu",
         imageSources: [
-          { path: "/team/remus_baciu-520.webp", width: 520 },
-          { path: "/team/remus_baciu-1040.webp", width: 1040 },
+          { path: "/team/remus_baciu-520.avif", width: 520, type: "image/avif" },
+          { path: "/team/remus_baciu-1040.avif", width: 1040, type: "image/avif" },
+          { path: "/team/remus_baciu-520.webp", width: 520, type: "image/webp" },
+          { path: "/team/remus_baciu-1040.webp", width: 1040, type: "image/webp" },
         ],
         linkedin: "https://linkedin.com/in/remus-baciu-4a11a7105",
         bio: [

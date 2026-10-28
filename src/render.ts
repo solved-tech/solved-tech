@@ -3,6 +3,8 @@ import type {
   CaseStudy,
   ContactConfig,
   FaqEntry,
+  FounderImageSource,
+  PortraitFormat,
   PrivacyContent,
   ProductId,
   ServicePage,
@@ -50,6 +52,46 @@ const pagesFor = (locale: Locale): ServicePage[] => {
 
 const homeHrefFor = (locale: Locale, baseUrl: string): string =>
   locale === "ro" ? publicAssetUrl("/ro/", baseUrl) : baseUrl;
+
+const PORTRAIT_SIZES = "(min-width: 48rem) 26rem, 80vw";
+
+const portraitFormat = (source: FounderImageSource): PortraitFormat => source.type ?? "image/webp";
+
+const renderPortraitSource = (
+  sources: FounderImageSource[],
+  type: PortraitFormat,
+  baseUrl: string,
+): string => {
+  if (sources.length === 0) {
+    return "";
+  }
+
+  const srcset = sources
+    .map(({ path, width }) => `${escapeHtml(publicAssetUrl(path, baseUrl))} ${width}w`)
+    .join(", ");
+
+  return `<source type="${type}" srcset="${srcset}" sizes="${PORTRAIT_SIZES}" />`;
+};
+
+const renderFounderPicture = (
+  image: string,
+  imageSources: FounderImageSource[],
+  alt: string,
+  baseUrl: string,
+): string => {
+  const avif = renderPortraitSource(
+    imageSources.filter((source) => portraitFormat(source) === "image/avif"),
+    "image/avif",
+    baseUrl,
+  );
+  const webp = renderPortraitSource(
+    imageSources.filter((source) => portraitFormat(source) === "image/webp"),
+    "image/webp",
+    baseUrl,
+  );
+
+  return `<picture>${avif}${webp}<img src="${escapeHtml(publicAssetUrl(image, baseUrl))}" alt="${escapeHtml(alt)}" width="520" height="620" loading="lazy" decoding="async" /></picture>`;
+};
 
 const renderContactActions = (
   config: ContactConfig,
@@ -460,19 +502,15 @@ export const renderHomepage = (
     .join("");
   const founders = content.founders
     .map(
-      ({ name, role, image, imageSources, linkedin, bio }) => {
-        const srcset = imageSources.length
-          ? ` srcset="${imageSources
-              .map(({ path, width }) => `${escapeHtml(publicAssetUrl(path, baseUrl))} ${width}w`)
-              .join(", ")}" sizes="(min-width: 48rem) 26rem, 80vw"`
-          : "";
+      ({ name, role, image, imageAlt, imageSources, linkedin, bio }) => {
         const paragraphs = bio.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
+        const alt = imageAlt ?? copy.portraitAlt(name);
 
         return `
         <article class="founder" data-reveal>
           <div class="founder__portrait">
             <div class="founder__portrait-frame">
-              <img src="${escapeHtml(publicAssetUrl(image, baseUrl))}"${srcset} alt="${escapeHtml(copy.portraitAlt(name))}" width="520" height="620" loading="lazy" />
+              ${renderFounderPicture(image, imageSources, alt, baseUrl)}
             </div>
           </div>
           <div class="founder__details">
