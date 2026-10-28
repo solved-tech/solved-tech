@@ -1,0 +1,330 @@
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 560 720;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/bricolage-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 560 720;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/bricolage-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("fonts/source-sans-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("fonts/source-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --concrete: #ddd8ce;
+  --ink: #161616;
+  --muted: #3f3c37;
+  --cobalt: #1a3fbe;
+  --cobalt-ink: #f4f6ff;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-color: #1a3fbe #ddd8ce;
+}
+
+body {
+  margin: 0;
+  background: var(--concrete);
+  color: var(--ink);
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+::selection {
+  background: #1a3fbe;
+  color: #f4f6ff;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  transform: translateY(-160%);
+  background: var(--cobalt);
+  color: var(--cobalt-ink);
+  padding: 0.6rem 0.9rem;
+  z-index: 5;
+}
+
+.skip:focus {
+  transform: none;
+}
+
+.wrap {
+  width: min(68rem, calc(100% - 2.5rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
+  margin-inline: auto;
+}
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.5rem max(1.25rem, env(safe-area-inset-right)) 0.5rem max(1.25rem, env(safe-area-inset-left));
+  background: var(--concrete);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+.brand {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 720;
+  font-size: 1.35rem;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.top-call,
+.contacts a,
+.colophon a {
+  color: var(--cobalt);
+  font-weight: 600;
+  text-underline-offset: 0.18em;
+}
+
+.top-call {
+  white-space: nowrap;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 720;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+h1 {
+  margin: 1.2rem 0 0;
+  font-size: clamp(3.3rem, 12vw, 5.6rem);
+}
+
+h1 span {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: clamp(1.8rem, 4.6vw, 2.7rem);
+  font-weight: 560;
+  color: var(--cobalt);
+}
+
+.lead,
+.services p,
+.hours p,
+.source,
+.colophon p,
+.door p {
+  max-width: 40rem;
+}
+
+.lead {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 1.25rem;
+}
+
+.door {
+  margin-top: 1.8rem;
+  padding: 1.75rem 1.5rem;
+  background: var(--cobalt);
+  color: var(--cobalt-ink);
+}
+
+.door-inner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  width: min(68rem, 100%);
+  margin-inline: auto;
+}
+
+.mirror {
+  width: 3px;
+  height: 100%;
+  min-height: 7rem;
+  background: var(--cobalt-ink);
+  transform-origin: top center;
+  animation: drop 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.door h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+}
+
+.call {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 3.2rem;
+  margin-top: 0.8rem;
+  color: var(--cobalt-ink);
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 720;
+  font-size: clamp(2rem, 8vw, 3rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+  text-decoration-thickness: 2px;
+}
+
+.door p {
+  margin: 0.7rem 0 0;
+  color: #d9e1ff;
+}
+
+.services,
+.hours {
+  padding-top: 2.6rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+}
+
+.pair {
+  display: grid;
+  gap: 1.6rem;
+  margin-top: 1.1rem;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.services p,
+.hours p {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+
+.source {
+  margin-top: 0.7rem;
+}
+
+table {
+  width: min(32rem, 100%);
+  margin-top: 0.8rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+th,
+td {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  text-align: left;
+}
+
+td {
+  text-align: right;
+  font-weight: 600;
+}
+
+.contacts {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+}
+
+.contacts a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  overflow-wrap: anywhere;
+}
+
+.colophon {
+  margin-top: 2.4rem;
+  padding: 1.4rem 0 2.4rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  color: var(--muted);
+}
+
+.colophon p {
+  margin: 0.35rem 0;
+  font-size: 1rem;
+}
+
+@media (min-width: 800px) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mirror {
+    animation: none;
+  }
+}
+
+@keyframes drop {
+  from { transform: scaleY(0.2); }
+  to { transform: scaleY(1); }
+}
