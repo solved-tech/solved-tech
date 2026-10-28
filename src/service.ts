@@ -2,7 +2,7 @@
 
 import { contactConfig, servicePages, siteContent } from "./content";
 import { servicePagesRo, siteContentRo } from "./content-ro";
-import { mount, setupHeaderOffset, setupLanguageSwitcher, setupMobileMenu, setupScrollProgress } from "./enhance";
+import { mount, setupHeaderOffset, setupMobileMenu, setupScrollProgress } from "./enhance";
 import { localizedServiceMeta } from "./head";
 import { applyDocumentLocale, currentLocale, redirectForLocale } from "./locale-client";
 import { renderServicePage } from "./render";
@@ -31,6 +31,5 @@ if (!redirectForLocale(window)) {
   mount(app, () => renderServicePage(page, content, contactConfig, import.meta.env.BASE_URL, locale));
   setupHeaderOffset(window);
   setupMobileMenu(app);
-  setupLanguageSwitcher(app, window);
   setupScrollProgress(window);
 }

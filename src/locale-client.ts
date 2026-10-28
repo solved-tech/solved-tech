@@ -1,24 +1,18 @@
+import { clearStoredLocale, detectLocale, isSearchBot, localeFromPath, localeRedirectPath } from "./locale";
 import type { Locale } from "./locale";
-import { detectLocale, isSearchBot, LOCALE_STORAGE_KEY, localeFromPath, localeRedirectPath, parseStoredLocale } from "./locale";
 import { uiCopy } from "./ui-copy";
 
-const readStoredLocale = (view: Window): Locale | null => {
+const forgetStoredLocale = (view: Window): void => {
   try {
-    return parseStoredLocale(view.localStorage.getItem(LOCALE_STORAGE_KEY));
+    clearStoredLocale(view.localStorage);
   } catch {
-    return null;
-  }
-};
-
-export const rememberLocale = (view: Window, locale: Locale): void => {
-  try {
-    view.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
-  } catch {
-    // Private mode and locked-down browsers can refuse storage. The link still navigates.
+    // Private mode can refuse storage. Detection still runs without a saved choice.
   }
 };
 
 export const redirectForLocale = (view: Window): boolean => {
+  forgetStoredLocale(view);
+
   const languages = view.navigator.languages?.length
     ? view.navigator.languages
     : [view.navigator.language].filter((language) => language);
@@ -34,7 +28,6 @@ export const redirectForLocale = (view: Window): boolean => {
     pathname: view.location.pathname,
     search: view.location.search,
     hash: view.location.hash,
-    stored: readStoredLocale(view),
     detected: detectLocale(languages, timeZone),
     isBot: isSearchBot(view.navigator.userAgent, view.navigator.webdriver),
   });

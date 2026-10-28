@@ -8,7 +8,6 @@ import {
   settlePrerenderedReveals,
   setupHeaderOffset,
   setupHeroProcessMotion,
-  setupLanguageSwitcher,
   setupMobileMenu,
   setupMotionToggle,
   setupRevealMotion,
@@ -54,7 +53,6 @@ const start = (view: Window): void => {
   setupRevealMotion(app, reducedMotion);
   setupHeroProcessMotion(app, reducedMotion);
   setupMobileMenu(app);
-  setupLanguageSwitcher(app, view);
   setupMotionToggle(app, view);
   setupScrollProgress(view);
 };

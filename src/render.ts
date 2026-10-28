@@ -51,22 +51,6 @@ const pagesFor = (locale: Locale): ServicePage[] => {
 const homeHrefFor = (locale: Locale, baseUrl: string): string =>
   locale === "ro" ? publicAssetUrl("/ro/", baseUrl) : baseUrl;
 
-const renderLanguageSwitcher = (locale: Locale, pagePath: string, baseUrl: string): string => {
-  const copy = uiCopy(locale);
-  const links = (["en", "ro"] as const)
-    .map((code) => {
-      const href = publicAssetUrl(localizePath(pagePath, code), baseUrl);
-      const current = code === locale ? ' aria-current="page"' : "";
-      const lang = code === "en" ? "en-GB" : "ro";
-      const label = code === "en" ? "EN" : "RO";
-
-      return `<a href="${escapeHtml(href)}" lang="${lang}" hreflang="${lang}" data-locale-switch="${code}"${current}>${label}</a>`;
-    })
-    .join("");
-
-  return `<div class="language-switcher" role="group" aria-label="${escapeHtml(copy.languageLabel)}">${links}</div>`;
-};
-
 const renderContactActions = (
   config: ContactConfig,
   className: string,
@@ -325,7 +309,6 @@ export const renderSiteHeader = (
   baseUrl: string,
   homeHref: string,
   locale: Locale = "en",
-  pagePath = "/",
 ): string => {
   const copy = uiCopy(locale);
 
@@ -336,7 +319,6 @@ export const renderSiteHeader = (
         <img src="${escapeHtml(publicAssetUrl("/brand/solved-tech-logo-dark.svg", baseUrl))}" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
       </a>
       <div class="site-header__end">
-        ${renderLanguageSwitcher(locale, pagePath, baseUrl)}
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="${escapeHtml(copy.openMenu)}" data-label-open="${escapeHtml(copy.openMenu)}" data-label-close="${escapeHtml(copy.closeMenu)}">
           <span></span><span></span><span></span>
         </button>
@@ -537,7 +519,7 @@ export const renderHomepage = (
     .join("");
 
   return `
-    ${renderSiteHeader(baseUrl, "", locale, "/")}
+    ${renderSiteHeader(baseUrl, "", locale)}
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero__layout">
@@ -620,7 +602,7 @@ export const renderPrivacyPage = (
     .join("");
 
   return `
-    ${renderSiteHeader(baseUrl, homeHrefFor(locale, baseUrl), locale, "/privacy/")}
+    ${renderSiteHeader(baseUrl, homeHrefFor(locale, baseUrl), locale)}
     <main id="main-content" class="page">
       <article class="prose" aria-labelledby="privacy-heading">
         <p class="page__eyebrow">${escapeHtml(copy.privacyUpdated(content.updated))}</p>
@@ -657,7 +639,7 @@ export const renderServicePage = (
     items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
 
   return `
-    ${renderSiteHeader(baseUrl, homeHref, locale, `/services/${page.slug}/`)}
+    ${renderSiteHeader(baseUrl, homeHref, locale)}
     <main id="main-content" class="page">
       <article class="service-detail" aria-labelledby="service-heading">
         <div class="service-hero">
@@ -802,7 +784,7 @@ export const renderVorbioPage = (
     .join("\n          ");
 
   return `
-    ${renderSiteHeader(baseUrl, homeHref, locale, "/services/vorbio/")}
+    ${renderSiteHeader(baseUrl, homeHref, locale)}
     <main id="main-content" class="page vorbio">
       <article class="vorbio-page" aria-labelledby="vorbio-heading">
         <header class="vorbio-hero">

@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  clearStoredLocale,
   detectLocale,
   isSearchBot,
+  LOCALE_STORAGE_KEY,
   localeFromPath,
   localeRedirectPath,
   localizePath,
-  parseStoredLocale,
   rewriteRomanianDevPath,
 } from "../src/locale";
 
@@ -41,11 +42,16 @@ describe("locale detection", () => {
     expect(detectLocale(["en-GB"], "Europe/Chisinau")).toBe("en");
   });
 
-  it("recognises a saved choice and ignores anything else", () => {
-    expect(parseStoredLocale("ro")).toBe("ro");
-    expect(parseStoredLocale("en")).toBe("en");
-    expect(parseStoredLocale("fr")).toBeNull();
-    expect(parseStoredLocale(null)).toBeNull();
+  it("clears a previously saved language choice", () => {
+    const removed: string[] = [];
+
+    clearStoredLocale({
+      removeItem: (key) => {
+        removed.push(key);
+      },
+    });
+
+    expect(removed).toEqual([LOCALE_STORAGE_KEY]);
   });
 
   it("does not redirect search bots", () => {
@@ -53,86 +59,65 @@ describe("locale detection", () => {
     expect(isSearchBot("Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)", false)).toBe(true);
     expect(isSearchBot("Mozilla/5.0", true)).toBe(true);
 
-    const target = localeRedirectPath({
-      pathname: "/",
-      search: "",
-      hash: "",
-      stored: null,
-      detected: "ro",
-      isBot: true,
-    });
-
-    expect(target).toBeNull();
+    expect(
+      localeRedirectPath({
+        pathname: "/",
+        search: "",
+        hash: "",
+        detected: "ro",
+        isBot: true,
+      }),
+    ).toBeNull();
+    expect(
+      localeRedirectPath({
+        pathname: "/ro/",
+        search: "",
+        hash: "",
+        detected: "en",
+        isBot: true,
+      }),
+    ).toBeNull();
   });
 
-  it("sends a first-time Romanian visitor from English to the matching Romanian URL", () => {
+  it("sends a Romanian visitor from English to the matching Romanian URL", () => {
     expect(
       localeRedirectPath({
         pathname: "/services/bug-fixing/",
         search: "?from=ad",
         hash: "#approach",
-        stored: null,
         detected: "ro",
         isBot: false,
       }),
     ).toBe("/ro/services/bug-fixing/?from=ad#approach");
   });
 
-  it("does not bounce a Romanian URL back to English", () => {
+  it("sends everyone else from a Romanian URL to the matching English URL", () => {
     expect(
       localeRedirectPath({
-        pathname: "/ro/",
+        pathname: "/ro/privacy/",
         search: "",
         hash: "",
-        stored: null,
         detected: "en",
         isBot: false,
       }),
-    ).toBeNull();
+    ).toBe("/privacy/");
   });
 
-  it("lets a remembered choice override detection in either direction", () => {
-    expect(
-      localeRedirectPath({
-        pathname: "/",
-        search: "",
-        hash: "",
-        stored: "en",
-        detected: "ro",
-        isBot: false,
-      }),
-    ).toBeNull();
-
-    expect(
-      localeRedirectPath({
-        pathname: "/privacy/",
-        search: "",
-        hash: "",
-        stored: "ro",
-        detected: "en",
-        isBot: false,
-      }),
-    ).toBe("/ro/privacy/");
-
-    expect(
-      localeRedirectPath({
-        pathname: "/ro/services/automation/",
-        search: "",
-        hash: "",
-        stored: "en",
-        detected: "ro",
-        isBot: false,
-      }),
-    ).toBe("/services/automation/");
-  });
-
-  it("stays put when the page already matches the choice", () => {
+  it("stays put when the page already matches the detected language", () => {
     expect(
       localeRedirectPath({
         pathname: "/ro/",
         search: "",
         hash: "#team",
-        stored: "ro",
+        detected: "ro",
+        isBot: false,
+      }),
+    ).toBeNull();
+    expect(
+      localeRedirectPath({
+        pathname: "/",
+        search: "",
+        hash: "",
         detected: "en",
         isBot: false,
       }),

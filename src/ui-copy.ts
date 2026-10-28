@@ -40,7 +40,6 @@ export interface UiCopy {
   navApproach: string;
   navTeam: string;
   navQuote: string;
-  languageLabel: string;
   privacyNotice: string;
   backToTop: string;
   caseSituation: string;
@@ -144,7 +143,6 @@ const en: UiCopy = {
   navApproach: "How we work",
   navTeam: "Team",
   navQuote: "Get a quote",
-  languageLabel: "Language",
   privacyNotice: "Privacy notice",
   backToTop: "Back to top",
   caseSituation: "Situation",
@@ -275,7 +273,6 @@ const ro: UiCopy = {
   navApproach: "Cum lucrăm",
   navTeam: "Echipa",
   navQuote: "Cereți o ofertă",
-  languageLabel: "Limbă",
   privacyNotice: "Notă de confidențialitate",
   backToTop: "Înapoi sus",
   caseSituation: "Situația",
