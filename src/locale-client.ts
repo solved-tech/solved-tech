@@ -10,25 +10,22 @@ const forgetStoredLocale = (view: Window): void => {
   }
 };
 
+const readTimeZone = (): string => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch {
+    return "";
+  }
+};
+
 export const redirectForLocale = (view: Window): boolean => {
   forgetStoredLocale(view);
-
-  const languages = view.navigator.languages?.length
-    ? view.navigator.languages
-    : [view.navigator.language].filter((language) => language);
-  let timeZone = "";
-
-  try {
-    timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  } catch {
-    timeZone = "";
-  }
 
   const target = localeRedirectPath({
     pathname: view.location.pathname,
     search: view.location.search,
     hash: view.location.hash,
-    detected: detectLocale(languages, timeZone),
+    detected: detectLocale(readTimeZone()),
     isBot: isSearchBot(view.navigator.userAgent, view.navigator.webdriver),
   });
 

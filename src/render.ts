@@ -90,7 +90,7 @@ const renderFounderPicture = (
     baseUrl,
   );
 
-  return `<picture>${avif}${webp}<img src="${escapeHtml(publicAssetUrl(image, baseUrl))}" alt="${escapeHtml(alt)}" width="520" height="620" loading="lazy" decoding="async" /></picture>`;
+  return `<picture>${avif}${webp}<img src="${escapeHtml(publicAssetUrl(image, baseUrl))}" alt="${escapeHtml(alt)}" width="520" height="611" loading="lazy" decoding="async" /></picture>`;
 };
 
 const renderContactActions = (
