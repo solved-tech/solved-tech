@@ -3,13 +3,7 @@ export interface ContactConfig {
   placeholder: boolean;
 }
 
-export type ProductId =
-  | "fix"
-  | "ai"
-  | "customers"
-  | "website"
-  | "app"
-  | "other";
+export type ProductId = "fix" | "ai" | "customers" | "app" | "other";
 
 export interface ProductOffer {
   id: ProductId;
@@ -80,12 +74,6 @@ export const siteStatus: SiteStatus = {
 
 export const siteContent: SiteContent = {
   products: [
-    {
-      id: "website",
-      question: "Need a simple website?",
-      title: "Websites for small businesses",
-      outcome: "A clear site for your business, quoted before we start.",
-    },
     {
       id: "customers",
       question: "Need more customers?",
@@ -405,28 +393,6 @@ export const vorbioProduct: VorbioProduct = {
 };
 
 export const servicePages: ServicePage[] = [
-  {
-    slug: "websites-online-shops",
-    productId: "website",
-    title: "Simple websites for small businesses",
-    description:
-      "Clear websites and small online shops, with a fixed quote and plain-English handover.",
-    intro:
-      "We build straightforward websites for small businesses. You tell us what you do and how customers should reach you. We agree the pages and a fixed quote before we build.",
-    requests: [
-      "You need a simple site that explains the business",
-      "The current site no longer matches what you do",
-      "Customers should be able to enquire without hunting for a number",
-      "You want a small online shop for a limited range",
-    ],
-    deliverables: [
-      "The pages and wording we agreed in the quote",
-      "A site people can use on a phone or a computer",
-      "A clear way for customers to get in touch or buy",
-      "A handover that says what you have and how to reach us afterwards",
-    ],
-    approved: true,
-  },
   {
     slug: "seo-paid-campaigns",
     productId: "customers",

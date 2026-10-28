@@ -108,21 +108,15 @@ describe("homepage renderer", () => {
     expect(html).not.toContain(">Products<");
   });
 
-  it("renders six product cards, one full link each, in the approved order", () => {
+  it("renders five other-service cards, one full link each, in the approved order", () => {
     const cards = Array.from(
       html.matchAll(/<article class="product-card product-card--([a-z]+)">/g),
       ([, id]) => id,
     );
 
-    expect(cards).toEqual([
-      "website",
-      "customers",
-      "app",
-      "ai",
-      "fix",
-      "other",
-    ]);
-    expect(html.match(/class="product-card__link"/g)).toHaveLength(6);
+    expect(cards).toEqual(["customers", "app", "ai", "fix", "other"]);
+    expect(html).not.toContain("websites-online-shops");
+    expect(html.match(/class="product-card__link"/g)).toHaveLength(5);
     expect(html).not.toContain("need-selector");
     expect(html).not.toContain("service-box");
     expect(html).not.toContain("data-service-art");
@@ -192,15 +186,15 @@ describe("homepage renderer", () => {
       ([, index]) => index,
     );
 
-    expect(indexes).toEqual(["01", "02", "03", "04", "05", "06"]);
-    expect(html.match(/class="product-card__action"/g)).toHaveLength(6);
+    expect(indexes).toEqual(["01", "02", "03", "04", "05"]);
+    expect(html.match(/class="product-card__action"/g)).toHaveLength(5);
 
     const grid = html.match(
       /<div class="product-grid">([\s\S]*?)<\/section>/,
     )?.[1];
 
     expect(grid).toBeDefined();
-    expect(grid!.match(/<a /g)).toHaveLength(6);
+    expect(grid!.match(/<a /g)).toHaveLength(5);
     expect(grid).not.toContain("<ul");
     expect(grid).not.toContain("<button");
     expect(grid).not.toContain('href="#contact"');
@@ -221,13 +215,13 @@ describe("homepage renderer", () => {
 
     expect(services).toBeDefined();
 
-    (["fix", "ai", "customers", "website", "app", "other"] as const).forEach(
+    (["fix", "ai", "customers", "app", "other"] as const).forEach(
       (id) => expect(services).toContain(`product-glyph--${id}`),
     );
 
     expect(
       html.match(/<svg class="product-glyph product-glyph--[a-z]+"/g),
-    ).toHaveLength(6);
+    ).toHaveLength(5);
     expect(services).toContain('viewBox="0 0 64 64"');
     expect(services).toContain('aria-hidden="true"');
     expect(services).toContain('focusable="false"');
@@ -436,7 +430,7 @@ describe("homepage renderer", () => {
     expect(html.match(/data-placement="hero"/g)).toHaveLength(1);
     expect(html.match(/data-placement="contact"/g)).toHaveLength(1);
     expect(html.match(/data-placement="package"/g)).toHaveLength(4);
-    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(6);
+    expect(html.match(/data-analytics="service_interest"/g)).toHaveLength(5);
     siteContent.products.forEach(({ id }) =>
       expect(html).toContain(`data-service-id="${id}" data-placement="product-card"`),
     );
@@ -600,7 +594,7 @@ describe("service page renderer", () => {
       renderServicePage(page, siteContent, contactConfig, "/"),
     );
 
-    expect(new Set(pages).size).toBe(6);
+    expect(new Set(pages).size).toBe(5);
     pages.forEach((pageHtml, index) => {
       expect(pageHtml).toContain(
         `data-service-art="${servicePages[index].productId}"`,
@@ -631,9 +625,7 @@ describe("service detail artwork", () => {
       "Log",
       "Reproduce",
       "Fixed",
-      "Home",
       "Shop",
-      "Contact",
       "Tasks",
       "Search",
       "Ads",

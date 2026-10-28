@@ -52,6 +52,7 @@ describe("Romanian homepage", () => {
     });
     expect(html).toContain('href="/ro/privacy/"');
     expect(html).toContain('href="#packages">Site-uri</a>');
+    expect(html).not.toContain("websites-online-shops");
     expect(html).not.toContain('href="/services/');
     expect(html).not.toContain('href="/privacy/"');
   });
@@ -144,7 +145,8 @@ describe("language metadata", () => {
       expect(sitemap).toContain(`<loc>https://solvedtech.co.uk/ro/services/${slug}/</loc>`);
     });
     expect(sitemap).not.toContain("/privacy/");
-    expect(sitemap.match(/<loc>/g)).toHaveLength(14);
+    expect(sitemap).not.toContain("websites-online-shops");
+    expect(sitemap.match(/<loc>/g)).toHaveLength(12);
   });
 });
 

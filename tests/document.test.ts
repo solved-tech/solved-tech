@@ -81,11 +81,33 @@ describe("document icons", () => {
   });
 });
 
+describe("website service redirect", () => {
+  it("sends the old website service URLs to the main website packages", () => {
+    const english = readFileSync(
+      new URL("../public/services/websites-online-shops/index.html", import.meta.url),
+      "utf8",
+    );
+    const romanian = readFileSync(
+      new URL("../public/ro/services/websites-online-shops/index.html", import.meta.url),
+      "utf8",
+    );
+
+    expect(english).toContain('http-equiv="refresh" content="0; url=/#packages"');
+    expect(english).toContain('href="/#packages"');
+    expect(english).toContain('content="noindex"');
+    expect(romanian).toContain('http-equiv="refresh" content="0; url=/ro/#packages"');
+    expect(romanian).toContain('href="/ro/#packages"');
+    expect(romanian).toContain('<html lang="ro">');
+    expect(english).not.toContain("London");
+    expect(romanian).not.toContain("Londra");
+  });
+});
+
 describe("service document shells", () => {
   it("ships exactly one shell per service record with unique paths", () => {
-    expect(servicePages).toHaveLength(6);
-    expect(new Set(servicePages.map(({ slug }) => slug)).size).toBe(6);
-    expect(new Set(servicePages.map(({ productId }) => productId)).size).toBe(6);
+    expect(servicePages).toHaveLength(5);
+    expect(new Set(servicePages.map(({ slug }) => slug)).size).toBe(5);
+    expect(new Set(servicePages.map(({ productId }) => productId)).size).toBe(5);
   });
 
   servicePages.forEach(({ slug, title, description }) => {

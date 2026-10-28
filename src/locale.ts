@@ -114,7 +114,7 @@ export const rewriteRomanianDevPath = (pathname: string): string | null => {
 
   const service = pathname.match(/^\/ro\/services\/([^/]+)\/?$/);
 
-  if (!service) {
+  if (!service || service[1] === "websites-online-shops") {
     return null;
   }
 

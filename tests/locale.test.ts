@@ -27,6 +27,7 @@ describe("locale paths", () => {
     expect(rewriteRomanianDevPath("/ro")).toBe("/index.html");
     expect(rewriteRomanianDevPath("/ro/privacy/")).toBe("/privacy/index.html");
     expect(rewriteRomanianDevPath("/ro/services/vorbio")).toBe("/services/vorbio/index.html");
+    expect(rewriteRomanianDevPath("/ro/services/websites-online-shops/")).toBeNull();
     expect(rewriteRomanianDevPath("/services/vorbio/")).toBeNull();
   });
 });
