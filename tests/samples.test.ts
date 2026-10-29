@@ -5,15 +5,22 @@ const root = new URL("..", import.meta.url);
 const read = (path: string): string => readFileSync(new URL(path, root), "utf8");
 
 const samples = [
-  { slug: "gossip-nails", lang: "en-GB", email: "gossipnails@hotmail.co.uk" },
-  { slug: "vyas-gardening", lang: "en-GB", email: "vyasgardeningservice@hotmail.com" },
-  { slug: "nz-cleaning", lang: "en-GB", email: "polishshine1@gmail.com" },
-  { slug: "nish", lang: "ro", email: "nishcafea@gmail.com" },
   { slug: "barberoka", lang: "ro", email: "barberokabarbershop@gmail.com" },
+  { slug: "call-si", lang: "en", email: "simon_lwson@yahoo.co.uk" },
+  { slug: "family-bistro", lang: "ro", email: "originalbistrofamily@gmail.com" },
+  { slug: "frizeria-virginia-m", lang: "ro", email: "balanvirginia57@gmail.com" },
+  { slug: "gossip-nails", lang: "en", email: "gossipnails@hotmail.co.uk" },
+  { slug: "itp-nmv-auto", lang: "ro", email: "madalin.neata@yahoo.com" },
+  { slug: "la-frizerie-2023", lang: "ro", email: "lafrizerie2003@gmail.com" },
+  { slug: "le-salon-amzei", lang: "ro", email: "lesalon.manager@gmail.com" },
+  { slug: "linecut", lang: "ro", email: "linecuthairstudio@gmail.com" },
+  { slug: "nish", lang: "ro", email: "nishcafea@gmail.com" },
+  { slug: "nz-cleaning", lang: "en", email: "polishshine1@gmail.com" },
+  { slug: "vyas-gardening", lang: "en-GB", email: "vyasgardeningservice@hotmail.com" },
 ] as const;
 
 describe("sample homepages", () => {
-  it("publishes exactly the five follow-up samples", () => {
+  it("publishes the follow-up samples", () => {
     const slugs = readdirSync(new URL("samples", root), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
