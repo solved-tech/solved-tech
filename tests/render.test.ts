@@ -268,13 +268,17 @@ describe("homepage renderer", () => {
     expect(contact).not.toContain("One click starts the conversation.");
   });
 
-  it("uses the professional logo lockup in the site header", () => {
+  it("uses the ST monogram in the site header", () => {
     expect(html).toContain(
       '<a class="wordmark" href="#top" aria-label="Solved Tech home">',
     );
     expect(html).toContain(
-      '<img src="/brand/solved-tech-logo-dark.svg" alt="Solved Tech — Your digital problems, solved."',
+      '<img src="/brand/st-mark-white-95.png" srcset="/brand/st-mark-white-95.png 1x, /brand/st-mark-white-190.png 2x" alt="Solved Tech" width="95" height="104" decoding="sync" />',
     );
+    expect(html).toContain(
+      '<source type="image/webp" srcset="/brand/st-mark-white-95.webp 1x, /brand/st-mark-white-190.webp 2x" />',
+    );
+    expect(html).not.toContain("solved-tech-logo");
   });
 
   it("serves public assets from the domain root", () => {
@@ -285,7 +289,7 @@ describe("homepage renderer", () => {
     );
 
     expect(pagesHtml).toContain(
-      'src="/brand/solved-tech-logo-dark.svg"',
+      'src="/brand/st-mark-white-95.png"',
     );
     expect(pagesHtml).toContain(
       'src="/team/razvan_cristofor-520.webp"',
@@ -374,7 +378,8 @@ describe("homepage renderer", () => {
       expect(html.match(/founder__linkedin/g)).toHaveLength(2);
     });
     expect(html.match(/class="founder__portrait-frame"/g)).toHaveLength(2);
-    expect(html.match(/ srcset="/g)).toHaveLength(3);
+    const team = html.match(/<section id="team"[\s\S]*?<\/section>/)?.[0] ?? "";
+    expect(team.match(/ srcset="/g)).toHaveLength(3);
     expect(html).not.toContain("Placeholder portrait");
     expect(html).not.toContain("Photo placeholder");
   });
