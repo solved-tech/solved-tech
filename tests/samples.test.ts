@@ -11,10 +11,11 @@ const samples = [
   { slug: "nish", lang: "ro", email: "nishcafea@gmail.com" },
   { slug: "barberoka", lang: "ro", email: "barberokabarbershop@gmail.com" },
   { slug: "mara-ellison", lang: "en-GB", email: "hello@maraellison.example" },
+  { slug: "adriannica", lang: "ro", email: "contact@adriannica.ro" },
 ] as const;
 
 describe("sample homepages", () => {
-  it("publishes exactly the six follow-up samples", () => {
+  it("publishes exactly the seven follow-up samples", () => {
     const slugs = readdirSync(new URL("samples", root), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)

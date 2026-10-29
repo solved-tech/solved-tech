@@ -44,8 +44,9 @@ Visitors compare portfolios on phones between other vendor tabs. They need locat
 
 ## Evidence on Hand
 
-- No client-supplied photographs yet. Use openly licensed photography (e.g. Wikimedia Commons) with credits, or synthetic plates clearly not claiming to be Mara’s shoots.
-- No real reviews, prices, or calendar to cite — do not invent them.
+- No client-supplied photographs yet for the Mara Ellison sample. Use openly licensed photography (e.g. Wikimedia Commons) with credits, or synthetic plates clearly not claiming to be Mara’s shoots.
+- No real reviews, prices, or calendar to cite for Mara Ellison — do not invent them.
+- A second sample, `samples/adriannica/`, is for the real studio Adrian Nica (adriannica.ro): București / Ilfov, 0723 986 982, contact@adriannica.ro, foto și video for weddings, baptisms and civil ceremonies, plus published Christmas studio rates (from 300 lei / from 400 lei). Photographs in that sample are his published frames. Do not invent wedding package prices or a booking calendar.
 
 ## Product Principles
 
