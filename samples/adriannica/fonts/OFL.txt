@@ -1,0 +1,5 @@
+Besley and Onest are licensed under the SIL Open Font License, Version 1.1.
+https://scripts.sil.org/OFL
+
+Besley: Copyright 2018 The Besley Project Authors (https://github.com/indestructible-type/Besley)
+Onest: Copyright 2022 The Onest Project Authors (https://github.com/googlefonts/onest)

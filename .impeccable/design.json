@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-29T17:09:00Z",
+  "title": "Design System: Mara Ellison",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Darkroom Ground",
+        "canonical": "#0c0a08",
+        "tonalRamp": [
+          "#0c0a08",
+          "#1a1612",
+          "#2f2820",
+          "#4a4034",
+          "#6a5a48",
+          "#9a8870",
+          "#c9b8a0",
+          "#ebe4d6"
+        ]
+      },
+      "tray": {
+        "role": "neutral",
+        "displayName": "Developer Tray",
+        "canonical": "#161210",
+        "tonalRamp": [
+          "#0c0a08",
+          "#161210",
+          "#241c14",
+          "#3a3026",
+          "#5a4c3c",
+          "#8a7860",
+          "#c9b8a0",
+          "#ebe4d6"
+        ]
+      },
+      "paper": {
+        "role": "primary",
+        "displayName": "Fibre Paper",
+        "canonical": "#ebe4d6",
+        "tonalRamp": [
+          "#2a241c",
+          "#4a4034",
+          "#6a5a48",
+          "#9a8870",
+          "#c9b8a0",
+          "#ddd4c4",
+          "#ebe4d6",
+          "#fff6ea"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Paper Ink",
+        "canonical": "#ebe4d6",
+        "tonalRamp": [
+          "#2a241c",
+          "#4a4034",
+          "#6a5a48",
+          "#9a8870",
+          "#c9b8a0",
+          "#ddd4c4",
+          "#ebe4d6",
+          "#fff6ea"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Caption Ink",
+        "canonical": "#c9b8a0",
+        "tonalRamp": [
+          "#1a1612",
+          "#2f2820",
+          "#4a4034",
+          "#6a5a48",
+          "#9a8870",
+          "#c9b8a0",
+          "#ddd4c4",
+          "#ebe4d6"
+        ]
+      },
+      "amber": {
+        "role": "primary",
+        "displayName": "Safelight Amber",
+        "canonical": "#c45a12",
+        "tonalRamp": [
+          "#3a1a08",
+          "#5c2a0c",
+          "#843e10",
+          "#c45a12",
+          "#d4783a",
+          "#e09a68",
+          "#ecc09a",
+          "#f5e0cc"
+        ]
+      },
+      "amber-soft": {
+        "role": "primary",
+        "displayName": "Amber Soft",
+        "canonical": "rgba(196, 90, 18, 0.42)",
+        "tonalRamp": [
+          "rgba(196, 90, 18, 0.12)",
+          "rgba(196, 90, 18, 0.22)",
+          "rgba(196, 90, 18, 0.32)",
+          "rgba(196, 90, 18, 0.42)",
+          "rgba(196, 90, 18, 0.55)",
+          "rgba(196, 90, 18, 0.68)",
+          "rgba(196, 90, 18, 0.82)",
+          "rgba(196, 90, 18, 0.95)"
+        ]
+      },
+      "paper-hover": {
+        "role": "primary",
+        "displayName": "Paper Hover",
+        "canonical": "#fff6ea",
+        "tonalRamp": [
+          "#2a241c",
+          "#4a4034",
+          "#6a5a48",
+          "#9a8870",
+          "#c9b8a0",
+          "#ebe4d6",
+          "#fff6ea",
+          "#fffaf3"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Shelf Rule",
+        "canonical": "#241c14",
+        "tonalRamp": [
+          "#0c0a08",
+          "#161210",
+          "#241c14",
+          "#3a3026",
+          "#5a4c3c",
+          "#8a7860",
+          "#c9b8a0",
+          "#ebe4d6"
+        ]
+      },
+      "sheet-fill": {
+        "role": "neutral",
+        "displayName": "Prior Sheet Fill",
+        "canonical": "#2f2820",
+        "tonalRamp": [
+          "#0c0a08",
+          "#161210",
+          "#2f2820",
+          "#4a4034",
+          "#6a5a48",
+          "#9a8870",
+          "#c9b8a0",
+          "#ebe4d6"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero brand name only — Mara Ellison at clamp 3.25–6rem."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles: Recent prints, In the room, Ready to talk dates?"
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Sticky mark and primary button labels."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "About paragraphs and long reading in Literata muted ink."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Hero supporting sentence; ~28ch measure."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Sticky in-page navigation links."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Figcaptions under print trays."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tray-depth",
+        "value": "0 22px 48px rgba(0, 0, 0, 0.55)",
+        "purpose": "Soft black drop under active print trays."
+      },
+      {
+        "name": "prior-sheet",
+        "value": "0 18px 40px rgba(0, 0, 0, 0.5)",
+        "purpose": "Soft black drop under stacked hero prior prints."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-settle",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Hero tray settle and intro rise entrances (~900ms)."
+      },
+      {
+        "name": "ease-state",
+        "value": "ease-out",
+        "purpose": "Button background, color, and transform transitions (180ms)."
+      },
+      {
+        "name": "pool-breathe",
+        "value": "7s ease-in-out infinite alternate",
+        "purpose": "Hero safelight pool slow breath."
+      },
+      {
+        "name": "pool-follow",
+        "value": "view() timeline; entry 0% cover 45%",
+        "purpose": "Print safelight opacity/position follows scroll into view."
+      }
+    ],
+    "breakpoints": [
+      { "name": "compact", "value": "520px" },
+      { "name": "nav", "value": "720px" },
+      { "name": "hero-split", "value": "960px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Fibre-paper Enquire control — the sole bright conversion signal on darkroom ground.",
+      "html": "<a class=\"ds-btn-primary\" href=\"mailto:hello@maraellison.example\">Enquire by email</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; background: var(--paper, #ebe4d6); color: var(--ground, #0c0a08); text-decoration: none; font-family: \"Bricolage Grotesque\", \"Segoe UI\", sans-serif; font-weight: 700; letter-spacing: 0.02em; border: none; border-radius: 0; white-space: nowrap; transition: background-color 180ms ease-out, color 180ms ease-out, transform 180ms ease-out; } .ds-btn-primary:hover { background: #fff6ea; transform: translateY(-1px); } .ds-btn-primary:active { transform: translateY(0); } .ds-btn-primary:focus-visible { outline: 3px solid var(--paper, #ebe4d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Primary Button Hover",
+      "kind": "button",
+      "refersTo": "button-primary-hover",
+      "description": "Brighter cream rest state for the Enquire button hover.",
+      "html": "<a class=\"ds-btn-primary-hover\" href=\"#\">Enquire</a>",
+      "css": ".ds-btn-primary-hover { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; background: #fff6ea; color: var(--ground, #0c0a08); text-decoration: none; font-family: \"Bricolage Grotesque\", \"Segoe UI\", sans-serif; font-weight: 700; letter-spacing: 0.02em; border-radius: 0; transform: translateY(-1px); } .ds-btn-primary-hover:focus-visible { outline: 3px solid var(--paper, #ebe4d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Skip Link",
+      "kind": "nav",
+      "refersTo": "skip-link",
+      "description": "Paper-on-ground skip control that appears on keyboard focus.",
+      "html": "<a class=\"ds-skip\" href=\"#main\">Skip to content</a>",
+      "css": ".ds-skip { display: inline-block; background: var(--paper, #ebe4d6); color: var(--ground, #0c0a08); padding: 12px 16px; font-family: \"Bricolage Grotesque\", \"Segoe UI\", sans-serif; font-weight: 700; text-decoration: none; border-radius: 0; } .ds-skip:focus-visible { outline: 3px solid var(--paper, #ebe4d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Muted in-page sticky nav link; brightens to paper ink on hover.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"On this page\"><a class=\"ds-nav-link\" href=\"#work\">Work</a><a class=\"ds-nav-link\" href=\"#about\">About</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 1.5rem; font-family: \"Bricolage Grotesque\", \"Segoe UI\", sans-serif; font-size: 0.95rem; font-weight: 500; } .ds-nav-link { color: var(--muted, #c9b8a0); text-decoration: none; text-underline-offset: 0.18em; } .ds-nav-link:hover { color: var(--ink, #ebe4d6); } .ds-nav-link:focus-visible { outline: 3px solid var(--paper, #ebe4d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Sticky Chrome",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Sticky top bar: mark, in-page links, Enquire — translucent ground with blur.",
+      "html": "<header class=\"ds-top\"><a class=\"ds-mark\" href=\"#top\">Mara Ellison</a><nav class=\"ds-nav\" aria-label=\"On this page\"><a class=\"ds-nav-link\" href=\"#work\">Work</a><a class=\"ds-nav-link\" href=\"#about\">About</a></nav><a class=\"ds-btn-primary\" href=\"mailto:hello@maraellison.example\">Enquire</a></header>",
+      "css": ".ds-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 4.75rem; padding: 12px clamp(20px, 4.5vw, 72px); background: color-mix(in srgb, #0c0a08 88%, transparent); backdrop-filter: blur(10px); font-family: \"Bricolage Grotesque\", \"Segoe UI\", sans-serif; } .ds-mark { font-weight: 700; font-size: 1.2rem; letter-spacing: -0.03em; color: #ebe4d6; text-decoration: none; } .ds-mark:focus-visible { outline: 3px solid #ebe4d6; outline-offset: 3px; } .ds-nav { display: flex; gap: 1.5rem; font-size: 0.95rem; } .ds-nav-link { color: #c9b8a0; text-decoration: none; } .ds-nav-link:hover { color: #ebe4d6; } .ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; background: #ebe4d6; color: #0c0a08; text-decoration: none; font-weight: 700; letter-spacing: 0.02em; border-radius: 0; transition: background-color 180ms ease-out, transform 180ms ease-out; } .ds-btn-primary:hover { background: #fff6ea; transform: translateY(-1px); }"
+    },
+    {
+      "name": "Print Tray",
+      "kind": "custom",
+      "refersTo": "tray",
+      "description": "Recessed developer tray holding a fibre-bordered photograph and Literata caption.",
+      "html": "<figure class=\"ds-tray\"><img class=\"ds-tray-img\" src=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='480' viewBox='0 0 720 480'%3E%3Crect fill='%231a1612' width='720' height='480'/%3E%3C/svg%3E\" alt=\"Print placeholder\" /><figcaption class=\"ds-caption\">Wedding day, late afternoon.</figcaption></figure>",
+      "css": ".ds-tray { margin: 0; background: var(--tray, #161210); padding: clamp(12px, 1.6vw, 22px); box-shadow: 0 22px 48px rgba(0, 0, 0, 0.55); max-width: 720px; } .ds-tray-img { display: block; width: 100%; height: auto; background: #1a1612; border: clamp(10px, 1.4vw, 18px) solid #ebe4d6; box-sizing: border-box; } .ds-caption { margin-top: 0.85rem; font-family: Literata, \"Iowan Old Style\", \"Palatino Linotype\", serif; font-size: 0.98rem; font-weight: 400; color: var(--muted, #c9b8a0); } .ds-tray:focus-within { outline: 3px solid var(--paper, #ebe4d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "About Text Link",
+      "kind": "custom",
+      "refersTo": "nav-link",
+      "description": "Bold Bricolage text link with amber-tinted underline for contact and in-page jumps.",
+      "html": "<p class=\"ds-links\"><a href=\"mailto:hello@maraellison.example\">hello@maraellison.example</a><a href=\"#work\">See the prints</a></p>",
+      "css": ".ds-links { display: flex; flex-direction: column; gap: 0.85rem; font-family: \"Bricolage Grotesque\", \"Segoe UI\", sans-serif; font-weight: 700; margin: 0; } .ds-links a { color: var(--ink, #ebe4d6); text-decoration-color: color-mix(in srgb, #c45a12 70%, transparent); text-underline-offset: 0.18em; } .ds-links a:hover { color: var(--paper, #ebe4d6); } .ds-links a:focus-visible { outline: 3px solid var(--paper, #ebe4d6); outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Darkroom Under Safelight",
+    "overview": "The site is a darkroom: near-black ground, amber light as atmosphere, photographs presented as wet prints with fibre-paper borders. Chrome stays subordinate to the print. Brand and enquire are the only bright signals that compete with the image; everything else reads as room, tray, or caption.\n\nPersonality is unhurried and material. Density is sparse — one composition in the first viewport, then a staggered run of prints, then short copy. The world refuses the category-default dark-minimal name-over-grid portfolio: no equal card grids, no eyebrow kickers, no glass marketing panels.",
+    "keyCharacteristics": [
+      "Near-black ground with safelight amber as atmospheric pools, never as an image tint",
+      "Fibre-paper cream for print borders and the sole bright Enquire control",
+      "Bricolage Grotesque for brand and UI; Literata for leads, body, and captions",
+      "Trays and stacked prior prints as depth — not cards",
+      "Sharp UI corners; soft drop shadows only under trays and prior sheets"
+    ],
+    "rules": [
+      {
+        "name": "The Safelight Rule",
+        "body": "Amber is light in the room, not a brand wash. Use it for pools, selection, and thin accents; never tint photographs or flood backgrounds.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fibre Paper Rule",
+        "body": "Cream is the print edge and the Enquire signal. It is scarce on purpose — if cream appears as a large page field, the darkroom has failed.",
+        "section": "colors"
+      },
+      {
+        "name": "The Quiet Chrome Rule",
+        "body": "On any screen, the photograph outranks navigation, labels, and supporting copy. If chrome competes with the print, remove chrome.",
+        "section": "colors"
+      },
+      {
+        "name": "The Brand-Is-Display Rule",
+        "body": "The photographer’s name is the display size. Do not place a larger marketing headline above or beside it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Serif-For-Voice Rule",
+        "body": "Literata carries sentences and captions; Bricolage carries names, section titles, nav, and buttons. Do not invert the pairing.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Composition Rule",
+        "body": "The first viewport holds brand, one lead, one CTA group, one dominant tray print, and atmospheric room (safelight + prior stack). No stats, schedules, or secondary marketing in that frame.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Staggered Print Rule",
+        "body": "Portfolio prints alternate left/right on a single track. Never a same-size card grid of photographs.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Tray-Not-Card Rule",
+        "body": "Photographs sit in recessed trays with fibre borders. Do not wrap images in bordered, radius, or equal-height cards.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Soft Depth Rule",
+        "body": "Shadows are soft black drops under material objects (trays, sheets). No hard offset neobrutalist shadows; no decorative multi-layer glows on chrome.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Square Bench Rule",
+        "body": "Interactive chrome is sharp-cornered. Roundness belongs only to light pools.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep the photographer’s name as the hero display signal and the dominant brand mark.",
+      "Do present photographs as fibre-bordered trays on near-black ground with soft tray shadows.",
+      "Do reserve safelight amber for atmospheric pools, selection, and thin accents.",
+      "Do use fibre-paper cream for print borders and Enquire — scarcity is the signal.",
+      "Do pair Bricolage for brand/UI with Literata for captions and body voice.",
+      "Do stagger prints left/right on a single track with generous vertical gap."
+    ],
+    "donts": [
+      "Don't build a dark-minimal name-over-equal-image-grid portfolio.",
+      "Don't introduce cards, eyebrow kickers, pill clusters, or stat strips.",
+      "Don't tint photographs with amber or flood the page with cream.",
+      "Don't use hard offset shadows, multi-layer chrome glows, or rounded-full controls.",
+      "Don't let supporting copy or nav outrank the print in the first viewport.",
+      "Don't invent review scores, prices, or booking calendars — the sample stays honest and quiet."
+    ]
+  }
+}
