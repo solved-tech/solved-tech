@@ -74,12 +74,12 @@ describe("document icons", () => {
 
   shells.forEach(([name, html]) => {
     it(`links the favicon and touch icon from ${name}`, () => {
+      expect(html).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml" />');
       expect(html).toContain('<link rel="icon" href="/favicon.ico" sizes="any" />');
       expect(html).toContain('<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />');
       expect(html).toContain('<link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />');
       expect(html).toContain('<link rel="icon" href="/favicon-512.png" type="image/png" sizes="512x512" />');
       expect(html).toContain('<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />');
-      expect(html).not.toContain("favicon.svg");
     });
   });
 });

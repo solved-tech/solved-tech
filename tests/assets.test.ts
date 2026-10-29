@@ -82,8 +82,17 @@ describe("brand icons", () => {
       expect(ascii(bytes, 8, 12), path).toBe("WEBP");
     });
 
+    const svg = new TextDecoder().decode(readBytes("/favicon.svg"));
+    const embedded = svg.match(/data:image\/png;base64,([A-Za-z0-9+/=]+)/)?.[1] ?? "";
+    const png = Uint8Array.from(atob(embedded), (char) => char.charCodeAt(0));
+
+    expect(svg).toContain('<rect width="936" height="936" fill="#ffffff"/>');
+    expect(svg).not.toContain("<path");
+    expect(ascii(png, 12, 16)).toBe("IHDR");
+    expect(u32be(png, 16)).toBe(855);
+    expect(u32be(png, 20)).toBe(936);
+
     [
-      "/favicon.svg",
       "/brand/solved-tech-logo-dark.svg",
       "/brand/solved-tech-logo-dark.png",
       "/brand/solved-tech-logo-light.svg",
