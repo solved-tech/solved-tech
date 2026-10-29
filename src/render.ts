@@ -382,12 +382,16 @@ export const renderSiteHeader = (
   pagePath = "/",
 ): string => {
   const copy = uiCopy(locale);
+  const mark = (path: string) => escapeHtml(publicAssetUrl(path, baseUrl));
 
   return `
     <div id="top" class="page-top" tabindex="-1"></div>
     <header class="site-header">
       <a class="wordmark" href="${escapeHtml(homeHref)}#top" aria-label="${escapeHtml(copy.homeLabel)}">
-        <img src="${escapeHtml(publicAssetUrl("/brand/solved-tech-logo-dark.svg", baseUrl))}" alt="Solved Tech — Your digital problems, solved." width="180" height="40" decoding="sync" />
+        <picture>
+          <source type="image/webp" srcset="${mark("/brand/st-mark-white-95.webp")} 1x, ${mark("/brand/st-mark-white-190.webp")} 2x" />
+          <img src="${mark("/brand/st-mark-white-95.png")}" srcset="${mark("/brand/st-mark-white-95.png")} 1x, ${mark("/brand/st-mark-white-190.png")} 2x" alt="Solved Tech" width="95" height="104" decoding="sync" />
+        </picture>
       </a>
       <div class="site-header__end">
         ${renderLanguageSwitcher(locale, pagePath, baseUrl)}

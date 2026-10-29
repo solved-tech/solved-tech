@@ -52,7 +52,7 @@ describe("head metadata", () => {
       '<meta property="og:image" content="https://solvedtech.co.uk/brand/solved-tech-social.png" />',
     );
     expect(data.url).toBe("https://solvedtech.co.uk/");
-    expect(data.logo).toBe("https://solvedtech.co.uk/brand/solved-tech-logo-dark.svg");
+    expect(data.logo).toBe("https://solvedtech.co.uk/brand/st-mark.png");
     expect(data.email).toBe("contact@solvedtech.co.uk");
     expect(data).not.toHaveProperty("areaServed");
     expect(data).not.toHaveProperty("address");
@@ -81,7 +81,7 @@ describe("head metadata", () => {
       "@type": "ProfessionalService",
       name: "Solved Tech",
       url: "https://example.test/",
-      logo: "https://example.test/brand/solved-tech-logo-dark.svg",
+      logo: "https://example.test/brand/st-mark.png",
       email: contactConfig.email,
       founder: siteContent.founders.map(({ name, linkedin }) => ({
         "@type": "Person",

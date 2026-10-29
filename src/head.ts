@@ -128,7 +128,7 @@ export const renderOrganizationJsonLd = (
     "@type": "ProfessionalService",
     name: "Solved Tech",
     url: absoluteUrl(status.productionOrigin, "/", baseUrl),
-    logo: absoluteUrl(status.productionOrigin, "/brand/solved-tech-logo-dark.svg", baseUrl),
+    logo: absoluteUrl(status.productionOrigin, "/brand/st-mark.png", baseUrl),
     email: config.email,
     founder: content.founders.map(({ name, linkedin }) => ({
       "@type": "Person",

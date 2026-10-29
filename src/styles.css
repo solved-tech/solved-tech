@@ -254,10 +254,14 @@ a {
   text-decoration: none;
 }
 
+.wordmark picture {
+  display: block;
+}
+
 .wordmark img {
   display: block;
-  width: clamp(9rem, 42vw, 11.25rem);
-  height: auto;
+  width: auto;
+  height: 2.5rem;
 }
 
 .site-header__end {
