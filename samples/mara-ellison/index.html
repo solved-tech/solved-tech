@@ -9,9 +9,16 @@
     <meta name="theme-color" content="#0c0a08" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      as="image"
+      href="media/wedding-sunset-800.webp"
+      imagesrcset="media/wedding-sunset-480.webp 480w, media/wedding-sunset-800.webp 800w, media/wedding-sunset-1200.webp 1200w, media/wedding-sunset-1600.webp 1600w"
+      imagesizes="(min-width: 960px) min(54vw, 1040px), calc(100vw - 4.5rem)"
+      fetchpriority="high"
+      type="image/webp"
+    />
     <link rel="preload" href="fonts/bricolage-grotesque-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="fonts/bricolage-grotesque-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="fonts/literata-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -36,7 +43,9 @@
         </div>
         <figure class="tray tray--hero">
           <img
-            src="media/wedding-sunset.jpg"
+            src="media/wedding-sunset-800.webp"
+            srcset="media/wedding-sunset-480.webp 480w, media/wedding-sunset-800.webp 800w, media/wedding-sunset-1200.webp 1200w, media/wedding-sunset-1600.webp 1600w"
+            sizes="(min-width: 960px) min(54vw, 1040px), calc(100vw - 4.5rem)"
             width="1920"
             height="1278"
             alt="A couple standing close at sunset, warm light on their faces."
@@ -59,33 +68,45 @@
           <figure class="tray tray--tall">
             <div class="safelight safelight--print" aria-hidden="true"></div>
             <img
-              src="media/wedding-portrait.jpg"
+              src="media/wedding-portrait-800.webp"
+              srcset="media/wedding-portrait-480.webp 480w, media/wedding-portrait-800.webp 800w, media/wedding-portrait-1000.webp 1000w"
+              sizes="(min-width: 800px) 720px, calc(100vw - 4.5rem)"
               width="1000"
               height="1398"
               alt="A bride and groom standing outdoors, looking toward each other."
               loading="lazy"
+              decoding="async"
+              fetchpriority="low"
             />
             <figcaption>Wedding day, late afternoon.</figcaption>
           </figure>
           <figure class="tray">
             <div class="safelight safelight--print" aria-hidden="true"></div>
             <img
-              src="media/portrait.jpg"
+              src="media/portrait-800.webp"
+              srcset="media/portrait-480.webp 480w, media/portrait-800.webp 800w, media/portrait-1200.webp 1200w, media/portrait-1600.webp 1600w"
+              sizes="(min-width: 800px) 720px, calc(100vw - 4.5rem)"
               width="2824"
               height="2328"
               alt="A woman with red hair looking toward the camera in soft daylight."
               loading="lazy"
+              decoding="async"
+              fetchpriority="low"
             />
             <figcaption>Portrait session.</figcaption>
           </figure>
           <figure class="tray tray--tall">
             <div class="safelight safelight--print" aria-hidden="true"></div>
             <img
-              src="media/wedding-close.jpg"
+              src="media/wedding-close-800.webp"
+              srcset="media/wedding-close-480.webp 480w, media/wedding-close-800.webp 800w, media/wedding-close-1000.webp 1000w"
+              sizes="(min-width: 800px) 720px, calc(100vw - 4.5rem)"
               width="1000"
               height="1404"
               alt="A wedding couple standing close, the bride holding a bouquet."
               loading="lazy"
+              decoding="async"
+              fetchpriority="low"
             />
             <figcaption>After the ceremony.</figcaption>
           </figure>
@@ -102,7 +123,9 @@
             </p>
             <p>
               This page is a sample layout. The name and contact address are fictional.
-              Write if you want a site like this for your own work.
+            </p>
+            <p>
+              Want tech like this working for your business? Solved Tech builds websites, apps and automation for small businesses, at a fixed price agreed before we start. <a href="https://solvedtech.co.uk">Book a free chat.</a>
             </p>
           </div>
           <p class="links">

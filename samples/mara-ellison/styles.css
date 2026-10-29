@@ -121,7 +121,7 @@ img {
 
 h1, h2 {
   font-weight: 700;
-  line-height: 0.96;
+  line-height: 1.08;
   letter-spacing: -0.035em;
   text-wrap: balance;
   margin: 0;
@@ -385,6 +385,12 @@ a {
   gap: 2rem;
 }
 .about p + p { margin-top: 1rem; }
+.about p a {
+  color: var(--ink);
+  text-decoration-color: color-mix(in srgb, var(--amber) 70%, transparent);
+  white-space: nowrap;
+}
+.about p a:hover { color: var(--paper); }
 .links {
   display: flex;
   flex-direction: column;
@@ -402,7 +408,7 @@ a {
   padding: 0 0 clamp(4rem, 8vw, 6rem);
 }
 .close-panel {
-  padding: clamp(2rem, 5vw, 3.25rem) 0;
+  padding-block: clamp(2rem, 5vw, 3.25rem);
   background: transparent;
   box-shadow: none;
   position: relative;
@@ -518,13 +524,13 @@ a {
 }
 
 @keyframes tray-settle {
-  from { opacity: 0.01; transform: translate3d(0, 18px, 0); }
-  to { opacity: 1; transform: none; }
+  from { transform: translate3d(0, 18px, 0); }
+  to { transform: none; }
 }
 
 @keyframes intro-rise {
-  from { opacity: 0.01; transform: translate3d(0, 14px, 0); }
-  to { opacity: 1; transform: none; }
+  from { transform: translate3d(0, 14px, 0); }
+  to { transform: none; }
 }
 
 @media (max-width: 520px) {

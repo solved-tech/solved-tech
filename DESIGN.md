@@ -17,13 +17,13 @@ typography:
     fontFamily: "Bricolage Grotesque, Segoe UI, sans-serif"
     fontSize: "clamp(3.25rem, 8vw, 6rem)"
     fontWeight: 700
-    lineHeight: 0.96
+    lineHeight: 1.08
     letterSpacing: "-0.035em"
   headline:
     fontFamily: "Bricolage Grotesque, Segoe UI, sans-serif"
     fontSize: "clamp(2rem, 3.4vw, 2.85rem)"
     fontWeight: 700
-    lineHeight: 0.96
+    lineHeight: 1.08
     letterSpacing: "-0.035em"
   title:
     fontFamily: "Bricolage Grotesque, Segoe UI, sans-serif"
@@ -136,8 +136,8 @@ A warm darkroom palette: black room, amber light, cream paper, muted caption ink
 **Character:** Industrial grotesque for the name and controls; literary serif for the quiet voice under the prints. Weight contrast does the hierarchy — 700 for brand and section titles, 400/500 for reading and nav.
 
 ### Hierarchy
-- **Display** (700, `clamp(3.25rem, 8vw, 6rem)`, line-height 0.96, tracking −0.035em): Hero brand name only — the first-viewport headline *is* the photographer’s name.
-- **Headline** (700, `clamp(2rem, 3.4vw, 2.85rem)`, line-height 0.96, tracking −0.035em): Section titles (Recent prints, In the room, Ready to talk dates?).
+- **Display** (700, `clamp(3.25rem, 8vw, 6rem)`, line-height 1.08, tracking −0.035em): Hero brand name only — the first-viewport headline *is* the photographer’s name.
+- **Headline** (700, `clamp(2rem, 3.4vw, 2.85rem)`, line-height 1.08, tracking −0.035em): Section titles (Recent prints, In the room, Ready to talk dates?).
 - **Title** (700, 1.2rem, tracking −0.03em): Sticky mark and button labels.
 - **Body** (400, 1.125rem, line-height 1.5, Literata in `muted`): About paragraphs and long reading; keep measure near 36–42ch in editorial columns, footer credits up to ~75ch.
 - **Lead** (400, `clamp(1.1rem, 2vw, 1.3rem)`, Literata): Hero supporting sentence; max-width ~28ch.
@@ -201,7 +201,7 @@ Form language is square and material. Buttons, trays, mark, and links use `0` ra
 
 ### Motion
 - Prefer-reduced-motion respected: animations only under `prefers-reduced-motion: no-preference`.
-- Hero safelight breathes (~7s alternate). Print safelights follow scroll via view timeline. Hero tray settles and intro rises (~900ms, cubic-bezier(0.16, 1, 0.3, 1)).
+- Hero safelight breathes (~7s alternate). Print safelights follow scroll via view timeline. Hero tray settles and intro rises (~900ms, cubic-bezier(0.16, 1, 0.3, 1)) by transform only, so the photograph stays visible from the first frame.
 
 ## Do's and Don'ts
 
