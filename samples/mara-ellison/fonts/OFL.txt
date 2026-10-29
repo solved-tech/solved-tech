@@ -1,0 +1,8 @@
+Bricolage Grotesque and Literata are licensed under the SIL Open Font License, Version 1.1.
+https://scripts.sil.org/OFL
+
+Bricolage Grotesque: Copyright 2022 The Bricolage Grotesque Project Authors
+https://github.com/ateliertriay/bricolage
+
+Literata: Copyright 2017 The Literata Project Authors
+https://github.com/googlefonts/literata
