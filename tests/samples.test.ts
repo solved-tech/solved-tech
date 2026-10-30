@@ -12,11 +12,12 @@ const samples = [
   { slug: "barberoka", lang: "ro", email: "barberokabarbershop@gmail.com" },
   { slug: "mara-ellison", lang: "en-GB", email: "hello@maraellison.example" },
   { slug: "adriannica", lang: "ro", email: "contact@adriannica.ro" },
+  { slug: "the-world", lang: "en-GB", email: "desk@theworld.example" },
   { slug: "through-the-lens", lang: "en-GB", email: "hello@through-the-lens.example" },
 ] as const;
 
 describe("sample homepages", () => {
-  it("publishes exactly the eight follow-up samples", () => {
+  it("publishes exactly the nine follow-up samples", () => {
     const slugs = readdirSync(new URL("samples", root), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
@@ -69,6 +70,14 @@ describe("sample homepages", () => {
         expect(read(`samples/${slug}/styles.css`)).toContain("font-display: optional");
       }
       expect(html).toContain(email);
+      if (slug === "the-world") {
+        expect(html).toContain("From 11:00, hard light");
+        expect(html).toContain('aria-label="Hour of day"');
+        expect(html).toContain("bricolage-800.woff2");
+        expect(html).not.toContain("fonts.googleapis.com");
+        expect(html).not.toContain("fonts.gstatic.com");
+        expect(html).not.toContain("DRAFT");
+      }
       expect(html).not.toMatch(/<style[\s>]/);
       expect(html).not.toMatch(/\sstyle="/);
       expect(html).toContain('href="styles.css"');
