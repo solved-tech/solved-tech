@@ -18,7 +18,7 @@ Single long page — four moments:
 1. **Meets** — Life-size frontal plate; take strip on plate; note Gaze 01 · Meets · **02/05**.
 2. **Past** — Plate biased left; void on gaze side (right); note **05/05**; Asked locked *Look up, past the light.*
 3. **Refuses** — Hard crop / bleed withhold; Sitting B; note **01/01**.
-4. **Book / blank note + colophon** — Blank sitting fields + **email only**; EXIF/licence honesty; no phone.
+4. **Book + colophon** — Mailto and the hint “Email only. Tell us who sits and what you asked them.” No sitting labels. EXIF/licence honesty; no phone.
 
 No chips, mosaic, iris chrome, hero+CTA, or rate cards.
 
