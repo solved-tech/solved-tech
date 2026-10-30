@@ -44,3 +44,33 @@ Audit, this surface: accessibility 4, performance 4, theming 4 against the sitti
 - Desktop note stays on Refuses during the book. Say if the margin should go blank there.
 - Life-size uses the rough’s `scale(1.85)` / `object-position: 50% 22%`. Not measured with a ruler on a physical 24" panel.
 - Copy is on the page. Merging still waits for Remus.
+
+## Round 2
+
+Shots: `shots/round-2/`. Same Playwright sizes as round 1. `behavior: "instant"` on scroll jumps.
+
+### What changed
+
+1. On desktop, when the top of `#book` is at or above `barH + 0.35*vh`, the fixed note is cleared. Gaze, take, fields, credit, and the kicker are hidden, and the live text is emptied. No take shows. Scrolling back onto a spread restores that spread, including the lens line `85mm · f/2 (example — EXIF absent)`.
+2. Life-size ruler, scale unchanged at `1.85` (`matrix(1.85, 0, 0, 1.85, 0, 0)` at 1440). The Meets face is about 726 CSS px, which is 19.2cm at 96 CSS px/in, inside the band. `art-direction.md` and `build-brief.md` now say: life-size = 18–22cm at 96 CSS px/in, measured at 1440. The 492px figure and the 24-inch note are out of those two docs. The crop comment in `styles.css` uses the same sentence. `object-position` and `transform` are unchanged.
+3. The skip link still points at `#main`. `#main:focus` is a 2px ink outline. That outline is covered: an inset one sits under the plate, and an outset one sits under the bar and the note. The visible indicator is a 2px `var(--ink)` frame, inset from the bar and the note. Pixels on the top, left, and right of that frame in the focus shot are `rgb(22, 21, 18)`.
+
+### Shots
+
+- `fold-390.png`, `fold-768.png`, `fold-1440.png`
+- `book-1440.png` — book in view, note column empty
+- `focus-after-skip-1440.png` — Tab to the skip link, Enter, focus on `#main`
+- `reduced-refuses-1440.png` — `prefers-reduced-motion: reduce`, Refuses, take `01/01`
+
+### Checks
+
+- At 1440 the book top lands at 44px. The threshold is 359px. The note’s text is empty and the take is `display: none`.
+- Past still reads `05/05` before the book threshold. Returning to Meets reads `02/05` and restores the lens example markup.
+- At 390 and 768 the Meets stage note is 210px, under 28svh. No horizontal overflow. The fixed note stays `display: none`.
+- Reduced motion: `scroll-behavior` is `auto`. A jump to Refuses updates the note. A jump to the book still clears it.
+- `npx vitest run tests/samples.test.ts` — 10 passed.
+
+### Still open for UI/UX
+
+- Merging still waits for Remus. Copy on the page is unchanged.
+- The focus frame is viewport-fixed while `#main` is focused, so it stays on screen through the book until focus moves on. Say if it should only mark the first plate.

@@ -16,10 +16,10 @@
 
 **Signature device — life-size plate + huge take number**
 
-- Each gaze state is a **100svh plate**. On a **1440×900** viewport mapped to a **24" 16:9** panel (~68.8 PPI), Meets crop uses `scale(1.85)` / `object-position: 50% 22%`. **Measured forehead→chin ≈ 18.2 cm** (hairline→chin on `shots/fold-1440.png`, 492 CSS px). Acceptance band **18–22 cm**. Confirm on a real 24" panel before Factory signs life-size.
+- Each gaze state is a **100svh plate**. Meets crop uses `scale(1.85)` / `object-position: 50% 22%`. Life-size = 18–22cm at 96 CSS px/in, measured at 1440.
 - The **only** display moment in the margin is the take index set huge (e.g. `02/05`). No second hero headline competing with it.
 - **Desktop:** plate fills the width left of a fixed note column. **Touch (≤820px):** each stage owns a **compact sticky note** (take + gaze + key fields, ≤~28svh) above its own **100svh** plate — the take numeral never leaves the viewport for that stage.
-- **Keyboard:** skip link → `#main`; document `<h1>` (visually hidden) + per-stage `<h2>` on touch notes; `:focus-visible` 2px ink on Enquire and mailto. **Reduced motion:** note text swaps instantly; no scroll-jacking; content always visible.
+- **Keyboard:** skip link → `#main`; document `<h1>` (visually hidden) + per-stage `<h2>` on touch notes; `:focus-visible` 2px ink on Enquire, mailto, and `#main` (2px ink frame inset from the bar and the note). **Reduced motion:** note text swaps instantly; no scroll-jacking; content always visible.
 
 ---
 
@@ -33,7 +33,7 @@ The **note column is always fixed on the right** (desktop). Spreads do not alter
 | **Past** | Plate biased **left**; **void on the right** (gaze side). Sitting A looks up and toward frame-right — void opens that way. Do **not** flip the photo. Asked line must match the picture (*Look up, past the light.*). |
 | **Refuses** | Plate cropped hard off the page edge and partly withheld (bleed off-canvas). No black “void panel” cosplay — the withhold is the crop. |
 
-Scroll updates the fixed desktop note by **section top** (not intersection ratio): active = last `.spread` whose `getBoundingClientRect().top <= stickyOffset + 0.35 * vh` (stickyOffset = bar height ≈ 44px). Touch uses per-stage notes (no spy dependency for the take). Active section owns `aria-current` logic only if any in-page nav is added later; omit `aria-current="false"`.
+Scroll updates the fixed desktop note by **section top** (not intersection ratio): active = last `.spread` whose `getBoundingClientRect().top <= stickyOffset + 0.35 * vh` (stickyOffset = bar height ≈ 44px). When the top of `#book` is at or above that same line, the fixed note is cleared and no take shows. Touch uses per-stage notes (no spy dependency for the take). Active section owns `aria-current` logic only if any in-page nav is added later; omit `aria-current="false"`.
 
 ---
 
@@ -52,7 +52,7 @@ Scroll updates the fixed desktop note by **section top** (not intersection ratio
 |---|---|---|
 | DR SAFE — The Sitting | Sitting notes, white/neutral ground, scale of the face | Avedon costume; cream SaaS shell |
 | DR gaze sequence | Meets / past / refuses as IA | Filter chips; equal mosaic |
-| Life-size plate | 100svh crop; face ~18–22 cm on 24" | Floating soft-shadow cards |
+| Life-size plate | 100svh crop; life-size = 18–22cm at 96 CSS px/in, measured at 1440 | Floating soft-shadow cards |
 | Take index as display | One huge margin numeral | Hero line + subhead + CTA |
 | Optics as behaviour | Offset, crop, withhold | Iris, viewfinder HUD, bokeh wallpaper |
 

@@ -51,15 +51,15 @@ Self-host subset woff2 only (Hanken 400+600, IBM Plex Mono 400+500); `font-displ
 
 | Mode | Behaviour |
 |---|---|
-| **Desktop (≥821px, fine pointer)** | Fixed note column right; plates `margin-right: var(--note-w)`; each gaze `100svh`; face ~18–22 cm on 24" @ 1440 (rough ≈ 18.2 cm @ scale 1.85). |
+| **Desktop (≥821px, fine pointer)** | Fixed note column right; plates `margin-right: var(--note-w)`; each gaze `100svh`; `scale(1.85)`. Life-size = 18–22cm at 96 CSS px/in, measured at 1440. |
 | **Touch / narrow (`max-width: 820px`)** | **Per-stage sticky note** (take + gaze + key fields, ≤~28svh) + **100svh** plate. Do not use a single top note that scrolls away. |
-| **Keyboard** | Skip → `#main`/`#meets`; visually hidden `<h1>` + per-stage `<h2>`; `:focus-visible` 2px ink on Enquire + mailto. |
+| **Keyboard** | Skip → `#main`; visually hidden `<h1>` + per-stage `<h2>`; `:focus-visible` 2px ink on Enquire, mailto, and `#main` (2px ink frame inset from the bar and the note). |
 | **Screen reader** | `<main id="main">`; note `aria-live="polite"` on desktop spy; omit `aria-current="false"`. |
 | **Reduced motion** | Instant note text; instant scroll; all gaze content always in DOM. |
 | **Perf** | Spy JS ≤ ~3KB; no scroll libraries. |
 | **Fallback** | Each stage still shows its own static note if JS fails. |
 
-**Spy (desktop fixed note):** active = last `.spread` whose top ≤ `barHeight + 0.35 * vh`.
+**Spy (desktop fixed note):** active = last `.spread` whose top ≤ `barHeight + 0.35 * vh`. When `#book` top ≤ that same line, clear the fixed note and show no take.
 
 ---
 
