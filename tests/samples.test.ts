@@ -12,10 +12,11 @@ const samples = [
   { slug: "barberoka", lang: "ro", email: "barberokabarbershop@gmail.com" },
   { slug: "mara-ellison", lang: "en-GB", email: "hello@maraellison.example" },
   { slug: "adriannica", lang: "ro", email: "contact@adriannica.ro" },
+  { slug: "through-the-lens", lang: "en-GB", email: "hello@through-the-lens.example" },
 ] as const;
 
 describe("sample homepages", () => {
-  it("publishes exactly the seven follow-up samples", () => {
+  it("publishes exactly the eight follow-up samples", () => {
     const slugs = readdirSync(new URL("samples", root), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
@@ -47,8 +48,25 @@ describe("sample homepages", () => {
       if (slug === "mara-ellison") {
         expect(html).toContain("Example site. Fictional studio for demonstration.");
         expect(html).not.toContain("Sample by");
+      } else if (slug === "through-the-lens") {
+        expect(html).toContain("Sample page by");
+        expect(html).toContain("Fictional studio for demonstration.");
       } else {
         expect(html).toContain("Sample by");
+      }
+      if (slug === "through-the-lens") {
+        expect(html).toContain("Skip to sitting");
+        expect(html).toContain('id="main"');
+        expect(html).toContain("<h1");
+        expect(html).toContain("Look up, past the light.");
+        expect(html).toContain("meets-1200.avif");
+        expect(html).toContain('fetchpriority="high"');
+        expect(html).toContain('src="sitting.js"');
+        expect(html).not.toContain("fonts.googleapis.com");
+        expect(html).not.toContain("fonts.gstatic.com");
+        expect(html).not.toContain("tel:");
+        expect(read(`samples/${slug}/styles.css`)).toContain("--rule: #757575");
+        expect(read(`samples/${slug}/styles.css`)).toContain("font-display: optional");
       }
       expect(html).toContain(email);
       expect(html).not.toMatch(/<style[\s>]/);
