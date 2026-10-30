@@ -30,7 +30,7 @@
     </noscript>
   </head>
   <body>
-    <a class="skip" href="#main">Skip to sitting</a>
+    <a class="skip" href="#meets">Skip to sitting</a>
 
     <header class="bar">
       <strong>Through the Lens</strong>
@@ -60,12 +60,13 @@
       </p>
     </aside>
 
-    <main id="main" class="plates" tabindex="-1">
+    <main id="main" class="plates">
       <h1 class="visually-hidden">Through the Lens — The Sitting</h1>
 
       <section
         class="spread"
         id="meets"
+        tabindex="-1"
         aria-labelledby="meets-title"
         data-gaze="Meets"
         data-take="02/05"
@@ -258,8 +259,8 @@
         <h2 id="book-title">Book a sitting</h2>
         <p class="lead">Bring a face. We keep the takes that hold.</p>
         <div class="blank mono">
-          <div class="line"><span>Sitter:</span><span class="rule" aria-hidden="true"></span></div>
-          <div class="line"><span>Asked:</span><span class="rule" aria-hidden="true"></span></div>
+          <p class="prompt">Sitter:</p>
+          <p class="prompt">Asked:</p>
           <a href="mailto:hello@through-the-lens.example">hello@through-the-lens.example</a>
           <p class="hint">Email only. Tell us who sits and what you asked them.</p>
         </div>

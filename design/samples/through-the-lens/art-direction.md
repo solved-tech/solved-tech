@@ -19,7 +19,7 @@
 - Each gaze state is a **100svh plate**. Meets crop uses `scale(1.85)` / `object-position: 50% 22%`. Life-size = 18–22cm at 96 CSS px/in, measured at 1440.
 - The **only** display moment in the margin is the take index set huge (e.g. `02/05`). No second hero headline competing with it.
 - **Desktop:** plate fills the width left of a fixed note column. **Touch (≤820px):** each stage owns a **compact sticky note** (take + gaze + key fields, ≤~28svh) above its own **100svh** plate — the take numeral never leaves the viewport for that stage.
-- **Keyboard:** skip link → `#main`; document `<h1>` (visually hidden) + per-stage `<h2>` on touch notes; `:focus-visible` 2px ink on Enquire, mailto, and `#main` (2px ink frame inset from the bar and the note). **Reduced motion:** note text swaps instantly; no scroll-jacking; content always visible.
+- **Keyboard:** skip link → `#meets`; document `<h1>` (visually hidden) + per-stage `<h2>` on touch notes; `:focus-visible` 2px ink on Enquire, mailto, and `#meets` (inset frame on the Meets plate only; it scrolls away with that plate). **Reduced motion:** note text swaps instantly; no scroll-jacking; content always visible.
 
 ---
 
@@ -42,7 +42,7 @@ Scroll updates the fixed desktop note by **section top** (not intersection ratio
 - Width ~`17.5rem` desktop; full-width stack on small screens.
 - Contents (reading-size **IBM Plex Mono**): kicker · gaze label · **huge take** · Sitter / Gaze / Kept / Light / Lens / Asked · credit line.
 - Lens line: print true EXIF when present; otherwise **`85mm · f/2 (example — EXIF absent)`** (or whatever example Remus locks) — never invent as fact.
-- Enquire block below the stages: blank sitting note (`Sitter: ___` / `Asked: ___`) + **email only**. No phone. No CRM form theatre.
+- Enquire block below the stages: plain labels `Sitter:` and `Asked:` (no blanks, no rules) + **email only**. No phone. No CRM form theatre.
 
 ---
 
@@ -149,7 +149,7 @@ Ban lyric AI captions and marketing filler.
 
 **A11y**
 
-- Skip link first in DOM → `#meets` or `#main` (≥ 44px, ≥ 4.5:1, visible on `:focus-visible`).
+- Skip link first in DOM → `#meets` (≥ 44px, ≥ 4.5:1, visible on `:focus-visible`). The inset frame is on `#meets:focus-visible` and scrolls away with that plate.
 - `<main id="main">` wrapping plates + book.
 - `:focus-visible` on Enquire and mailto (2px ink outline).
 - Hairlines `--rule` ≥ 3:1 vs ground.

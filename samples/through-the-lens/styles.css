@@ -82,21 +82,13 @@ a:focus-visible,
   outline-offset: 3px;
 }
 
-#main:focus {
-  outline: 2px solid var(--ink);
-  outline-offset: -4px;
-}
-
-/* The plate paints over an inset outline on #main, and the bar and note
-   cover an outset one. The frame sits in the plate, under the bar. */
-#main:focus::after {
+/* The plate covers an inset outline. This frame is on the Meets plate only,
+   so it leaves the viewport when the page scrolls on. */
+#meets:focus-visible::after {
   content: "";
-  position: fixed;
-  z-index: 25;
-  top: calc(var(--bar-h) + 0.4rem);
-  right: calc(var(--note-w) + 0.4rem);
-  bottom: 0.4rem;
-  left: 0.4rem;
+  position: absolute;
+  z-index: 6;
+  inset: 0.4rem;
   border: 2px solid var(--ink);
   pointer-events: none;
 }
@@ -443,26 +435,15 @@ a:focus-visible,
 
 .blank {
   max-width: 34rem;
-  padding: 1.15rem 1.25rem 1rem;
-  border: 1px solid var(--ink);
-  background: var(--ground);
 }
 
-.blank .line {
-  display: grid;
-  grid-template-columns: 7ch 1fr;
-  gap: 0.45rem 0.65rem;
-  align-items: end;
-  margin-bottom: 0.75rem;
+.blank .prompt {
+  margin: 0;
+  line-height: 1.5;
 }
 
-.blank .line:last-of-type {
-  margin-bottom: 1.1rem;
-}
-
-.blank .rule {
-  border-bottom: 1px solid var(--ink);
-  min-height: 1.35rem;
+.blank .prompt + .prompt {
+  margin-top: 0.15rem;
 }
 
 .blank a {
@@ -470,6 +451,7 @@ a:focus-visible,
   align-items: center;
   min-height: 44px;
   min-width: 44px;
+  margin-top: 0.85rem;
   padding: 0.65rem 0.15rem;
   font-family: var(--font-mono);
   font-size: 0.88rem;

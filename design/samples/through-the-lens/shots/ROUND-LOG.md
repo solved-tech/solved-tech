@@ -74,3 +74,36 @@ Shots: `shots/round-2/`. Same Playwright sizes as round 1. `behavior: "instant"`
 
 - Merging still waits for Remus. Copy on the page is unchanged.
 - The focus frame is viewport-fixed while `#main` is focused, so it stays on screen through the book until focus moves on. Say if it should only mark the first plate.
+
+## Round 3
+
+Shots: `shots/round-3/`. Playwright, `behavior: "instant"` on scroll jumps.
+
+### What changed
+
+1. The book no longer draws rules or `___` blanks. The labels are plain text, verbatim from `copy.md`: `Sitter:` and `Asked:`. The hint stays `Email only. Tell us who sits and what you asked them.` The mailto is the only control in that block, 259×44 CSS px at both 390 and 1440.
+2. The skip link points at `#meets` (`tabindex="-1"`). The 2px ink frame is `#meets:focus-visible::after`, positioned on that plate. It is not `position: fixed`. Scrolling to Past leaves focus on Meets, and the frame leaves with the plate. Past shows `05/05` with no frame in the viewport.
+
+### Copy flag
+
+`copy.md` still lists blank placeholders `` `___` ``. Those are not on the page. A sentence such as “Tell us: who sits, and what you asked them.” is not in `copy.md`, so the labels were not rewritten. `Sitter:` and `Asked:` still read as labels. The hint underneath is the sentence already in the copy file.
+
+### Shots
+
+- `fold-1440.png`, `fold-768.png`, `fold-390.png` — final desktop, tablet, mobile
+- `reduced-refuses-1440.png` — reduced motion, Refuses, `01/01`
+- `book-1440.png`, `book-390.png` — plain labels, email link, empty desktop note
+- `focus-after-skip-1440.png` — frame on the Meets plate, pixels `rgb(22, 21, 18)`
+- `focus-past-1440.png` — same focus, scrolled to Past; Meets bottom sits at the bar (44px) so the frame is not in view
+
+### Checks
+
+- `#meets` matches `:focus-visible` after Tab, Enter on the skip link.
+- At 390 and 768 the Meets stage note is 210px, under 28svh.
+- Desktop book still clears the fixed note.
+- `npx vitest run tests/samples.test.ts` — 10 passed.
+
+### Still open for UI/UX
+
+- Merging still waits for Remus.
+- Whether `Sitter:` / `Asked:` should become a sentence. That needs a copy change; the words are not in `copy.md`.

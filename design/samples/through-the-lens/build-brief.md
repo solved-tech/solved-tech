@@ -53,7 +53,7 @@ Self-host subset woff2 only (Hanken 400+600, IBM Plex Mono 400+500); `font-displ
 |---|---|
 | **Desktop (≥821px, fine pointer)** | Fixed note column right; plates `margin-right: var(--note-w)`; each gaze `100svh`; `scale(1.85)`. Life-size = 18–22cm at 96 CSS px/in, measured at 1440. |
 | **Touch / narrow (`max-width: 820px`)** | **Per-stage sticky note** (take + gaze + key fields, ≤~28svh) + **100svh** plate. Do not use a single top note that scrolls away. |
-| **Keyboard** | Skip → `#main`; visually hidden `<h1>` + per-stage `<h2>`; `:focus-visible` 2px ink on Enquire, mailto, and `#main` (2px ink frame inset from the bar and the note). |
+| **Keyboard** | Skip → `#meets`; visually hidden `<h1>` + per-stage `<h2>`; `:focus-visible` 2px ink on Enquire, mailto, and `#meets` (inset frame on the Meets plate only). |
 | **Screen reader** | `<main id="main">`; note `aria-live="polite"` on desktop spy; omit `aria-current="false"`. |
 | **Reduced motion** | Instant note text; instant scroll; all gaze content always in DOM. |
 | **Perf** | Spy JS ≤ ~3KB; no scroll libraries. |
@@ -79,7 +79,7 @@ Self-host subset woff2 only (Hanken 400+600, IBM Plex Mono 400+500); `font-displ
 - Must not: dark theme; beauty smile; other photographers.
 
 ### Book / blank note
-- `Sitter: ___` / `Asked: ___` + mailto ≥ 44×44; colophon licence + EXIF honesty.
+- Plain labels `Sitter:` and `Asked:` (no blanks, no rules) + mailto ≥ 44×44; colophon licence + EXIF honesty.
 - Must not: phone, form suite, newsletter, fake reviews, invented stats.
 
 ---
