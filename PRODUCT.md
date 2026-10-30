@@ -18,7 +18,7 @@ Secondary: Solved Tech prospects viewing this page as a portfolio sample of a sm
 
 ## Product Purpose
 
-A one-page photographer homepage that lets the photographs lead, states who the photographer is and where they work, and makes enquiry the only hard action. Success is a visitor who understands the work and sends an email or call without hunting.
+Mara Ellison is a one-page contact sheet. The strips are the argument. Success is a visitor who sees the three keeps (07A2, 07B1, 07C3) and emails to hold them. The sample is location-neutral and has no phone number. Adrian Nica is a separate sample with his own published facts.
 
 ## Positioning
 
@@ -26,15 +26,15 @@ The site is the contact sheet made public: the sequence of pictures is the argum
 
 ## Operating Context
 
-Visitors compare portfolios on phones between other vendor tabs. They need location, typical work (weddings and portraits), and a direct enquire path. Proof lives in the images and a short about line, not in invented review scores.
+Visitors compare portfolios on phones between other vendor tabs. Mara’s page needs the work (weddings and portraits) and one email path. It does not publish a town or a telephone number. Proof lives in the marked frames, not in invented review scores.
 
 ## Capabilities and Constraints
 
 - Single static homepage under `samples/mara-ellison/`, copied into `dist/samples` by the existing build script.
-- Self-hosted fonts and images only; same CSP posture as sibling samples (`script-src 'none'`).
+- Self-hosted fonts and images only. Sibling samples stay `script-src 'none'`. The Mara contact sheet loads one same-origin script for the loupe, so its CSP is `script-src 'self'`.
 - Synthetic studio identity for demonstration; footer must say it is a Solved Tech sample, not a live site.
 - No prices, fake testimonials, or fabricated booking calendar. [Inferred: undecided real client identity — synthetic allowed and labelled.]
-- Enquire via `mailto:` (and optional `tel:` if a sample number is authored as clearly fictional).
+- Mara enquires by `mailto:hello@maraellison.example` only. No telephone on that sample.
 
 ## Brand Commitments
 
@@ -44,7 +44,7 @@ Visitors compare portfolios on phones between other vendor tabs. They need locat
 
 ## Evidence on Hand
 
-- No client-supplied photographs yet for the Mara Ellison sample. Use openly licensed photography (e.g. Wikimedia Commons) with credits, or synthetic plates clearly not claiming to be Mara’s shoots.
+- Mara’s frames are Unsplash photographs. Each strip is derived from one source image (crop, tilt, exposure), not a real burst. The colophon says so. Do not describe them as Wikimedia plates or as Mara’s own shoots.
 - No real reviews, prices, or calendar to cite for Mara Ellison — do not invent them.
 - A second sample, `samples/adriannica/`, is for the real studio Adrian Nica (adriannica.ro): București / Ilfov, 0723 986 982, contact@adriannica.ro, foto și video for weddings, baptisms and civil ceremonies, plus published Christmas studio rates (from 300 lei / from 400 lei). Photographs in that sample are his published frames. Do not invent wedding package prices or a booking calendar.
 
@@ -57,4 +57,4 @@ Visitors compare portfolios on phones between other vendor tabs. They need locat
 
 ## Accessibility & Inclusion
 
-Keyboard-focusable controls, visible focus, skip link, meaningful image alt text, `prefers-reduced-motion` respected. No product-specific WCAG target beyond the sibling samples’ bar.
+Keyboard-focusable controls, visible focus, skip link, meaningful image alt text, `prefers-reduced-motion` respected. The Mara contact sheet is built to WCAG 2.2 AA (text 4.5:1, non-text UI 3:1, targets at least 44px).

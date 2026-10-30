@@ -3,162 +3,266 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mara Ellison — Weddings and portraits</title>
-    <meta name="description" content="Weddings and portraits by Mara Ellison, Sussex. A sample page by Solved Tech, not a live photographer’s website." />
+    <title>Mara Ellison — Contact Sheet</title>
+    <meta name="description" content="Mara Ellison contact sheet, roll 07. Weddings and portraits. Example site. Fictional studio for demonstration." />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#0c0a08" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
+    <meta name="theme-color" content="#C2BEB0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link
       rel="preload"
       as="image"
-      href="media/wedding-sunset-800.webp"
-      imagesrcset="media/wedding-sunset-480.webp 480w, media/wedding-sunset-800.webp 800w, media/wedding-sunset-1200.webp 1200w, media/wedding-sunset-1600.webp 1600w"
-      imagesizes="(min-width: 960px) min(54vw, 1040px), calc(100vw - 4.5rem)"
+      type="image/avif"
+      href="media/stripA-0-640.avif"
+      imagesrcset="media/stripA-0-640.avif 640w, media/stripA-0-720.avif 720w"
+      imagesizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px"
       fetchpriority="high"
-      type="image/webp"
     />
-    <link rel="preload" href="fonts/bricolage-grotesque-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
-    <header class="top">
-      <a class="mark" href="#top" translate="no">Mara Ellison</a>
-      <nav class="nav" aria-label="On this page">
-        <a href="#work">Work</a>
-        <a href="#about">About</a>
-      </nav>
-      <a class="btn" href="mailto:hello@maraellison.example">Enquire</a>
-    </header>
-    <main id="main">
-      <section class="hero" id="top" aria-labelledby="hero-heading">
-        <div class="room" aria-hidden="true">
-          <div class="safelight safelight--hero"></div>
-          <div class="prior" aria-hidden="true">
-            <span class="sheet"></span>
-            <span class="sheet"></span>
-            <span class="sheet"></span>
-          </div>
-        </div>
-        <figure class="tray tray--hero">
-          <img
-            src="media/wedding-sunset-800.webp"
-            srcset="media/wedding-sunset-480.webp 480w, media/wedding-sunset-800.webp 800w, media/wedding-sunset-1200.webp 1200w, media/wedding-sunset-1600.webp 1600w"
-            sizes="(min-width: 960px) min(54vw, 1040px), calc(100vw - 4.5rem)"
-            width="1920"
-            height="1278"
-            alt="A couple standing close at sunset, warm light on their faces."
-            fetchpriority="high"
-          />
-        </figure>
-        <div class="intro">
-          <h1 id="hero-heading" translate="no">Mara Ellison</h1>
-          <p class="lead">Weddings and portraits in Sussex.</p>
-          <a class="btn" href="mailto:hello@maraellison.example">Enquire by email</a>
-        </div>
-      </section>
-
-      <section class="work" id="work" aria-labelledby="work-heading">
-        <div class="wrap">
-          <h2 id="work-heading">Recent prints</h2>
-          <p class="section-lead">A short run of days. Ask if you want to see more of a particular kind of light.</p>
-        </div>
-        <div class="prints">
-          <figure class="tray tray--tall">
-            <div class="safelight safelight--print" aria-hidden="true"></div>
-            <img
-              src="media/wedding-portrait-800.webp"
-              srcset="media/wedding-portrait-480.webp 480w, media/wedding-portrait-800.webp 800w, media/wedding-portrait-1000.webp 1000w"
-              sizes="(min-width: 800px) 720px, calc(100vw - 4.5rem)"
-              width="1000"
-              height="1398"
-              alt="A bride and groom standing outdoors, looking toward each other."
-              loading="lazy"
-              decoding="async"
-              fetchpriority="low"
-            />
-            <figcaption>Wedding day, late afternoon.</figcaption>
-          </figure>
-          <figure class="tray">
-            <div class="safelight safelight--print" aria-hidden="true"></div>
-            <img
-              src="media/portrait-800.webp"
-              srcset="media/portrait-480.webp 480w, media/portrait-800.webp 800w, media/portrait-1200.webp 1200w, media/portrait-1600.webp 1600w"
-              sizes="(min-width: 800px) 720px, calc(100vw - 4.5rem)"
-              width="2824"
-              height="2328"
-              alt="A woman with red hair looking toward the camera in soft daylight."
-              loading="lazy"
-              decoding="async"
-              fetchpriority="low"
-            />
-            <figcaption>Portrait session.</figcaption>
-          </figure>
-          <figure class="tray tray--tall">
-            <div class="safelight safelight--print" aria-hidden="true"></div>
-            <img
-              src="media/wedding-close-800.webp"
-              srcset="media/wedding-close-480.webp 480w, media/wedding-close-800.webp 800w, media/wedding-close-1000.webp 1000w"
-              sizes="(min-width: 800px) 720px, calc(100vw - 4.5rem)"
-              width="1000"
-              height="1404"
-              alt="A wedding couple standing close, the bride holding a bouquet."
-              loading="lazy"
-              decoding="async"
-              fetchpriority="low"
-            />
-            <figcaption>After the ceremony.</figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <section class="about" id="about" aria-labelledby="about-heading">
-        <div class="wrap about-grid">
-          <div>
-            <h2 id="about-heading">In the room</h2>
-            <p>
-              Mara photographs weddings and portraits across Sussex and the South East.
-              Days are quiet, unhurried, and built around the light you already have.
-            </p>
-            <p>
-              This page is a sample layout. The name and contact address are fictional.
-            </p>
-            <p>
-              Want tech like this working for your business? Solved Tech builds websites, apps and automation for small businesses, at a fixed price agreed before we start. <a href="https://solvedtech.co.uk">Book a free chat.</a>
-            </p>
-          </div>
-          <p class="links">
-            <a href="mailto:hello@maraellison.example">hello@maraellison.example</a>
-            <a href="#work">See the prints</a>
+    <a class="skip" href="#hold">Skip to hold frames</a>
+    <div class="sheet">
+      <main id="main">
+        <header class="head">
+          <h1>Mara Ellison — contact · roll 07</h1>
+          <p class="meta">
+            Weddings · portraits · EXAMPLE
+            <a class="nav" href="#hold"><span>Hold these frames</span></a>
           </p>
+        </header>
+        <div class="rolls" role="group" aria-label="Contact sheet film strips">
+          <section class="roll roll-a" aria-label="Strip A — backlight">
+      <p class="pull-hint">Pull strip · roll 07A</p>
+      <div class="film">
+        <p class="edge-print"><span>▲ KODAK · PORTRA 400 · ROLL 07A</span><span aria-hidden="true">→ → →</span><span>07A1–07A5</span></p>
+        <div class="sprocket" aria-hidden="true"></div>
+        <div class="strip" aria-label="Strip A — backlight frames">
+        <article class="frame" aria-label="07A1 soft · Backlit couple, frame 07A1, slightly soft">
+          <span class="shorthand" aria-hidden="true">f/2.8 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripA-0-640.avif 640w, media/stripA-0-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripA-0-640.webp 640w, media/stripA-0-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripA-0.jpg" alt="" width="720" height="720" decoding="async" fetchpriority="high" />
+          </picture>
+          <span class="fn" aria-hidden="true">07A1</span>
+          
+        </article>
+        <button class="frame keep" type="button" aria-label="07A2 keep · Backlit couple, frame 07A2, chosen keep" data-keep="07A2" data-loupe="media/stripA-1-720.webp" data-zoom="1" id="keep-a">
+          <span class="shorthand" aria-hidden="true">f/2.8 · keep</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripA-1-640.avif 640w, media/stripA-1-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripA-1-640.webp 640w, media/stripA-1-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripA-1.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07A2</span>
+          <img class="mark mark--circle" src="media/marks/circle-heavy.png" alt="" width="300" height="300" decoding="async" />
+          <img class="mark mark--star" src="media/marks/star.png" alt="" width="90" height="90" decoding="async" />
+        </button>
+        <article class="frame" aria-label="07A3 soft · Backlit couple, frame 07A3, out of focus miss">
+          <span class="shorthand" aria-hidden="true">f/2.8 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripA-2-640.avif 640w, media/stripA-2-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripA-2-640.webp 640w, media/stripA-2-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripA-2.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07A3</span>
+          <img class="mark mark--reject" src="media/marks/reject-x.png" alt="" width="200" height="200" decoding="async" />
+        </article>
+        <article class="frame" aria-label="Backlit couple, frame 07A4, darker exposure">
+          <span class="shorthand" aria-hidden="true">f/4</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripA-3-640.avif 640w, media/stripA-3-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripA-3-640.webp 640w, media/stripA-3-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripA-3.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07A4</span>
+          
+        </article>
+        <article class="frame frame--cut-a" aria-label="Backlit couple, frame 07A5, motion blur, cut by sheet edge">
+          <span class="shorthand" aria-hidden="true">f/2.8 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripA-4-640.avif 640w, media/stripA-4-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripA-4-640.webp 640w, media/stripA-4-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripA-4.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07A5</span>
+          
+        </article>
         </div>
-      </section>
-
-      <section class="close" id="enquire" aria-labelledby="close-heading">
-        <div class="wrap close-panel">
-          <h2 id="close-heading">Ready to talk dates?</h2>
-          <p>Send a short note with the day, the place, and what you hope to keep.</p>
-          <a class="btn" href="mailto:hello@maraellison.example">Enquire by email</a>
+        <div class="sprocket sprocket--bottom" aria-hidden="true"></div>
+      </div>
+    </section>
+          <div class="gap">
+            <img class="hand-note" src="media/marks/print-note.png" alt="print 8×10" width="220" height="56" decoding="async" />
+          </div>
+          <section class="roll roll-b" aria-label="Strip B — hands">
+      <p class="pull-hint">Pull strip · roll 07B</p>
+      <div class="film">
+        <p class="edge-print"><span>▲ KODAK · PORTRA 400 · ROLL 07B</span><span aria-hidden="true">→ → →</span><span>07B1–07B5</span></p>
+        <div class="sprocket" aria-hidden="true"></div>
+        <div class="strip" aria-label="Strip B — hands frames">
+        <button class="frame keep" type="button" aria-label="07B1 keep · Hands, frame 07B1, chosen keep" data-keep="07B1" data-loupe="media/stripB-loupe-07B1.webp" data-zoom="0" id="keep-b">
+          <span class="shorthand" aria-hidden="true">f/2 · keep</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripB-0-640.avif 640w, media/stripB-0-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripB-0-640.webp 640w, media/stripB-0-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripB-0.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07B1</span>
+          <img class="mark mark--circle" src="media/marks/circle-med.png" alt="" width="260" height="260" decoding="async" loading="lazy" />
+          <img class="mark mark--crop" src="media/marks/crop-l.png" alt="" width="70" height="70" decoding="async" />
+        </button>
+        <article class="frame" aria-label="07B2 soft · Hands, frame 07B2">
+          <span class="shorthand" aria-hidden="true">f/2 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripB-1-640.avif 640w, media/stripB-1-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripB-1-640.webp 640w, media/stripB-1-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripB-1.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07B2</span>
+          
+        </article>
+        <article class="frame" aria-label="Hands, frame 07B3, soft">
+          <span class="shorthand" aria-hidden="true">f/2.8 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripB-2-640.avif 640w, media/stripB-2-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripB-2-640.webp 640w, media/stripB-2-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripB-2.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07B3</span>
+          
+        </article>
+        <article class="frame" aria-label="07B4 soft · Hands, frame 07B4, out of focus miss">
+          <span class="shorthand" aria-hidden="true">f/2 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripB-3-640.avif 640w, media/stripB-3-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripB-3-640.webp 640w, media/stripB-3-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripB-3.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07B4</span>
+          <img class="mark mark--reject" src="media/marks/reject-x.png" alt="" width="200" height="200" decoding="async" loading="lazy" />
+        </article>
+        <article class="frame frame--cut-b" aria-label="Hands, frame 07B5, cut by sheet edge">
+          <span class="shorthand" aria-hidden="true">f/2</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripB-4-640.avif 640w, media/stripB-4-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripB-4-640.webp 640w, media/stripB-4-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripB-4.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07B5</span>
+          
+        </article>
         </div>
-      </section>
-    </main>
-    <footer class="foot">
-      <p class="credits" data-credits>
-        Photographs are illustrative stand-ins, not Mara’s shoots.
-        <a href="https://commons.wikimedia.org/wiki/File:Wedding_couple_in_sunset.jpg">Wedding couple in sunset</a>
-        by Beercha, CC BY 2.0;
-        <a href="https://commons.wikimedia.org/wiki/File:Wedding_couple_(1293933).jpg">Wedding couple (1293933)</a>
-        and
-        <a href="https://commons.wikimedia.org/wiki/File:Wedding_couple_(1294004).jpg">Wedding couple (1294004)</a>
-        by Percy Benzie Abery, CC0;
-        <a href="https://commons.wikimedia.org/wiki/File:Woman_redhead_natural_portrait_1.jpg">Woman redhead natural portrait 1</a>
-        by dusdin, cropped by Gridge, CC BY 2.0. Via Wikimedia Commons.
-      </p>
-      <p class="sample">
-        Sample by <a href="https://solvedtech.co.uk">Solved Tech</a>.
-        Sample page, not a live website. Studio identity is synthetic for demonstration.
-      </p>
-    </footer>
+        <div class="sprocket sprocket--bottom" aria-hidden="true"></div>
+      </div>
+      <div class="loupe-rest" id="loupe-rest">
+        <div class="loupe" aria-hidden="true">
+          <picture>
+            <source media="(min-width: 901px)" srcset="media/stripB-loupe-07B1.webp" />
+            <img id="loupe-rest-img" alt="" width="640" height="640" decoding="async" />
+          </picture>
+        </div>
+        <p class="loupe-label">loupe · 07B1</p>
+      </div>
+    </section>
+          <section class="roll roll-c" aria-label="Strip C — kiss">
+      <p class="pull-hint">Pull strip · roll 07C</p>
+      <div class="film">
+        <p class="edge-print"><span>▲ KODAK · PORTRA 400 · ROLL 07C</span><span aria-hidden="true">→ → →</span><span>07C1–07C5</span></p>
+        <div class="sprocket" aria-hidden="true"></div>
+        <div class="strip" aria-label="Strip C — kiss frames">
+        <article class="frame" aria-label="Kiss, frame 07C1, soft">
+          <span class="shorthand" aria-hidden="true">f/2.8 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripC-0-640.avif 640w, media/stripC-0-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripC-0-640.webp 640w, media/stripC-0-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripC-0.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07C1</span>
+          
+        </article>
+        <article class="frame" aria-label="07C2 soft · Kiss, frame 07C2, out of focus miss">
+          <span class="shorthand" aria-hidden="true">f/2.8 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripC-1-640.avif 640w, media/stripC-1-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripC-1-640.webp 640w, media/stripC-1-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripC-1.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07C2</span>
+          <img class="mark mark--reject" src="media/marks/reject-x.png" alt="" width="200" height="200" decoding="async" loading="lazy" />
+        </article>
+        <button class="frame keep" type="button" aria-label="07C3 keep · Kiss, frame 07C3, chosen keep" data-keep="07C3" data-loupe="media/stripC-2-720.webp" data-zoom="1" id="keep-c">
+          <span class="shorthand" aria-hidden="true">f/2.8 · keep</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripC-2-640.avif 640w, media/stripC-2-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripC-2-640.webp 640w, media/stripC-2-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripC-2.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07C3</span>
+          <img class="mark mark--circle" src="media/marks/circle-light.png" alt="" width="240" height="240" decoding="async" loading="lazy" />
+        </button>
+        <article class="frame" aria-label="Kiss, frame 07C4">
+          <span class="shorthand" aria-hidden="true">f/4</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripC-3-640.avif 640w, media/stripC-3-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripC-3-640.webp 640w, media/stripC-3-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripC-3.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07C4</span>
+          
+        </article>
+        <article class="frame frame--cut-c" aria-label="Kiss, frame 07C5, motion blur, runs off sheet">
+          <span class="shorthand" aria-hidden="true">f/2.8 · soft</span>
+          <picture>
+            <source type="image/avif" srcset="media/stripC-4-640.avif 640w, media/stripC-4-720.avif 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <source type="image/webp" srcset="media/stripC-4-640.webp 640w, media/stripC-4-720.webp 720w" sizes="(max-width: 767px) min(78vw, 300px), (max-width: 900px) min(42vw, 280px), 240px" />
+            <img class="photo" src="media/stripC-4.jpg" alt="" width="720" height="720" decoding="async" loading="lazy" />
+          </picture>
+          <span class="fn" aria-hidden="true">07C5</span>
+          
+        </article>
+        </div>
+        <div class="sprocket sprocket--bottom" aria-hidden="true"></div>
+      </div>
+    </section>
+        </div>
+        <section class="hold" id="hold" tabindex="-1" aria-label="Hold these frames">
+          <div>
+            <h2>Enquire</h2>
+            <p class="ask">Hold these frames.</p>
+            <p class="ask ask-body">Write me a date and who should be in them. I will answer by email.</p>
+            <a class="mail" href="mailto:hello@maraellison.example"><span>hello@maraellison.example</span></a>
+          </div>
+          <div>
+            <h3 class="aside-title">Not a shortlist</h3>
+            <p class="aside">I mark keeps in grease pencil, not hearts. Keeps on this sheet: <span class="keeps">07A2 · 07B1 · 07C3</span>.</p>
+            <p class="honesty">I am a fictional photographer for this example. The email is a sample address.</p>
+          </div>
+        </section>
+        <footer class="foot">
+          <a class="st" href="https://solvedtech.co.uk">
+            <img src="media/st-logo-mark.png" alt="Solved Tech" width="975" height="1056" decoding="async" loading="lazy" />
+            <span>Example site by Solved Tech: websites, apps and automation for small businesses.</span>
+          </a>
+          <p>Photographs: Unsplash Licence. Each strip’s frames are derived from one source image (not a real burst).</p>
+          <p class="sample">Sample by Solved Tech. Example site. Fictional studio for demonstration.</p>
+        </footer>
+      </main>
+    </div>
+    <div class="loupe-float" id="loupe-float" hidden>
+      <div class="loupe" aria-hidden="true">
+        <img id="loupe-float-img" alt="" width="640" height="640" decoding="async" />
+      </div>
+      <p class="loupe-label" id="loupe-float-label"></p>
+    </div>
+    <div class="loupe-layer" id="loupe-layer" hidden role="dialog" aria-modal="true" aria-label="Loupe" tabindex="-1">
+      <div class="loupe loupe--full" aria-hidden="true">
+        <img id="loupe-full-img" alt="" width="640" height="640" decoding="async" />
+      </div>
+      <p class="loupe-layer-label" id="loupe-layer-label"></p>
+    </div>
+    <script src="sheet.js"></script>
   </body>
 </html>
