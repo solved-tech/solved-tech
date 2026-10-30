@@ -2,36 +2,41 @@
 version: 1
 slug: "samples-mara-ellison-index-html"
 primary_target: "samples/mara-ellison/index.html"
-related_targets: []
+related_targets:
+  - "samples/mara-ellison/styles.css"
+  - "samples/mara-ellison/sheet.js"
 ---
 
-# Surface: Mara Ellison sample homepage
+# Surface: Mara Ellison contact sheet
 
 ## Scope
-Single-page Experience portfolio at `samples/mara-ellison/index.html` — synthetic UK wedding & portrait photographer sample for Solved Tech.
+
+Single-page Experience sample at `samples/mara-ellison/`. Replaces the retired darkroom page. Contract: `design/photography/v3/art-direction.md`.
 
 ## Visitor mode
+
 Experience
 
 ## Audience & job
-Couples and families deciding whether to enquire; they need to feel the work in one scroll and act.
+
+Someone deciding whether to ask a photographer to hold three frames, and a Solved Tech reader checking that the sample is honest.
 
 ## Direction contract
 
-THESIS: The site is a darkroom under safelight — photographs emerge as wet prints in an amber room; chrome stays subordinate to the print. Refuses the category-default dark-minimal name-over-grid.
+THESIS: The page is a marked contact sheet. Choosing is the story. Refuses the wedding-template hero, the package grid, and the darkroom safelight.
 
-OWN-WORLD: Near-black ground (#0c0a08), safelight amber (#c45a12) as atmospheric light not image tint, fibre-paper cream (#ebe4d6) for print borders and the sole bright Enquire signal, muted warm caption ink (#c9b8a0). Bricolage Grotesque for brand and UI; Literata for captions. Trays, stacked prior prints, paper borders — no cards, no eyebrow kickers.
+OWN-WORLD: Paper `#C2BEB0` on chrome `#1E1C18`. IBM Plex Mono. DM Sans for the ask only. Grease `#C45C2A` and `#D4A017` on the frames. Film `#0A0908`. Focus `#8A1A22`.
 
-STORY: Visitor enters the darkroom, meets one decisive print, scrolls through more work as safelight pools, reads a short about, and enquires by email.
+STORY: Mast, strip A (keep 07A2), print 8×10, strip B (keep 07B1 under the loupe), strip C (keep 07C3), then “Hold these frames.”
 
-FIRST VIEWPORT: Sticky mark + paper-white Enquire. Full-bleed tray holding one large fibre-bordered wedding photograph under an amber radial pool. Brand name Mara Ellison at display scale over the dark margin (not over faces). One short supporting line. No stats, no grid in the first viewport.
+FIRST VIEWPORT: The filing mast and the start of the film. Desktop shows strips A and B. A phone shows strip A at about 300px with strip B following. No headline, no subhead, no button hero.
 
-FORM: Darkroom Safelight (grounded candidate 4 of 7). seed:89a0340553ae63f1. Raises: Enquire-only paper-white signal (kaiju); stacked prior prints as depth (torn flyer); safelight pools follow the photograph in view (alien understory).
-
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+FORM: Direction 2, contact sheet. Proof: `design/photography/v3/direction-2.png` and `direction-2-mobile.png`.
 
 ## Memorable moment
-Safelight pool tracking the photograph currently in view (CSS view-timeline; static amber under reduced motion).
+
+The resting loupe on 07B1, and the grease that marks a keep instead of a heart. On a phone the loupe is a circle you open, and all three rolls are still in the sheet.
 
 ## Constraints
-Static HTML/CSS only (`script-src 'none'`). Synthetic studio; Wikimedia photos credited; Solved Tech sample footer. No invented reviews or prices.
+
+Static HTML, CSS, and one same-origin script. `noindex`. Email `hello@maraellison.example` only. No phone. No location. Unsplash-derived frames, said so in the colophon. Exact Solved Tech mark. WCAG 2.2 AA. Do not publish or change DNS.

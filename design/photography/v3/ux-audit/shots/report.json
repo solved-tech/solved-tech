@@ -1,0 +1,314 @@
+{
+  "url": "file:///workspace/design/photography/v3/direction-2.html",
+  "capturedAt": "2026-10-30T14:03:03.404Z",
+  "views": [
+    {
+      "name": "mobile",
+      "reduced": false,
+      "errs": [],
+      "probe": {
+        "overflow": false,
+        "skip": true,
+        "main": false,
+        "h1": 1,
+        "targets": [
+          {
+            "text": "Skip to hold frames",
+            "w": 222,
+            "h": 46,
+            "href": "#hold"
+          },
+          {
+            "text": "Hold these frames",
+            "w": 119,
+            "h": 44,
+            "href": "#hold"
+          },
+          {
+            "text": "hello@maraellison.example",
+            "w": 213,
+            "h": 44,
+            "href": "mailto:hello@maraellison.example"
+          },
+          {
+            "text": "Example by Solved Tech — tech solutions ",
+            "w": 358,
+            "h": 44,
+            "href": "https://solvedtech.co.uk"
+          }
+        ],
+        "fonts": [
+          "IBM Plex Mono 500",
+          "DM Sans 400"
+        ],
+        "imgs": [
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-0.webp",
+            "w": 720,
+            "nw": 720,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-1.webp",
+            "w": 720,
+            "nw": 720,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/circle-heavy.png",
+            "w": 300,
+            "nw": 300,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/star.png",
+            "w": 90,
+            "nw": 90,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-2.webp",
+            "w": 720,
+            "nw": 720,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/reject-x.png",
+            "w": 200,
+            "nw": 200,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-3.webp",
+            "w": 720,
+            "nw": 720,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-4.webp",
+            "w": 720,
+            "nw": 720,
+            "complete": true
+          }
+        ],
+        "visibleDesktop": false,
+        "visibleMobile": true,
+        "metaColor": "rgb(20, 18, 14)",
+        "metaOpacity": "0.55",
+        "headBorder": "rgba(20, 18, 14, 0.22)",
+        "title": "Mara Ellison — Contact Sheet"
+      },
+      "size": "390x844"
+    },
+    {
+      "name": "mobile",
+      "reduced": true,
+      "errs": [],
+      "probe": null,
+      "size": "390x844"
+    },
+    {
+      "name": "tablet",
+      "reduced": false,
+      "errs": [],
+      "probe": {
+        "overflow": false,
+        "skip": true,
+        "main": false,
+        "h1": 1,
+        "targets": [
+          {
+            "text": "Skip to hold frames",
+            "w": 222,
+            "h": 46,
+            "href": "#hold"
+          },
+          {
+            "text": "Hold these frames",
+            "w": 119,
+            "h": 44,
+            "href": "#hold"
+          },
+          {
+            "text": "hello@maraellison.example",
+            "w": 213,
+            "h": 44,
+            "href": "mailto:hello@maraellison.example"
+          },
+          {
+            "text": "Example by Solved Tech — tech solutions ",
+            "w": 419,
+            "h": 44,
+            "href": "https://solvedtech.co.uk"
+          }
+        ],
+        "fonts": [
+          "IBM Plex Mono 500",
+          "DM Sans 400"
+        ],
+        "imgs": [
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-0.webp",
+            "w": 720,
+            "nw": 125,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-1.webp",
+            "w": 720,
+            "nw": 125,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/circle-heavy.png",
+            "w": 300,
+            "nw": 118,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/star.png",
+            "w": 90,
+            "nw": 48,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-2.webp",
+            "w": 720,
+            "nw": 125,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/reject-x.png",
+            "w": 200,
+            "nw": 105,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-3.webp",
+            "w": 720,
+            "nw": 125,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-4.webp",
+            "w": 720,
+            "nw": 125,
+            "complete": true
+          }
+        ],
+        "visibleDesktop": true,
+        "visibleMobile": false,
+        "metaColor": "rgb(20, 18, 14)",
+        "metaOpacity": "0.55",
+        "headBorder": "rgba(20, 18, 14, 0.22)",
+        "title": "Mara Ellison — Contact Sheet"
+      },
+      "size": "768x1024"
+    },
+    {
+      "name": "desktop",
+      "reduced": false,
+      "errs": [],
+      "probe": {
+        "overflow": false,
+        "skip": true,
+        "main": false,
+        "h1": 1,
+        "targets": [
+          {
+            "text": "Skip to hold frames",
+            "w": 222,
+            "h": 46,
+            "href": "#hold"
+          },
+          {
+            "text": "Hold these frames",
+            "w": 119,
+            "h": 44,
+            "href": "#hold"
+          },
+          {
+            "text": "hello@maraellison.example",
+            "w": 213,
+            "h": 44,
+            "href": "mailto:hello@maraellison.example"
+          },
+          {
+            "text": "Example by Solved Tech — tech solutions ",
+            "w": 419,
+            "h": 44,
+            "href": "https://solvedtech.co.uk"
+          }
+        ],
+        "fonts": [
+          "IBM Plex Mono 500",
+          "DM Sans 400"
+        ],
+        "imgs": [
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-0.webp",
+            "w": 720,
+            "nw": 251,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-1.webp",
+            "w": 720,
+            "nw": 251,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/circle-heavy.png",
+            "w": 300,
+            "nw": 236,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/star.png",
+            "w": 90,
+            "nw": 48,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-2.webp",
+            "w": 720,
+            "nw": 251,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/marks/reject-x.png",
+            "w": 200,
+            "nw": 211,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-3.webp",
+            "w": 720,
+            "nw": 251,
+            "complete": true
+          },
+          {
+            "src": "file:///workspace/design/photography/v3/assets/strips/stripA-4.webp",
+            "w": 720,
+            "nw": 251,
+            "complete": true
+          }
+        ],
+        "visibleDesktop": true,
+        "visibleMobile": false,
+        "metaColor": "rgb(20, 18, 14)",
+        "metaOpacity": "0.55",
+        "headBorder": "rgba(20, 18, 14, 0.22)",
+        "title": "Mara Ellison — Contact Sheet"
+      },
+      "size": "1440x900"
+    },
+    {
+      "name": "desktop",
+      "reduced": true,
+      "errs": [],
+      "probe": null,
+      "size": "1440x900"
+    }
+  ]
+}
