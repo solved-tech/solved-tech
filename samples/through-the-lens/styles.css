@@ -437,21 +437,11 @@ a:focus-visible,
   max-width: 34rem;
 }
 
-.blank .prompt {
-  margin: 0;
-  line-height: 1.5;
-}
-
-.blank .prompt + .prompt {
-  margin-top: 0.15rem;
-}
-
 .blank a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   min-width: 44px;
-  margin-top: 0.85rem;
   padding: 0.65rem 0.15rem;
   font-family: var(--font-mono);
   font-size: 0.88rem;

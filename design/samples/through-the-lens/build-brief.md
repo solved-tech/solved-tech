@@ -79,7 +79,7 @@ Self-host subset woff2 only (Hanken 400+600, IBM Plex Mono 400+500); `font-displ
 - Must not: dark theme; beauty smile; other photographers.
 
 ### Book / blank note
-- Plain labels `Sitter:` and `Asked:` (no blanks, no rules) + mailto ≥ 44×44; colophon licence + EXIF honesty.
+- Mailto ≥ 44×44 and the hint “Email only. Tell us who sits and what you asked them.” No book labels. Colophon licence + EXIF honesty.
 - Must not: phone, form suite, newsletter, fake reviews, invented stats.
 
 ---

@@ -85,9 +85,6 @@ Internal process notes (e.g. "No phone. Location-neutral." / "Copy DRAFT pending
 |------|------|
 | Section `h2` | Book a sitting |
 | Lead (new; short) | Bring a face. We keep the takes that hold. |
-| Blank field label | Sitter: |
-| Blank field label | Asked: |
-| Blank placeholders | `___` / `___` (as in rough) |
 | Mailto label / link text | hello@through-the-lens.example |
 | Mailto hint (optional, mute) | Email only. Tell us who sits and what you asked them. |
 | Colophon | Imagery: Gustavo Fring on Pexels (EXIF Artist taras_chaban), Pexels License. Lens and aperture marked example where EXIF provides none. |
