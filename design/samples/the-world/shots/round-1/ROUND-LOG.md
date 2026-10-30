@@ -17,3 +17,13 @@ Preview: `samples/the-world/`. Capture stand-in: Playwright + system Chrome at 3
 3. The noon left frame was cropped onto sky, and a two-column wrap made “Left / Centre / Right” untrue on a phone. The three-up stays one row, and the street frames sit on the photographer.
 
 Impeccable detect also flags Bricolage, the hour papers, the time stamps, the notebook rules, and the em dashes. Those are this sample’s contract and `copy.md`, not the Mara Ellison design file. Copy on the page is `copy.md` as it stood on 30 Oct (quiet “Sample”, no DRAFT stamp). Merging still waits for Remus.
+
+## Round 2
+
+UI/UX passed rail sync, spy, LCP, fonts, copy, and reduced motion. Three fixes, contract tokens only. Shots: `shots/round-2/` and artifacts `the-world/round-2/`. Capture stand-in is still Playwright.
+
+1. At 390 the hour band is 28vh and the display line was 86px, stuck to the top by `flex: 0` and `space-between` once the brand was hidden. `.big` now fills that band and the glyphs centre in it (text centre 163px, band centre 164px). The line stays at `clamp(4.5rem, 22vw, 5.5rem)`.
+2. The wordmark is “The World”. “Sample” is its own line, sentence case, mute, at the rail size (0.7rem). It no longer reads as a third word of the logotype.
+3. `outline-offset: 2px` still landed on the shared rail rule and on `aria-current`. The rail ring is inset, with `--bg` paper on both sides of a 2px ink stroke, including on the current hour. Notes links use `outline-offset: 2px`.
+
+`npx vitest run`: 11 files, 204 tests passed.
