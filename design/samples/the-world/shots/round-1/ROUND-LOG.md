@@ -27,3 +27,12 @@ UI/UX passed rail sync, spy, LCP, fonts, copy, and reduced motion. Three fixes, 
 3. `outline-offset: 2px` still landed on the shared rail rule and on `aria-current`. The rail ring is inset, with `--bg` paper on both sides of a 2px ink stroke, including on the current hour. Notes links use `outline-offset: 2px`.
 
 `npx vitest run`: 11 files, 204 tests passed.
+
+## Round 3
+
+UI/UX verified the round 2 fixes. Two changes. Shots: `shots/round-3/` and artifacts `the-world/round-3/`. Capture stand-in is still Playwright.
+
+1. At 390 the wordmark was missing from the first screen. “The World” and the “Sample” line now sit inside the 28vh hour band, small and in `--mute`, above 11:00. There is no header bar. The hour stays centred (text centre 163px, band centre 164px) with 17px between the label and the glyphs.
+2. The horizontal rail fades on the right with a `mask-image` gradient, on the scrolling row only, so the rail plate stays opaque. Focusing 12:00 keeps that fade and a solid ring. Focusing 15:00, the hour under the fade, drops the mask so its ring stays solid.
+
+Reduced motion: body transition `0s`, click on 15:00 lands with the section top at 0. `npx vitest run`: 11 files, 204 tests passed.
