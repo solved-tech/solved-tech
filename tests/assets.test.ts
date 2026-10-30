@@ -1,4 +1,4 @@
-import { readFileSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { siteContent } from "../src/content";
 
@@ -13,6 +13,65 @@ describe("portrait assets", () => {  it("ships every portrait as WebP or AVIF un
         expect(size, path).toBeGreaterThan(0);
         expect(size, path).toBeLessThan(PORTRAIT_BUDGET_BYTES);
       });
+    });
+  });
+});
+
+const instagramPosts = [
+  { name: "post1.png", sha256: "5b923b3eabf5c34a37f3c6fcf23bd9ad3549d366a1c2efef14dd8d7abc69c25a" },
+  { name: "post2.png", sha256: "a598db9d9c7782fdccdef4f0bf3f9d21d4aea09d7652101dcf5b384b983938d4" },
+  { name: "post3.png", sha256: "59a58339c52550c5d65396c0c3c0956f426134973ccfa70dfcc418a047a09ba1" },
+  { name: "post4.png", sha256: "94d2f649cf4f69bb94b6678e3bca2025caedc3184cc0ad013b3a45b4daa8c7a3" },
+  { name: "post5.png", sha256: "56bf82d6c520e0ae1cb8e4a68505600a9c34a234d7f214206e319ce64beca6e6" },
+] as const;
+
+const sha256 = async (bytes: Uint8Array): Promise<string> => {
+  const buffer = new ArrayBuffer(bytes.byteLength);
+  new Uint8Array(buffer).set(bytes);
+  const digest = await crypto.subtle.digest("SHA-256", buffer);
+
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+};
+
+describe("week 1 Instagram images", () => {
+  it("serves the five posts from /social/w1 without linking them or listing them in the sitemap", async () => {
+    const directory = new URL("../public/social/w1/", import.meta.url);
+    const names = readdirSync(directory, { withFileTypes: true })
+      .filter((entry) => !entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort();
+
+    expect(names).toEqual(instagramPosts.map(({ name }) => name));
+
+    for (const { name, sha256: expected } of instagramPosts) {
+      const bytes = readFileSync(new URL(name, directory));
+
+      expect(await sha256(bytes), name).toBe(expected);
+    }
+
+    const prerender = readFileSync(new URL("../scripts/prerender.mts", import.meta.url), "utf8");
+
+    expect(prerender).toContain('sitemap.includes("/social/")');
+    expect(prerender).toContain("Instagram images must stay out of the sitemap.");
+
+    [
+      "index.html",
+      "privacy/index.html",
+      "public/ro/services/websites-online-shops/index.html",
+      "public/services/websites-online-shops/index.html",
+      "services/ai-assistants/index.html",
+      "services/automation/index.html",
+      "services/bug-fixing/index.html",
+      "services/seo-paid-campaigns/index.html",
+      "services/software-development/index.html",
+      "services/vorbio/index.html",
+      "src/content.ts",
+      "src/content-ro.ts",
+      "src/head.ts",
+      "src/render.ts",
+      "src/ui-copy.ts",
+    ].forEach((path) => {
+      expect(readFileSync(new URL(`../${path}`, import.meta.url), "utf8"), path).not.toContain("/social/");
     });
   });
 });

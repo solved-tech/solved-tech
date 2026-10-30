@@ -114,6 +114,10 @@ try {
       throw new Error("Sample homepages must stay out of the sitemap.");
     }
 
+    if (sitemap.includes("/social/")) {
+      throw new Error("Instagram images must stay out of the sitemap.");
+    }
+
     const sitemapUrl = new URL(`${baseUrl}sitemap.xml`, siteStatus.productionOrigin).toString();
 
     writeFileSync(resolve(distDir, "sitemap.xml"), sitemap);
