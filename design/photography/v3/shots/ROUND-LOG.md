@@ -59,3 +59,13 @@ Left as specified, after the critique asked to move them:
 - 768px: frame 280px, three pull-strips.
 - 1440px: loupe ∩ 07B1 circle is empty. Label gap 17.6px. One `h1`. `lang="en-GB"`. `noindex`. No phone number. No Google Fonts. No `style=` in the HTML.
 - Reduced motion: `scroll-behavior: auto`, loupe transition `0s`.
+
+## UI/UX round 1
+
+Shots for this pass are artifacts, not files in `shots/`: `mara-ux-round-2/1440.png`, `768.png`, `390.png`, `390-loupe-tab.png`, `hold.png`. Capture is Playwright + Chrome, viewport only.
+
+1. Touch loupe focus. At 390, opening `#keep-b` and pressing Tab left the layer open and moved focus to `.skip`. Tab now stays on `#loupe-layer` (`role="dialog"`, `aria-modal="true"`). Measured after Tab: `activeElement` id `loupe-layer`, `hidden` false, scrim `rgba(30, 28, 24, 0.55)`, circle 320×320 (`min(100vw, 320px)`). Escape still closes the layer and returns focus to `#keep-b`.
+2. Hold type. The ask stays DM Sans (`22px` at 1440, `20px` at 390, `--ink`). The body no longer has the `ask` class. `.ask-body` is IBM Plex Mono `12px` in `--mute` (`rgb(70, 63, 56)`).
+3. Footer sample line. Replaced the invented “Sample by Solved Tech.” with the copy.md sentence: “Example site. Fictional studio for demonstration.” The locked mark credit is unchanged. This replaces the round 3 note that the page still contained “Sample by”. The sample test expects that sentence here and still requires “Sample by” on the other samples.
+
+`sheet.js` gzip: 1675 bytes. `npm test`: 203 passed.

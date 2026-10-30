@@ -206,6 +206,11 @@
   });
 
   document.addEventListener("keydown", function (event) {
+    if (!layer.hidden && event.key === "Tab") {
+      event.preventDefault();
+      layer.focus();
+      return;
+    }
     if (event.key !== "Escape") return;
     if (!layer.hidden) {
       event.preventDefault();

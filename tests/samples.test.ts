@@ -44,7 +44,12 @@ describe("sample homepages", () => {
       expect(html).toContain(`<html lang="${lang}">`);
       expect(html).toContain('<meta name="robots" content="noindex, nofollow" />');
       expect(html).toContain('href="https://solvedtech.co.uk"');
-      expect(html).toContain("Sample by");
+      if (slug === "mara-ellison") {
+        expect(html).toContain("Example site. Fictional studio for demonstration.");
+        expect(html).not.toContain("Sample by");
+      } else {
+        expect(html).toContain("Sample by");
+      }
       expect(html).toContain(email);
       expect(html).not.toMatch(/<style[\s>]/);
       expect(html).not.toMatch(/\sstyle="/);
