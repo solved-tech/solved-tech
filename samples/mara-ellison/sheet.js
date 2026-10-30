@@ -208,7 +208,7 @@
   document.addEventListener("keydown", function (event) {
     if (!layer.hidden && event.key === "Tab") {
       event.preventDefault();
-      layer.focus();
+      layer.focus({ focusVisible: true });
       return;
     }
     if (event.key !== "Escape") return;

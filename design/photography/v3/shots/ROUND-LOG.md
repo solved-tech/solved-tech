@@ -69,3 +69,13 @@ Shots for this pass are artifacts, not files in `shots/`: `mara-ux-round-2/1440.
 3. Footer sample line. Replaced the invented “Sample by Solved Tech.” with the copy.md sentence: “Example site. Fictional studio for demonstration.” The locked mark credit is unchanged. This replaces the round 3 note that the page still contained “Sample by”. The sample test expects that sentence here and still requires “Sample by” on the other samples.
 
 `sheet.js` gzip: 1675 bytes. `npm test`: 203 passed.
+
+## UI/UX round 2
+
+Shot: `shots/390-loupe-focus.png`. Viewport 390. `#keep-b` open, then Tab.
+
+The global `:focus-visible` rule drew `2px solid var(--focus)` with a 3px offset on `#loupe-layer`. The layer is `inset: 0`, so that outline sat outside the viewport and was clipped. The layer outline is now `none`. When the layer matches `:focus-visible`, `.loupe--full::after` draws the ring 4px inside the circle: `2px solid var(--focus)`, with `--paper` on both sides, same as a keep. Only those tokens. The circle stays `min(100vw, 320px)` (320px at 390). Sampled pixels on the ring are `--paper` `#c2beb0`, then `--focus` `#8a1a22`, then `--paper`, inside the circle.
+
+Tab still keeps focus on `#loupe-layer` (`:focus-visible` true, layer open). Escape still closes the layer and returns focus to `#keep-b`.
+
+`sheet.js` gzip: 1687 bytes. `npm test`: 203 passed.

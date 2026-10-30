@@ -474,6 +474,21 @@ button.frame {
   background: rgba(30, 28, 24, 0.55);
 }
 
+.loupe-layer:focus-visible {
+  outline: none;
+}
+
+.loupe-layer:focus-visible .loupe--full::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 4px;
+  border: 2px solid var(--focus);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--paper), inset 0 0 0 2px var(--paper);
+  pointer-events: none;
+}
+
 .loupe--full {
   position: absolute;
   top: 42%;
