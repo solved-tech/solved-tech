@@ -1,0 +1,28 @@
+@media (min-width: 821px) {
+  :root {
+    --note-w: 0px;
+  }
+
+  .note-fixed {
+    display: none;
+  }
+
+  .plates,
+  .book {
+    margin-right: 0;
+  }
+
+  .stage-note {
+    position: static;
+    width: auto;
+    height: auto;
+    max-height: none;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    padding: 1rem 1.25rem 1.1rem;
+    border-bottom: 1px solid var(--rule);
+    background: var(--ground);
+  }
+}
