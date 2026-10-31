@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>void / frame</title>
+    <meta name="description" content="void / frame — solved tech photography sample" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'"
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="image" type="image/avif" href="media/b04-lcp.avif" fetchpriority="high" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="fonts/tektur-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="sheet">
+    <a class="skip" href="#well">skip to plates</a>
+    <p class="vault" id="vault" role="status">
+      <span>archive 04 is gone. forever.</span>
+      <span class="drop">drop · 004 · 0 plates</span>
+    </p>
+
+    <main>
+      <h1 class="visually-hidden">void / frame: photography sample</h1>
+      <div class="brand-edge" aria-hidden="true">void / frame</div>
+
+      <nav class="series" aria-label="series" id="series">
+        <button type="button" data-series="brutalism" aria-pressed="true">
+          <span class="s" aria-hidden="true">001</span>
+          <span class="f">001 / brutalism</span>
+        </button>
+        <button type="button" data-series="flesh" aria-pressed="false">
+          <span class="s" aria-hidden="true">002</span>
+          <span class="f">002 / flesh</span>
+        </button>
+        <button type="button" data-series="wasteland" aria-pressed="false">
+          <span class="s" aria-hidden="true">003</span>
+          <span class="f">003 / wasteland</span>
+        </button>
+        <button type="button" data-series="archive04" aria-pressed="false" aria-disabled="true" hidden id="stamp04" tabindex="-1">
+          <span class="s" aria-hidden="true">004</span>
+          <span class="f">004 / archive</span>
+        </button>
+      </nav>
+
+      <!-- Each series counts its pause as a plate. 001 has 6 photos and 1 pause, so 7 plates. 002 and 003 have 4 photos and 1 pause, so 5 plates. The serial and the aria count both use plates (§12). -->
+      <section
+        id="well"
+        aria-roledescription="zoom well"
+        aria-label="001 / brutalism, 7 plates, 6 photos"
+        tabindex="0"
+        aria-describedby="well-help"
+      >
+        <p id="well-help" class="visually-hidden">
+          up and down arrows, and left and right, move between plates. enter opens the plate full screen. escape closes it. keys 1 2 3 switch series.
+        </p>
+        <div class="well-scroller" id="scroller">
+          <article class="plate is-land" data-series="brutalism" data-kind="photo" data-serial="001·01 / 007">
+            <figure>
+              <picture>
+                <source srcset="media/b04-lcp.avif" type="image/avif" />
+                <source srcset="media/b04-lcp.webp" type="image/webp" />
+                <img
+                  src="media/b04-lcp.jpg"
+                  alt="Looking up a repeating pattern of curved concrete shell forms"
+                  fetchpriority="high"
+                  loading="eager"
+                  decoding="async"
+                />
+              </picture>
+              <figcaption class="visually-hidden">Sébastien Lavalaye / Unsplash · https://unsplash.com/photos/abstract-architectural-detail-with-repeating-curved-shapes-WSvuTQGg6sg</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark" id="depthMark">depth 01</span><span class="serial-stamp">001·01 / 007</span></p>
+          </article>
+          <article class="plate is-pause" data-series="brutalism" data-kind="pause" data-serial="001·02 / 007">
+            <span class="void-mark" aria-hidden="true">void</span>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">void</span><span class="serial-stamp">001·02 / 007</span></p>
+            <p class="visually-hidden">001·02 / 007 · plate 2 of 7, pause, no image</p>
+          </article>
+          <article class="plate" data-series="brutalism" data-kind="photo" data-serial="001·03 / 007">
+            <figure>
+              <img src="media/b03-rowan-heuvel.webp" alt="Low-angle view of a concrete facade with deep vertical fins and recessed windows" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Rowan Heuvel / Unsplash · https://unsplash.com/photos/modern-concrete-building-facade-with-repeating-window-pattern-czJvFnRvaf4</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 02</span><span class="serial-stamp">001·03 / 007</span></p>
+          </article>
+          <article class="plate" data-series="brutalism" data-kind="photo" data-serial="001·04 / 007">
+            <figure>
+              <img src="media/b05-declan-sun.webp" alt="Multi-level concrete walkways and beams opening onto a bright void" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Declan Sun / Unsplash · https://unsplash.com/photos/concrete-architecture-inside-a-brutalist-structure-7WQlCMzGGI8</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 03</span><span class="serial-stamp">001·04 / 007</span></p>
+          </article>
+          <article class="plate" data-series="brutalism" data-kind="photo" data-serial="001·05 / 007">
+            <figure>
+              <img src="media/b06-marcio-skull.webp" alt="Worm’s-eye view of a board-marked concrete tower against a pale sky" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Marcio Skull / Pexels · https://www.pexels.com/photo/dramatic-black-and-white-brutalist-architecture-32191170/</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 04</span><span class="serial-stamp">001·05 / 007</span></p>
+          </article>
+          <article class="plate" data-series="brutalism" data-kind="photo" data-serial="001·06 / 007">
+            <figure>
+              <img src="media/b01-julia-taubitz.webp" alt="Brutalist concrete building with horizontal ribbon windows above a stone plaza" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Julia Taubitz / Unsplash · https://unsplash.com/photos/brutalist-concrete-building-with-many-windows-PBZr1SVALPE</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 05</span><span class="serial-stamp">001·06 / 007</span></p>
+          </article>
+          <article class="plate" data-series="brutalism" data-kind="photo" data-serial="001·07 / 007">
+            <figure>
+              <img src="media/b02-julia-taubitz.webp" alt="Concrete pillars and stairs framing an empty courtyard under a heavy roof" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Julia Taubitz / Unsplash · https://unsplash.com/photos/concrete-brutalist-architecture-with-stairs-and-buildings-3TBzCd2ECVE</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 06</span><span class="serial-stamp">001·07 / 007</span></p>
+          </article>
+
+          <article class="plate" data-series="flesh" data-kind="photo" data-serial="002·01 / 005" hidden>
+            <figure>
+              <img src="media/f02-eugenia-pankiv.webp" alt="Close black-and-white face half cut by a hard diagonal shadow" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Eugenia Pan'kiv / Unsplash · https://unsplash.com/photos/black-and-white-portrait-of-a-woman-with-dramatic-lighting-l0uhKKvNaak</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 01</span><span class="serial-stamp">002·01 / 005</span></p>
+          </article>
+          <article class="plate is-pause" data-series="flesh" data-kind="pause" data-serial="002·02 / 005" hidden>
+            <span class="void-mark" aria-hidden="true">void</span>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">void</span><span class="serial-stamp">002·02 / 005</span></p>
+            <p class="visually-hidden">002·02 / 005 · plate 2 of 5, pause, no image</p>
+          </article>
+          <article class="plate" data-series="flesh" data-kind="photo" data-serial="002·03 / 005" hidden>
+            <figure>
+              <img src="media/f04-dave-garcia.webp" alt="High-contrast black-and-white portrait of a woman looking into the lens" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Dave Garcia / Pexels · https://www.pexels.com/photo/high-contrast-black-and-white-portrait-of-a-woman-37573323/</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 02</span><span class="serial-stamp">002·03 / 005</span></p>
+          </article>
+          <article class="plate" data-series="flesh" data-kind="photo" data-serial="002·04 / 005" hidden>
+            <figure>
+              <img src="media/f06-italo-melo.webp" alt="Portrait of a bearded man in a crew-neck shirt against a textured wall" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Italo Melo / Pexels · https://www.pexels.com/photo/2379005/</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 03</span><span class="serial-stamp">002·04 / 005</span></p>
+          </article>
+          <article class="plate" data-series="flesh" data-kind="photo" data-serial="002·05 / 005" hidden>
+            <figure>
+              <img src="media/f07-mohamed-elamine-msiouri.webp" alt="Black-and-white portrait of a man with one side of his face lit and the rest lost in shadow" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Mohamed elamine M'siouri / Pexels · https://www.pexels.com/photo/4412516/</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 04</span><span class="serial-stamp">002·05 / 005</span></p>
+          </article>
+
+          <article class="plate" data-series="wasteland" data-kind="photo" data-serial="003·01 / 005" hidden>
+            <figure>
+              <img src="media/w06-nathan-cowley.webp" alt="Winding forest highway fading into thick fog" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Nathan Cowley / Pexels · https://www.pexels.com/photo/highway-in-the-middle-of-forest-covered-in-fog-1161375/</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 01</span><span class="serial-stamp">003·01 / 005</span></p>
+          </article>
+          <article class="plate is-pause" data-series="wasteland" data-kind="pause" data-serial="003·02 / 005" hidden>
+            <span class="void-mark" aria-hidden="true">void</span>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">void</span><span class="serial-stamp">003·02 / 005</span></p>
+            <p class="visually-hidden">003·02 / 005 · plate 2 of 5, pause, no image</p>
+          </article>
+          <article class="plate" data-series="wasteland" data-kind="photo" data-serial="003·03 / 005" hidden>
+            <figure>
+              <img src="media/w07-anna-galimova.webp" alt="Two-lane road into fog with a forested embankment" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Anna Galimova / Pexels · https://www.pexels.com/photo/gray-asphalt-road-between-green-trees-covered-with-fog-9283762/</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 02</span><span class="serial-stamp">003·03 / 005</span></p>
+          </article>
+          <article class="plate" data-series="wasteland" data-kind="photo" data-serial="003·04 / 005" hidden>
+            <figure>
+              <img src="media/w05-craig-adderley.webp" alt="Wet asphalt road running straight between autumn trees under a grey sky" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Craig Adderley / Pexels · https://www.pexels.com/photo/concrete-road-between-trees-1563356/</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 03</span><span class="serial-stamp">003·04 / 005</span></p>
+          </article>
+          <article class="plate" data-series="wasteland" data-kind="photo" data-serial="003·05 / 005" hidden>
+            <figure>
+              <img src="media/w04-aleks-magnusson.webp" alt="Fogged bus shelter beside a wet road that disappears into mist" decoding="async" loading="lazy" />
+              <figcaption class="visually-hidden">Aleks Magnusson / Pexels · https://www.pexels.com/photo/empty-road-with-fog-3071474/</figcaption>
+            </figure>
+            <p class="meta-tab" aria-hidden="true"><span class="depth-mark">depth 04</span><span class="serial-stamp">003·05 / 005</span></p>
+          </article>
+
+          <article class="plate is-empty-archive" data-series="archive04" data-kind="empty" hidden>
+            <p class="visually-hidden">this archive has been removed.</p>
+          </article>
+        </div>
+      </section>
+
+      <div role="status" aria-live="polite" id="announce"></div>
+    </main>
+    </div>
+
+    <footer class="colophon">
+      <a class="st" href="https://solvedtech.co.uk">
+        <img src="media/st-logo-mark.png" alt="Solved Tech" width="975" height="1056" decoding="async" />
+        <span>solved tech sample</span>
+      </a>
+      <p>fictional photography sample. not a client site.</p>
+      <p>websites, apps, ai and automation for small businesses.</p>
+      <div class="credits">photos
+001 / brutalism
+sébastien lavalaye / unsplash
+rowan heuvel / unsplash
+declan sun / unsplash
+marcio skull / pexels
+julia taubitz / unsplash
+
+002 / flesh
+eugenia pan'kiv / unsplash
+dave garcia / pexels
+italo melo / pexels
+mohamed elamine m'siouri / pexels
+
+003 / wasteland
+nathan cowley / pexels
+anna galimova / pexels
+craig adderley / pexels
+aleks magnusson / pexels
+
+type
+tektur / sil ofl 1.1</div>
+      <p class="licence-line">stock licences: unsplash license · pexels license.</p>
+      <button type="button" class="vault-toggle" id="vaultToggle" aria-pressed="false">vault · demo</button>
+    </footer>
+
+    <dialog class="focus-dlg" id="focusDlg" aria-labelledby="focusTitle">
+      <button type="button" class="exit" id="exitBtn" aria-label="exit full screen">exit</button>
+      <div class="stage" id="focusStage">
+        <h2 class="visually-hidden" id="focusTitle"></h2>
+      </div>
+    </dialog>
+
+    <div class="reticle" id="reticle" aria-hidden="true"></div>
+    <script src="zoom.js"></script>
+  </body>
+</html>

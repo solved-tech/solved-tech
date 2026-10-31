@@ -17,13 +17,13 @@ const samples = [
 ] as const;
 
 describe("sample homepages", () => {
-  it("publishes exactly the nine follow-up samples", () => {
+  it("publishes the follow-up samples and the void / frame route", () => {
     const slugs = readdirSync(new URL("samples", root), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .sort();
 
-    expect(slugs).toEqual(samples.map(({ slug }) => slug).sort());
+    expect(slugs).toEqual([...samples.map(({ slug }) => slug), "void-frame"].sort());
   });
 
   it("copies them into the Pages build without listing them in navigation", () => {
@@ -82,5 +82,47 @@ describe("sample homepages", () => {
       expect(html).not.toMatch(/\sstyle="/);
       expect(html).toContain('href="styles.css"');
     });
+  });
+
+  it("keeps the void / frame zoom sample on its own route", () => {
+    const html = read("samples/void-frame/zoom/index.html");
+    const css = read("samples/void-frame/zoom/styles.css");
+    const js = read("samples/void-frame/zoom/zoom.js");
+
+    expect(html).toContain('<html lang="en-GB">');
+    expect(html).toContain('<meta name="robots" content="noindex, nofollow" />');
+    expect(html).toContain('href="https://solvedtech.co.uk"');
+    expect(html).toContain("solved tech sample");
+    expect(html).toContain("fictional photography sample. not a client site.");
+    expect(html).toContain("drop · 004 · 0 plates");
+    expect(html).toContain('aria-roledescription="zoom well"');
+    expect(html).toContain('aria-describedby="well-help"');
+    expect(html).toContain('class="meta-tab"');
+    expect(html).toContain("001 / brutalism, 7 plates, 6 photos");
+    expect(html).toContain('class="s"');
+    expect(html).toContain('class="f"');
+    expect(html).toContain("media/st-logo-mark.png");
+    expect(html).toContain('fetchpriority="high"');
+    expect(html).toContain("b04-lcp.avif");
+    expect(html).toContain('src="zoom.js"');
+    expect(html).not.toContain("fonts.googleapis.com");
+    expect(html).not.toContain("tel:");
+    expect(html).not.toContain("<audio");
+    expect(html).not.toMatch(/<style[\s>]/);
+    expect(html).not.toMatch(/\sstyle="/);
+    expect(css).toContain("--void: #000000");
+    expect(css).toContain("--chalk: #ffffff");
+    expect(css).toContain("--concrete: #1a1a1a");
+    expect(css).toContain("font-display: optional");
+    expect(css).toContain("scroll-snap-type: y mandatory");
+    expect(css).toContain("min-height: 56px");
+    expect(css).toContain("landZoom");
+    expect(css).toContain("@media (prefers-reduced-motion: no-preference)");
+    expect(css).not.toContain("#9A9A9A");
+    expect(css).not.toContain("grayscale");
+    expect(css).not.toContain("brightness");
+    expect(js).toContain("matchMedia");
+    expect(js).toContain("prefers-reduced-motion");
+    expect(js).not.toContain("audio");
   });
 });
