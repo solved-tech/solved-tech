@@ -98,6 +98,12 @@ describe("sample homepages", () => {
     expect(html).toContain('aria-roledescription="zoom well"');
     expect(html).toContain('aria-describedby="well-help"');
     expect(html).toContain('class="meta-tab"');
+    const metaTabs = html.match(/<p class="meta-tab">[\s\S]*?<\/p>/g) ?? [];
+    expect(metaTabs.length).toBeGreaterThan(0);
+    for (const tab of metaTabs) {
+      expect(tab).toContain('<span class="visually-hidden">, </span><span class="serial-stamp">');
+      expect(tab).not.toMatch(/class="depth-mark"[^>]*>[^<]*<\/span><span class="serial-stamp">/);
+    }
     expect(html).toContain("001 / brutalism, 7 plates, 6 photos");
     expect(html).toContain('class="s"');
     expect(html).toContain('class="f"');
