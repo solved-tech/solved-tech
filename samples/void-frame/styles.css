@@ -158,13 +158,17 @@ a {
   display: block;
   margin-top: 0.2rem;
   font-weight: 400;
-  font-size: 50%;
-  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
   color: var(--chalk);
 }
 
 main {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
   min-height: 100svh;
   overflow: hidden;
 }
@@ -185,20 +189,19 @@ main {
 }
 
 .series {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 20;
   display: flex;
+  flex: 0 0 auto;
   align-items: stretch;
   justify-content: flex-start;
   gap: 0;
+  width: 100%;
   padding: 0 0.35rem;
-  background: transparent;
+  background: var(--chalk);
   border: 0;
   pointer-events: none;
-  mix-blend-mode: difference;
+  mix-blend-mode: normal;
 }
 
 .series button {
@@ -214,14 +217,14 @@ main {
   font-size: clamp(1.5rem, 5vw, 2rem);
   letter-spacing: -0.02em;
   line-height: 1;
-  color: var(--chalk);
+  color: var(--void);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .ink {
   display: inline-block;
-  color: var(--chalk);
+  color: var(--void);
 }
 
 .series button:focus-visible {
@@ -246,14 +249,14 @@ main {
 }
 
 .series button[aria-pressed="true"] .ink {
-  box-shadow: inset 0 -2px 0 var(--chalk);
+  box-shadow: inset 0 -2px 0 var(--void);
 }
 
 .series button[aria-disabled="true"] {
   text-decoration: line-through;
   font-size: clamp(0.75rem, 2.5vw, 1rem);
   font-weight: 400;
-  color: var(--chalk);
+  color: var(--void);
   pointer-events: none;
 }
 
@@ -285,7 +288,9 @@ main {
 
 #track {
   position: relative;
-  height: 100svh;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
 }
 
 #track:focus-visible {
@@ -615,6 +620,36 @@ dialog.focus-dlg::backdrop {
     --plate-std: 96vw;
   }
 
+  main {
+    display: block;
+    height: auto;
+  }
+
+  .series {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    background: transparent;
+    mix-blend-mode: difference;
+  }
+
+  .series button,
+  .ink,
+  .series button[aria-disabled="true"] {
+    color: var(--chalk);
+  }
+
+  .series button[aria-pressed="true"] .ink {
+    box-shadow: inset 0 -2px 0 var(--chalk);
+  }
+
+  #track {
+    height: 100svh;
+    flex: none;
+  }
+
   .series .s {
     position: absolute;
     width: 1px;
@@ -713,6 +748,26 @@ dialog.focus-dlg::backdrop {
     z-index: 30;
   }
 
+  body:has(.vault.is-on) {
+    --vault-band: 4.25rem;
+  }
+
+  body:has(.vault.is-on) .vault.is-on {
+    position: relative;
+    height: var(--vault-band);
+    min-height: var(--vault-band);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  body:has(.vault.is-on) main {
+    height: calc(100svh - var(--vault-band));
+    min-height: 0;
+  }
+
   .brand-edge {
     display: flex;
     grid-column: 1;
@@ -720,7 +775,7 @@ dialog.focus-dlg::backdrop {
     align-items: center;
     justify-content: center;
     border-right: 1px solid var(--chalk);
-    height: 100svh;
+    height: 100%;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
     font-family: var(--display);
@@ -741,7 +796,7 @@ dialog.focus-dlg::backdrop {
     padding: 0;
     margin: 0;
     border-right: 1px solid var(--chalk);
-    height: 100svh;
+    height: 100%;
     font-size: 0;
     line-height: 0;
     overflow: hidden;
@@ -751,7 +806,8 @@ dialog.focus-dlg::backdrop {
   #track {
     grid-column: 3;
     grid-row: 1;
-    height: 100svh;
+    height: 100%;
+    min-height: 0;
     min-width: 0;
   }
 
@@ -762,13 +818,14 @@ dialog.focus-dlg::backdrop {
     align-items: stretch;
     justify-content: center;
     border-right: 1px solid var(--chalk);
-    height: 100svh;
-    max-height: 100svh;
+    height: 100%;
+    max-height: 100%;
     padding: 0;
     background: var(--void);
     color: var(--chalk);
     overflow: hidden;
     contain: paint;
+    container-type: size;
   }
 
   .series-edge > .edge-label {
@@ -791,7 +848,7 @@ dialog.focus-dlg::backdrop {
     letter-spacing: -0.02em;
     line-height: 1;
     white-space: nowrap;
-    font-size: min(5.25rem, calc((100svh - var(--plate-top) - var(--plate-bottom)) / 9));
+    font-size: min(5.25rem, calc((100cqh - var(--plate-top) - var(--plate-bottom)) / 9));
     text-indent: 0.04em;
     overflow: hidden;
   }
@@ -806,9 +863,13 @@ dialog.focus-dlg::backdrop {
     align-items: stretch;
     gap: 0;
     padding: 0;
-    height: 100svh;
+    height: 100%;
     background: var(--void);
     mix-blend-mode: normal;
+  }
+
+  .ink {
+    color: inherit;
   }
 
   .series button {
@@ -826,6 +887,8 @@ dialog.focus-dlg::backdrop {
     justify-content: center;
     overflow: hidden;
     white-space: nowrap;
+    color: var(--chalk);
+    container-type: size;
   }
 
   .series button[aria-pressed="false"] {
@@ -872,6 +935,18 @@ dialog.focus-dlg::backdrop {
     overflow: visible;
     clip: auto;
     white-space: normal;
+  }
+
+  body:has(.vault.is-on) .series button {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+    letter-spacing: 0.06em;
+  }
+
+  body:has(.vault.is-on) .series button[aria-pressed="true"] .f {
+    font-size: min(1.35rem, 9cqh);
+    letter-spacing: 0.04em;
+    font-weight: 700;
   }
 
   .plate[data-w="a"] {
