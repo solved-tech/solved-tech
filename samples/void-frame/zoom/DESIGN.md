@@ -133,9 +133,7 @@ The palette is the plate, the band, and the concrete vault bar.
 
 ## Layout
 
-Below 768px the stamp row is a full-width void band, 56px tall, at the bottom of the viewport. The active code is one line. The meta tab sits above that band, flush to the left edge of the plate.
-
-From 768px to 1439px the stamps sit on the bottom edge and may use the full series name.
+Below 1440px the stamp row is a full-width void band, 56px tall, at the bottom of the viewport. Below 768px the active code is one line. From 768px to 1439px the stamps may use the full series name, still on that band. The meta tab sits above the band, flush to the left edge of the plate.
 
 At 1440px the stamps are a left column and `void / frame` is a right spine. The active stamp stays on one line, including when the vault adds a fourth stamp. The meta tab is flush to the bottom-left of the well.
 
@@ -152,7 +150,7 @@ Corners are square (`0`). The reticle is a 52px square. The stamp band is a hard
 ### Buttons
 
 - **Shape:** Square. Minimum target 44px.
-- **Active stamp:** At 1440, chalk fill and void type. Below 768, chalk type on the void band, short code only.
+- **Active stamp:** At 1440, chalk fill and void type. Below 1440, chalk type on the void band. Below 768 the visible label is the short code.
 - **Inactive stamp:** Chalk type, half the active size, at least 12px.
 - **Disabled:** Chalk with a strike. Not grey. Not a pointer target.
 - **Focus:** 2px chalk outline. The well uses an inset chalk ring.

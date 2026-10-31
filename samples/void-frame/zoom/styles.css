@@ -79,6 +79,7 @@ body {
 
 html {
   scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -88,14 +89,22 @@ body {
   line-height: 1.15;
   letter-spacing: 0.02em;
   text-transform: lowercase;
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
-a {
+a,
+a:link,
+a:visited,
+a:hover,
+a:focus-visible,
+button:hover,
+button:focus-visible {
   font: inherit;
-  color: inherit;
+  color: var(--chalk);
   letter-spacing: inherit;
   text-transform: lowercase;
+  -webkit-font-smoothing: antialiased;
 }
 
 button {
@@ -260,8 +269,27 @@ main {
   line-height: 1.05;
   text-align: center;
   user-select: none;
-  -webkit-text-stroke: 1px var(--void);
-  paint-order: stroke fill;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke: 0;
+  paint-order: normal;
+}
+
+.series button:link,
+.series button:visited,
+.series button:hover,
+.series button:focus-visible,
+.series button[aria-pressed="false"],
+.series button[aria-pressed="false"]:link,
+.series button[aria-pressed="false"]:visited,
+.series button[aria-pressed="false"]:hover,
+.series button[aria-pressed="false"]:focus-visible,
+.series button[aria-disabled="true"],
+.series button[aria-disabled="true"]:link,
+.series button[aria-disabled="true"]:visited,
+.series button[aria-disabled="true"]:hover,
+.series button[aria-disabled="true"]:focus-visible {
+  color: var(--chalk);
+  -webkit-font-smoothing: antialiased;
 }
 
 .series button[aria-pressed="true"] {
@@ -289,6 +317,9 @@ main {
 .series .s,
 .series .f {
   line-height: 1.05;
+  -webkit-font-smoothing: antialiased;
+  /* Flat layer so glyph edges stay neutral gray. Subpixel stripes read as a blue fringe. */
+  transform: translateZ(0);
 }
 
 .series .s {
@@ -676,6 +707,31 @@ html.is-zooming .well-scroller {
 }
 
 @media (min-width: 768px) and (max-width: 1439px) {
+  .series {
+    align-items: stretch;
+    justify-content: flex-start;
+    height: 56px;
+    min-height: 56px;
+    padding: 0 0.45rem;
+    background: var(--void);
+  }
+
+  .series button,
+  .series button[aria-pressed="true"],
+  .series button[aria-disabled="true"] {
+    flex: 0 0 auto;
+    height: 100%;
+    min-height: 44px;
+    max-width: none;
+    -webkit-text-stroke: 0;
+    paint-order: normal;
+    white-space: nowrap;
+  }
+
+  .meta-tab {
+    bottom: 56px;
+  }
+
   .series .s {
     position: absolute;
     width: 1px;
@@ -696,7 +752,7 @@ html.is-zooming .well-scroller {
     margin: 0;
     overflow: visible;
     clip: auto;
-    white-space: normal;
+    white-space: nowrap;
   }
 
   .series button {
@@ -706,7 +762,7 @@ html.is-zooming .well-scroller {
   }
 
   .series button[aria-pressed="true"] {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     max-width: none;
     font-size: clamp(1.5rem, 2.4vw, 2rem);
     letter-spacing: 0.1em;
@@ -748,7 +804,7 @@ html.is-zooming .well-scroller {
     -webkit-text-stroke: 0;
     paint-order: normal;
     writing-mode: vertical-rl;
-    transform: rotate(180deg);
+    transform: rotate(180deg) translateZ(0);
     flex: 1 1 0;
     max-width: none;
     min-width: 100%;
@@ -765,7 +821,11 @@ html.is-zooming .well-scroller {
     font-weight: 400;
   }
 
-  .series button[aria-pressed="true"] {
+  .series button[aria-pressed="true"],
+  .series button[aria-pressed="true"]:link,
+  .series button[aria-pressed="true"]:visited,
+  .series button[aria-pressed="true"]:hover,
+  .series button[aria-pressed="true"]:focus-visible {
     flex: 1.6 0 auto;
     min-height: 18rem;
     background: var(--chalk);

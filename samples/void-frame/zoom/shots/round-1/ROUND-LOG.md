@@ -81,3 +81,28 @@ UI note on the 390 band: `002` and `003` grew to fill the row, so `003` sat alon
 Measured at 390×844: the gap between stamp boxes is 24px. `003` ends at x 205, leaving 185px of the band empty on the right. The tab’s bottom edge meets the band’s top edge. Reduced motion sets the land image `animation-name` to `none`. At 768 the full names still pack left with gap 0. At 1440 the stamps stay a column, active 24px and inactive 12px.
 
 Shots for this round: `void-frame-zoom/round-3/` — 390 fold, 390 focus-visible, 390 reduced-motion, 768 fold, 1440 focus-visible, 1440 reduced-motion. Twelve sample tests passed.
+
+## Round 4
+
+UI notes: the 390 grouping and the skip link stay. Two fixes.
+
+- Inactive stamps were subpixel-striped, so `002` and `003` read light blue and the 1440 names carried a colour fringe. Links and stamp buttons now set `color: var(--chalk)` on `:link`, `:visited`, `:hover`, and `:focus-visible`, with `-webkit-font-smoothing: antialiased`. The label spans sit on a flat layer so the edges rasterize as equal-channel gray instead of RGB stripes. The 1440 active stamp stays void on chalk, including hover and focus.
+- From 768 to 1439 the stamp row uses the same 56px void band as the phone. The chalk rule on the active name sits on that band. The meta tab sits flush above it. Full series names stay on one line. Below 768 is unchanged, including the 24px gap.
+
+Pixel sample of the visible label boxes, device scale 1. Background pixels are excluded. Chalk is every channel at least 250. Void is every channel at most 8. A neutral edge has equal channels (delta at most 2) between those. Chromatic means the channels differ by more than 2. Tokens are void `#000000`, chalk `#FFFFFF`, concrete `#1A1A1A`.
+
+| shot | stamp | role | css color | core rgb | core token | chromatic | max channel delta |
+|---|---|---|---|---|---|---:|---:|
+| 390 fold | 001 | active | 255,255,255 | 255,255,255 | chalk | 0 | 0 |
+| 390 fold | 002 | inactive | 255,255,255 | 255,255,255 | chalk | 0 | 0 |
+| 390 fold | 003 | inactive | 255,255,255 | 255,255,255 | chalk | 0 | 0 |
+| 768 fold | 001 / brutalism | active | 255,255,255 | 255,255,255 | chalk | 0 | 0 |
+| 768 fold | 002 / flesh | inactive | 255,255,255 | 255,255,255 | chalk | 0 | 0 |
+| 768 fold | 003 / wasteland | inactive | 255,255,255 | 255,255,255 | chalk | 0 | 0 |
+| 1440 fold | 001 / brutalism | active | 0,0,0 | 0,0,0 | void | 0 | 0 |
+| 1440 fold | 002 / flesh | inactive | 255,255,255 | 255,255,255 | chalk | 0 | 0 |
+| 1440 fold | 003 / wasteland | inactive | 255,255,255 | 253,253,253 | chalk | 0 | 0 |
+
+Every sampled ink pixel has equal red, green, and blue. No stamp pixel is outside the chalk–void line. The full count is in `void-frame-zoom/round-4/PIXEL-SAMPLE.md`.
+
+Shots: `void-frame-zoom/round-4/` — 390 fold, 768 fold, 1440 fold.
