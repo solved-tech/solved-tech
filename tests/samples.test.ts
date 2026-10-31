@@ -96,6 +96,8 @@ describe("sample homepages", () => {
     expect(html).toContain("fictional photography sample. not a client site.");
     expect(html).toContain("drop · 004 · 0 plates");
     expect(html).toContain('aria-roledescription="zoom well"');
+    expect(html).toContain('aria-describedby="well-help"');
+    expect(html).toContain('class="meta-tab"');
     expect(html).toContain("001 / brutalism, 7 plates, 6 photos");
     expect(html).toContain('class="s"');
     expect(html).toContain('class="f"');
@@ -113,6 +115,7 @@ describe("sample homepages", () => {
     expect(css).toContain("--concrete: #1a1a1a");
     expect(css).toContain("font-display: optional");
     expect(css).toContain("scroll-snap-type: y mandatory");
+    expect(css).toContain("min-height: 56px");
     expect(css).toContain("landZoom");
     expect(css).toContain("@media (prefers-reduced-motion: no-preference)");
     expect(css).not.toContain("#9A9A9A");

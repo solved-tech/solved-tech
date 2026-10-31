@@ -168,15 +168,6 @@ a {
   grid-row: 2;
 }
 
-@media (max-width: 1439px) {
-  .sheet:has(.skip:focus) .depth-mark,
-  .sheet:has(.skip:focus-visible) .depth-mark {
-    left: 0.75rem;
-    right: auto;
-    transform: none;
-  }
-}
-
 .vault {
   display: none;
   margin: 0;
@@ -186,7 +177,7 @@ a {
   border-bottom: 1px solid var(--chalk);
   font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   line-height: 1.35;
 }
 
@@ -202,7 +193,7 @@ a {
   color: var(--chalk);
   font-weight: 400;
   font-size: 0.75rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   line-height: 1.2;
   opacity: 1;
 }
@@ -406,28 +397,43 @@ html.is-zooming .well-scroller {
   user-select: none;
 }
 
-.serial-stamp {
+.meta-tab {
   position: absolute;
   left: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 0;
   margin: 0;
-  padding: 4px 8px;
+  padding: 0;
   background: var(--void);
+  color: var(--chalk);
+  pointer-events: none;
+  user-select: none;
+}
+
+.meta-tab .depth-mark,
+.meta-tab .serial-stamp {
+  position: static;
+  display: block;
+  margin: 0;
+  padding: 0.3rem 0.45rem;
+  background: transparent;
   color: var(--chalk);
   border-radius: 0;
   font-family: var(--display);
   font-variant-numeric: tabular-nums;
-  font-size: clamp(0.65rem, 1.05vw, 0.85rem);
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   line-height: 1.05;
-  pointer-events: none;
-  user-select: none;
-  -webkit-text-stroke: 0;
   text-shadow: none;
   filter: none;
   mix-blend-mode: normal;
+  transform: none;
+  -webkit-text-stroke: 0;
+  white-space: nowrap;
 }
 
 .plate figure,
@@ -446,22 +452,6 @@ html.is-zooming .well-scroller {
   transform-origin: center center;
 }
 
-.depth-mark {
-  position: absolute;
-  top: 1rem;
-  left: 50%;
-  z-index: 15;
-  margin: 0;
-  color: var(--chalk);
-  font-weight: 700;
-  font-size: clamp(0.75rem, 1.5vw, 1rem);
-  letter-spacing: 0.16em;
-  line-height: 1.05;
-  transform: translateX(-50%);
-  mix-blend-mode: difference;
-  pointer-events: none;
-  user-select: none;
-}
 
 #announce {
   position: absolute;
@@ -491,7 +481,7 @@ html.is-zooming .well-scroller {
   min-height: 44px;
   margin-bottom: 0.35rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
 }
 
 .st img {
@@ -621,6 +611,67 @@ html.is-zooming .well-scroller {
   }
 }
 
+@media (max-width: 767px) {
+  .series {
+    align-items: stretch;
+    height: 56px;
+    min-height: 56px;
+    padding: 0 0.35rem;
+    background: var(--void);
+  }
+
+  .series button,
+  .series button[aria-pressed="true"],
+  .series button[aria-disabled="true"] {
+    flex: 1 1 0;
+    max-width: none;
+    height: 100%;
+    min-height: 44px;
+    padding: 0 0.35rem;
+    box-shadow: none;
+    -webkit-text-stroke: 0;
+    paint-order: normal;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .series button[aria-pressed="true"] {
+    flex: 1.15 1 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .series .f,
+  .series button[aria-pressed="true"] .f {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .series .s,
+  .series button[aria-pressed="true"] .s {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: nowrap;
+  }
+
+  .meta-tab {
+    bottom: 56px;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1439px) {
   .series .s {
     position: absolute;
@@ -700,27 +751,30 @@ html.is-zooming .well-scroller {
     min-width: 100%;
     min-height: 44px;
     justify-content: center;
-    padding: 1.25rem 0.4rem;
-    letter-spacing: 0.18em;
+    padding: 0.75rem 0.35rem;
+    letter-spacing: 0.04em;
     box-shadow: none;
+    white-space: nowrap;
   }
 
   .series button {
-    font-size: clamp(0.625rem, 0.7vw, 1rem);
+    font-size: 0.75rem;
     font-weight: 400;
   }
 
   .series button[aria-pressed="true"] {
+    flex: 1.6 0 auto;
+    min-height: 18rem;
     background: var(--chalk);
     color: var(--void);
-    font-size: clamp(1.25rem, 1.4vw, 2rem);
+    font-size: 1.5rem;
     font-weight: 700;
   }
 
   .series button[aria-disabled="true"] {
     background: transparent;
     color: var(--chalk);
-    font-size: clamp(0.625rem, 0.7vw, 1rem);
+    font-size: 0.75rem;
     font-weight: 400;
   }
 
@@ -744,7 +798,7 @@ html.is-zooming .well-scroller {
     margin: 0;
     overflow: visible;
     clip: auto;
-    white-space: normal;
+    white-space: nowrap;
   }
 
   .brand-edge {
@@ -776,12 +830,6 @@ html.is-zooming .well-scroller {
   .skip:focus-visible {
     left: calc(5.5rem + 0.75rem);
     right: auto;
-  }
-
-  .depth-mark {
-    left: auto;
-    right: 1rem;
-    transform: none;
   }
 }
 

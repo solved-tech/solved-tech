@@ -11,7 +11,6 @@ const fineQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
 const scroller = document.getElementById("scroller");
 const well = document.getElementById("well");
 const announce = document.getElementById("announce");
-const depthMark = document.getElementById("depthMark");
 const dlg = document.getElementById("focusDlg");
 const focusTitle = document.getElementById("focusTitle");
 const focusStage = document.getElementById("focusStage");
@@ -100,7 +99,13 @@ function syncStamps() {
 
 function updateChrome(seriesChange) {
   const plate = plates[index];
-  if (depthMark) depthMark.textContent = depthText(plate);
+  const mark = plate?.querySelector(".depth-mark");
+  if (mark) {
+    mark.textContent = depthText(plate);
+    const current = document.getElementById("depthMark");
+    if (current && current !== mark) current.removeAttribute("id");
+    mark.id = "depthMark";
+  }
   if (well) well.setAttribute("aria-label", trackLabel());
   if (!booted) {
     booted = true;

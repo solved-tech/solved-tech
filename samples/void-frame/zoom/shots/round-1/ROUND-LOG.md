@@ -60,6 +60,16 @@ Detector on `index.html` exited 2 with 5 findings: wide tracking 0.08em and 0.06
 
 ## Left for a later round
 
-- Inactive column labels at 1440 are 10.08px because they must stay at most half the active label.
-- The key legend is the visually hidden `#well-help` line. That matches an experience surface; it is not a help system.
 - SAFE’s `samples/void-frame/index.html` is untouched. This branch’s sample test allows the `void-frame` directory without requiring that index, so a parallel SAFE edit of `tests/samples.test.ts` can conflict.
+
+## Round 2
+
+UI notes on PR #34. 1440 still matches v2.1. The chalk pause and the two-row vault bar stay.
+
+- This sample now has `samples/void-frame/zoom/DESIGN.md`. The detector loads it for this route instead of the Mara Ellison sheet. `impeccable detect` on `index.html` exits 0. Tektur, chalk, concrete, and the mono credit stack are declared. Body and tab tracking is 0.04em so the wide-tracking rule does not fire. The repo-root `DESIGN.md` is unchanged.
+- At widths under 768 the stamp row is a full-width void band, 56px tall. There is no chalk rule across the photograph. The active stamp shows `001` (the `.s` span). The full name stays in `.f`, visually hidden, and is the accessible name. `002` and `003` are 12px. The active code is 24px, so the inactive codes are half of it.
+- The serial and `depth 01` share one flush void tab, chalk on void. On the phone the tab sits on the plate, flush with the top of the band, not inside it. At 1440 it is flush to the bottom-left of the well.
+- At 1440 inactive stamps are 12px and the active stamp is 24px. The active cell does not shrink, and the label is `white-space: nowrap`, including in the vault state, so it stays `001 / brutalism` on one line.
+- `#well` already references the visually hidden key legend with `aria-describedby="well-help"`.
+
+Shots for this round: `void-frame-zoom/round-2/` — 390 fold, 390 pause, 1440 fold, 1440 vault.
