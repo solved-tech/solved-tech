@@ -106,3 +106,26 @@ Pixel sample of the visible label boxes, device scale 1. Background pixels are e
 Every sampled ink pixel has equal red, green, and blue. No stamp pixel is outside the chalk–void line. The full count is in `void-frame-zoom/round-4/PIXEL-SAMPLE.md`.
 
 Shots: `void-frame-zoom/round-4/` — 390 fold, 768 fold, 1440 fold.
+
+## QA advisories
+
+Branched from `main` at `ff6358a` (the squash of pull request #34).
+
+### Meta tab
+
+The tab’s text content was `depth 01001·01 / 007`, one run, and `aria-hidden` kept that string out of the accessibility tree. Each tab now carries a visually hidden comma between the depth mark and the serial, and the tab is exposed. Chrome’s accessibility tree lists separate strings — `depth 01`, `,`, `001·01 / 007` — instead of one joined run. The comma is clipped (`1×1`), so it adds no gap: the tab’s painted width is still the depth mark plus the serial.
+
+Before and after frames, animations held at 0, pixel diff 0:
+
+| frame | different pixels |
+|---|---:|
+| 390 | 0 |
+| 768 | 0 |
+| 1440 | 0 |
+| 1440 reduced motion | 0 |
+
+### ST mark
+
+`samples/void-frame/zoom/media/st-logo-mark.png` and `design/photography/v3/assets/st-logo-mark.png` are the same file. The check in `tests/st-logo-match.test.ts` does not resize the full canvas. It takes pixels with alpha of at least 1, which is a content box of `x 60, y 60, 855×936` inside the `975×1056` canvas, scales both crops to 128px wide, and compares channels. Maximum channel delta is 0.
+
+Shots: `void-frame-zoom/qa-advisories/before/` and `qa-advisories/after/` — 390, 768, 1440, and reduced motion.
