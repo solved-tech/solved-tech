@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>void / frame</title>
+    <meta name="description" content="void / frame — solved tech photography sample" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'"
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="assets/photos/avif/b04-lcp.avif"
+      as="image"
+      type="image/avif"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/woff2/oswald-latin-700-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="track.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#track">skip to plates</a>
+    <p class="vault" id="vault" role="status">
+      archive 04 is gone. forever.<span class="drop">drop · 004 · 0 plates</span>
+    </p>
+
+    <main id="main">
+      <h1 class="visually-hidden">void / frame: photography sample</h1>
+      <div class="brand-edge" aria-hidden="true">void / frame</div>
+      <aside class="exif-rail" id="exifRail" aria-hidden="true"></aside>
+
+      <nav class="series" aria-label="series" id="series">
+        <button type="button" data-series="brutalism" aria-pressed="true">
+          <span class="ink"><span class="s" aria-hidden="true">001</span><span class="f">001 / brutalism</span></span>
+        </button>
+        <button type="button" data-series="flesh" aria-pressed="false">
+          <span class="ink"><span class="s" aria-hidden="true">002</span><span class="f">002 / flesh</span></span>
+        </button>
+        <button type="button" data-series="wasteland" aria-pressed="false">
+          <span class="ink"><span class="s" aria-hidden="true">003</span><span class="f">003 / wasteland</span></span>
+        </button>
+        <button type="button" data-series="archive04" aria-pressed="false" aria-disabled="true" hidden id="stamp04" tabindex="-1">
+          <span class="ink"><span class="s" aria-hidden="true">004</span><span class="f">004 / archive</span></span>
+        </button>
+      </nav>
+      <div class="stamp-ring" id="stampRing" hidden></div>
+
+      <!-- Each series counts its pause as a plate. 001 has 6 photos and 1 pause, so 7 plates. 002 and 003 have 4 photos and 1 pause, so 5 plates. The serial and the aria count both use plates (§12). -->
+      <section
+        id="track"
+        aria-roledescription="track"
+        aria-label="001 / brutalism, 7 plates, 6 photos"
+        tabindex="0"
+        aria-describedby="track-help"
+      >
+        <p id="track-help" class="visually-hidden">
+          left and right arrows move between plates. enter opens the plate full screen. escape closes it. keys 1 2 3 switch series.
+        </p>
+        <div class="track-scroller" id="scroller" tabindex="-1">
+          <article class="plate is-land" data-w="c" data-index="0" data-pause="0" data-serial="001·01 / 007">
+            <figure>
+              <picture>
+                <source type="image/avif" srcset="assets/photos/avif/b04-lcp.avif" />
+                <source type="image/webp" srcset="assets/photos/webp/b04-lcp.webp" />
+                <img
+                  src="assets/photos/lcp/b04-lcp.jpg"
+                  alt="Looking up a repeating pattern of curved concrete shell forms"
+                  width="1440"
+                  height="954"
+                  decoding="async"
+                  fetchpriority="high"
+                  loading="eager"
+                />
+              </picture>
+              <span class="serial-stamp on-light" aria-hidden="true">001·01 / 007</span>
+              <figcaption class="visually-hidden">
+                Sébastien Lavalaye / Unsplash · https://unsplash.com/photos/abstract-architectural-detail-with-repeating-curved-shapes-WSvuTQGg6sg
+              </figcaption>
+            </figure>
+          </article>
+          <article class="plate is-pause" data-w="pause" data-index="1" data-pause="1" data-serial="001·02 / 007">
+            <span class="void-mark" data-mode="void" aria-hidden="true">void</span>
+            <span class="void-mark" data-mode="serial" aria-hidden="true">001·02 / 007</span>
+            <span class="visually-hidden">001·02 / 007 · plate 2 of 7, pause, no image</span>
+          </article>
+          <article class="plate" data-w="e" data-index="2" data-pause="0" data-serial="001·03 / 007">
+            <figure>
+              <img
+                src="assets/photos/webp/b03-rowan-heuvel.webp"
+                alt="Low-angle view of a concrete facade with deep vertical fins and recessed windows"
+                width="1920"
+                height="1281"
+                decoding="async"
+                loading="lazy"
+              />
+              <span class="serial-stamp on-light" aria-hidden="true">001·03 / 007</span>
+              <figcaption class="visually-hidden">
+                Rowan Heuvel / Unsplash · https://unsplash.com/photos/modern-concrete-building-facade-with-repeating-window-pattern-czJvFnRvaf4
+              </figcaption>
+            </figure>
+          </article>
+          <article class="plate" data-w="a" data-index="3" data-pause="0" data-serial="001·04 / 007">
+            <figure>
+              <img
+                src="assets/photos/webp/b05-declan-sun.webp"
+                alt="Multi-level concrete walkways and beams opening onto a bright void"
+                width="1920"
+                height="2880"
+                decoding="async"
+                loading="lazy"
+              />
+              <span class="serial-stamp on-dark" aria-hidden="true">001·04 / 007</span>
+              <figcaption class="visually-hidden">
+                Declan Sun / Unsplash · https://unsplash.com/photos/concrete-architecture-inside-a-brutalist-structure-7WQlCMzGGI8
+              </figcaption>
+            </figure>
+          </article>
+          <article class="plate" data-w="f" data-index="4" data-pause="0" data-serial="001·05 / 007">
+            <figure>
+              <img
+                src="assets/photos/webp/b06-marcio-skull.webp"
+                alt="Worm’s-eye view of a board-marked concrete tower against a pale sky"
+                width="1600"
+                height="2133"
+                decoding="async"
+                loading="lazy"
+              />
+              <span class="serial-stamp on-dark" aria-hidden="true">001·05 / 007</span>
+              <figcaption class="visually-hidden">
+                Marcio Skull / Pexels · https://www.pexels.com/photo/dramatic-black-and-white-brutalist-architecture-32191170/
+              </figcaption>
+            </figure>
+          </article>
+          <article class="plate" data-w="b" data-index="5" data-pause="0" data-serial="001·06 / 007">
+            <figure>
+              <img
+                src="assets/photos/webp/b01-julia-taubitz.webp"
+                alt="Brutalist concrete building with horizontal ribbon windows above a stone plaza"
+                width="1920"
+                height="1280"
+                decoding="async"
+                loading="lazy"
+              />
+              <span class="serial-stamp on-dark" aria-hidden="true">001·06 / 007</span>
+              <figcaption class="visually-hidden">
+                Julia Taubitz / Unsplash · https://unsplash.com/photos/brutalist-concrete-building-with-many-windows-PBZr1SVALPE
+              </figcaption>
+            </figure>
+          </article>
+          <article class="plate" data-w="d" data-index="6" data-pause="0" data-serial="001·07 / 007">
+            <figure>
+              <img
+                src="assets/photos/webp/b02-julia-taubitz.webp"
+                alt="Concrete pillars and stairs framing an empty courtyard under a heavy roof"
+                width="1920"
+                height="2880"
+                decoding="async"
+                loading="lazy"
+              />
+              <span class="serial-stamp on-light" aria-hidden="true">001·07 / 007</span>
+              <figcaption class="visually-hidden">
+                Julia Taubitz / Unsplash · https://unsplash.com/photos/concrete-brutalist-architecture-with-stairs-and-buildings-3TBzCd2ECVE
+              </figcaption>
+            </figure>
+          </article>
+        </div>
+      </section>
+
+      <div class="series-edge" id="seriesEdge" aria-hidden="true"><span class="edge-label">001 / brutalism</span></div>
+      <div role="status" aria-live="polite" aria-atomic="true" id="announce"></div>
+    </main>
+
+    <footer class="colophon">
+      <a class="mark" href="https://solvedtech.co.uk">
+        <span class="mark-plate">
+          <img src="assets/st-logo-mark.png" alt="" width="975" height="1056" decoding="async" />
+        </span>
+        <span>solved tech sample</span>
+      </a>
+      <div>fictional photography sample. not a client site.</div>
+      <div>websites, apps, ai and automation for small businesses.</div>
+      <div class="credits">photos
+001 / brutalism
+sébastien lavalaye / unsplash
+rowan heuvel / unsplash
+declan sun / unsplash
+marcio skull / pexels
+julia taubitz / unsplash
+
+002 / flesh
+eugenia pan'kiv / unsplash
+dave garcia / pexels
+italo melo / pexels
+mohamed elamine m'siouri / pexels
+
+003 / wasteland
+nathan cowley / pexels
+anna galimova / pexels
+craig adderley / pexels
+aleks magnusson / pexels
+
+type
+oswald / sil ofl 1.1</div>
+      <div class="licence">stock licences: unsplash license · pexels license.</div>
+      <button type="button" class="vault-toggle" id="vaultToggle" aria-pressed="false">vault · demo</button>
+    </footer>
+
+    <dialog class="focus-dlg" id="focusDlg" aria-labelledby="focusTitle">
+      <button type="button" class="exit" id="exitBtn" aria-label="exit full screen">exit</button>
+      <div class="stage" id="focusStage">
+        <h2 class="visually-hidden" id="focusTitle"></h2>
+        <img id="focusImg" src="assets/photos/avif/b04-lcp.avif" alt="" width="1440" height="954" decoding="async" />
+      </div>
+    </dialog>
+
+    <div class="reticle" id="reticle" aria-hidden="true"></div>
+  </body>
+</html>
