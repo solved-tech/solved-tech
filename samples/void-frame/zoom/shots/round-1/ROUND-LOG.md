@@ -106,3 +106,26 @@ Pixel sample of the visible label boxes, device scale 1. Background pixels are e
 Every sampled ink pixel has equal red, green, and blue. No stamp pixel is outside the chalk–void line. The full count is in `void-frame-zoom/round-4/PIXEL-SAMPLE.md`.
 
 Shots: `void-frame-zoom/round-4/` — 390 fold, 768 fold, 1440 fold.
+
+## QA advisories
+
+Branched from `main` at `ff6358a` (the squash of pull request #34).
+
+### Meta tab
+
+The tab’s text content was `depth 01001·01 / 007`, one run, and `aria-hidden` kept that string out of the accessibility tree. Each tab now carries a visually hidden comma between the depth mark and the serial, and the tab is exposed. Chrome’s accessibility tree lists separate strings — `depth 01`, `,`, `001·01 / 007` — instead of one joined run. The comma is clipped (`1×1`), so it adds no gap: the tab’s painted width is still the depth mark plus the serial.
+
+Before and after frames, animations held at 0, pixel diff 0:
+
+| frame | different pixels |
+|---|---:|
+| 390 | 0 |
+| 768 | 0 |
+| 1440 | 0 |
+| 1440 reduced motion | 0 |
+
+### ST mark
+
+The brand original is the read-only fixture `tests/fixtures/brand/st-logo-original-2048.png` (`ig-logo-exact-2048-transparent.png`, sha256 `411429d662a276bfa462a75e75ba47846be23a84f34b4732e7e5e8a157b9e1cf`). The shipped mark is `samples/void-frame/zoom/media/st-logo-mark.png` (sha256 `02fc797c7598ae54e42becd3822fc8d80b68b19eb43c2fd306fa98339432dd72`). They are different files. The brand canvas is 2048×2048 with ink at `x 597, y 557, 855×936`. The shipped canvas is 975×1056 with the same ink size at `x 60, y 60`. `tests/st-logo-match.test.ts` crops those content boxes, scales both to 128px wide, and compares them. Maximum channel delta is 0. IoU of the ink masks is 1. The shipped file is unchanged.
+
+Shots: `void-frame-zoom/qa-advisories/before/` and `qa-advisories/after/` — 390, 768, 1440, and reduced motion.
