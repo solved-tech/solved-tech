@@ -1,11 +1,14 @@
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { inflateSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
 
 const root = new URL("..", import.meta.url);
 
-const CANONICAL = "design/photography/v3/assets/st-logo-mark.png";
+const CANONICAL = "tests/fixtures/brand/st-logo-original-2048.png";
 const SAMPLE = "samples/void-frame/zoom/media/st-logo-mark.png";
+/** Brand original `ig-logo-exact-2048-transparent.png`. */
+const CANONICAL_SHA256 = "411429d662a276bfa462a75e75ba47846be23a84f34b4732e7e5e8a157b9e1cf";
 const SCALE_WIDTH = 128;
 const ALPHA_MIN = 1;
 
@@ -184,26 +187,66 @@ function maxChannelDelta(left: Raster, right: Raster): number {
   return max;
 }
 
+/** Ink is any pixel whose alpha survives the content-box threshold. */
+function maskIoU(left: Raster, right: Raster): number {
+  if (left.width !== right.width || left.height !== right.height) {
+    throw new Error("scaled content boxes differ in size");
+  }
+  let intersection = 0;
+  let union = 0;
+  const count = left.width * left.height;
+  for (let pixel = 0; pixel < count; pixel += 1) {
+    const leftInk = (left.pixels[pixel * 4 + 3] ?? 0) >= ALPHA_MIN;
+    const rightInk = (right.pixels[pixel * 4 + 3] ?? 0) >= ALPHA_MIN;
+    if (leftInk && rightInk) intersection += 1;
+    if (leftInk || rightInk) union += 1;
+  }
+  if (union === 0) {
+    throw new Error("scaled marks have no ink");
+  }
+  return intersection / union;
+}
+
+function sha256(bytes: Buffer): string {
+  return createHash("sha256").update(bytes).digest("hex");
+}
+
 describe("ST logo match", () => {
-  it("matches the canonical mark by content-box scale, not a full-canvas resize", () => {
+  it("matches the shipped mark to the brand original by content-box scale", () => {
+    const canonicalBytes = readFileSync(new URL(CANONICAL, root));
+    const sampleBytes = readFileSync(new URL(SAMPLE, root));
+    const canonicalSha = sha256(canonicalBytes);
+    const sampleSha = sha256(sampleBytes);
+
+    expect(canonicalSha).toBe(CANONICAL_SHA256);
+    expect(sampleSha).not.toBe(canonicalSha);
+    expect(CANONICAL).not.toBe(SAMPLE);
+
     const canonical = readPng(CANONICAL);
     const sample = readPng(SAMPLE);
     const canonicalBox = contentBox(canonical);
     const sampleBox = contentBox(sample);
 
-    expect(canonicalBox).toEqual(sampleBox);
-    expect(canonicalBox).toEqual({ x: 60, y: 60, width: 855, height: 936 });
-    expect(canonical.width).toBe(975);
-    expect(canonical.height).toBe(1056);
+    expect(canonical).toMatchObject({ width: 2048, height: 2048 });
+    expect(sample).toMatchObject({ width: 975, height: 1056 });
+    expect(canonicalBox).toEqual({ x: 597, y: 557, width: 855, height: 936 });
+    expect(sampleBox).toEqual({ x: 60, y: 60, width: 855, height: 936 });
     expect(canonicalBox.width).toBeLessThan(canonical.width);
-    expect(canonicalBox.height).toBeLessThan(canonical.height);
+    expect(sampleBox.width).toBeLessThan(sample.width);
 
     const targetHeight = Math.round((canonicalBox.height * SCALE_WIDTH) / canonicalBox.width);
+    const sampleHeight = Math.round((sampleBox.height * SCALE_WIDTH) / sampleBox.width);
+    expect(sampleHeight).toBe(targetHeight);
+
     const canonicalScaled = scaleContent(crop(canonical, canonicalBox), SCALE_WIDTH, targetHeight);
-    const sampleScaled = scaleContent(crop(sample, sampleBox), SCALE_WIDTH, targetHeight);
+    const sampleScaled = scaleContent(crop(sample, sampleBox), SCALE_WIDTH, sampleHeight);
+    const delta = maxChannelDelta(canonicalScaled, sampleScaled);
+    const iou = maskIoU(canonicalScaled, sampleScaled);
 
     expect(canonicalScaled.width).toBe(SCALE_WIDTH);
     expect(canonicalScaled.width).not.toBe(canonical.width);
-    expect(maxChannelDelta(canonicalScaled, sampleScaled)).toBe(0);
+    expect(sampleScaled.width).not.toBe(sample.width);
+    expect(delta).toBe(0);
+    expect(iou).toBe(1);
   });
 });

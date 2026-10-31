@@ -126,6 +126,6 @@ Before and after frames, animations held at 0, pixel diff 0:
 
 ### ST mark
 
-`samples/void-frame/zoom/media/st-logo-mark.png` and `design/photography/v3/assets/st-logo-mark.png` are the same file. The check in `tests/st-logo-match.test.ts` does not resize the full canvas. It takes pixels with alpha of at least 1, which is a content box of `x 60, y 60, 855×936` inside the `975×1056` canvas, scales both crops to 128px wide, and compares channels. Maximum channel delta is 0.
+The brand original is the read-only fixture `tests/fixtures/brand/st-logo-original-2048.png` (`ig-logo-exact-2048-transparent.png`, sha256 `411429d662a276bfa462a75e75ba47846be23a84f34b4732e7e5e8a157b9e1cf`). The shipped mark is `samples/void-frame/zoom/media/st-logo-mark.png` (sha256 `02fc797c7598ae54e42becd3822fc8d80b68b19eb43c2fd306fa98339432dd72`). They are different files. The brand canvas is 2048×2048 with ink at `x 597, y 557, 855×936`. The shipped canvas is 975×1056 with the same ink size at `x 60, y 60`. `tests/st-logo-match.test.ts` crops those content boxes, scales both to 128px wide, and compares them. Maximum channel delta is 0. IoU of the ink masks is 1. The shipped file is unchanged.
 
 Shots: `void-frame-zoom/qa-advisories/before/` and `qa-advisories/after/` — 390, 768, 1440, and reduced motion.
