@@ -14,10 +14,11 @@ const samples = [
   { slug: "adriannica", lang: "ro", email: "contact@adriannica.ro" },
   { slug: "the-world", lang: "en-GB", email: "desk@theworld.example" },
   { slug: "through-the-lens", lang: "en-GB", email: "hello@through-the-lens.example" },
+  { slug: "void-frame", lang: "en-GB", email: "hello@void-frame.example" },
 ] as const;
 
 describe("sample homepages", () => {
-  it("publishes exactly the nine follow-up samples", () => {
+  it("publishes exactly the ten follow-up samples", () => {
     const slugs = readdirSync(new URL("samples", root), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
@@ -46,12 +47,16 @@ describe("sample homepages", () => {
       expect(html).toContain(`<html lang="${lang}">`);
       expect(html).toContain('<meta name="robots" content="noindex, nofollow" />');
       expect(html).toContain('href="https://solvedtech.co.uk"');
+      if (slug !== "void-frame") expect(html).toContain(email);
       if (slug === "mara-ellison") {
         expect(html).toContain("Example site. Fictional studio for demonstration.");
         expect(html).not.toContain("Sample by");
       } else if (slug === "through-the-lens") {
         expect(html).toContain("Sample page by");
         expect(html).toContain("Fictional studio for demonstration.");
+      } else if (slug === "void-frame") {
+        expect(html).toContain("solved tech sample");
+        expect(html).not.toContain("Sample by");
       } else {
         expect(html).toContain("Sample by");
       }
@@ -68,8 +73,30 @@ describe("sample homepages", () => {
         expect(html).not.toContain("tel:");
         expect(read(`samples/${slug}/styles.css`)).toContain("--rule: #757575");
         expect(read(`samples/${slug}/styles.css`)).toContain("font-display: optional");
+      } else if (slug === "void-frame") {
+        expect(html).toContain("solved tech sample");
+        expect(html).toContain("fictional photography sample. not a client site.");
+        expect(html).toContain("skip to plates");
+        expect(html).toContain('id="main"');
+        expect(html).toContain("<h1");
+        expect(html).toContain("void / frame: photography sample");
+        expect(html).toContain("001 / brutalism, 7 plates, 6 photos");
+        expect(html).toContain("b04-lcp.avif");
+        expect(html).toContain('fetchpriority="high"');
+        expect(html).toContain('src="track.js"');
+        expect(html).toContain("st-logo-mark.png");
+        expect(html).not.toContain("fonts.googleapis.com");
+        expect(html).not.toContain("fonts.gstatic.com");
+        expect(html).not.toContain("tel:");
+        expect(html).not.toContain("tektur");
+        expect(html).not.toContain("mixkit");
+        expect(html).not.toContain("<audio");
+        expect(read(`samples/${slug}/styles.css`)).toContain("--void: #000000");
+        expect(read(`samples/${slug}/styles.css`)).toContain("--chalk: #FFFFFF");
+        expect(read(`samples/${slug}/styles.css`)).toContain("--concrete: #1A1A1A");
+        expect(read(`samples/${slug}/styles.css`)).toContain("font-display: optional");
+        expect(read(`samples/${slug}/styles.css`)).toContain("scroll-snap-type: x mandatory");
       }
-      expect(html).toContain(email);
       if (slug === "the-world") {
         expect(html).toContain("From 11:00, hard light");
         expect(html).toContain('aria-label="Hour of day"');
