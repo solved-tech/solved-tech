@@ -18,7 +18,7 @@ Single long page — four moments:
 1. **Meets** — Life-size frontal plate; take strip on plate; note Gaze 01 · Meets · **02/05**.
 2. **Past** — Plate biased left; void on gaze side (right); note **05/05**; Asked locked *Look up, past the light.*
 3. **Refuses** — Hard crop / bleed withhold; Sitting B; note **01/01**.
-4. **Book / blank note + colophon** — Blank sitting fields + **email only**; EXIF/licence honesty; no phone.
+4. **Book + colophon** — Mailto and the hint “Email only. Tell us who sits and what you asked them.” No sitting labels. EXIF/licence honesty; no phone.
 
 No chips, mosaic, iris chrome, hero+CTA, or rate cards.
 
@@ -79,7 +79,7 @@ Self-host subset woff2 only (Hanken 400+600, IBM Plex Mono 400+500); `font-displ
 - Must not: dark theme; beauty smile; other photographers.
 
 ### Book / blank note
-- Plain labels `Sitter:` and `Asked:` (no blanks, no rules) + mailto ≥ 44×44; colophon licence + EXIF honesty.
+- Mailto ≥ 44×44 and the hint “Email only. Tell us who sits and what you asked them.” No book labels. Colophon licence + EXIF honesty.
 - Must not: phone, form suite, newsletter, fake reviews, invented stats.
 
 ---

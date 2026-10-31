@@ -42,7 +42,7 @@ Scroll updates the fixed desktop note by **section top** (not intersection ratio
 - Width ~`17.5rem` desktop; full-width stack on small screens.
 - Contents (reading-size **IBM Plex Mono**): kicker · gaze label · **huge take** · Sitter / Gaze / Kept / Light / Lens / Asked · credit line.
 - Lens line: print true EXIF when present; otherwise **`85mm · f/2 (example — EXIF absent)`** (or whatever example Remus locks) — never invent as fact.
-- Enquire block below the stages: plain labels `Sitter:` and `Asked:` (no blanks, no rules) + **email only**. No phone. No CRM form theatre.
+- Enquire block below the stages: the mailto and the hint “Email only. Tell us who sits and what you asked them.” No book labels. No phone. No CRM form theatre.
 
 ---
 
