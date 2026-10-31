@@ -238,6 +238,18 @@ main {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* The separator stays in the stamp’s text, off the line. Its static
+   position would change where Chromium snaps the glyphs. */
+.ink > .visually-hidden {
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  font-size: 0;
+  line-height: 0;
+}
+
 .series button:focus,
 .series button:focus-visible {
   outline: none;
