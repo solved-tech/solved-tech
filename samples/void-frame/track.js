@@ -496,9 +496,7 @@ function openFocus(i) {
 }
 
 function placeTrackFocus(visible) {
-  const options = { preventScroll: true };
-  if (visible) options.focusVisible = true;
-  track.focus(options);
+  track.focus({ preventScroll: true, focusVisible: visible });
 }
 
 function closeFocus(fromKeyboard) {
