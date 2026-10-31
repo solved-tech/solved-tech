@@ -174,7 +174,7 @@ This file governs `samples/void-frame/` except `samples/void-frame/zoom/`, which
 - Three colors: void `#000000`, chalk `#FFFFFF`, concrete `#1A1A1A`
 - Oswald for stamps, the series edge, and the vault line. System mono for serials
 - Square corners, no shadow, no extra face
-- Below 768 the stamp row is a full-width chalk band above the track
+- Below 1440 the stamp row is a full-width chalk band above the track, including at 768
 - At 1440 the active series name is one full-height edge, and the active stamp is a chalk plate
 
 ## Colors
@@ -192,7 +192,7 @@ The palette is the plate, the stamp band, and the concrete vault bar.
 
 ### Named Rules
 
-**The Three Token Rule.** No grey, no fourth color, and no opacity used to fake a mute. A struck stamp is the same chalk or void as the stamps beside it, with a line through the word.
+**The Three Token Rule.** No grey, no fourth color, and no opacity used to fake a mute. A struck stamp is the same chalk or void as the stamps beside it, with a line through the word. Stamp glyphs use that token in every state — link, visited, hover, and focus-visible — and they are smoothed with `-webkit-font-smoothing: antialiased`, so a quiet stamp does not pick up a colour fringe.
 
 ## Typography
 
@@ -206,7 +206,7 @@ The palette is the plate, the stamp band, and the concrete vault bar.
 
 ### Hierarchy
 
-- **Display** (700, clamp(1.5rem, 5vw, 2rem)): The pressed stamp below 768.
+- **Display** (700, clamp(1.5rem, 5vw, 2rem)): The pressed stamp on the chalk band.
 - **Stamp** (400, clamp(0.75rem, 2.5vw, 1rem)): The quiet stamps on the chalk band.
 - **Stamp, desktop** (700, clamp(1.25rem, 1.4vw, 2rem), 0.18em): The pressed stamp at 1440. The quiet stamps are clamp(0.75rem, 0.85vw, 1rem), at least 12px.
 - **Series edge** (700, up to 5.25rem, -0.02em): The active series name, once, beside the track.
@@ -217,15 +217,15 @@ The palette is the plate, the stamp band, and the concrete vault bar.
 
 ### Named Rules
 
-**The Band Rule.** Below 768 the stamps sit on a chalk band the height of the stamp row, above the plates. They do not sit on the photograph.
+**The Band Rule.** Below 1440 the stamps sit on a chalk band the height of the stamp row, above the plates. At 768 the band is the same chalk backing as at 390. They do not sit on the photograph.
 
 **The Third Rule.** The pause is one third of the land plate.
 
 ## Layout
 
-Below 768 the stamp row is an in-flow chalk band. The track fills the rest of the viewport. Plates are full-bleed. The land plate snaps to the start. The pause is one third of that plate.
+Below 1440 the stamp row is an in-flow chalk band. The track fills the rest of the viewport. Plates are full-bleed. The land plate snaps to the start below 768. The pause is one third of that plate.
 
-From 768 to 1439 the stamps overlay the top of the track and knock out of the photograph with difference. The track is the full viewport.
+From 768 to 1439 the stamps keep that chalk band. They use the full series name, and the pause shows its serial. The track is the viewport under the band, not a full-viewport overlay.
 
 At 1440 the page is brand, an empty rail, the track, the series edge, and a stamp column. The vault bar reserves 4.25rem and the column fits in the viewport under it. The active stamp reads in full, including “001 / brutalism”.
 
@@ -246,7 +246,7 @@ Corners are square (`0`). The reticle is a 52px square. The stamp band is a hard
 - **Active stamp, 1440:** Chalk fill and void type.
 - **Inactive stamp:** Quieter type. On the chalk band it is void. On the void column it is chalk.
 - **Disabled:** A strike. Not grey. Not a pointer target. On the chalk band the struck stamp is void. On void it is chalk.
-- **Focus:** 2px chalk outline, 2px outside, with a 4px void halo. The track draws that ring on its own edge, and only for `:focus-visible`. A pointer click does not draw it.
+- **Focus:** 2px chalk outline, 2px outside, with a 4px void halo. The track draws that ring on its own edge, and only for `:focus-visible`. The stamp ring is the same: it is drawn only while the stamp itself matches `:focus-visible`. A pointer click does not draw either ring.
 
 ### Navigation
 
@@ -260,12 +260,12 @@ One flush void rectangle in the corner of a plate. Chalk mono. It does not use a
 
 ### Do:
 
-- **Do** keep the 390 stamps on a chalk band above the plates.
+- **Do** keep the stamps on a chalk band above the plates below 1440, including at 768.
 - **Do** keep the pause at one third of the land plate.
 - **Do** use chalk on concrete for the vault drop line, at 12px or larger.
 
 ### Don't:
 
-- **Don't** let a stamp sit on a plate at 390.
+- **Don't** let a stamp sit on a plate below 1440.
 - **Don't** draw the track ring after a pointer click.
 - **Don't** add a color, a radius, or a shadow.

@@ -539,10 +539,16 @@ vaultToggle.addEventListener("click", () => setVault(!vaultOn));
 const stampRing = document.getElementById("stampRing");
 const mainEl = document.getElementById("main");
 const seriesNav = document.getElementById("series");
+let stampFromPointer = false;
 
 function placeStampRing(btn) {
   if (!stampRing || !mainEl) return;
-  if (!btn || !btn.matches(":focus-visible")) {
+  const show =
+    !stampFromPointer &&
+    btn instanceof HTMLElement &&
+    document.activeElement === btn &&
+    btn.matches(":focus-visible");
+  if (!show) {
     stampRing.hidden = true;
     return;
   }
@@ -555,6 +561,20 @@ function placeStampRing(btn) {
   stampRing.style.height = `${box.height}px`;
 }
 
+seriesNav.addEventListener("pointerdown", () => {
+  stampFromPointer = true;
+  if (stampRing) stampRing.hidden = true;
+});
+
+document.addEventListener(
+  "keydown",
+  (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    stampFromPointer = false;
+  },
+  true,
+);
+
 seriesNav.addEventListener("focusin", (event) => {
   const btn = event.target.closest("button");
   window.requestAnimationFrame(() => placeStampRing(btn));
@@ -562,12 +582,12 @@ seriesNav.addEventListener("focusin", (event) => {
 seriesNav.addEventListener("focusout", () => {
   window.requestAnimationFrame(() => {
     const active = document.activeElement;
-    if (!active || !seriesNav.contains(active)) stampRing.hidden = true;
+    placeStampRing(active instanceof HTMLElement ? active : null);
   });
 });
 window.addEventListener("resize", () => {
   const active = document.activeElement;
-  if (active && seriesNav.contains(active)) placeStampRing(active);
+  placeStampRing(active instanceof HTMLElement ? active : null);
 });
 
 document.querySelectorAll("#series button").forEach((btn) => {
