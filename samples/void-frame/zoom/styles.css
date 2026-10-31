@@ -614,6 +614,8 @@ html.is-zooming .well-scroller {
 @media (max-width: 767px) {
   .series {
     align-items: stretch;
+    justify-content: flex-start;
+    gap: 24px;
     height: 56px;
     min-height: 56px;
     padding: 0 0.35rem;
@@ -623,11 +625,12 @@ html.is-zooming .well-scroller {
   .series button,
   .series button[aria-pressed="true"],
   .series button[aria-disabled="true"] {
-    flex: 1 1 0;
+    flex: 0 0 auto;
     max-width: none;
     height: 100%;
     min-height: 44px;
     padding: 0 0.35rem;
+    justify-content: center;
     box-shadow: none;
     -webkit-text-stroke: 0;
     paint-order: normal;
@@ -638,7 +641,7 @@ html.is-zooming .well-scroller {
   }
 
   .series button[aria-pressed="true"] {
-    flex: 1.15 1 0;
+    flex: 0 0 auto;
     font-size: 1.5rem;
     font-weight: 700;
   }

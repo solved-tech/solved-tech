@@ -73,3 +73,11 @@ UI notes on PR #34. 1440 still matches v2.1. The chalk pause and the two-row vau
 - `#well` already references the visually hidden key legend with `aria-describedby="well-help"`.
 
 Shots for this round: `void-frame-zoom/round-2/` — 390 fold, 390 pause, 1440 fold, 1440 vault.
+
+## Round 3
+
+UI note on the 390 band: `002` and `003` grew to fill the row, so `003` sat alone at the right. Below 768 the stamps are content-sized (`flex: 0 0 auto`), packed to the left (`justify-content: flex-start`), with a 24px gap, the same left grouping as The Track. The band stays a 56px void fill, with no rule across the photograph. The active code stays 24px and the inactive codes stay 12px. The meta tab stays flush above the band. 768 and 1440 are unchanged.
+
+Measured at 390×844: the gap between stamp boxes is 24px. `003` ends at x 205, leaving 185px of the band empty on the right. The tab’s bottom edge meets the band’s top edge. Reduced motion sets the land image `animation-name` to `none`. At 768 the full names still pack left with gap 0. At 1440 the stamps stay a column, active 24px and inactive 12px.
+
+Shots for this round: `void-frame-zoom/round-3/` — 390 fold, 390 focus-visible, 390 reduced-motion, 768 fold, 1440 focus-visible, 1440 reduced-motion. Twelve sample tests passed.
